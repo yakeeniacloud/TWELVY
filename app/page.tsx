@@ -38,7 +38,7 @@ export default function TestPage() {
         }),
       })
 
-      const data: BookingResponse = await response.json()
+      const data = (await response.json()) as BookingResponse
 
       if (response.ok && data.id) {
         setPostMessage(`✅ Success! Booking ID: ${data.id} | Reference: ${data.booking_reference}`)
@@ -61,7 +61,7 @@ export default function TestPage() {
         method: 'GET',
       })
 
-      const data: GetResponse = await response.json()
+      const data = (await response.json()) as GetResponse
 
       if (response.ok && data.ok) {
         setGetMessage(`✅ GET Success! PHP is executing. Message: ${data.message}`)
