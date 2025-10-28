@@ -2,6 +2,20 @@
 
 import { useState } from 'react'
 
+interface BookingResponse {
+  ok?: boolean
+  id?: string
+  booking_reference?: string
+  error?: string
+  message?: string
+}
+
+interface GetResponse {
+  ok: boolean
+  message: string
+  error?: string
+}
+
 export default function TestPage() {
   const [postMessage, setPostMessage] = useState('')
   const [getMessage, setGetMessage] = useState('')
@@ -24,9 +38,9 @@ export default function TestPage() {
         }),
       })
 
-      const data = await response.json()
+      const data: BookingResponse = await response.json()
 
-      if (response.ok) {
+      if (response.ok && data.id) {
         setPostMessage(`✅ Success! Booking ID: ${data.id} | Reference: ${data.booking_reference}`)
       } else {
         setPostMessage(`❌ Error: ${data.error || 'Unknown error'}`)
@@ -47,7 +61,7 @@ export default function TestPage() {
         method: 'GET',
       })
 
-      const data = await response.json()
+      const data: GetResponse = await response.json()
 
       if (response.ok && data.ok) {
         setGetMessage(`✅ GET Success! PHP is executing. Message: ${data.message}`)
