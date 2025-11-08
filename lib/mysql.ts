@@ -13,7 +13,7 @@ function getPool() {
       connectionLimit: 5,
       queueLimit: 0,
       enableKeepAlive: true,
-      keepAliveInitialDelayMs: 0,
+      keepAliveInitialDelay: 0,
     })
   }
   return connectionPool
