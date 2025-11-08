@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { querySite } from '@/lib/mysql'
 
 interface Stage {
@@ -24,11 +24,12 @@ interface Site {
 }
 
 export async function GET(
-  request: Request,
-  { params }: { params: { city: string } }
+  request: NextRequest,
+  { params }: { params: Promise<{ city: string }> }
 ) {
   try {
-    const city = (await params).city.toUpperCase()
+    const resolvedParams = await params
+    const city = resolvedParams.city.toUpperCase()
 
     // Fetch stages for this city with site details
     const stages = (await querySite(
