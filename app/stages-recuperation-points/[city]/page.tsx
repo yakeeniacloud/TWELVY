@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
+import Link from 'next/link'
 
 interface Stage {
   id: number
@@ -185,9 +186,12 @@ export default function StagesResultsPage() {
                 </div>
 
                 {/* Button */}
-                <button className="bg-gradient-to-b from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold px-6 py-2 rounded-lg transition-all">
-                  Sélectionner
-                </button>
+                <Link
+                  href={`/stages-recuperation-points/${city.toLowerCase()}/${stage.id}`}
+                  className="bg-gradient-to-b from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold px-6 py-2 rounded-lg transition-all inline-block"
+                >
+                  Plus d'infos
+                </Link>
               </div>
             ))}
           </div>
