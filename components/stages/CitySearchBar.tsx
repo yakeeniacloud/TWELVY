@@ -39,10 +39,13 @@ export default function CitySearchBar({
       (c) => c.toLowerCase() === cityToSearch.toLowerCase()
     ) || filteredCities[0]
 
-    if (city) {
-      const slug = city.toLowerCase()
+    // If no city found in list, use typed value anyway (fallback)
+    const cityToNavigate = city || cityToSearch
+
+    if (cityToNavigate) {
+      const slug = cityToNavigate.toLowerCase()
       if (onCitySelect) {
-        onCitySelect(city)
+        onCitySelect(cityToNavigate)
       } else {
         router.push(`/stages-recuperation-points/${slug}`)
       }
