@@ -31,7 +31,14 @@ export async function GET(
     const resolvedParams = await params
     const city = resolvedParams.city.toUpperCase()
 
+    console.log('📍 /api/stages/[city] called with city:', city)
+    console.log('🔧 Environment check:')
+    console.log('  MYSQL_HOST:', process.env.MYSQL_HOST || 'NOT SET')
+    console.log('  MYSQL_USER:', process.env.MYSQL_USER || 'NOT SET')
+    console.log('  MYSQL_DATABASE:', process.env.MYSQL_DATABASE || 'NOT SET')
+
     // Fetch stages for this city with site details
+    console.log('🔄 Executing query...')
     const stages = (await querySite(
       `SELECT s.*, st.nom as site_nom, st.ville, st.adresse, st.code_postal, st.latitude, st.longitude
        FROM stage s
@@ -62,14 +69,19 @@ export async function GET(
       },
     }))
 
+    console.log('✅ Query successful, formatted:', formattedStages.length, 'stages')
     return NextResponse.json(
       { stages: formattedStages, city },
       { status: 200 }
     )
   } catch (error) {
-    console.error('Error fetching stages:', error)
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    console.error('❌ Error fetching stages:')
+    console.error('   Message:', errorMsg)
+    console.error('   Stack:', error instanceof Error ? error.stack : 'N/A')
+
     return NextResponse.json(
-      { error: 'Failed to fetch stages' },
+      { error: 'Failed to fetch stages', details: errorMsg },
       { status: 500 }
     )
   }
