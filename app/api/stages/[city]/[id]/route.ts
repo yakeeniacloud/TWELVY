@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { querySite } from '@/lib/mysql'
 
 export async function GET(
   request: NextRequest,
@@ -9,26 +8,38 @@ export async function GET(
     const resolvedParams = await params
     const { id } = resolvedParams
 
-    const stage = (await querySite(
-      `SELECT s.*, st.nom as site_nom, st.ville, st.adresse, st.code_postal, st.latitude, st.longitude
-       FROM stage s
-       JOIN site st ON s.id_site = st.id
-       WHERE s.id = ?`,
-      [id]
-    )) as any[]
+    console.log('📍 /api/stages/[city]/[id] called with id:', id)
+    console.log('🔄 Proxying to PHP API...')
 
-    if (stage.length === 0) {
-      return NextResponse.json(
-        { error: 'Stage not found' },
-        { status: 404 }
-      )
+    // Call PHP API on api.twelvy.net
+    const response = await fetch(`https://api.twelvy.net/stage-detail.php?id=${encodeURIComponent(id)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    console.log('📡 PHP API response status:', response.status)
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        return NextResponse.json(
+          { error: 'Stage not found' },
+          { status: 404 }
+        )
+      }
+      throw new Error(`PHP API returned ${response.status}`)
     }
 
-    return NextResponse.json({ stage: stage[0] }, { status: 200 })
+    const stage = await response.json()
+    console.log('✅ Stage loaded from PHP API:', stage.id)
+
+    return NextResponse.json(stage, { status: 200 })
   } catch (error) {
-    console.error('Error fetching stage:', error)
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    console.error('❌ Error fetching stage:', errorMsg)
     return NextResponse.json(
-      { error: 'Failed to fetch stage' },
+      { error: 'Failed to fetch stage', details: errorMsg },
       { status: 500 }
     )
   }
