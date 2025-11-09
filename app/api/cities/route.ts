@@ -5,7 +5,7 @@ export async function GET() {
     console.log('📍 /api/cities called - proxying to PHP API')
 
     // Call PHP API on api.twelvy.net
-    const response = await fetch('https://api.twelvy.net/cities.php', {
+    const response = await fetch('https://api.twelvy.net/www/api/cities.php', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

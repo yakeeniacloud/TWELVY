@@ -12,7 +12,7 @@ export async function GET(
     console.log('🔄 Proxying to PHP API...')
 
     // Call PHP API on api.twelvy.net
-    const response = await fetch(`https://api.twelvy.net/stage-detail.php?id=${encodeURIComponent(id)}`, {
+    const response = await fetch(`https://api.twelvy.net/www/api/stage-detail.php?id=${encodeURIComponent(id)}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
