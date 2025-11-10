@@ -51,11 +51,21 @@ export default function StagesResultsPage() {
           throw new Error('Failed to fetch stages')
         }
         const data = (await response.json()) as { stages: Stage[] }
-        setAllStages(data.stages)
-        setStages(data.stages)
 
-        // Extract unique cities from stages
-        const cities = Array.from(new Set(data.stages.map(s => s.site.ville))).sort()
+        // NORMALIZE: Convert all city names to UPPERCASE for consistency
+        const normalizedStages = data.stages.map(s => ({
+          ...s,
+          site: {
+            ...s.site,
+            ville: s.site.ville.toUpperCase()
+          }
+        }))
+
+        setAllStages(normalizedStages)
+        setStages(normalizedStages)
+
+        // Extract unique cities from stages (normalized to uppercase)
+        const cities = Array.from(new Set(normalizedStages.map(s => s.site.ville))).sort()
         setAllCities(cities)
 
         // Calculate nearby cities within 50km using city coordinates reference
@@ -161,12 +171,19 @@ export default function StagesResultsPage() {
               {searchInput && (
                 <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 border-t-0 rounded-b shadow-lg z-10">
                   {allCities
-                    .filter(c => c.toLowerCase().includes(searchInput.toLowerCase()))
+                    .filter(c => c.toUpperCase().includes(searchInput.toUpperCase()))
                     .slice(0, 5)
                     .map(filteredCity => (
                       <button
                         key={filteredCity}
-                        onClick={() => setSearchInput(filteredCity)}
+                        onClick={() => {
+                          // ADD city to selection instead of replacing
+                          const upperCity = filteredCity.toUpperCase()
+                          if (!selectedCities.includes(upperCity)) {
+                            setSelectedCities([...selectedCities, upperCity])
+                          }
+                          setSearchInput('')
+                        }}
                         className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm text-gray-700"
                       >
                         {filteredCity}
@@ -234,8 +251,8 @@ export default function StagesResultsPage() {
                 <label className="flex items-center gap-2 cursor-pointer border-b pb-3 font-medium">
                   <input
                     type="checkbox"
-                    checked={selectedCities.length === allCities.length}
-                    onChange={() => setSelectedCities(allCities)}
+                    checked={selectedCities.length === 0}
+                    onChange={() => setSelectedCities([])}
                     className="w-4 h-4 text-blue-600"
                   />
                   <span className="text-sm text-gray-900">Toutes les villes</span>
@@ -245,14 +262,14 @@ export default function StagesResultsPage() {
                 <label className="flex items-center gap-2 cursor-pointer font-medium">
                   <input
                     type="checkbox"
-                    checked={selectedCities.includes(city)}
-                    onChange={() => toggleCity(city)}
+                    checked={selectedCities.includes(city.toUpperCase())}
+                    onChange={() => toggleCity(city.toUpperCase())}
                     className="w-4 h-4 text-blue-600"
                   />
                   <span className="text-sm text-gray-900">{city}</span>
                 </label>
 
-                {/* Nearby cities */}
+                {/* Nearby cities with distances */}
                 {nearbyCities.map(nearby => (
                   <label key={nearby.city} className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -262,14 +279,17 @@ export default function StagesResultsPage() {
                       className="w-4 h-4 text-blue-600"
                     />
                     <span className="text-sm text-gray-600">
-                      {nearby.city} ({nearby.distance.toFixed(0)} km)
+                      {nearby.city} ({nearby.distance} km)
                     </span>
                   </label>
                 ))}
 
                 {/* Other cities not in range */}
                 {allCities
-                  .filter(c => !nearbyCities.find(n => n.city === c) && c !== city)
+                  .map(c => c.toUpperCase())
+                  .filter(c => !nearbyCities.find(n => n.city === c) && c !== city.toUpperCase())
+                  .filter((c, i, arr) => arr.indexOf(c) === i) // Remove duplicates
+                  .sort()
                   .map(cityName => (
                     <label key={cityName} className="flex items-center gap-2 cursor-pointer">
                       <input
