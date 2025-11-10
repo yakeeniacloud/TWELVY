@@ -61,9 +61,9 @@ export default function StagesResultsPage() {
         const nearby = getCitiesWithinRadius(data.stages, city, 50)
         setNearbyCities(nearby)
 
-        // Set default selected cities to searched city + nearby cities
-        const defaultSelectedCities = [city, ...nearby.map(n => n.city)]
-        setSelectedCities(defaultSelectedCities)
+        // DO NOT pre-select cities - let user choose what to filter
+        // This allows the sidebar to show ALL proximity cities available
+        setSelectedCities([])
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error')
         setStages([])
@@ -77,9 +77,11 @@ export default function StagesResultsPage() {
 
   // Filter and sort stages
   useEffect(() => {
+    // IMPORTANT: Always show all nearby stages by default (not pre-filtered by selectedCities)
+    // selectedCities is only applied for client-side filtering
     let filtered = [...allStages]
 
-    // Filter by selected cities (if any selected, show only those; if none, show all nearby + searched)
+    // Filter by selected cities (if any selected, show only those; if none, show all)
     if (selectedCities.length > 0) {
       filtered = filtered.filter(s => selectedCities.includes(s.site.ville))
     }

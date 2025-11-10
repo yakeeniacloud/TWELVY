@@ -43,7 +43,7 @@ export default function StageDetailsModal({
   const { latitude, longitude } = stage.site
   const mapsUrl =
     latitude && longitude
-      ? `https://www.google.com/maps/embed/v1/place?key=AIzaSyDz6IQJ6tz-uVqXMqCVWNQvXdLw0hUTzEo&q=${latitude},${longitude}`
+      ? `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${latitude},${longitude}`
       : null
 
   const formatDate = (dateStart: string, dateEnd: string) => {
