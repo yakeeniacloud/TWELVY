@@ -81,7 +81,7 @@ export default function StageDetailsModal({
               height="100%"
               style={{ border: 0, minHeight: '400px' }}
               loading="lazy"
-              allowFullScreen=""
+              allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
               src={mapsUrl}
             ></iframe>
