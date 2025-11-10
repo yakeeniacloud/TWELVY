@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { getCitiesWithinRadius } from '@/lib/distance'
 import { getCitiesInRadius } from '@/lib/cityCoordinates'
+import { useWordPressContent } from '@/lib/useWordPressContent'
 import StageDetailsModal from '@/components/stages/StageDetailsModal'
 
 interface Stage {
@@ -41,6 +42,9 @@ export default function StagesResultsPage() {
   const [searchInput, setSearchInput] = useState('')
   const [selectedStage, setSelectedStage] = useState<Stage | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
+
+  // Fetch city-specific WordPress content
+  const { content: cityContent, loading: cityContentLoading } = useWordPressContent(`stages-${city.toLowerCase()}`)
 
   useEffect(() => {
     async function fetchStages() {
@@ -508,6 +512,18 @@ export default function StagesResultsPage() {
           </div>
         </div>
       </div>
+
+      {/* City-Specific WordPress Content Below Courses */}
+      {cityContent && (
+        <div className="bg-gray-50 border-t border-gray-200 py-8 px-4 mt-8">
+          <div className="mx-auto max-w-3xl">
+            <div
+              className="prose prose-sm max-w-none text-gray-700"
+              dangerouslySetInnerHTML={{ __html: cityContent.content }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Google Maps Modal */}
       {selectedStage && (

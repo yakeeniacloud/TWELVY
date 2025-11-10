@@ -1,11 +1,11 @@
-import CitySearchBar from '@/components/stages/CitySearchBar'
+'use client'
 
-export const metadata = {
-  title: 'TWELVY - Stage de Récupération de Points',
-  description: 'Récupérez 4 points en 48h - Stages agréés par la Préfecture',
-}
+import CitySearchBar from '@/components/stages/CitySearchBar'
+import { useWordPressContent } from '@/lib/useWordPressContent'
 
 export default function Home() {
+  const { content, loading } = useWordPressContent('homepage')
+
   return (
     <div>
       {/* Hero Section with Background */}
@@ -37,16 +37,21 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Content Section */}
-      <div className="bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-          <div className="prose prose-lg prose-indigo max-w-none">
-            <h2>Trouvez votre stage de récupération de points</h2>
-            <p>
-              TWELVY vous propose une sélection de stages de récupération de points agréés par la Préfecture.
-              Saisissez votre ville pour découvrir les stages disponibles près de chez vous.
-            </p>
-          </div>
+      {/* WordPress Content Section Below Search Bar */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+          {loading ? (
+            <div className="text-center text-gray-500 text-sm">Chargement du contenu...</div>
+          ) : content ? (
+            <div
+              className="prose prose-sm prose-indigo max-w-none text-gray-700"
+              dangerouslySetInnerHTML={{ __html: content.content }}
+            />
+          ) : (
+            <div className="text-center text-gray-400 text-sm">
+              Contenu non disponible pour le moment
+            </div>
+          )}
         </div>
       </div>
     </div>
