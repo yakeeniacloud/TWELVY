@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { getCitiesWithinRadius } from '@/lib/distance'
+import { getCitiesInRadius } from '@/lib/cityCoordinates'
 import StageDetailsModal from '@/components/stages/StageDetailsModal'
 
 interface Stage {
@@ -57,8 +58,9 @@ export default function StagesResultsPage() {
         const cities = Array.from(new Set(data.stages.map(s => s.site.ville))).sort()
         setAllCities(cities)
 
-        // Calculate nearby cities within 50km
-        const nearby = getCitiesWithinRadius(data.stages, city, 50)
+        // Calculate nearby cities within 50km using city coordinates reference
+        // This includes ALL cities in the coordinate database, not just those with stages
+        const nearby = getCitiesInRadius(city, 50)
         setNearbyCities(nearby)
 
         // DO NOT pre-select cities - let user choose what to filter
