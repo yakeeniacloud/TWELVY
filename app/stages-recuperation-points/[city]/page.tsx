@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import { getCitiesWithinRadius } from '@/lib/distance'
+import StageDetailsModal from '@/components/stages/StageDetailsModal'
 
 interface Stage {
   id: number
@@ -34,6 +36,10 @@ export default function StagesResultsPage() {
   const [sortBy, setSortBy] = useState<'pertinence' | 'proximite' | 'date' | 'prix'>('pertinence')
   const [selectedCities, setSelectedCities] = useState<string[]>([])
   const [allCities, setAllCities] = useState<string[]>([])
+  const [nearbyCities, setNearbyCities] = useState<{ city: string; distance: number }[]>([])
+  const [searchInput, setSearchInput] = useState('')
+  const [selectedStage, setSelectedStage] = useState<Stage | null>(null)
+  const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(() => {
     async function fetchStages() {
@@ -50,6 +56,14 @@ export default function StagesResultsPage() {
         // Extract unique cities from stages
         const cities = Array.from(new Set(data.stages.map(s => s.site.ville))).sort()
         setAllCities(cities)
+
+        // Calculate nearby cities within 50km
+        const nearby = getCitiesWithinRadius(data.stages, city, 50)
+        setNearbyCities(nearby)
+
+        // Set default selected cities to searched city + nearby cities
+        const defaultSelectedCities = [city, ...nearby.map(n => n.city)]
+        setSelectedCities(defaultSelectedCities)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error')
         setStages([])
@@ -65,13 +79,20 @@ export default function StagesResultsPage() {
   useEffect(() => {
     let filtered = [...allStages]
 
-    // Filter by selected cities (if any selected, show only those; if none, show all)
+    // Filter by selected cities (if any selected, show only those; if none, show all nearby + searched)
     if (selectedCities.length > 0) {
       filtered = filtered.filter(s => selectedCities.includes(s.site.ville))
     }
 
-    // Sort
-    if (sortBy === 'date') {
+    // Sort by proximity (distance from searched city)
+    if (sortBy === 'proximite') {
+      const stagesWithDistance = filtered.map(stage => ({
+        stage,
+        distance: nearbyCities.find(c => c.city === stage.site.ville)?.distance ?? 0,
+      }))
+      stagesWithDistance.sort((a, b) => a.distance - b.distance)
+      filtered = stagesWithDistance.map(item => item.stage)
+    } else if (sortBy === 'date') {
       filtered.sort((a, b) => {
         const aDate = new Date(a.date_start).getTime()
         const bDate = new Date(b.date_start).getTime()
@@ -80,10 +101,10 @@ export default function StagesResultsPage() {
     } else if (sortBy === 'prix') {
       filtered.sort((a, b) => a.prix - b.prix)
     }
-    // pertinence and proximite don't need sorting, keep original order
+    // pertinence doesn't need sorting, keep original order
 
     setStages(filtered)
-  }, [sortBy, selectedCities, allStages])
+  }, [sortBy, selectedCities, allStages, nearbyCities])
 
   const formatDate = (dateStart: string, dateEnd: string) => {
     const start = new Date(dateStart)
@@ -124,12 +145,32 @@ export default function StagesResultsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Sidebar - Filters */}
           <div className="lg:col-span-2">
-            {/* City Search */}
-            <input
-              type="text"
-              placeholder="Ville ou CP"
-              className="w-full px-3 py-2 border border-gray-300 rounded mb-6 text-sm"
-            />
+            {/* City Search with Autocomplete */}
+            <div className="relative mb-6">
+              <input
+                type="text"
+                placeholder="Ville ou CP"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+              />
+              {searchInput && (
+                <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 border-t-0 rounded-b shadow-lg z-10">
+                  {allCities
+                    .filter(c => c.toLowerCase().includes(searchInput.toLowerCase()))
+                    .slice(0, 5)
+                    .map(filteredCity => (
+                      <button
+                        key={filteredCity}
+                        onClick={() => setSearchInput(filteredCity)}
+                        className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm text-gray-700"
+                      >
+                        {filteredCity}
+                      </button>
+                    ))}
+                </div>
+              )}
+            </div>
 
             {/* Sort Section */}
             <div className="mb-6">
@@ -189,23 +230,53 @@ export default function StagesResultsPage() {
                 <label className="flex items-center gap-2 cursor-pointer border-b pb-3 font-medium">
                   <input
                     type="checkbox"
-                    checked={selectedCities.length === 0}
-                    onChange={() => setSelectedCities([])}
+                    checked={selectedCities.length === allCities.length}
+                    onChange={() => setSelectedCities(allCities)}
                     className="w-4 h-4 text-blue-600"
                   />
                   <span className="text-sm text-gray-900">Toutes les villes</span>
                 </label>
-                {allCities.map(cityName => (
-                  <label key={cityName} className="flex items-center gap-2 cursor-pointer">
+
+                {/* Searched city first */}
+                <label className="flex items-center gap-2 cursor-pointer font-medium">
+                  <input
+                    type="checkbox"
+                    checked={selectedCities.includes(city)}
+                    onChange={() => toggleCity(city)}
+                    className="w-4 h-4 text-blue-600"
+                  />
+                  <span className="text-sm text-gray-900">{city}</span>
+                </label>
+
+                {/* Nearby cities */}
+                {nearbyCities.map(nearby => (
+                  <label key={nearby.city} className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={selectedCities.includes(cityName)}
-                      onChange={() => toggleCity(cityName)}
+                      checked={selectedCities.includes(nearby.city)}
+                      onChange={() => toggleCity(nearby.city)}
                       className="w-4 h-4 text-blue-600"
                     />
-                    <span className="text-sm text-gray-600">{cityName}</span>
+                    <span className="text-sm text-gray-600">
+                      {nearby.city} ({nearby.distance.toFixed(0)} km)
+                    </span>
                   </label>
                 ))}
+
+                {/* Other cities not in range */}
+                {allCities
+                  .filter(c => !nearbyCities.find(n => n.city === c) && c !== city)
+                  .map(cityName => (
+                    <label key={cityName} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedCities.includes(cityName)}
+                        onChange={() => toggleCity(cityName)}
+                        className="w-4 h-4 text-blue-600"
+                      />
+                      <span className="text-sm text-gray-600">{cityName}</span>
+                    </label>
+                  ))}
               </div>
             </div>
           </div>
@@ -312,7 +383,13 @@ export default function StagesResultsPage() {
                       <div className="flex items-center gap-2 mt-2">
                         <span className="text-red-600 text-xs flex items-center gap-1">
                           ⊕
-                          <button className="text-blue-700 hover:underline text-xs">
+                          <button
+                            onClick={() => {
+                              setSelectedStage(stage)
+                              setModalOpen(true)
+                            }}
+                            className="text-blue-700 hover:underline text-xs cursor-pointer"
+                          >
                             Plus d'infos
                           </button>
                         </span>
@@ -407,6 +484,16 @@ export default function StagesResultsPage() {
           </div>
         </div>
       </div>
+
+      {/* Google Maps Modal */}
+      {selectedStage && (
+        <StageDetailsModal
+          stage={selectedStage}
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          city={city.toLowerCase()}
+        />
+      )}
     </div>
   )
 }
