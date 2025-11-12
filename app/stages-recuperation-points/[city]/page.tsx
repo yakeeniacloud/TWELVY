@@ -323,7 +323,6 @@ export default function StagesResultsPage() {
                     checked={selectedCities !== null && selectedCities.includes(city.toUpperCase())}
                     onChange={() => toggleCity(city.toUpperCase())}
                     className="w-4 h-4 text-blue-600"
-                    disabled={selectedCities === null}
                   />
                   <span className="text-sm text-gray-900">{city}</span>
                 </label>
@@ -336,7 +335,6 @@ export default function StagesResultsPage() {
                       checked={selectedCities !== null && selectedCities.includes(nearby.city)}
                       onChange={() => toggleCity(nearby.city)}
                       className="w-4 h-4 text-blue-600"
-                      disabled={selectedCities === null}
                     />
                     <span className="text-sm text-gray-600">
                       {nearby.city} ({nearby.distance} km)
