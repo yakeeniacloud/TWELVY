@@ -36,7 +36,7 @@ export default function StagesResultsPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [sortBy, setSortBy] = useState<'pertinence' | 'proximite' | 'date' | 'prix'>('pertinence')
-  const [selectedCities, setSelectedCities] = useState<string[]>([])
+  const [selectedCities, setSelectedCities] = useState<string[] | null>(null) // null = all nearby cities
   const [allCities, setAllCities] = useState<string[]>([])
   const [nearbyCities, setNearbyCities] = useState<{ city: string; distance: number }[]>([])
   const [searchInput, setSearchInput] = useState('')
@@ -65,11 +65,38 @@ export default function StagesResultsPage() {
           }
         }))
 
-        setAllStages(normalizedStages)
-        setStages(normalizedStages)
+        // Calculate nearby cities within 30-40km range (NOT 50km)
+        const nearby = getCitiesInRadius(city, 40) // Changed from 50 to 40
+        setNearbyCities(nearby)
 
-        // FIX: Get ALL cities from database, not just from current stages
-        // This ensures autocomplete works even when searching for cities without stages
+        // FILTER: Only keep courses from searched city + cities within 30-40km
+        // Get list of cities to include (searched city + nearby cities)
+        const citiesToInclude = new Set([city])
+        nearby.forEach(n => citiesToInclude.add(n.city))
+
+        const filteredStages = normalizedStages.filter(s =>
+          citiesToInclude.has(s.site.ville)
+        )
+
+        // Sort by pertinence (proximity + price blend) and limit to 100
+        const stagesWithScore = filteredStages.map(stage => {
+          const distance = nearby.find(c => c.city === stage.site.ville)?.distance ?? 0
+          const isSearchedCity = stage.site.ville === city ? 0 : 1 // 0 for searched city, 1 for nearby
+
+          // Simple pertinence score: prioritize searched city, then by price, then by distance
+          const pertinenceScore = (isSearchedCity * 100) + (stage.prix / 10) + distance
+
+          return { stage, pertinenceScore }
+        })
+
+        // Sort by pertinence and take top 100
+        stagesWithScore.sort((a, b) => a.pertinenceScore - b.pertinenceScore)
+        const top100Stages = stagesWithScore.slice(0, 100).map(item => item.stage)
+
+        setAllStages(top100Stages)
+        setStages(top100Stages)
+
+        // Get ALL cities from database for autocomplete
         async function fetchAllCities() {
           try {
             const citiesResponse = await fetch('/api/cities')
@@ -77,27 +104,19 @@ export default function StagesResultsPage() {
               const { cities } = (await citiesResponse.json()) as { cities: string[] }
               setAllCities(cities.map(c => c.toUpperCase()).sort())
             } else {
-              // Fallback: extract from all stages if API fails
-              const citiesSet = new Set(normalizedStages.map(s => s.site.ville))
+              const citiesSet = new Set(top100Stages.map(s => s.site.ville))
               setAllCities(Array.from(citiesSet).sort())
             }
           } catch {
-            // Fallback: extract from current stages
-            const citiesSet = new Set(normalizedStages.map(s => s.site.ville))
+            const citiesSet = new Set(top100Stages.map(s => s.site.ville))
             setAllCities(Array.from(citiesSet).sort())
           }
         }
 
         fetchAllCities()
 
-        // Calculate nearby cities within 50km using city coordinates reference
-        // This includes ALL cities in the coordinate database, not just those with stages
-        const nearby = getCitiesInRadius(city, 50)
-        setNearbyCities(nearby)
-
-        // DO NOT pre-select cities - let user choose what to filter
-        // This allows the sidebar to show ALL proximity cities available
-        setSelectedCities([])
+        // DEFAULT STATE: "Toutes les villes" is pre-selected (null = all nearby cities)
+        setSelectedCities(null)
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error')
         setStages([])
@@ -111,16 +130,17 @@ export default function StagesResultsPage() {
 
   // Filter and sort stages
   useEffect(() => {
-    // IMPORTANT: Always show all nearby stages by default (not pre-filtered by selectedCities)
-    // selectedCities is only applied for client-side filtering
     let filtered = [...allStages]
 
-    // Filter by selected cities (if any selected, show only those; if none, show all)
-    if (selectedCities.length > 0) {
+    // Filter by selected cities
+    // selectedCities = null means "Toutes les villes" (all nearby cities - show all)
+    // selectedCities = [] means no cities selected (shouldn't happen, but treat as show all)
+    // selectedCities = [array] means user selected specific cities (show only those)
+    if (selectedCities !== null && selectedCities.length > 0) {
       filtered = filtered.filter(s => selectedCities.includes(s.site.ville))
     }
 
-    // Sort by proximity (distance from searched city)
+    // Apply sorting
     if (sortBy === 'proximite') {
       const stagesWithDistance = filtered.map(stage => ({
         stage,
@@ -137,7 +157,7 @@ export default function StagesResultsPage() {
     } else if (sortBy === 'prix') {
       filtered.sort((a, b) => a.prix - b.prix)
     }
-    // pertinence doesn't need sorting, keep original order
+    // 'pertinence' doesn't need re-sorting (already sorted by pertinence score)
 
     setStages(filtered)
   }, [sortBy, selectedCities, allStages, nearbyCities])
@@ -155,11 +175,20 @@ export default function StagesResultsPage() {
   }
 
   const toggleCity = (cityName: string) => {
-    setSelectedCities(prev =>
-      prev.includes(cityName)
-        ? prev.filter(c => c !== cityName)
-        : [...prev, cityName]
-    )
+    setSelectedCities(prev => {
+      if (prev === null) {
+        // Currently showing all cities, start selection with this city
+        return [cityName]
+      } else if (prev.includes(cityName)) {
+        // City is selected, remove it
+        const updated = prev.filter(c => c !== cityName)
+        // If no cities left, go back to "all cities"
+        return updated.length === 0 ? null : updated
+      } else {
+        // City not selected, add it
+        return [...prev, cityName]
+      }
+    })
   }
 
   return (
@@ -276,11 +305,12 @@ export default function StagesResultsPage() {
                 Filtrer par
               </div>
               <div className="bg-white border border-gray-300 border-t-0 rounded-b p-4 space-y-3 max-h-96 overflow-y-auto">
+                {/* "Toutes les villes" - DEFAULT state */}
                 <label className="flex items-center gap-2 cursor-pointer border-b pb-3 font-medium">
                   <input
                     type="checkbox"
-                    checked={selectedCities.length === 0}
-                    onChange={() => setSelectedCities([])}
+                    checked={selectedCities === null}
+                    onChange={() => setSelectedCities(null)}
                     className="w-4 h-4 text-blue-600"
                   />
                   <span className="text-sm text-gray-900">Toutes les villes</span>
@@ -290,21 +320,23 @@ export default function StagesResultsPage() {
                 <label className="flex items-center gap-2 cursor-pointer font-medium">
                   <input
                     type="checkbox"
-                    checked={selectedCities.includes(city.toUpperCase())}
+                    checked={selectedCities !== null && selectedCities.includes(city.toUpperCase())}
                     onChange={() => toggleCity(city.toUpperCase())}
                     className="w-4 h-4 text-blue-600"
+                    disabled={selectedCities === null}
                   />
                   <span className="text-sm text-gray-900">{city}</span>
                 </label>
 
-                {/* Nearby cities with distances */}
+                {/* Nearby cities with distances (only show within 30-40km) */}
                 {nearbyCities.map(nearby => (
                   <label key={nearby.city} className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={selectedCities.includes(nearby.city)}
+                      checked={selectedCities !== null && selectedCities.includes(nearby.city)}
                       onChange={() => toggleCity(nearby.city)}
                       className="w-4 h-4 text-blue-600"
+                      disabled={selectedCities === null}
                     />
                     <span className="text-sm text-gray-600">
                       {nearby.city} ({nearby.distance} km)
@@ -312,23 +344,7 @@ export default function StagesResultsPage() {
                   </label>
                 ))}
 
-                {/* Other cities not in range */}
-                {allCities
-                  .map(c => c.toUpperCase())
-                  .filter(c => !nearbyCities.find(n => n.city === c) && c !== city.toUpperCase())
-                  .filter((c, i, arr) => arr.indexOf(c) === i) // Remove duplicates
-                  .sort()
-                  .map(cityName => (
-                    <label key={cityName} className="flex items-center gap-2 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedCities.includes(cityName)}
-                        onChange={() => toggleCity(cityName)}
-                        className="w-4 h-4 text-blue-600"
-                      />
-                      <span className="text-sm text-gray-600">{cityName}</span>
-                    </label>
-                  ))}
+                {/* NOTE: Removed "Other cities not in range" section - sidebar now only shows nearby cities (30-40km) */}
               </div>
             </div>
           </div>
