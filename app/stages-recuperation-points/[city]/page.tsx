@@ -68,9 +68,27 @@ export default function StagesResultsPage() {
         setAllStages(normalizedStages)
         setStages(normalizedStages)
 
-        // Extract unique cities from stages (normalized to uppercase)
-        const cities = Array.from(new Set(normalizedStages.map(s => s.site.ville))).sort()
-        setAllCities(cities)
+        // FIX: Get ALL cities from database, not just from current stages
+        // This ensures autocomplete works even when searching for cities without stages
+        async function fetchAllCities() {
+          try {
+            const citiesResponse = await fetch('/api/cities')
+            if (citiesResponse.ok) {
+              const { cities } = (await citiesResponse.json()) as { cities: string[] }
+              setAllCities(cities.map(c => c.toUpperCase()).sort())
+            } else {
+              // Fallback: extract from all stages if API fails
+              const citiesSet = new Set(normalizedStages.map(s => s.site.ville))
+              setAllCities(Array.from(citiesSet).sort())
+            }
+          } catch {
+            // Fallback: extract from current stages
+            const citiesSet = new Set(normalizedStages.map(s => s.site.ville))
+            setAllCities(Array.from(citiesSet).sort())
+          }
+        }
+
+        fetchAllCities()
 
         // Calculate nearby cities within 50km using city coordinates reference
         // This includes ALL cities in the coordinate database, not just those with stages
