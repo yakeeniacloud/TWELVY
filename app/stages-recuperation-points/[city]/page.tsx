@@ -87,9 +87,21 @@ export default function StagesResultsPage() {
 
         // FILTER: Only keep courses from searched city + cities within 30-40km
         const citiesToInclude = new Set(citiesToFetch.map(c => c.toUpperCase()))
-        const filteredStages = normalizedStages.filter(s =>
-          citiesToInclude.has(s.site.ville)
-        )
+
+        // Also filter by date: only show courses after today
+        const today = new Date()
+        today.setHours(0, 0, 0, 0) // Reset to start of day for fair comparison
+
+        const filteredStages = normalizedStages.filter(s => {
+          // Check city is in range
+          const inRange = citiesToInclude.has(s.site.ville)
+          // Check date is after today
+          const courseDate = new Date(s.date_start)
+          courseDate.setHours(0, 0, 0, 0)
+          const isAfterToday = courseDate >= today
+
+          return inRange && isAfterToday
+        })
 
         // Sort by pertinence (proximity + price blend) and limit to 100
         const stagesWithScore = filteredStages.map(stage => {
