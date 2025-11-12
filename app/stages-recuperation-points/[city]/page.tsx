@@ -170,23 +170,29 @@ export default function StagesResultsPage() {
                 placeholder="Ville ou CP"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && searchInput.trim()) {
+                    const matchedCity = allCities.find(c =>
+                      c.toUpperCase().startsWith(searchInput.toUpperCase())
+                    )
+                    if (matchedCity) {
+                      window.location.href = `/stages-recuperation-points/${matchedCity.toLowerCase()}`
+                    }
+                  }
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
               />
               {searchInput && (
                 <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 border-t-0 rounded-b shadow-lg z-10">
                   {allCities
-                    .filter(c => c.toUpperCase().includes(searchInput.toUpperCase()))
+                    .filter(c => c.toUpperCase().startsWith(searchInput.toUpperCase()))
                     .slice(0, 5)
                     .map(filteredCity => (
                       <button
                         key={filteredCity}
                         onClick={() => {
-                          // ADD city to selection instead of replacing
-                          const upperCity = filteredCity.toUpperCase()
-                          if (!selectedCities.includes(upperCity)) {
-                            setSelectedCities([...selectedCities, upperCity])
-                          }
-                          setSearchInput('')
+                          // REPLACE current city with new one - navigate directly
+                          window.location.href = `/stages-recuperation-points/${filteredCity.toLowerCase()}`
                         }}
                         className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm text-gray-700"
                       >
