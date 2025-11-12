@@ -50,14 +50,34 @@ export default function StagesResultsPage() {
     async function fetchStages() {
       try {
         setLoading(true)
-        const response = await fetch(`/api/stages/${city}`)
-        if (!response.ok) {
-          throw new Error('Failed to fetch stages')
+
+        // Calculate nearby cities within 30-40km range FIRST
+        const nearby = getCitiesInRadius(city, 40)
+        setNearbyCities(nearby)
+
+        // Build list of all cities to fetch: searched city + nearby cities
+        const citiesToFetch = [city]
+        nearby.forEach(n => citiesToFetch.push(n.city))
+
+        // FETCH courses from ALL nearby cities (not just the searched city)
+        // This ensures we have courses available for all selectable cities in the sidebar
+        let allFetchedStages: Stage[] = []
+
+        for (const fetchCity of citiesToFetch) {
+          try {
+            const response = await fetch(`/api/stages/${fetchCity}`)
+            if (response.ok) {
+              const data = (await response.json()) as { stages: Stage[] }
+              allFetchedStages = allFetchedStages.concat(data.stages)
+            }
+          } catch (err) {
+            // Continue fetching other cities if one fails
+            console.error(`Failed to fetch stages for ${fetchCity}:`, err)
+          }
         }
-        const data = (await response.json()) as { stages: Stage[] }
 
         // NORMALIZE: Convert all city names to UPPERCASE for consistency
-        const normalizedStages = data.stages.map(s => ({
+        const normalizedStages = allFetchedStages.map(s => ({
           ...s,
           site: {
             ...s.site,
@@ -65,15 +85,8 @@ export default function StagesResultsPage() {
           }
         }))
 
-        // Calculate nearby cities within 30-40km range (NOT 50km)
-        const nearby = getCitiesInRadius(city, 40) // Changed from 50 to 40
-        setNearbyCities(nearby)
-
         // FILTER: Only keep courses from searched city + cities within 30-40km
-        // Get list of cities to include (searched city + nearby cities)
-        const citiesToInclude = new Set([city])
-        nearby.forEach(n => citiesToInclude.add(n.city))
-
+        const citiesToInclude = new Set(citiesToFetch.map(c => c.toUpperCase()))
         const filteredStages = normalizedStages.filter(s =>
           citiesToInclude.has(s.site.ville)
         )
