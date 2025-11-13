@@ -225,12 +225,34 @@ export default function StagesResultsPage() {
     })
   }
 
-  const handleCitySearch = (searchedCity: string) => {
+  const handleCitySearch = async (searchedCity: string) => {
     // Find first postal code for this city from stages
     const firstStageForCity = allStages.find(s => s.site.ville === searchedCity.toUpperCase())
+
     if (firstStageForCity) {
+      // Use postal from existing stages
       const newUrl = buildRecuperationPointsUrl(searchedCity, firstStageForCity.site.code_postal)
       window.location.href = newUrl
+    } else {
+      // Fallback: fetch stages for this city to get postal code
+      try {
+        const response = await fetch(`/api/stages/${searchedCity.toUpperCase()}`)
+        if (response.ok) {
+          const data = (await response.json()) as { stages: Stage[] }
+          if (data.stages && data.stages.length > 0) {
+            const postal = data.stages[0].site.code_postal
+            const newUrl = buildRecuperationPointsUrl(searchedCity, postal)
+            window.location.href = newUrl
+          }
+        } else {
+          // Last resort: use placeholder postal code
+          window.location.href = buildRecuperationPointsUrl(searchedCity, '00000')
+        }
+      } catch (error) {
+        // Last resort: use placeholder postal code
+        console.error('Error fetching stages for search:', error)
+        window.location.href = buildRecuperationPointsUrl(searchedCity, '00000')
+      }
     }
   }
 
@@ -260,13 +282,13 @@ export default function StagesResultsPage() {
                 placeholder="Ville ou CP"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={(e) => {
+                onKeyDown={async (e) => {
                   if (e.key === 'Enter' && searchInput.trim()) {
                     const matchedCity = allCities.find(c =>
                       c.toUpperCase().startsWith(searchInput.toUpperCase())
                     )
                     if (matchedCity) {
-                      handleCitySearch(matchedCity)
+                      await handleCitySearch(matchedCity)
                     }
                   }
                 }}
@@ -280,8 +302,8 @@ export default function StagesResultsPage() {
                     .map(filteredCity => (
                       <button
                         key={filteredCity}
-                        onClick={() => {
-                          handleCitySearch(filteredCity)
+                        onClick={async () => {
+                          await handleCitySearch(filteredCity)
                         }}
                         className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm text-gray-700"
                       >
