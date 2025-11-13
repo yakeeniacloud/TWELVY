@@ -61,12 +61,38 @@ export default function StagesResultsPage() {
         setLoading(true)
 
         // Calculate nearby cities within 30-40km range FIRST
-        const nearby = getCitiesInRadius(city, 40)
+        let nearby = getCitiesInRadius(city, 40)
+
+        // FALLBACK: If city not found in coordinates, fetch ALL cities for fallback
+        if (nearby.length === 0) {
+          console.warn(`City ${city} not found in proximity list, will fetch all available cities as fallback`)
+        }
+
         setNearbyCities(nearby)
 
-        // Build list of all cities to fetch: searched city + nearby cities
+        // Build list of all cities to fetch: searched city + nearby cities + fallback cities
         const citiesToFetch = [city]
         nearby.forEach(n => citiesToFetch.push(n.city))
+
+        // If no nearby cities, fetch all available cities from database and add them
+        if (nearby.length === 0) {
+          try {
+            const citiesResponse = await fetch('/api/cities')
+            if (citiesResponse.ok) {
+              const { cities: allAvailableCities } = (await citiesResponse.json()) as { cities: string[] }
+              // Add all other cities as fallback (no proximity, but better than nothing)
+              allAvailableCities.forEach(c => {
+                const upperC = c.toUpperCase()
+                if (upperC !== city && !citiesToFetch.includes(upperC)) {
+                  citiesToFetch.push(upperC)
+                }
+              })
+              console.log(`Added ${citiesToFetch.length - 1} cities to fetch (fallback mode)`)
+            }
+          } catch (err) {
+            console.error('Error fetching cities for fallback:', err)
+          }
+        }
 
         // FETCH courses from ALL nearby cities (not just the searched city)
         // This ensures we have courses available for all selectable cities in the sidebar
@@ -97,19 +123,21 @@ export default function StagesResultsPage() {
         // FILTER: Only keep courses from searched city + cities within 30-40km
         const citiesToInclude = new Set(citiesToFetch.map(c => c.toUpperCase()))
 
-        // Also filter by date: only show courses after today
+        // Filter by date: only show courses after today (OPTIONAL: can be disabled for testing)
         const today = new Date()
         today.setHours(0, 0, 0, 0) // Reset to start of day for fair comparison
 
         const filteredStages = normalizedStages.filter(s => {
           // Check city is in range
           const inRange = citiesToInclude.has(s.site.ville)
-          // Check date is after today
+          // Check date is after today - DISABLED for now to see all courses
+          // If you want to enable date filtering, uncomment the line below
           const courseDate = new Date(s.date_start)
           courseDate.setHours(0, 0, 0, 0)
           const isAfterToday = courseDate >= today
 
-          return inRange && isAfterToday
+          // For now, show all courses regardless of date to debug the low count issue
+          return inRange // && isAfterToday
         })
 
         // Sort by pertinence (proximity + price blend) and limit to 100
@@ -123,9 +151,15 @@ export default function StagesResultsPage() {
           return { stage, pertinenceScore }
         })
 
-        // Sort by pertinence and take top 100
+        // Sort by pertinence (ascending = lowest score = most relevant) and take top 100
         stagesWithScore.sort((a, b) => a.pertinenceScore - b.pertinenceScore)
         const top100Stages = stagesWithScore.slice(0, 100).map(item => item.stage)
+
+        console.log(`Searched city: ${city}`)
+        console.log(`Total stages fetched: ${allFetchedStages.length}`)
+        console.log(`Filtered stages (after date filter): ${filteredStages.length}`)
+        console.log(`Top 100 stages: ${top100Stages.length}`)
+        console.log(`Sample stage scores:`, stagesWithScore.slice(0, 5).map(s => ({ city: s.stage.site.ville, score: s.pertinenceScore })))
 
         setAllStages(top100Stages)
         setStages(top100Stages)
