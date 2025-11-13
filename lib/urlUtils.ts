@@ -18,10 +18,10 @@ export function parseRecuperationPointsSlug(slug: string): { city: string; posta
 }
 
 /**
- * Build new URL format: recuperation-points-MARSEILLE-13015
+ * Build new URL format: /recuperation-points/MARSEILLE-13015
  */
 export function buildRecuperationPointsUrl(city: string, postal: string): string {
-  return `/recuperation-points-${city.toUpperCase()}-${postal}`
+  return `/recuperation-points/${city.toUpperCase()}-${postal}`
 }
 
 /**
