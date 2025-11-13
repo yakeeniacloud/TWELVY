@@ -74,42 +74,33 @@ export default function StagesResultsPage() {
         const citiesToFetch = [city]
         nearby.forEach(n => citiesToFetch.push(n.city))
 
-        // If no nearby cities, fetch all available cities from database and add them
+        // If no nearby cities, limit to just the searched city (don't fetch all cities)
+        // This prevents extreme slowness when city not in CITY_COORDINATES
         if (nearby.length === 0) {
-          try {
-            const citiesResponse = await fetch('/api/cities')
-            if (citiesResponse.ok) {
-              const { cities: allAvailableCities } = (await citiesResponse.json()) as { cities: string[] }
-              // Add all other cities as fallback (no proximity, but better than nothing)
-              allAvailableCities.forEach(c => {
-                const upperC = c.toUpperCase()
-                if (upperC !== city && !citiesToFetch.includes(upperC)) {
-                  citiesToFetch.push(upperC)
-                }
-              })
-              console.log(`Added ${citiesToFetch.length - 1} cities to fetch (fallback mode)`)
-            }
-          } catch (err) {
-            console.error('Error fetching cities for fallback:', err)
-          }
+          console.warn(`No nearby cities found for ${city}. Only fetching this city's stages.`)
+          // citiesToFetch already has [city], so we're good
         }
 
-        // FETCH courses from ALL nearby cities (not just the searched city)
+        // FETCH courses from ALL nearby cities IN PARALLEL (not sequentially!)
         // This ensures we have courses available for all selectable cities in the sidebar
-        let allFetchedStages: Stage[] = []
-
-        for (const fetchCity of citiesToFetch) {
+        // Using Promise.all() instead of for loop = 10x+ faster
+        console.log(`Fetching stages for ${citiesToFetch.length} cities in parallel...`)
+        const fetchPromises = citiesToFetch.map(async (fetchCity) => {
           try {
             const response = await fetch(`/api/stages/${fetchCity}`)
             if (response.ok) {
               const data = (await response.json()) as { stages: Stage[] }
-              allFetchedStages = allFetchedStages.concat(data.stages)
+              return data.stages || []
             }
+            return []
           } catch (err) {
-            // Continue fetching other cities if one fails
             console.error(`Failed to fetch stages for ${fetchCity}:`, err)
+            return []
           }
-        }
+        })
+
+        const stagesByCity = await Promise.all(fetchPromises)
+        const allFetchedStages = stagesByCity.flat()
 
         // NORMALIZE: Convert all city names to UPPERCASE for consistency
         const normalizedStages = allFetchedStages.map(s => ({
