@@ -30,11 +30,27 @@ interface Stage {
 
 export default function StagesResultsPage() {
   const params = useParams()
-  const slug = params.slug as string
+  const fullSlug = params.slug as string
 
   // Debug logging to help diagnose routing issues
-  console.log('Route params:', { slug, parsedSlug: params })
+  console.log('Route params:', { fullSlug, params })
 
+  // Check if this is a recuperation-points slug
+  if (!fullSlug || !fullSlug.startsWith('recuperation-points-')) {
+    // Not a recuperation-points route, show 404
+    return (
+      <div className="min-h-screen bg-white p-8 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">404 - Page Non Trouvée</h1>
+          <p className="text-gray-700 mb-4">Cette page n'existe pas</p>
+          <a href="/" className="text-blue-600 hover:underline">Retour à l'accueil</a>
+        </div>
+      </div>
+    )
+  }
+
+  // Extract the city-postal part after "recuperation-points-"
+  const slug = fullSlug.replace('recuperation-points-', '')
   const parsed = parseRecuperationPointsSlug(slug)
 
   if (!parsed) {
