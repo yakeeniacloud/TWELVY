@@ -67,7 +67,7 @@ export default function CitySearchBar({
         if (onCitySelect) {
           onCitySelect(cityToNavigate)
         } else {
-          router.push(`/recuperation-points/${cityToNavigate.toUpperCase()}-00000`)
+          router.push(`/recuperation-points-${cityToNavigate.toUpperCase()}-00000`)
         }
       }
       setQuery('')

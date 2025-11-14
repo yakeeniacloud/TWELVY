@@ -1,27 +1,29 @@
 /**
- * Parse city slug from URL format: MARSEILLE-13015
+ * Parse city slug from URL format: MARSEILLE-13015 or AIX-EN-PROVENCE-13100
  * Returns: { city: "MARSEILLE", postal: "13015" }
+ * Splits on the LAST hyphen since postal is always 5 digits
  */
 export function parseRecuperationPointsSlug(slug: string): { city: string; postal: string } | null {
   if (!slug) return null
 
-  // Format: CITY-POSTAL (postal code is last 5 digits after last dash)
-  const parts = slug.split('-')
-  if (parts.length < 2) return null
+  // Format: CITY-POSTAL where postal is 5 digits after last dash
+  // Handle city names with hyphens (e.g., AIX-EN-PROVENCE-13100)
+  const lastHyphenIndex = slug.lastIndexOf('-')
+  if (lastHyphenIndex === -1) return null
 
-  const postal = parts[parts.length - 1]
-  const city = parts.slice(0, -1).join('-').toUpperCase()
+  const postal = slug.substring(lastHyphenIndex + 1)
+  const city = slug.substring(0, lastHyphenIndex).toUpperCase()
 
-  if (!postal || !city) return null
+  if (!postal || !city || postal.length !== 5) return null
 
   return { city, postal }
 }
 
 /**
- * Build new URL format: /recuperation-points/MARSEILLE-13015
+ * Build new URL format: /recuperation-points-MARSEILLE-13015
  */
 export function buildRecuperationPointsUrl(city: string, postal: string): string {
-  return `/recuperation-points/${city.toUpperCase()}-${postal}`
+  return `/recuperation-points-${city.toUpperCase()}-${postal}`
 }
 
 /**
