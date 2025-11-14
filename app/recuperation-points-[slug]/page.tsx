@@ -31,10 +31,25 @@ interface Stage {
 export default function StagesResultsPage() {
   const params = useParams()
   const slug = params.slug as string
+
+  // Debug logging to help diagnose routing issues
+  console.log('Route params:', { slug, parsedSlug: params })
+
   const parsed = parseRecuperationPointsSlug(slug)
 
   if (!parsed) {
-    return <div>Invalid URL format</div>
+    return (
+      <div className="min-h-screen bg-white p-8 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">404 - Page Non Trouvée</h1>
+          <p className="text-gray-700 mb-4">Format d'URL invalide: "{slug}"</p>
+          <p className="text-gray-600 text-sm mb-4">
+            Format attendu: /recuperation-points-VILLE-CODEPOSTAL (ex: /recuperation-points-MARSEILLE-13001)
+          </p>
+          <a href="/" className="text-blue-600 hover:underline">Retour à l'accueil</a>
+        </div>
+      </div>
+    )
   }
 
   const { city, postal } = parsed
