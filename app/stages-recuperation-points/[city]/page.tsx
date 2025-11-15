@@ -3,8 +3,6 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { getCitiesWithinRadius } from '@/lib/distance'
-import { getCitiesInRadius } from '@/lib/cityCoordinates'
 import { useWordPressContent } from '@/lib/useWordPressContent'
 import StageDetailsModal from '@/components/stages/StageDetailsModal'
 
@@ -51,30 +49,15 @@ export default function StagesResultsPage() {
       try {
         setLoading(true)
 
-        // Calculate nearby cities within 30-40km range FIRST
-        const nearby = getCitiesInRadius(city, 40)
-        setNearbyCities(nearby)
-
-        // Build list of all cities to fetch: searched city + nearby cities
-        const citiesToFetch = [city]
-        nearby.forEach(n => citiesToFetch.push(n.city))
-
-        // FETCH courses from ALL nearby cities (not just the searched city)
-        // This ensures we have courses available for all selectable cities in the sidebar
-        let allFetchedStages: Stage[] = []
-
-        for (const fetchCity of citiesToFetch) {
-          try {
-            const response = await fetch(`/api/stages/${fetchCity}`)
-            if (response.ok) {
-              const data = (await response.json()) as { stages: Stage[] }
-              allFetchedStages = allFetchedStages.concat(data.stages)
-            }
-          } catch (err) {
-            // Continue fetching other cities if one fails
-            console.error(`Failed to fetch stages for ${fetchCity}:`, err)
-          }
+        // PHP backend now handles 100km proximity filtering via Haversine SQL
+        // Just fetch stages for the searched city - backend returns all within 100km
+        const response = await fetch(`/api/stages/${city}`)
+        if (!response.ok) {
+          throw new Error('Failed to fetch stages')
         }
+
+        const data = (await response.json()) as { stages: Stage[] }
+        let allFetchedStages = data.stages
 
         // NORMALIZE: Convert all city names to UPPERCASE for consistency
         const normalizedStages = allFetchedStages.map(s => ({
@@ -85,41 +68,28 @@ export default function StagesResultsPage() {
           }
         }))
 
-        // FILTER: Only keep courses from searched city + cities within 30-40km
-        const citiesToInclude = new Set(citiesToFetch.map(c => c.toUpperCase()))
-
-        // Also filter by date: only show courses after today
+        // Filter by date: only show courses after today
         const today = new Date()
-        today.setHours(0, 0, 0, 0) // Reset to start of day for fair comparison
+        today.setHours(0, 0, 0, 0)
 
         const filteredStages = normalizedStages.filter(s => {
-          // Check city is in range
-          const inRange = citiesToInclude.has(s.site.ville)
-          // Check date is after today
           const courseDate = new Date(s.date_start)
           courseDate.setHours(0, 0, 0, 0)
-          const isAfterToday = courseDate >= today
-
-          return inRange && isAfterToday
+          return courseDate >= today
         })
 
-        // Sort by pertinence (proximity + price blend) and limit to 100
-        const stagesWithScore = filteredStages.map(stage => {
-          const distance = nearby.find(c => c.city === stage.site.ville)?.distance ?? 0
-          const isSearchedCity = stage.site.ville === city ? 0 : 1 // 0 for searched city, 1 for nearby
-
-          // Simple pertinence score: prioritize searched city, then by price, then by distance
-          const pertinenceScore = (isSearchedCity * 100) + (stage.prix / 10) + distance
-
-          return { stage, pertinenceScore }
+        // Extract unique nearby cities from results for sidebar
+        const citiesInResults = new Set<string>()
+        filteredStages.forEach(s => {
+          if (s.site.ville !== city) {
+            citiesInResults.add(s.site.ville)
+          }
         })
+        const nearbyCitiesList = Array.from(citiesInResults).sort().map(c => ({ city: c, distance: 0 }))
+        setNearbyCities(nearbyCitiesList)
 
-        // Sort by pertinence and take top 100
-        stagesWithScore.sort((a, b) => a.pertinenceScore - b.pertinenceScore)
-        const top100Stages = stagesWithScore.slice(0, 100).map(item => item.stage)
-
-        setAllStages(top100Stages)
-        setStages(top100Stages)
+        setAllStages(filteredStages)
+        setStages(filteredStages)
 
         // Get ALL cities from database for autocomplete
         async function fetchAllCities() {
@@ -129,11 +99,11 @@ export default function StagesResultsPage() {
               const { cities } = (await citiesResponse.json()) as { cities: string[] }
               setAllCities(cities.map(c => c.toUpperCase()).sort())
             } else {
-              const citiesSet = new Set(top100Stages.map(s => s.site.ville))
+              const citiesSet = new Set(filteredStages.map(s => s.site.ville))
               setAllCities(Array.from(citiesSet).sort())
             }
           } catch {
-            const citiesSet = new Set(top100Stages.map(s => s.site.ville))
+            const citiesSet = new Set(filteredStages.map(s => s.site.ville))
             setAllCities(Array.from(citiesSet).sort())
           }
         }
