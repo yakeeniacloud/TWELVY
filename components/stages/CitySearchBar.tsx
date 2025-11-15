@@ -43,13 +43,13 @@ export default function CitySearchBar({
     const cityToNavigate = city || cityToSearch
 
     if (cityToNavigate) {
-      // Fetch first stage to get postal code for URL format: /stages-recuperation-points/CITY-POSTAL
+      // Fetch first stage to get postal code for URL format: /stages-recuperation-points-CITY-POSTAL
       fetch(`/api/stages/${cityToNavigate.toUpperCase()}`)
         .then(response => response.json())
         .then(data => {
           if (data.stages && data.stages.length > 0) {
             const postal = data.stages[0].site.code_postal
-            const newUrl = `/stages-recuperation-points/${cityToNavigate.toUpperCase()}-${postal}`
+            const newUrl = `/stages-recuperation-points-${cityToNavigate.toUpperCase()}-${postal}`
 
             if (onCitySelect) {
               onCitySelect(cityToNavigate)
@@ -58,7 +58,7 @@ export default function CitySearchBar({
             }
           } else {
             // Fallback if no stages found
-            const newUrl = `/stages-recuperation-points/${cityToNavigate.toUpperCase()}-00000`
+            const newUrl = `/stages-recuperation-points-${cityToNavigate.toUpperCase()}-00000`
             if (onCitySelect) {
               onCitySelect(cityToNavigate)
             } else {
@@ -68,7 +68,7 @@ export default function CitySearchBar({
         })
         .catch(() => {
           // Fallback on error
-          const newUrl = `/stages-recuperation-points/${cityToNavigate.toUpperCase()}-00000`
+          const newUrl = `/stages-recuperation-points-${cityToNavigate.toUpperCase()}-00000`
           if (onCitySelect) {
             onCitySelect(cityToNavigate)
           } else {
