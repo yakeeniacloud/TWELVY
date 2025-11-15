@@ -546,7 +546,7 @@ export default function StagesResultsPage() {
                         {stage.prix.toFixed(0)} €
                       </p>
                       <Link
-                        href={`/stages-recuperation-points/${city.toLowerCase()}/${stage.id}`}
+                        href={`/stages-recuperation-points-${city.toUpperCase()}-${stage.site.code_postal}/${stage.id}`}
                         className="bg-gradient-to-b from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold px-5 py-2 rounded text-sm transition-all"
                       >
                         Sélectionner
