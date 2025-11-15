@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
 
     // Proxy to PHP backend
-    const response = await fetch('https://www.twelvy.net/php/stagiaire-create.php', {
+    const response = await fetch('https://api.twelvy.net/stagiaire-create.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
