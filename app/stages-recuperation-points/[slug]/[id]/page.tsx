@@ -130,7 +130,7 @@ export default function StageDetailPage() {
       }))
 
       // Redirect to confirmation page
-      router.push(`/stages-recuperation-points-${fullSlug}/${id}/confirmation`)
+      router.push(`/stages-recuperation-points/${fullSlug}/${id}/confirmation`)
     } catch (error) {
       alert('Erreur: ' + (error instanceof Error ? error.message : 'Unknown error'))
     }

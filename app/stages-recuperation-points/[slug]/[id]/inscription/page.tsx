@@ -19,7 +19,7 @@ export default function InscriptionPage() {
       <div className="bg-gray-50 border-b border-gray-200 py-4">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Link
-            href={`/stages-recuperation-points-${fullSlug}/${id}`}
+            href={`/stages-recuperation-points/${fullSlug}/${id}`}
             className="text-blue-600 hover:text-blue-800 font-semibold"
           >
             ← Retour aux détails
