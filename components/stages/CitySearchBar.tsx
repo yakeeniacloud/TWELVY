@@ -43,14 +43,38 @@ export default function CitySearchBar({
     const cityToNavigate = city || cityToSearch
 
     if (cityToNavigate) {
-      // NEW: Use the correct /stages-recuperation-points/[city] route
-      const newUrl = `/stages-recuperation-points/${cityToNavigate.toLowerCase()}`
+      // Fetch first stage to get postal code for URL format: /stages-recuperation-points-CITY-POSTAL
+      fetch(`/api/stages/${cityToNavigate.toUpperCase()}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.stages && data.stages.length > 0) {
+            const postal = data.stages[0].site.code_postal
+            const newUrl = `/stages-recuperation-points-${cityToNavigate.toUpperCase()}-${postal}`
 
-      if (onCitySelect) {
-        onCitySelect(cityToNavigate)
-      } else {
-        router.push(newUrl)
-      }
+            if (onCitySelect) {
+              onCitySelect(cityToNavigate)
+            } else {
+              router.push(newUrl)
+            }
+          } else {
+            // Fallback if no stages found
+            const newUrl = `/stages-recuperation-points-${cityToNavigate.toUpperCase()}-00000`
+            if (onCitySelect) {
+              onCitySelect(cityToNavigate)
+            } else {
+              router.push(newUrl)
+            }
+          }
+        })
+        .catch(() => {
+          // Fallback on error
+          const newUrl = `/stages-recuperation-points-${cityToNavigate.toUpperCase()}-00000`
+          if (onCitySelect) {
+            onCitySelect(cityToNavigate)
+          } else {
+            router.push(newUrl)
+          }
+        })
 
       setQuery('')
       setShowSuggestions(false)
