@@ -48,16 +48,22 @@ export default function StagesResultsPage() {
     async function fetchStages() {
       try {
         setLoading(true)
+        console.log(`🚀 Starting fetch for city: ${city}`)
 
         // PHP backend now handles 100km proximity filtering via Haversine SQL
         // Just fetch stages for the searched city - backend returns all within 100km
         const response = await fetch(`/api/stages/${city}`)
+        console.log(`📡 API response status: ${response.status}`)
+
         if (!response.ok) {
+          const errorText = await response.text()
+          console.error(`❌ API error: ${response.status} - ${errorText}`)
           throw new Error('Failed to fetch stages')
         }
 
         const data = (await response.json()) as { stages: Stage[] }
         let allFetchedStages = data.stages
+        console.log(`✅ Received ${allFetchedStages.length} stages from API`)
 
         // NORMALIZE: Convert all city names to UPPERCASE for consistency
         const normalizedStages = allFetchedStages.map(s => ({
@@ -123,13 +129,16 @@ export default function StagesResultsPage() {
         // DEFAULT STATE: "Toutes les villes" is pre-selected (null = all nearby cities)
         setSelectedCities(null)
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unknown error')
+        const errorMsg = err instanceof Error ? err.message : 'Unknown error'
+        console.error('💥 Error in fetchStages:', errorMsg, err)
+        setError(errorMsg)
         setStages([])
       } finally {
         setLoading(false)
       }
     }
 
+    console.log(`🔄 useEffect triggered for city: ${city}`)
     fetchStages()
   }, [city])
 
