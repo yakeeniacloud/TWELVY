@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCities } from '@/hooks/useCities'
-import { buildRecuperationPointsUrl } from '@/lib/urlUtils'
 
 interface CitySearchBarProps {
   placeholder?: string
@@ -44,32 +43,15 @@ export default function CitySearchBar({
     const cityToNavigate = city || cityToSearch
 
     if (cityToNavigate) {
-      try {
-        // Fetch first stage for this city to get postal code
-        const response = await fetch(`/api/stages/${cityToNavigate.toUpperCase()}`)
-        if (response.ok) {
-          const data = (await response.json()) as { stages: any[] }
-          if (data.stages && data.stages.length > 0) {
-            const firstStage = data.stages[0]
-            const postal = firstStage.site.code_postal
-            const newUrl = buildRecuperationPointsUrl(cityToNavigate, postal)
+      // NEW: Use the correct /stages-recuperation-points/[city] route
+      const newUrl = `/stages-recuperation-points/${cityToNavigate.toLowerCase()}`
 
-            if (onCitySelect) {
-              onCitySelect(cityToNavigate)
-            } else {
-              router.push(newUrl)
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching stages:', error)
-        // Fallback if API fails
-        if (onCitySelect) {
-          onCitySelect(cityToNavigate)
-        } else {
-          router.push(`/recuperation-points-${cityToNavigate.toUpperCase()}-00000`)
-        }
+      if (onCitySelect) {
+        onCitySelect(cityToNavigate)
+      } else {
+        router.push(newUrl)
       }
+
       setQuery('')
       setShowSuggestions(false)
     }
