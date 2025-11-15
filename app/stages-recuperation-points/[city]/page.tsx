@@ -69,13 +69,15 @@ export default function StagesResultsPage() {
         }))
 
         // Filter by date: only show courses after today
+        // Use UTC dates to avoid timezone issues
         const today = new Date()
-        today.setHours(0, 0, 0, 0)
+        const todayStr = today.toISOString().split('T')[0] // YYYY-MM-DD format
 
         const filteredStages = normalizedStages.filter(s => {
-          const courseDate = new Date(s.date_start)
-          courseDate.setHours(0, 0, 0, 0)
-          return courseDate >= today
+          // Skip invalid dates
+          if (!s.date_start || s.date_start === '0000-00-00') return false
+          // Direct string comparison (YYYY-MM-DD format)
+          return s.date_start >= todayStr
         })
 
         // Extract unique nearby cities from results for sidebar
