@@ -150,7 +150,7 @@ export default function StageDetailsModal({
             </div>
 
             <Link
-              href={slug ? `/stages-recuperation-points-${slug}/${stage.id}` : `/stages-recuperation-points-${city.toUpperCase()}-${stage.site.code_postal}/${stage.id}`}
+              href={slug ? `/stages-recuperation-points/${slug}/${stage.id}` : `/stages-recuperation-points/${city.toUpperCase()}-${stage.site.code_postal}/${stage.id}`}
               onClick={onClose}
               className="block w-full bg-gradient-to-b from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 rounded text-center transition-all"
             >

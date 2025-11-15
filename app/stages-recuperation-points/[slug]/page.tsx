@@ -249,9 +249,9 @@ export default function StagesResultsPage() {
                         const response = await fetch(`/api/stages/${matchedCity.toUpperCase()}`)
                         const data = await response.json()
                         const postal = data.stages?.[0]?.site?.code_postal || '00000'
-                        window.location.href = `/stages-recuperation-points-${matchedCity.toUpperCase()}-${postal}`
+                        window.location.href = `/stages-recuperation-points/${matchedCity.toUpperCase()}-${postal}`
                       } catch {
-                        window.location.href = `/stages-recuperation-points-${matchedCity.toUpperCase()}-00000`
+                        window.location.href = `/stages-recuperation-points/${matchedCity.toUpperCase()}-00000`
                       }
                     }
                   }
@@ -272,9 +272,9 @@ export default function StagesResultsPage() {
                             const response = await fetch(`/api/stages/${filteredCity.toUpperCase()}`)
                             const data = await response.json()
                             const postal = data.stages?.[0]?.site?.code_postal || '00000'
-                            window.location.href = `/stages-recuperation-points-${filteredCity.toUpperCase()}-${postal}`
+                            window.location.href = `/stages-recuperation-points/${filteredCity.toUpperCase()}-${postal}`
                           } catch {
-                            window.location.href = `/stages-recuperation-points-${filteredCity.toUpperCase()}-00000`
+                            window.location.href = `/stages-recuperation-points/${filteredCity.toUpperCase()}-00000`
                           }
                         }}
                         className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm text-gray-700"
@@ -511,7 +511,7 @@ export default function StagesResultsPage() {
                         {stage.prix.toFixed(0)} €
                       </p>
                       <Link
-                        href={`/stages-recuperation-points-${fullSlug}/${stage.id}`}
+                        href={`/stages-recuperation-points/${fullSlug}/${stage.id}`}
                         className="bg-gradient-to-b from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold px-5 py-2 rounded text-sm transition-all"
                       >
                         Sélectionner
