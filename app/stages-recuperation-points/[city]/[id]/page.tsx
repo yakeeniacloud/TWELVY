@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 interface Stage {
@@ -22,6 +22,7 @@ interface Stage {
 
 export default function StageDetailPage() {
   const params = useParams()
+  const router = useRouter()
   const city = (params.city as string).toLowerCase()
   const id = params.id as string
   const [stage, setStage] = useState<Stage | null>(null)
@@ -117,8 +118,14 @@ export default function StageDetailPage() {
         throw new Error('Erreur lors de l\'inscription')
       }
 
-      // Redirect to payment or confirmation
-      alert('Inscription réussie!')
+      // Store form data in sessionStorage for confirmation page
+      sessionStorage.setItem('bookingFormData', JSON.stringify({
+        ...stagiaireData,
+        garantie_serenite: formData.garantie_serenite
+      }))
+
+      // Redirect to confirmation page
+      router.push(`/stages-recuperation-points/${city}/${id}/confirmation`)
     } catch (error) {
       alert('Erreur: ' + (error instanceof Error ? error.message : 'Unknown error'))
     }
