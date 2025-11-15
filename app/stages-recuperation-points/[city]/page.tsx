@@ -80,6 +80,11 @@ export default function StagesResultsPage() {
           return s.date_start >= todayStr
         })
 
+        console.log(`🔍 DEBUG for ${city}:`)
+        console.log(`  - Total fetched: ${allFetchedStages.length}`)
+        console.log(`  - After normalization: ${normalizedStages.length}`)
+        console.log(`  - After date filter (>= ${todayStr}): ${filteredStages.length}`)
+
         // Extract unique nearby cities from results for sidebar
         const citiesInResults = new Set<string>()
         filteredStages.forEach(s => {
@@ -88,10 +93,13 @@ export default function StagesResultsPage() {
           }
         })
         const nearbyCitiesList = Array.from(citiesInResults).sort().map(c => ({ city: c, distance: 0 }))
+        console.log(`  - Nearby cities found: ${nearbyCitiesList.length}`)
+        console.log(`  - Sample cities:`, Array.from(citiesInResults).slice(0, 5))
         setNearbyCities(nearbyCitiesList)
 
         setAllStages(filteredStages)
         setStages(filteredStages)
+        console.log(`  - Final stages to display: ${filteredStages.length}`)
 
         // Get ALL cities from database for autocomplete
         async function fetchAllCities() {
