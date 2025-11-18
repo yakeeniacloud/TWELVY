@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCities } from '@/hooks/useCities'
+import { CITY_POSTAL_MAP } from '@/lib/city-postal-map'
 
 interface CitySearchBarProps {
   placeholder?: string
@@ -43,18 +44,59 @@ export default function CitySearchBar({
     const cityToNavigate = city || cityToSearch
 
     if (cityToNavigate) {
-      // Fetch stage data to get postal code AND cache for results page
-      fetch(`/api/stages/${cityToNavigate.toUpperCase()}`)
+      const cityUpper = cityToNavigate.toUpperCase()
+
+      // TRY POSTAL MAP FIRST for instant navigation
+      const postalFromMap = CITY_POSTAL_MAP[cityUpper]
+
+      if (postalFromMap) {
+        // ⚡ INSTANT NAVIGATION - no API call needed!
+        console.log(`⚡ Using postal map: ${cityUpper} -> ${postalFromMap}`)
+        const newUrl = `/stages-recuperation-points/${cityUpper}-${postalFromMap}`
+
+        // Prefetch data in background for instant display on results page
+        fetch(`/api/stages/${cityUpper}`)
+          .then(response => response.json())
+          .then(data => {
+            try {
+              sessionStorage.setItem(
+                `stages_cache_${cityUpper}`,
+                JSON.stringify({
+                  data: data,
+                  timestamp: Date.now()
+                })
+              )
+              console.log('✅ Cached stage data in background')
+            } catch (e) {
+              console.warn('⚠️ Failed to cache:', e)
+            }
+          })
+          .catch(err => console.warn('⚠️ Background fetch failed:', err))
+
+        if (onCitySelect) {
+          onCitySelect(cityToNavigate)
+        } else {
+          router.push(newUrl)
+        }
+
+        setQuery('')
+        setShowSuggestions(false)
+        return
+      }
+
+      // FALLBACK: City not in map - fetch from API (slower but works for all cities)
+      console.log(`📡 City not in postal map, fetching from API: ${cityUpper}`)
+      fetch(`/api/stages/${cityUpper}`)
         .then(response => response.json())
         .then(data => {
           if (data.stages && data.stages.length > 0) {
             const postal = data.stages[0].site.code_postal
-            const newUrl = `/stages-recuperation-points/${cityToNavigate.toUpperCase()}-${postal}`
+            const newUrl = `/stages-recuperation-points/${cityUpper}-${postal}`
 
             // CACHE the fetched data for instant display on results page
             try {
               sessionStorage.setItem(
-                `stages_cache_${cityToNavigate.toUpperCase()}`,
+                `stages_cache_${cityUpper}`,
                 JSON.stringify({
                   data: data,
                   timestamp: Date.now()
@@ -72,7 +114,7 @@ export default function CitySearchBar({
             }
           } else {
             // Fallback if no stages found
-            const newUrl = `/stages-recuperation-points/${cityToNavigate.toUpperCase()}-00000`
+            const newUrl = `/stages-recuperation-points/${cityUpper}-00000`
             if (onCitySelect) {
               onCitySelect(cityToNavigate)
             } else {
@@ -82,7 +124,7 @@ export default function CitySearchBar({
         })
         .catch(() => {
           // Fallback on error
-          const newUrl = `/stages-recuperation-points/${cityToNavigate.toUpperCase()}-00000`
+          const newUrl = `/stages-recuperation-points/${cityUpper}-00000`
           if (onCitySelect) {
             onCitySelect(cityToNavigate)
           } else {
