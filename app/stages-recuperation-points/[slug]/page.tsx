@@ -57,8 +57,82 @@ export default function StagesResultsPage() {
         setLoading(true)
         console.log(`🚀 Starting fetch for city: ${city}`)
 
-        // PHP backend now handles 100km proximity filtering via Haversine SQL
-        // Just fetch stages for the searched city - backend returns all within 100km
+        // CHECK CACHE FIRST for instant display
+        const cacheKey = `stages_cache_${city}`
+        const cached = sessionStorage.getItem(cacheKey)
+
+        if (cached) {
+          try {
+            const { data: cachedData, timestamp } = JSON.parse(cached)
+            const age = Date.now() - timestamp
+
+            // Use cache if less than 5 minutes old
+            if (age < 5 * 60 * 1000) {
+              console.log('⚡ Using cached data (instant display!)')
+
+              // Process cached data immediately (same logic as fetched data)
+              let allFetchedStages = cachedData.stages
+              console.log(`✅ Loaded ${allFetchedStages.length} stages from cache`)
+
+              // Clean up cache after use
+              sessionStorage.removeItem(cacheKey)
+
+              // Continue with normal processing below
+              const data = cachedData
+
+              // NORMALIZE: Convert all city names to UPPERCASE for consistency
+              const normalizedStages = allFetchedStages.map(s => ({
+                ...s,
+                site: {
+                  ...s.site,
+                  ville: s.site.ville.toUpperCase()
+                }
+              }))
+
+              // Filter by date: only show courses after today
+              const today = new Date()
+              const todayStr = today.toISOString().split('T')[0]
+
+              const filteredStages = normalizedStages.filter(s => {
+                if (!s.date_start || s.date_start === '0000-00-00') return false
+                return s.date_start >= todayStr
+              })
+
+              console.log(`🔍 DEBUG for ${city}:`)
+              console.log(`  - Total cached: ${allFetchedStages.length}`)
+              console.log(`  - After normalization: ${normalizedStages.length}`)
+              console.log(`  - After date filter (>= ${todayStr}): ${filteredStages.length}`)
+
+              // Extract unique nearby cities from results for sidebar
+              const citiesInResults = new Set<string>()
+              filteredStages.forEach(s => {
+                if (s.site.ville !== city) {
+                  citiesInResults.add(s.site.ville)
+                }
+              })
+              const nearbyCitiesList = Array.from(citiesInResults).sort().map(c => ({ city: c, distance: 0 }))
+              console.log(`  - Nearby cities found: ${nearbyCitiesList.length}`)
+              setNearbyCities(nearbyCitiesList)
+
+              setAllStages(filteredStages)
+              setStages(filteredStages)
+              console.log(`  - Final stages to display: ${filteredStages.length}`)
+
+              setSelectedCities(null)
+              setLoading(false)
+              return // Exit early - no need to fetch
+            } else {
+              console.log('⚠️ Cache expired, fetching fresh data')
+              sessionStorage.removeItem(cacheKey)
+            }
+          } catch (e) {
+            console.warn('⚠️ Failed to parse cache, fetching fresh data:', e)
+            sessionStorage.removeItem(cacheKey)
+          }
+        }
+
+        // NO CACHE or EXPIRED - fetch from API
+        console.log('📡 No cache found, fetching from API...')
         const response = await fetch(`/api/stages/${city}`)
         console.log(`📡 API response status: ${response.status}`)
 

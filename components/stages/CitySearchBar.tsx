@@ -43,13 +43,27 @@ export default function CitySearchBar({
     const cityToNavigate = city || cityToSearch
 
     if (cityToNavigate) {
-      // Fetch first stage to get postal code for URL format: /stages-recuperation-points/CITY-POSTAL
+      // Fetch stage data to get postal code AND cache for results page
       fetch(`/api/stages/${cityToNavigate.toUpperCase()}`)
         .then(response => response.json())
         .then(data => {
           if (data.stages && data.stages.length > 0) {
             const postal = data.stages[0].site.code_postal
             const newUrl = `/stages-recuperation-points/${cityToNavigate.toUpperCase()}-${postal}`
+
+            // CACHE the fetched data for instant display on results page
+            try {
+              sessionStorage.setItem(
+                `stages_cache_${cityToNavigate.toUpperCase()}`,
+                JSON.stringify({
+                  data: data,
+                  timestamp: Date.now()
+                })
+              )
+              console.log('✅ Cached stage data for instant display')
+            } catch (e) {
+              console.warn('⚠️ Failed to cache stage data:', e)
+            }
 
             if (onCitySelect) {
               onCitySelect(cityToNavigate)
