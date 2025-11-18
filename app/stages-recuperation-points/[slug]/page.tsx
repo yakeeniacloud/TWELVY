@@ -213,8 +213,8 @@ export default function StagesResultsPage() {
           {/* Left Sidebar - Filters */}
           <div className="lg:col-span-2">
             {/* City Search with Autocomplete - Using CitySearchBar component */}
-            <div className="mb-6">
-              <CitySearchBar placeholder="Ville ou CP" variant="small" />
+            <div className="relative mb-6">
+              <CitySearchBar placeholder="Ville ou CP" variant="sidebar" />
             </div>
 
             {/* Sort Section */}

@@ -6,7 +6,7 @@ import { useCities } from '@/hooks/useCities'
 
 interface CitySearchBarProps {
   placeholder?: string
-  variant?: 'large' | 'small'
+  variant?: 'large' | 'small' | 'sidebar'
   onCitySelect?: (city: string) => void
 }
 
@@ -121,6 +121,7 @@ export default function CitySearchBar({
   }, [])
 
   const isLarge = variant === 'large'
+  const isSidebar = variant === 'sidebar'
 
   return (
     <div className={`relative w-full ${isLarge ? 'max-w-[640px] mx-auto' : ''}`}>
@@ -133,8 +134,8 @@ export default function CitySearchBar({
         }}
         className="relative"
       >
-        <div className="flex gap-3">
-          {/* Input */}
+        {isSidebar ? (
+          // Sidebar variant - just input field, no button
           <input
             ref={inputRef}
             type="text"
@@ -147,45 +148,65 @@ export default function CitySearchBar({
             onFocus={() => setShowSuggestions(true)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className={`flex-1 px-4 border-0 outline-none text-gray-900 placeholder-gray-500 transition-all ${
-              isLarge
-                ? 'h-14 text-base rounded-lg'
-                : 'h-10 text-sm rounded'
-            }`}
-            style={{ background: '#ffffff' }}
+            className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
           />
+        ) : (
+          <div className="flex gap-3">
+            {/* Input */}
+            <input
+              ref={inputRef}
+              type="text"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value)
+                setShowSuggestions(true)
+                setSelectedIndex(-1)
+              }}
+              onFocus={() => setShowSuggestions(true)}
+              onKeyDown={handleKeyDown}
+              placeholder={placeholder}
+              className={`flex-1 px-4 border-0 outline-none text-gray-900 placeholder-gray-500 transition-all ${
+                isLarge
+                  ? 'h-14 text-base rounded-lg'
+                  : 'h-10 text-sm rounded'
+              }`}
+              style={{ background: '#ffffff' }}
+            />
 
-          {/* Search Button */}
-          <button
-            type="submit"
-            className={`bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold transition-all rounded-lg flex items-center justify-center ${
-              isLarge
-                ? 'px-8 h-14 text-base'
-                : 'px-4 h-10 text-sm'
-            }`}
-          >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            {isLarge ? 'Rechercher' : 'OK'}
-          </button>
-        </div>
+            {/* Search Button */}
+            <button
+              type="submit"
+              className={`bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold transition-all rounded-lg flex items-center justify-center ${
+                isLarge
+                  ? 'px-8 h-14 text-base'
+                  : 'px-4 h-10 text-sm'
+              }`}
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              {isLarge ? 'Rechercher' : 'OK'}
+            </button>
+          </div>
+        )}
 
         {/* Suggestions Dropdown */}
         {showSuggestions && filteredCities.length > 0 && (
           <div
             ref={suggestionsRef}
-            className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+            className={`absolute top-full left-0 right-0 bg-white border border-gray-300 shadow-lg z-50 ${
+              isSidebar ? 'border-t-0 rounded-b' : 'mt-1 border rounded-lg'
+            }`}
             style={{ maxHeight: '300px', overflowY: 'auto' }}
           >
             {filteredCities.map((city, index) => (
               <button
                 key={city}
                 onClick={() => handleSearch(city)}
-                className={`w-full text-left px-4 py-2.5 transition-colors ${
+                className={`w-full text-left px-3 py-2 text-sm transition-colors ${
                   index === selectedIndex
                     ? 'bg-blue-100 text-blue-900'
-                    : 'text-gray-700 hover:bg-gray-50'
+                    : 'text-gray-700 hover:bg-gray-100'
                 }`}
               >
                 {city}
