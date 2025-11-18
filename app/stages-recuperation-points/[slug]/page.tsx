@@ -1,10 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useWordPressContent } from '@/lib/useWordPressContent'
 import StageDetailsModal from '@/components/stages/StageDetailsModal'
+import CitySearchBar from '@/components/stages/CitySearchBar'
 
 interface Stage {
   id: number
@@ -28,6 +29,7 @@ interface Stage {
 
 export default function StagesResultsPage() {
   const params = useParams()
+  const router = useRouter()
   const fullSlug = (params.slug as string) || ''
 
   // Parse slug: "MARSEILLE-13001" or "PARIS-75001"
@@ -42,9 +44,7 @@ export default function StagesResultsPage() {
   const [error, setError] = useState<string | null>(null)
   const [sortBy, setSortBy] = useState<'pertinence' | 'proximite' | 'date' | 'prix'>('pertinence')
   const [selectedCities, setSelectedCities] = useState<string[] | null>(null) // null = all nearby cities
-  const [allCities, setAllCities] = useState<string[]>([])
   const [nearbyCities, setNearbyCities] = useState<{ city: string; distance: number }[]>([])
-  const [searchInput, setSearchInput] = useState('')
   const [selectedStage, setSelectedStage] = useState<Stage | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
 
@@ -113,25 +113,6 @@ export default function StagesResultsPage() {
         setAllStages(filteredStages)
         setStages(filteredStages)
         console.log(`  - Final stages to display: ${filteredStages.length}`)
-
-        // Get ALL cities from database for autocomplete
-        async function fetchAllCities() {
-          try {
-            const citiesResponse = await fetch('/api/cities')
-            if (citiesResponse.ok) {
-              const { cities } = (await citiesResponse.json()) as { cities: string[] }
-              setAllCities(cities.map(c => c.toUpperCase()).sort())
-            } else {
-              const citiesSet = new Set(filteredStages.map(s => s.site.ville))
-              setAllCities(Array.from(citiesSet).sort())
-            }
-          } catch {
-            const citiesSet = new Set(filteredStages.map(s => s.site.ville))
-            setAllCities(Array.from(citiesSet).sort())
-          }
-        }
-
-        fetchAllCities()
 
         // DEFAULT STATE: "Toutes les villes" is pre-selected (null = all nearby cities)
         setSelectedCities(null)
@@ -231,59 +212,9 @@ export default function StagesResultsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Left Sidebar - Filters */}
           <div className="lg:col-span-2">
-            {/* City Search with Autocomplete */}
-            <div className="relative mb-6">
-              <input
-                type="text"
-                placeholder="Ville ou CP"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                onKeyDown={async (e) => {
-                  if (e.key === 'Enter' && searchInput.trim()) {
-                    const matchedCity = allCities.find(c =>
-                      c.toUpperCase().startsWith(searchInput.toUpperCase())
-                    )
-                    if (matchedCity) {
-                      // Fetch postal code for URL
-                      try {
-                        const response = await fetch(`/api/stages/${matchedCity.toUpperCase()}`)
-                        const data = await response.json()
-                        const postal = data.stages?.[0]?.site?.code_postal || '00000'
-                        window.location.href = `/stages-recuperation-points/${matchedCity.toUpperCase()}-${postal}`
-                      } catch {
-                        window.location.href = `/stages-recuperation-points/${matchedCity.toUpperCase()}-00000`
-                      }
-                    }
-                  }
-                }}
-                className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
-              />
-              {searchInput && (
-                <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 border-t-0 rounded-b shadow-lg z-10">
-                  {allCities
-                    .filter(c => c.toUpperCase().startsWith(searchInput.toUpperCase()))
-                    .slice(0, 5)
-                    .map(filteredCity => (
-                      <button
-                        key={filteredCity}
-                        onClick={async () => {
-                          // REPLACE current city with new one - navigate directly
-                          try {
-                            const response = await fetch(`/api/stages/${filteredCity.toUpperCase()}`)
-                            const data = await response.json()
-                            const postal = data.stages?.[0]?.site?.code_postal || '00000'
-                            window.location.href = `/stages-recuperation-points/${filteredCity.toUpperCase()}-${postal}`
-                          } catch {
-                            window.location.href = `/stages-recuperation-points/${filteredCity.toUpperCase()}-00000`
-                          }
-                        }}
-                        className="w-full text-left px-3 py-2 hover:bg-gray-100 text-sm text-gray-700"
-                      >
-                        {filteredCity}
-                      </button>
-                    ))}
-                </div>
-              )}
+            {/* City Search with Autocomplete - Using CitySearchBar component */}
+            <div className="mb-6">
+              <CitySearchBar placeholder="Ville ou CP" variant="small" />
             </div>
 
             {/* Sort Section */}
