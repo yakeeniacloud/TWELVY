@@ -10,19 +10,29 @@ interface City {
 /**
  * Normalize city names to group arrondissements
  * MARSEILLE-1ER, MARSEILLE-2EME -> MARSEILLE
+ * MARSEILLE 14, MARSEILLE-14EME-ARRONDISS -> MARSEILLE
  * PARIS-16EME -> PARIS
  * LYON-3EME -> LYON
  */
 function normalizeCityName(city: string): string {
-  // Pattern: CITY-NUMBER (with optional ER/EME/E suffix)
-  const arrondissementPattern = /^(.+)-\d+(ER|EME|E)?$/i
-  const match = city.match(arrondissementPattern)
+  const upperCity = city.toUpperCase().trim()
 
-  if (match) {
-    return match[1].toUpperCase() // Return base city name
+  // Pattern 1: CITY-NUMBER+SUFFIX (e.g., MARSEILLE-1ER, MARSEILLE-14EME, MARSEILLE-14EME-ARRONDISS)
+  // Match: CITY followed by hyphen, then digits, then anything else
+  const pattern1 = /^(.+?)-\d+.*$/
+  const match1 = upperCity.match(pattern1)
+  if (match1) {
+    return match1[1].toUpperCase()
   }
 
-  return city.toUpperCase()
+  // Pattern 2: CITY SPACE NUMBER (e.g., MARSEILLE 14)
+  const pattern2 = /^(.+?)\s+\d+$/
+  const match2 = upperCity.match(pattern2)
+  if (match2) {
+    return match2[1].toUpperCase()
+  }
+
+  return upperCity
 }
 
 export function useCities() {
