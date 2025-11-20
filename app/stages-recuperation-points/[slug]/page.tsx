@@ -55,7 +55,6 @@ export default function StagesResultsPage() {
     async function fetchStages() {
       try {
         setLoading(true)
-        console.log(`🚀 Starting fetch for city: ${city}`)
 
         // CHECK CACHE FIRST for instant display
         const cacheKey = `stages_cache_${city}`
@@ -68,11 +67,9 @@ export default function StagesResultsPage() {
 
             // Use cache if less than 5 minutes old
             if (age < 5 * 60 * 1000) {
-              console.log('⚡ Using cached data (instant display!)')
 
               // Process cached data immediately (same logic as fetched data)
               let allFetchedStages = cachedData.stages
-              console.log(`✅ Loaded ${allFetchedStages.length} stages from cache`)
 
               // Clean up cache after use
               sessionStorage.removeItem(cacheKey)
@@ -98,10 +95,6 @@ export default function StagesResultsPage() {
                 return s.date_start >= todayStr
               })
 
-              console.log(`🔍 DEBUG for ${city}:`)
-              console.log(`  - Total cached: ${allFetchedStages.length}`)
-              console.log(`  - After normalization: ${normalizedStages.length}`)
-              console.log(`  - After date filter (>= ${todayStr}): ${filteredStages.length}`)
 
               // Extract unique nearby cities from results for sidebar
               const citiesInResults = new Set<string>()
@@ -111,18 +104,15 @@ export default function StagesResultsPage() {
                 }
               })
               const nearbyCitiesList = Array.from(citiesInResults).sort().map(c => ({ city: c, distance: 0 }))
-              console.log(`  - Nearby cities found: ${nearbyCitiesList.length}`)
               setNearbyCities(nearbyCitiesList)
 
               setAllStages(filteredStages)
               setStages(filteredStages)
-              console.log(`  - Final stages to display: ${filteredStages.length}`)
 
               setSelectedCities(null)
               setLoading(false)
               return // Exit early - no need to fetch
             } else {
-              console.log('⚠️ Cache expired, fetching fresh data')
               sessionStorage.removeItem(cacheKey)
             }
           } catch (e) {
@@ -132,9 +122,7 @@ export default function StagesResultsPage() {
         }
 
         // NO CACHE or EXPIRED - fetch from API
-        console.log('📡 No cache found, fetching from API...')
         const response = await fetch(`/api/stages/${city}`)
-        console.log(`📡 API response status: ${response.status}`)
 
         if (!response.ok) {
           const errorText = await response.text()
@@ -144,7 +132,6 @@ export default function StagesResultsPage() {
 
         const data = (await response.json()) as { stages: Stage[] }
         let allFetchedStages = data.stages
-        console.log(`✅ Received ${allFetchedStages.length} stages from API`)
 
         // NORMALIZE: Convert all city names to UPPERCASE for consistency
         const normalizedStages = allFetchedStages.map(s => ({
@@ -167,10 +154,6 @@ export default function StagesResultsPage() {
           return s.date_start >= todayStr
         })
 
-        console.log(`🔍 DEBUG for ${city}:`)
-        console.log(`  - Total fetched: ${allFetchedStages.length}`)
-        console.log(`  - After normalization: ${normalizedStages.length}`)
-        console.log(`  - After date filter (>= ${todayStr}): ${filteredStages.length}`)
 
         // Extract unique nearby cities from results for sidebar
         const citiesInResults = new Set<string>()
@@ -180,13 +163,10 @@ export default function StagesResultsPage() {
           }
         })
         const nearbyCitiesList = Array.from(citiesInResults).sort().map(c => ({ city: c, distance: 0 }))
-        console.log(`  - Nearby cities found: ${nearbyCitiesList.length}`)
-        console.log(`  - Sample cities:`, Array.from(citiesInResults).slice(0, 5))
         setNearbyCities(nearbyCitiesList)
 
         setAllStages(filteredStages)
         setStages(filteredStages)
-        console.log(`  - Final stages to display: ${filteredStages.length}`)
 
         // DEFAULT STATE: "Toutes les villes" is pre-selected (null = all nearby cities)
         setSelectedCities(null)
@@ -200,7 +180,6 @@ export default function StagesResultsPage() {
       }
     }
 
-    console.log(`🔄 useEffect triggered for city: ${city}`)
     fetchStages()
   }, [city])
 
@@ -268,7 +247,7 @@ export default function StagesResultsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white">
       {/* Header Section */}
       <div className="bg-white py-8 border-b border-gray-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -477,9 +456,9 @@ export default function StagesResultsPage() {
                     {/* Stage Info */}
                     <div className="flex-1 flex flex-col justify-between">
                       <div>
-                        <h3 className="text-base font-bold text-blue-700 uppercase mb-1">
+                        <h2 className="text-base font-bold text-blue-700 uppercase mb-1">
                           {stage.site.ville}
-                        </h3>
+                        </h2>
                         <p className="text-sm text-gray-600 mb-1">
                           {stage.site.nom}
                         </p>
@@ -518,6 +497,7 @@ export default function StagesResultsPage() {
                       <Link
                         href={`/stages-recuperation-points/${fullSlug}/${stage.id}`}
                         className="bg-gradient-to-b from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold px-5 py-2 rounded text-sm transition-all"
+                        aria-label={`Sélectionner le stage à ${stage.site.ville} - ${stage.site.nom} le ${formatDate(stage.date_start, stage.date_end)}`}
                       >
                         Sélectionner
                       </Link>
@@ -614,6 +594,6 @@ export default function StagesResultsPage() {
           slug={fullSlug}
         />
       )}
-    </div>
+    </main>
   )
 }

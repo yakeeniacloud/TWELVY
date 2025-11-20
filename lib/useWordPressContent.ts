@@ -21,6 +21,12 @@ export function useWordPressContent(slug: string) {
         const response = await fetch(`/api/wordpress/${slug}`)
 
         if (!response.ok) {
+          // 404 is expected for cities without custom content - don't throw error
+          if (response.status === 404) {
+            setContent(null)
+            setLoading(false)
+            return
+          }
           throw new Error('Failed to fetch WordPress content')
         }
 

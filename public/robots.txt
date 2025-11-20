@@ -1,0 +1,6 @@
+# robots.txt for www.twelvy.net
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://www.twelvy.net/sitemap.xml

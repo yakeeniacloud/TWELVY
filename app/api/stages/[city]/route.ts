@@ -8,9 +8,6 @@ export async function GET(
     const resolvedParams = await params
     const city = resolvedParams.city.toUpperCase()
 
-    console.log('📍 /api/stages/[city] called with city:', city)
-    console.log('🔄 Proxying to PHP API...')
-
     // Call PHP API on api.twelvy.net
     const response = await fetch(`https://api.twelvy.net/stages.php?city=${encodeURIComponent(city)}`, {
       method: 'GET',
@@ -19,14 +16,11 @@ export async function GET(
       },
     })
 
-    console.log('📡 PHP API response status:', response.status)
-
     if (!response.ok) {
       throw new Error(`PHP API returned ${response.status}`)
     }
 
     const data = (await response.json()) as { stages: any[]; city: string }
-    console.log('✅ Raw stages from PHP API:', data.stages.length, 'stages')
 
     // ⚡ OPTIMIZATION: Filter and reduce payload size
     const today = new Date()
@@ -39,9 +33,6 @@ export async function GET(
       if (!stage.date_start || stage.date_start === '0000-00-00') return false
       return stage.date_start >= todayStr && stage.date_start <= sixMonthsStr
     })
-
-    console.log('✅ Filtered stages (active only):', filteredStages.length, 'stages')
-    console.log(`   📊 Payload reduced: ${data.stages.length} → ${filteredStages.length} (${Math.round((1 - filteredStages.length / data.stages.length) * 100)}% smaller)`)
 
     // Return optimized payload
     return NextResponse.json({
