@@ -48,6 +48,15 @@ export default function StagesResultsPage() {
   const [selectedStage, setSelectedStage] = useState<Stage | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const STAGES_PER_PAGE = 20
+
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentPage])
+
   // Fetch city-specific WordPress content
   const { content: cityContent, loading: cityContentLoading } = useWordPressContent(`stages-${city.toLowerCase()}`)
 
@@ -215,7 +224,15 @@ export default function StagesResultsPage() {
     // 'pertinence' doesn't need re-sorting (already sorted by pertinence score)
 
     setStages(filtered)
+    // Reset to page 1 when filters change
+    setCurrentPage(1)
   }, [sortBy, selectedCities, allStages, nearbyCities])
+
+  // Calculate pagination
+  const totalPages = Math.ceil(stages.length / STAGES_PER_PAGE)
+  const startIndex = (currentPage - 1) * STAGES_PER_PAGE
+  const endIndex = startIndex + STAGES_PER_PAGE
+  const paginatedStages = stages.slice(startIndex, endIndex)
 
   const formatDate = (dateStart: string, dateEnd: string) => {
     const start = new Date(dateStart)
@@ -439,8 +456,14 @@ export default function StagesResultsPage() {
 
             {/* Stages List */}
             {!loading && !error && stages.length > 0 && (
-              <div className="space-y-4">
-                {stages.map((stage) => (
+              <>
+                {/* Results Summary */}
+                <div className="mb-4 text-sm text-gray-600">
+                  Affichage de {startIndex + 1}-{Math.min(endIndex, stages.length)} sur {stages.length} stages
+                </div>
+
+                <div className="space-y-4">
+                  {paginatedStages.map((stage) => (
                   <div
                     key={stage.id}
                     className="bg-white border border-gray-200 rounded p-4 hover:shadow-md transition-shadow flex items-stretch gap-4"
@@ -503,8 +526,34 @@ export default function StagesResultsPage() {
                       </Link>
                     </div>
                   </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-4 mt-8 pb-8">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                    >
+                      ← Précédent
+                    </button>
+
+                    <span className="text-gray-700 font-medium">
+                      Page {currentPage} sur {totalPages}
+                    </span>
+
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Suivant →
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
 
