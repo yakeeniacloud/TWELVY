@@ -57,7 +57,11 @@ try {
                    st.id as site_id, st.nom as site_nom, st.ville, st.adresse, st.code_postal, st.latitude, st.longitude
             FROM stage s
             JOIN site st ON s.id_site = st.id
-            WHERE UPPER(st.ville) LIKE ? AND s.visible = 1 AND s.annule = 0
+            WHERE UPPER(st.ville) LIKE ?
+              AND s.visible = 1
+              AND s.annule = 0
+              AND s.date1 >= CURDATE()
+              AND s.date1 <= DATE_ADD(CURDATE(), INTERVAL 6 MONTH)
             ORDER BY s.date1 ASC
         ");
         $stmt->execute([$cityPattern]);
@@ -82,6 +86,8 @@ try {
               AND s.annule = 0
               AND st.latitude IS NOT NULL
               AND st.longitude IS NOT NULL
+              AND s.date1 >= CURDATE()
+              AND s.date1 <= DATE_ADD(CURDATE(), INTERVAL 6 MONTH)
             HAVING distance_km <= ?
             ORDER BY distance_km ASC, s.date1 ASC
         ");
