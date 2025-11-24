@@ -33,29 +33,41 @@ export async function GET() {
 
     const pages: WordPressPage[] = await response.json()
 
+    console.log('📄 Raw WordPress pages:', pages.map(p => ({ id: p.id, title: p.title.rendered, parent: p.parent })))
+
     // Filter out homepage and stages-* pages (same as OPTIMUS)
     const filteredPages = pages.filter(page =>
       page.slug !== 'homepage' &&
       !page.slug.startsWith('stages-')
     )
 
+    console.log('🔍 Filtered pages:', filteredPages.map(p => ({ id: p.id, title: p.title.rendered, parent: p.parent })))
+
     // Build hierarchical menu structure
     const parentPages = filteredPages.filter(p => p.parent === 0)
     const childPages = filteredPages.filter(p => p.parent !== 0)
 
-    const menuStructure = parentPages.map(parent => ({
-      id: parent.id,
-      title: parent.title.rendered,
-      slug: parent.slug,
-      children: childPages
+    const menuStructure = parentPages.map(parent => {
+      const children = childPages
         .filter(child => child.parent === parent.id)
         .map(child => ({
           id: child.id,
           title: child.title.rendered,
           slug: child.slug,
         }))
-        .sort((a, b) => a.id - b.id), // Sort children by creation order
-    }))
+        .sort((a, b) => a.id - b.id)
+
+      console.log(`👨‍👧 Parent "${parent.title.rendered}" (ID: ${parent.id}) has ${children.length} children:`, children)
+
+      return {
+        id: parent.id,
+        title: parent.title.rendered,
+        slug: parent.slug,
+        children,
+      }
+    })
+
+    console.log('✅ Final menu structure:', JSON.stringify(menuStructure, null, 2))
 
     return NextResponse.json({
       menu: menuStructure,
