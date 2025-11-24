@@ -36,15 +36,17 @@ export async function GET() {
     console.log('📄 Raw WordPress pages:', pages.map(p => ({ id: p.id, title: p.title.rendered, parent: p.parent })))
 
     // Filter out homepage and stages-CITY pages (e.g., stages-marseille, stages-paris)
-    // But KEEP pages like "stages-obligatoires" (child pages about stages)
+    // But KEEP child pages with parent set (even if they start with "stages-")
     const filteredPages = pages.filter(page => {
       if (page.slug === 'homepage') return false
 
-      // Only filter out stages-{city} pattern (stages-marseille, stages-paris-75001, etc.)
-      // These are city-specific stage listing pages, not menu items
-      // Keep everything else, including "stages-obligatoires" (child pages)
+      // KEEP all pages that have a parent (child pages)
+      if (page.parent !== 0) return true
+
+      // For parent pages (parent = 0), filter out city-specific stage pages
+      // Pattern: stages-{city} or stages-{city}-{postalcode}
       const isCityStagesPage = page.slug.match(/^stages-[a-z]+-\d+/)  // stages-paris-75001
-        || (page.slug.startsWith('stages-') && page.slug.split('-').length === 2 && page.slug.split('-')[1].match(/^[a-z]+$/))  // stages-marseille
+        || (page.slug.startsWith('stages-') && page.slug.split('-').length === 2)  // stages-marseille, stages-paris, stages-toulon
 
       return !isCityStagesPage
     })
