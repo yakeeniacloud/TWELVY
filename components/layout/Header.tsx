@@ -4,6 +4,14 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useWordPressMenu } from '@/lib/useWordPressMenu'
 
+// Decode HTML entities (like &#8217; to ')
+const decodeHtmlEntities = (text: string): string => {
+  if (typeof window === 'undefined') return text
+  const textarea = document.createElement('textarea')
+  textarea.innerHTML = text
+  return textarea.value
+}
+
 export default function Header() {
   const { menu, loading } = useWordPressMenu()
   const [openMenuId, setOpenMenuId] = useState<number | null>(null)
@@ -108,7 +116,7 @@ export default function Header() {
                             openMenuId === item.id ? 'text-red-500' : 'text-white'
                           }`}
                         >
-                          {item.title}
+                          {decodeHtmlEntities(item.title)}
                           <svg
                             className={`w-3 h-3 transition-transform ${
                               openMenuId === item.id ? 'rotate-180' : ''
@@ -134,7 +142,7 @@ export default function Header() {
                                       onClick={() => setOpenMenuId(null)}
                                       className="block text-sm text-blue-600 hover:text-blue-800 hover:underline"
                                     >
-                                      {child.title}
+                                      {decodeHtmlEntities(child.title)}
                                     </Link>
                                   ))}
                                 </div>
@@ -149,7 +157,7 @@ export default function Header() {
                         href={`/${item.slug}`}
                         className="text-xs font-medium uppercase tracking-wide text-white hover:text-red-500 transition-colors"
                       >
-                        {item.title}
+                        {decodeHtmlEntities(item.title)}
                       </Link>
                     )}
                   </div>
