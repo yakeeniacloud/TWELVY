@@ -39,11 +39,8 @@ export function useWordPressMenu() {
       }
     }
 
+    // Fetch once on initial load only
     fetchMenu()
-
-    // Poll every 30 seconds for updates (like OPTIMUS)
-    const interval = setInterval(fetchMenu, 30000)
-    return () => clearInterval(interval)
   }, [])
 
   return { menu, loading, error }
