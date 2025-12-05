@@ -255,12 +255,12 @@ useEffect(() => {
 1. Validate emails match
 2. Validate CGV accepted
 3. Construct date_naissance from dropdowns
-4. Insert into Supabase stage_bookings table
+4. Insert into OVH MySQL stage_bookings table
 5. Auto-generate booking_reference via trigger
 6. Redirect to /merci page with reference
 ```
 
-**Database Table**: `stage_bookings` (Supabase)
+**Database Table**: `stage_bookings` (OVH MySQL)
 ```sql
 CREATE TABLE stage_bookings (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -919,7 +919,7 @@ CREATE TABLE stages_recuperation_points (
 
 ---
 
-### Supabase Database (Bookings)
+### MySQL Database (OVH) - Bookings
 
 **Table**: `stage_bookings`
 
@@ -928,83 +928,46 @@ CREATE TABLE stages_recuperation_points (
 **Schema**:
 ```sql
 CREATE TABLE stage_bookings (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  stage_id UUID NOT NULL REFERENCES stages_recuperation_points(id),
-  booking_reference TEXT UNIQUE NOT NULL,
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  stage_id INT NOT NULL,
+  booking_reference VARCHAR(20) UNIQUE NOT NULL,
 
   -- Personal info
-  civilite TEXT NOT NULL CHECK (civilite IN ('M', 'Mme')),
-  nom TEXT NOT NULL,
-  prenom TEXT NOT NULL,
+  civilite VARCHAR(10) NOT NULL,
+  nom VARCHAR(255) NOT NULL,
+  prenom VARCHAR(255) NOT NULL,
   date_naissance DATE NOT NULL,
 
   -- Contact info
   adresse TEXT NOT NULL,
-  code_postal TEXT NOT NULL,
-  ville TEXT NOT NULL,
-  email TEXT NOT NULL,
-  email_confirmation TEXT NOT NULL,
-  telephone_mobile TEXT NOT NULL,
+  code_postal VARCHAR(10) NOT NULL,
+  ville VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  email_confirmation VARCHAR(255) NOT NULL,
+  telephone_mobile VARCHAR(20) NOT NULL,
 
   -- Options
   guarantee_serenite BOOLEAN DEFAULT false,
   cgv_accepted BOOLEAN NOT NULL DEFAULT true,
 
   -- Timestamps
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
--- Indexes
-CREATE INDEX idx_stage_bookings_stage_id ON stage_bookings(stage_id);
-CREATE INDEX idx_stage_bookings_email ON stage_bookings(email);
-CREATE INDEX idx_stage_bookings_booking_ref ON stage_bookings(booking_reference);
-CREATE INDEX idx_stage_bookings_created_at ON stage_bookings(created_at);
+  -- Foreign key
+  FOREIGN KEY (stage_id) REFERENCES stages_recuperation_points(id),
+
+  -- Indexes
+  INDEX idx_stage_bookings_stage_id (stage_id),
+  INDEX idx_stage_bookings_email (email),
+  INDEX idx_stage_bookings_booking_ref (booking_reference),
+  INDEX idx_stage_bookings_created_at (created_at)
+);
 ```
 
 **Booking Reference Format**: `BK-YYYY-NNNNNN`
 - Example: `BK-2025-000001`
-- Auto-generated via Supabase trigger
-
-**Trigger**:
-```sql
-CREATE OR REPLACE FUNCTION generate_booking_reference()
-RETURNS TRIGGER AS $$
-DECLARE
-  new_ref TEXT;
-  counter INT;
-BEGIN
-  SELECT COALESCE(MAX(CAST(SUBSTRING(booking_reference FROM 9) AS INT)), 0) + 1
-  INTO counter
-  FROM stage_bookings
-  WHERE booking_reference LIKE 'BK-' || EXTRACT(YEAR FROM NOW()) || '-%';
-
-  new_ref := 'BK-' || EXTRACT(YEAR FROM NOW()) || '-' || LPAD(counter::TEXT, 6, '0');
-  NEW.booking_reference := new_ref;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trigger_set_booking_reference
-  BEFORE INSERT ON stage_bookings
-  FOR EACH ROW
-  EXECUTE FUNCTION generate_booking_reference();
-```
-
-**RLS Policies**:
-```sql
--- Allow public insert
-CREATE POLICY "Allow public insert" ON stage_bookings
-  FOR INSERT WITH CHECK (true);
-
--- Allow users to read own bookings
-CREATE POLICY "Allow users to read own bookings" ON stage_bookings
-  FOR SELECT USING (auth.jwt() ->> 'email' = email);
-
--- Allow service role full access
-CREATE POLICY "Allow service role full access" ON stage_bookings
-  FOR ALL USING (true) WITH CHECK (true);
-```
+- Auto-generated via MySQL trigger or application logic
 
 ---
 
@@ -1536,15 +1499,14 @@ export function useWordPressContent(slug: string) {
 **File**: `.env.local`
 
 ```bash
-# Supabase (Bookings)
-NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
-
 # Google Maps
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="your-google-maps-key"
 
 # WordPress Headless (Optional if hardcoded)
 NEXT_PUBLIC_WORDPRESS_API_URL="https://headless.twelvy.net/wp-json/wp/v2"
+
+# OVH Database (if needed for direct connections)
+# All database operations go through PHP API on OVH
 
 # Production Domain
 NEXT_PUBLIC_SITE_URL="https://www.twelvy.net"
@@ -1555,8 +1517,6 @@ NEXT_PUBLIC_SITE_URL="https://www.twelvy.net"
 **Dashboard**: Vercel → Settings → Environment Variables
 
 **Required**:
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
 
 **Optional**:
@@ -1979,13 +1939,13 @@ git reset HEAD~1
 - **Backend Hosting**: OVH (o2switch shared)
 - **CMS Hosting**: OVH (headless.twelvy.net)
 - **Domain Registrar**: OVH
-- **Database**: MySQL (OVH), Supabase (Bookings)
+- **Database**: MySQL (OVH) - both stages and bookings
 
 ### Important URLs
 - **Production**: https://www.twelvy.net
 - **WordPress Admin**: https://headless.twelvy.net/wp-admin
 - **Vercel Dashboard**: https://vercel.com/dashboard
-- **Supabase Dashboard**: https://supabase.com/dashboard
+- **OVH Dashboard**: https://www.ovh.com/manager/
 
 ---
 
