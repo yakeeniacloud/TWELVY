@@ -262,28 +262,28 @@ export default function StagesResultsPage() {
             alt="Agréé Préfecture"
             width={200}
             height={50}
-            className="h-12 w-auto"
+            className="h-10 w-auto"
           />
           <Image
             src="/4points-48h.png"
             alt="+ 4 points en 48h"
             width={200}
             height={50}
-            className="h-12 w-auto"
+            className="h-10 w-auto"
           />
           <Image
             src="/prix-bas-garanti.png"
             alt="Prix le plus bas garanti"
             width={240}
             height={50}
-            className="h-12 w-auto"
+            className="h-10 w-auto opacity-90"
           />
           <Image
             src="/14jours-changer-avis.png"
             alt="14 jours pour changer d'avis"
             width={280}
             height={50}
-            className="h-12 w-auto"
+            className="h-10 w-auto"
           />
         </div>
 
