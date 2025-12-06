@@ -401,27 +401,14 @@ export default function StagesResultsPage() {
         )}
 
         {/* Pourquoi Réserver Section */}
-        <section className="bg-[#e8e3e3] rounded p-8 my-16 flex items-center gap-8">
-          <div className="flex-1">
-            <h2 className="text-xl text-center mb-1">Pourquoi réserver votre stage chez</h2>
-            <h2 className="text-xl text-center text-red-600 mb-6">ProStagesPermis</h2>
-          </div>
-
-          <ul className="flex-1 space-y-2">
-            {[
-              'Paiement 100% sécurisé',
-              'Inscription en quelques clics',
-              'Meilleur prix garanti',
-              'Attestation de stage remise le 2ème jour'
-            ].map((text, index) => (
-              <li key={index} className="flex items-center gap-3">
-                <svg className="w-8 h-8 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"/>
-                </svg>
-                <span className="text-gray-800">{text}</span>
-              </li>
-            ))}
-          </ul>
+        <section className="my-16">
+          <Image
+            src="/pourquoi-reserver.png"
+            alt="Pourquoi réserver votre stage chez ProStagesPermis"
+            width={1200}
+            height={400}
+            className="w-full h-auto"
+          />
         </section>
 
         {/* Customer Reviews Section */}
@@ -459,13 +446,22 @@ export default function StagesResultsPage() {
           <div className="w-px bg-gray-300"></div>
 
           <aside className="flex flex-col items-center justify-center gap-4 w-80">
-            <div className="w-28 h-16 bg-blue-600 rounded flex items-center justify-center text-white font-bold text-lg">
-              Europe 1
-            </div>
+            <Image
+              src="/europe1-logo.png"
+              alt="Europe 1"
+              width={150}
+              height={80}
+              className="w-auto h-16"
+            />
             <p className="text-center text-gray-700">
               ProStagesPermis cité comme site de confiance par Europe 1
             </p>
-            <a href="#" className="text-red-700 hover:underline">
+            <a
+              href="https://www.youtube.com/watch?v=z1AsmdcGTaw"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-red-700 hover:underline"
+            >
               Écouter l'extrait
             </a>
           </aside>
