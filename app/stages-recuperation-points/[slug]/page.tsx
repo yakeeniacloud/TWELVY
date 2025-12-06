@@ -393,7 +393,7 @@ export default function StagesResultsPage() {
               return (
                 <article
                   key={stage.id}
-                  className={`flex items-center justify-between px-5 py-3 mb-2.5 rounded-2xl border ${
+                  className={`flex items-center justify-between px-6 py-2.5 mb-2.5 rounded-2xl border max-w-6xl ${
                     isCheapest ? 'bg-[#fff5f5] border-gray-300' : 'bg-white border-gray-300'
                   }`}
                 >
@@ -438,7 +438,7 @@ export default function StagesResultsPage() {
                   {/* Right: Green Button */}
                   <Link
                     href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
-                    className="px-6 py-2 bg-[#4caf50] text-white text-sm font-normal rounded-full hover:bg-[#45a049] transition-colors whitespace-nowrap"
+                    className="px-6 py-2 bg-[#4caf50] text-white text-sm font-normal rounded-xl hover:bg-[#45a049] transition-colors whitespace-nowrap"
                   >
                     Sélectionner
                   </Link>
