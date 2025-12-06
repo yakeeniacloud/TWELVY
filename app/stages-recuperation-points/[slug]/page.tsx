@@ -393,15 +393,16 @@ export default function StagesResultsPage() {
               return (
                 <article
                   key={stage.id}
-                  className={`flex items-center justify-between p-4 mb-3 rounded-lg border border-gray-300 shadow-sm ${
-                    isCheapest ? 'bg-[#fff5f5]' : 'bg-white'
+                  className={`flex items-center justify-between px-6 py-4 mb-3 rounded-2xl border-2 ${
+                    isCheapest ? 'bg-[#fff5f5] border-gray-200' : 'bg-white border-gray-200'
                   }`}
                 >
-                  <div className="flex flex-col">
-                    <p className="font-medium text-gray-900 mb-1">
+                  {/* Left: Date and Details Link */}
+                  <div className="flex flex-col gap-1 min-w-[220px]">
+                    <p className="text-[17px] font-normal text-black leading-tight">
                       {formatDate(stage.date_start, stage.date_end)}
                     </p>
-                    <button className="flex items-center gap-1 text-blue-600 text-sm hover:underline">
+                    <button className="flex items-center gap-1.5 text-[#5b7ab8] text-[15px] hover:underline w-fit">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
                       </svg>
@@ -409,30 +410,35 @@ export default function StagesResultsPage() {
                     </button>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                      <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">{stage.site.ville}</p>
-                      <p className="text-sm text-gray-500">{stage.site.adresse}</p>
+                  {/* Center: Location Pin + City + Address */}
+                  <div className="flex items-center gap-3 flex-1 mx-8">
+                    <Image
+                      src="/location-pin.png"
+                      alt="Location"
+                      width={50}
+                      height={50}
+                      className="w-12 h-12"
+                    />
+                    <div className="flex flex-col">
+                      <p className="text-[17px] font-semibold text-black">{stage.site.ville}</p>
+                      <p className="text-[15px] text-gray-500">{stage.site.adresse}</p>
                     </div>
                   </div>
 
-                  <div className="text-center">
-                    <p className="text-xl font-normal text-gray-900">{stage.prix}€</p>
+                  {/* Right: Price */}
+                  <div className="text-right min-w-[100px]">
+                    <p className="text-[28px] font-normal text-black">{stage.prix}€</p>
                     {isCheapest && (
-                      <p className="text-xs text-red-600 font-medium">
+                      <p className="text-[12px] text-red-600 font-medium mt-0.5">
                         Notre prix bas à {city.charAt(0) + city.slice(1).toLowerCase()}
                       </p>
                     )}
                   </div>
 
+                  {/* Right: Green Button */}
                   <Link
                     href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
-                    className="px-6 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition-colors"
+                    className="ml-6 px-8 py-2.5 bg-[#4caf50] text-white text-[15px] font-medium rounded-xl hover:bg-[#45a049] transition-colors"
                   >
                     Sélectionner
                   </Link>
