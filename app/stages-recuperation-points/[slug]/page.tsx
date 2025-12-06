@@ -393,7 +393,7 @@ export default function StagesResultsPage() {
               return (
                 <article
                   key={stage.id}
-                  className={`flex items-center justify-between px-6 py-2.5 mb-2.5 rounded-2xl border max-w-6xl ${
+                  className={`flex items-center justify-between px-8 py-2 mb-2.5 rounded-2xl border w-full ${
                     isCheapest ? 'bg-[#fff5f5] border-gray-300' : 'bg-white border-gray-300'
                   }`}
                 >
