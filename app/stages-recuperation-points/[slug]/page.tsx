@@ -389,14 +389,25 @@ export default function StagesResultsPage() {
               )
             })}
 
-            {hasMore && (
-              <button
-                onClick={() => setVisibleCount(prev => prev + STAGES_PER_LOAD)}
-                className="mx-auto block px-8 py-2 bg-[#c4cce1] text-gray-800 text-sm rounded-2xl hover:bg-[#b3bdd4] transition-colors mt-6"
-              >
-                Voir plus de stages
-              </button>
-            )}
+            <div className="flex items-center justify-center gap-4 mt-6">
+              {visibleCount > STAGES_PER_LOAD && (
+                <button
+                  onClick={() => setVisibleCount(STAGES_PER_LOAD)}
+                  className="px-8 py-2 bg-white border-2 border-[#c4cce1] text-gray-800 text-sm rounded-2xl hover:bg-gray-50 transition-colors"
+                >
+                  Afficher moins de stages
+                </button>
+              )}
+
+              {hasMore && (
+                <button
+                  onClick={() => setVisibleCount(prev => prev + STAGES_PER_LOAD)}
+                  className="px-8 py-2 bg-[#c4cce1] text-gray-800 text-sm rounded-2xl hover:bg-[#b3bdd4] transition-colors"
+                >
+                  Voir plus de stages
+                </button>
+              )}
+            </div>
           </>
         )}
 
@@ -477,20 +488,37 @@ export default function StagesResultsPage() {
             {faqData.map((faq, index) => (
               <article
                 key={faq.id}
-                className="flex items-center justify-between p-4 rounded border border-black"
+                className="rounded border border-black overflow-hidden"
               >
                 <button
-                  className="flex items-center gap-3 flex-1 text-left"
+                  className="flex items-center justify-between p-4 w-full text-left hover:bg-gray-50 transition-colors"
                   onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
                 >
-                  <svg className="w-6 h-6 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <div className="flex items-center gap-3 flex-1">
+                    <svg className="w-6 h-6 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p className="text-gray-900">{faq.question}</p>
+                  </div>
+                  <svg
+                    className={`w-5 h-5 text-gray-600 transition-transform ${openFaqIndex === index ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
-                  <p className="text-gray-900">{faq.question}</p>
                 </button>
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
+
+                {openFaqIndex === index && (
+                  <div className="px-4 pb-4 pt-2 bg-gray-50 border-t border-gray-200">
+                    <p className="text-gray-700 leading-relaxed">
+                      Ceci est un placeholder pour la réponse à la question. Le contenu sera ajouté ultérieurement.
+                      Cette section peut contenir des informations détaillées sur la récupération de points,
+                      les délais, les conditions et toutes les informations pertinentes pour répondre à la question posée.
+                    </p>
+                  </div>
+                )}
               </article>
             ))}
           </div>
