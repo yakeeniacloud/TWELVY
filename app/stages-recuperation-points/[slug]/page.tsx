@@ -401,13 +401,13 @@ export default function StagesResultsPage() {
         )}
 
         {/* Pourquoi Réserver Section */}
-        <section className="my-16">
+        <section className="my-16 flex justify-center">
           <Image
             src="/pourquoi-reserver.png"
             alt="Pourquoi réserver votre stage chez ProStagesPermis"
-            width={1200}
-            height={400}
-            className="w-full h-auto"
+            width={800}
+            height={300}
+            className="w-auto h-auto max-w-2xl"
           />
         </section>
 
@@ -449,9 +449,9 @@ export default function StagesResultsPage() {
             <Image
               src="/europe1-logo.png"
               alt="Europe 1"
-              width={150}
-              height={80}
-              className="w-auto h-16"
+              width={250}
+              height={140}
+              className="w-auto h-32"
             />
             <p className="text-center text-gray-700">
               ProStagesPermis cité comme site de confiance par Europe 1
