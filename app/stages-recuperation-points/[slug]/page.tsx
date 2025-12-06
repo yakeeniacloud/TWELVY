@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useWordPressMenu } from '@/lib/useWordPressMenu'
 
 interface Stage {
   id: number
@@ -44,8 +43,6 @@ export default function StagesResultsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [visibleCount, setVisibleCount] = useState(6)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
-
-  const { menu } = useWordPressMenu()
 
   const STAGES_PER_LOAD = 6
 
@@ -191,62 +188,6 @@ export default function StagesResultsPage() {
 
   return (
     <div className="bg-white w-full min-h-screen">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="flex items-center justify-between px-8 py-3">
-          <Link href="/">
-            <Image
-              src="/prostagespermis-logo.png"
-              alt="ProStagesPermis"
-              width={160}
-              height={40}
-              className="h-8 w-auto"
-            />
-          </Link>
-
-          <Link
-            href="/espace-client"
-            className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            <span className="text-sm">Espace Client</span>
-          </Link>
-        </div>
-
-        {/* Navigation */}
-        <nav className="bg-[#3d3d3d] px-8 py-3">
-          <div className="flex items-center justify-between max-w-7xl mx-auto">
-            <ul className="flex items-center gap-6">
-              {menu.slice(0, 3).map((item) => (
-                <li key={item.id}>
-                  <Link
-                    href={`/${item.slug}`}
-                    className="text-white text-sm hover:text-gray-200 transition-colors"
-                  >
-                    {item.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <ul className="flex items-center gap-6">
-              <li>
-                <Link href="/qui-sommes-nous" className="text-white text-sm hover:text-gray-200 transition-colors">
-                  Qui sommes-nous
-                </Link>
-              </li>
-              <li>
-                <Link href="/aide-et-contact" className="text-white text-sm hover:text-gray-200 transition-colors">
-                  Aide et contact
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </header>
-
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-normal text-center mb-3">
