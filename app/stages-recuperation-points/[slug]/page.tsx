@@ -334,7 +334,7 @@ export default function StagesResultsPage() {
             {visibleStages.map((stage) => (
                 <article
                   key={stage.id}
-                  className="flex w-[903px] p-[0_7px] items-center gap-[70px] mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
+                  className="flex w-[903px] h-[85px] p-[0_7px] items-center gap-[70px] mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
                 >
                   {/* Left: Date and Details Link */}
                   <div className="flex flex-col">
