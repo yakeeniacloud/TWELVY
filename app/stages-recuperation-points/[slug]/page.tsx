@@ -331,29 +331,23 @@ export default function StagesResultsPage() {
 
         {!loading && !error && stages.length > 0 && (
           <>
-            {visibleStages.map((stage) => {
-              const isCheapest = cheapestStage?.id === stage.id
-
-              return (
+            {visibleStages.map((stage) => (
                 <article
                   key={stage.id}
                   className="flex w-[903px] p-[0_7px] items-center gap-[70px] mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
                 >
                   {/* Left: Date and Details Link */}
-                  <div className="flex flex-col gap-0.5 min-w-[200px]">
-                    <p className="text-base font-normal text-black leading-snug">
+                  <div className="flex flex-col">
+                    <p className="w-[223px] text-[rgba(0,0,0,0.89)] font-['Poppins'] text-[15px] font-normal leading-[35px]">
                       {formatDate(stage.date_start, stage.date_end)}
                     </p>
-                    <button className="flex items-center gap-1 text-[#6b7ab8] text-sm hover:underline w-fit">
-                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
-                      </svg>
-                      <span>Détails du stage</span>
+                    <button className="w-[120px] h-[34px] text-[rgba(90,106,147,0.86)] font-['Poppins'] text-[13px] font-normal leading-[35px] hover:underline text-left">
+                      Détails du stage
                     </button>
                   </div>
 
                   {/* Center: Location Pin + City + Address */}
-                  <div className="flex items-center gap-2.5 flex-1 mx-6">
+                  <div className="flex items-center gap-2.5">
                     <Image
                       src="/location-pin.png"
                       alt="Location"
@@ -361,32 +355,26 @@ export default function StagesResultsPage() {
                       height={50}
                       className="w-11 h-11"
                     />
-                    <div className="flex flex-col gap-0">
-                      <p className="text-base font-normal text-black">{stage.site.ville}</p>
-                      <p className="text-sm text-gray-500">{stage.site.adresse}</p>
+                    <div className="flex flex-col">
+                      <p className="w-[138px] h-[34px] flex-shrink-0 text-[rgba(0,0,0,0.98)] font-['Poppins'] text-[15px] font-normal leading-[35px]">{stage.site.ville}</p>
+                      <p className="h-[31px] flex-shrink-0 self-stretch text-[rgba(6,6,6,0.56)] font-['Poppins'] text-[12px] font-normal leading-[35px]">{stage.site.adresse}</p>
                     </div>
                   </div>
 
                   {/* Right: Price */}
-                  <div className="text-center w-[121px] h-[31px] flex-shrink-0">
+                  <div className="w-[121px] h-[31px] flex-shrink-0">
                     <p className="text-[rgba(6,6,6,0.86)] text-center font-['Poppins'] text-[20px] font-normal leading-[35px]">{stage.prix}€</p>
-                    {isCheapest && (
-                      <p className="text-[11px] text-red-600 font-medium mt-0">
-                        Notre prix bas à {city.charAt(0) + city.slice(1).toLowerCase()}
-                      </p>
-                    )}
                   </div>
 
                   {/* Right: Green Button */}
                   <Link
                     href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
-                    className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white text-sm font-normal hover:bg-[#389c2e] transition-colors whitespace-nowrap"
+                    className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white font-['Poppins'] text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap"
                   >
                     Sélectionner
                   </Link>
                 </article>
-              )
-            })}
+            ))}
 
             <div className="flex items-center justify-center gap-4 mt-6">
               {visibleCount > STAGES_PER_LOAD && (
