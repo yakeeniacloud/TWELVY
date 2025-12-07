@@ -334,10 +334,10 @@ export default function StagesResultsPage() {
             {visibleStages.map((stage) => (
                 <article
                   key={stage.id}
-                  className="flex w-[903px] h-[85px] p-[0_7px] items-center gap-[70px] mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
+                  className="flex w-[903px] h-[85px] p-[0_7px] items-center mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
                 >
                   {/* Left: Date and Details Link */}
-                  <div className="flex flex-col">
+                  <div className="flex flex-col flex-shrink-0">
                     <p className="w-[223px] text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[35px]" style={{ fontFamily: 'var(--font-poppins)' }}>
                       {formatDate(stage.date_start, stage.date_end)}
                     </p>
@@ -347,13 +347,13 @@ export default function StagesResultsPage() {
                   </div>
 
                   {/* Center: Location Pin + City + Address */}
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex items-center gap-2.5 flex-1 mx-[70px]">
                     <Image
                       src="/location-pin.png"
                       alt="Location"
                       width={50}
                       height={50}
-                      className="w-11 h-11"
+                      className="w-11 h-11 flex-shrink-0"
                     />
                     <div className="flex flex-col">
                       <p className="w-[138px] h-[34px] flex-shrink-0 text-[rgba(0,0,0,0.98)] text-[15px] font-normal leading-[35px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville}</p>
@@ -369,7 +369,7 @@ export default function StagesResultsPage() {
                   {/* Right: Green Button */}
                   <Link
                     href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
-                    className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap"
+                    className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap flex-shrink-0 ml-[70px]"
                     style={{ fontFamily: 'var(--font-poppins)' }}
                   >
                     Sélectionner
