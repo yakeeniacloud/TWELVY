@@ -337,8 +337,8 @@ export default function StagesResultsPage() {
               return (
                 <article
                   key={stage.id}
-                  className={`flex items-center justify-between px-8 py-5 mb-3 rounded-2xl border max-w-4xl mx-auto ${
-                    isCheapest ? 'bg-[#fff5f5] border-gray-300' : 'bg-white border-gray-300'
+                  className={`flex w-[903px] px-[7px] items-center gap-[70px] mb-3 rounded-[10px] border border-[#BBB] shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto ${
+                    isCheapest ? 'bg-[#fff5f5]' : 'bg-white'
                   }`}
                 >
                   {/* Left: Date and Details Link */}
@@ -370,8 +370,8 @@ export default function StagesResultsPage() {
                   </div>
 
                   {/* Right: Price */}
-                  <div className="text-left min-w-[80px] mr-8">
-                    <p className="text-xl font-normal text-black">{stage.prix}€</p>
+                  <div className="text-center w-[121px] h-[31px] flex-shrink-0">
+                    <p className="text-[rgba(6,6,6,0.86)] text-center font-['Poppins'] text-[20px] font-normal leading-[35px]">{stage.prix}€</p>
                     {isCheapest && (
                       <p className="text-[11px] text-red-600 font-medium mt-0">
                         Notre prix bas à {city.charAt(0) + city.slice(1).toLowerCase()}
