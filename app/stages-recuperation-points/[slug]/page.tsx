@@ -338,10 +338,10 @@ export default function StagesResultsPage() {
                 >
                   {/* Left: Date and Details Link */}
                   <div className="flex flex-col">
-                    <p className="w-[223px] text-[rgba(0,0,0,0.89)] font-['Poppins'] text-[15px] font-normal leading-[35px]">
+                    <p className="w-[223px] text-[rgba(0,0,0,0.89)] font-poppins text-[15px] font-normal leading-[35px]">
                       {formatDate(stage.date_start, stage.date_end)}
                     </p>
-                    <button className="w-[120px] h-[34px] text-[rgba(90,106,147,0.86)] font-['Poppins'] text-[13px] font-normal leading-[35px] hover:underline text-left">
+                    <button className="w-[120px] h-[34px] text-[rgba(90,106,147,0.86)] font-poppins text-[13px] font-normal leading-[35px] hover:underline text-left">
                       Détails du stage
                     </button>
                   </div>
@@ -356,20 +356,20 @@ export default function StagesResultsPage() {
                       className="w-11 h-11"
                     />
                     <div className="flex flex-col">
-                      <p className="w-[138px] h-[34px] flex-shrink-0 text-[rgba(0,0,0,0.98)] font-['Poppins'] text-[15px] font-normal leading-[35px]">{stage.site.ville}</p>
-                      <p className="h-[31px] flex-shrink-0 self-stretch text-[rgba(6,6,6,0.56)] font-['Poppins'] text-[12px] font-normal leading-[35px]">{stage.site.adresse}</p>
+                      <p className="w-[138px] h-[34px] flex-shrink-0 text-[rgba(0,0,0,0.98)] font-poppins text-[15px] font-normal leading-[35px]">{stage.site.ville}</p>
+                      <p className="h-[31px] flex-shrink-0 self-stretch text-[rgba(6,6,6,0.56)] font-poppins text-[12px] font-normal leading-[35px]">{stage.site.adresse}</p>
                     </div>
                   </div>
 
                   {/* Right: Price */}
                   <div className="w-[121px] h-[31px] flex-shrink-0">
-                    <p className="text-[rgba(6,6,6,0.86)] text-center font-['Poppins'] text-[20px] font-normal leading-[35px]">{stage.prix}€</p>
+                    <p className="text-[rgba(6,6,6,0.86)] text-center font-poppins text-[20px] font-normal leading-[35px]">{stage.prix}€</p>
                   </div>
 
                   {/* Right: Green Button */}
                   <Link
                     href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
-                    className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white font-['Poppins'] text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap"
+                    className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white font-poppins text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap"
                   >
                     Sélectionner
                   </Link>
