@@ -361,9 +361,9 @@ export default function StagesResultsPage() {
                         </defs>
                       </svg>
                     </div>
-                    <div className="flex flex-col justify-center">
-                      <p className="w-[138px] h-[34px] flex-shrink-0 text-[rgba(0,0,0,0.98)] text-[15px] font-normal leading-[35px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville}</p>
-                      <p className="h-[31px] flex-shrink-0 self-stretch text-[rgba(6,6,6,0.56)] text-[12px] font-normal leading-[35px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.adresse}</p>
+                    <div className="flex flex-col justify-center gap-0">
+                      <p className="w-[138px] flex-shrink-0 text-[rgba(0,0,0,0.98)] text-[15px] font-normal leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville}</p>
+                      <p className="flex-shrink-0 self-stretch text-[rgba(6,6,6,0.56)] text-[12px] font-normal leading-[12px] mt-3" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.adresse}</p>
                     </div>
                   </div>
 
