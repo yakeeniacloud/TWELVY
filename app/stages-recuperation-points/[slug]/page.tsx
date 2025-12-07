@@ -337,11 +337,11 @@ export default function StagesResultsPage() {
                   className="flex w-[903px] h-[85px] p-[0_7px] items-center mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
                 >
                   {/* Left: Date and Details Link */}
-                  <div className="flex flex-col flex-shrink-0">
-                    <p className="w-[223px] text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[35px]" style={{ fontFamily: 'var(--font-poppins)' }}>
+                  <div className="flex flex-col flex-shrink-0 gap-0">
+                    <p className="w-[223px] text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>
                       {formatDate(stage.date_start, stage.date_end)}
                     </p>
-                    <button className="w-[120px] h-[34px] text-[rgba(90,106,147,0.86)] text-[13px] font-normal leading-[35px] hover:underline text-left" style={{ fontFamily: 'var(--font-poppins)' }}>
+                    <button className="w-[120px] text-[rgba(90,106,147,0.86)] text-[13px] font-normal leading-[13px] hover:underline text-left mt-3" style={{ fontFamily: 'var(--font-poppins)' }}>
                       Détails du stage
                     </button>
                   </div>
