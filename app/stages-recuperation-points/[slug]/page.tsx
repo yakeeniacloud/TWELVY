@@ -378,7 +378,7 @@ export default function StagesResultsPage() {
                   {/* Right: Green Button */}
                   <Link
                     href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
-                    className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap flex-shrink-0 ml-[70px]"
+                    className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap flex-shrink-0 ml-[70px] mr-[25px]"
                     style={{ fontFamily: 'var(--font-poppins)' }}
                   >
                     Sélectionner
