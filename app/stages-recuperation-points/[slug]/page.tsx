@@ -338,7 +338,7 @@ export default function StagesResultsPage() {
                 >
                   {/* Left: Date and Details Link */}
                   <div className="flex flex-col">
-                    <p className="w-[223px] text-[rgba(0,0,0,0.89)] font-poppins text-[15px] font-normal leading-[35px]">
+                    <p className="w-[223px] text-[rgba(0,0,0,0.89)] font-poppins text-[15px] font-medium leading-[35px]">
                       {formatDate(stage.date_start, stage.date_end)}
                     </p>
                     <button className="w-[120px] h-[34px] text-[rgba(90,106,147,0.86)] font-poppins text-[13px] font-normal leading-[35px] hover:underline text-left">
