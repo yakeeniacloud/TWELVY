@@ -337,12 +337,15 @@ export default function StagesResultsPage() {
                   className="flex w-[903px] h-[85px] p-[0_7px] items-center mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
                 >
                   {/* Left: Date and Details Link */}
-                  <div className="flex flex-col flex-shrink-0 gap-0">
+                  <div className="flex flex-col flex-shrink-0 gap-0 ml-3">
                     <p className="w-[223px] text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>
                       {formatDate(stage.date_start, stage.date_end)}
                     </p>
-                    <button className="w-[120px] text-[rgba(90,106,147,0.86)] text-[13px] font-normal leading-[13px] hover:underline text-left mt-3" style={{ fontFamily: 'var(--font-poppins)' }}>
-                      Détails du stage
+                    <button className="flex items-center gap-[5px] text-[rgba(90,106,147,0.86)] text-[13px] font-normal leading-[13px] hover:underline text-left mt-3" style={{ fontFamily: 'var(--font-poppins)' }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" className="w-[13.333px] h-[13.333px] flex-shrink-0">
+                        <path d="M7.46665 10.1334V7.46672M7.46665 4.80005H7.47332M14.1333 7.46672C14.1333 11.1486 11.1486 14.1334 7.46665 14.1334C3.78476 14.1334 0.799988 11.1486 0.799988 7.46672C0.799988 3.78482 3.78476 0.800049 7.46665 0.800049C11.1486 0.800049 14.1333 3.78482 14.1333 7.46672Z" stroke="#5A6A93" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <span>Détails du stage</span>
                     </button>
                   </div>
 
