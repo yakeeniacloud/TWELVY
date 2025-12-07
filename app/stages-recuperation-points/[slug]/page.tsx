@@ -43,6 +43,7 @@ export default function StagesResultsPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [visibleCount, setVisibleCount] = useState(6)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
+  const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
 
   const STAGES_PER_LOAD = 6
 
@@ -381,7 +382,7 @@ export default function StagesResultsPage() {
                   {/* Right: Green Button */}
                   <Link
                     href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
-                    className="px-6 py-2 bg-[#4caf50] text-white text-sm font-normal rounded-xl hover:bg-[#45a049] transition-colors whitespace-nowrap"
+                    className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white text-sm font-normal hover:bg-[#389c2e] transition-colors whitespace-nowrap"
                   >
                     Sélectionner
                   </Link>
