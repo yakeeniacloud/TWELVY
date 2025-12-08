@@ -423,7 +423,16 @@ export default function StagesResultsPage() {
         <section className="my-16">
           <div className="flex items-center justify-center gap-4 mb-8">
             <div className="h-px w-16 bg-gray-300" />
-            <h2 className="text-xl">Avis <span className="text-red-600">Clients</span></h2>
+            <h2 className="text-center text-[20px] font-[250] leading-[35px]" style={{
+              fontFamily: 'var(--font-poppins)',
+              color: 'rgba(6, 6, 6, 0.86)',
+              WebkitTextStrokeWidth: '1px',
+              WebkitTextStrokeColor: '#000'
+            }}>
+              Avis <span style={{
+                WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)'
+              }}>Clients</span>
+            </h2>
             <div className="h-px w-16 bg-gray-300" />
           </div>
 
@@ -435,8 +444,15 @@ export default function StagesResultsPage() {
         {/* About Us Section */}
         <section className="my-16 flex items-stretch gap-8">
           <div className="flex-1">
-            <h2 className="text-xl text-center mb-4">
-              Qui est <span className="text-red-600">ProStagesPermis</span>
+            <h2 className="text-center mb-4 text-[20px] font-[250] leading-[35px]" style={{
+              fontFamily: 'var(--font-poppins)',
+              color: 'rgba(6, 6, 6, 0.86)',
+              WebkitTextStrokeWidth: '1px',
+              WebkitTextStrokeColor: '#000'
+            }}>
+              Qui est <span style={{
+                WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)'
+              }}>ProStagesPermis</span>
             </h2>
             <div className="text-gray-800 leading-relaxed space-y-4">
               <p>
@@ -477,8 +493,15 @@ export default function StagesResultsPage() {
 
         {/* FAQ Section */}
         <section className="my-16">
-          <h2 className="text-xl text-center mb-8">
-            Questions <span className="text-red-600">Fréquentes</span>
+          <h2 className="text-center mb-8 text-[20px] font-[250] leading-[35px]" style={{
+            fontFamily: 'var(--font-poppins)',
+            color: 'rgba(6, 6, 6, 0.86)',
+            WebkitTextStrokeWidth: '1px',
+            WebkitTextStrokeColor: '#000'
+          }}>
+            Questions <span style={{
+              WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)'
+            }}>Fréquentes</span>
           </h2>
 
           <div className="space-y-4">
