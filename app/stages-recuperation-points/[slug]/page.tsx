@@ -444,7 +444,7 @@ export default function StagesResultsPage() {
         {/* About Us Section */}
         <section className="my-16 flex flex-col items-center">
           {/* Top: Europe 1 Recommendation */}
-          <div className="flex items-center justify-center mb-[120px]" style={{ gap: '35px' }}>
+          <div className="flex items-center justify-center mb-[120px]">
             {/* Left: Recommandé par Europe 1 */}
             <div className="flex flex-col items-center justify-center" style={{
               width: '176px',
@@ -461,24 +461,28 @@ export default function StagesResultsPage() {
               }}>
                 Recommandé par Europe 1
               </h3>
-              <p className="text-center mt-4" style={{
-                fontFamily: 'var(--font-poppins)',
-                width: '333px',
-                height: '56px',
-                color: 'rgba(6, 6, 6, 0.80)',
-                fontSize: '15px',
-                fontWeight: 400,
-                lineHeight: '25px'
-              }}>
-                ProStagesPermis cité comme site de confiance par Europe 1
-              </p>
             </div>
+
+            {/* Subtitle with 35px gap */}
+            <p className="text-center" style={{
+              fontFamily: 'var(--font-poppins)',
+              width: '333px',
+              height: '56px',
+              color: 'rgba(6, 6, 6, 0.80)',
+              fontSize: '15px',
+              fontWeight: 400,
+              lineHeight: '25px',
+              marginRight: '35px'
+            }}>
+              ProStagesPermis cité comme site de confiance par Europe 1
+            </p>
 
             {/* Vertical Line */}
             <div style={{
               width: '1px',
               height: '172.502px',
-              background: '#000'
+              background: '#000',
+              marginRight: '35px'
             }}></div>
 
             {/* Right: Europe 1 Logo */}
