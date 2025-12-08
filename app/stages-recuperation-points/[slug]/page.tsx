@@ -636,7 +636,7 @@ export default function StagesResultsPage() {
             {/* 3x3 Grid of nearby cities */}
             <div className="flex flex-col items-center gap-[15px]">
               {[0, 1, 2].map(rowIndex => (
-                <div key={rowIndex} className="flex gap-[22px]">
+                <div key={rowIndex} className="flex gap-[30px]">
                   {nearbyCities.slice(rowIndex * 3, rowIndex * 3 + 3).map((nearbyCity) => {
                     // Format city name for display (Title Case)
                     const formattedCity = nearbyCity.city
@@ -654,7 +654,6 @@ export default function StagesResultsPage() {
                         href={`/stages-recuperation-points/${nearbyCity.city.toLowerCase()}`}
                         style={{
                           display: 'flex',
-                          width: '230px',
                           height: '35px',
                           flexDirection: 'column',
                           justifyContent: 'center',
@@ -664,7 +663,8 @@ export default function StagesResultsPage() {
                           fontSize: '15px',
                           fontWeight: 400,
                           lineHeight: '35px',
-                          textDecoration: 'none'
+                          textDecoration: 'none',
+                          whiteSpace: 'nowrap'
                         }}
                         className="hover:underline"
                       >
