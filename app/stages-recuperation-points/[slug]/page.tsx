@@ -624,13 +624,15 @@ export default function StagesResultsPage() {
         {/* Nearby Cities Section */}
         {nearbyCities.length > 0 && (
           <section className="my-16">
-            <h2 className="text-center mb-8" style={{
+            <h2 className="text-center mb-8 text-[20px] font-[250] leading-[35px]" style={{
               fontFamily: 'var(--font-poppins)',
-              fontSize: '20px',
-              fontWeight: 400,
-              lineHeight: '35px'
+              color: 'rgba(6, 6, 6, 0.86)',
+              WebkitTextStrokeWidth: '1px',
+              WebkitTextStrokeColor: '#000'
             }}>
-              Stages Récupération de Points <span style={{ color: '#BC4747' }}>autour de {city.charAt(0) + city.slice(1).toLowerCase()}</span>
+              Stages Récupération de Points <span style={{
+                WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)'
+              }}>autour de {city.charAt(0) + city.slice(1).toLowerCase()}</span>
             </h2>
 
             {/* 3x3 Grid of nearby cities */}
