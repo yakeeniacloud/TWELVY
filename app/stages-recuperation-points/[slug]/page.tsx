@@ -600,6 +600,25 @@ export default function StagesResultsPage() {
               </article>
             ))}
           </div>
+
+          {/* Show More Questions Button */}
+          <div className="flex justify-center" style={{ marginTop: '25px' }}>
+            <button style={{
+              fontFamily: 'var(--font-poppins)',
+              color: '#000',
+              fontSize: '15px',
+              fontWeight: 500,
+              letterSpacing: '1.05px',
+              textDecoration: 'underline',
+              textDecorationStyle: 'solid',
+              textDecorationSkipInk: 'auto',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer'
+            }}>
+              Afficher plus de questions
+            </button>
+          </div>
         </section>
       </main>
 
