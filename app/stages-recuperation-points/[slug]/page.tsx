@@ -634,46 +634,114 @@ export default function StagesResultsPage() {
             </h2>
 
             {/* 3x3 Grid of nearby cities */}
-            <div className="flex flex-col items-center gap-[15px]">
-              {[0, 1, 2].map(rowIndex => (
-                <div key={rowIndex} className="flex gap-[30px]">
-                  {nearbyCities.slice(rowIndex * 3, rowIndex * 3 + 3).map((nearbyCity) => {
-                    // Format city name for display (Title Case)
-                    const formattedCity = nearbyCity.city
-                      .split('-')
-                      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
-                      .join(' ')
+            <div className="flex justify-center gap-[30px]">
+              {/* Column 1 */}
+              <div className="flex flex-col gap-[15px]">
+                {nearbyCities.slice(0, 3).map((nearbyCity) => {
+                  const formattedCity = nearbyCity.city
+                    .split('-')
+                    .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+                    .join(' ')
+                  const cityStage = allStages.find(s => s.site.ville === nearbyCity.city)
+                  const deptNumber = cityStage?.site.code_postal.substring(0, 2) || ''
 
-                    // Get department number from first stage in that city
-                    const cityStage = allStages.find(s => s.site.ville === nearbyCity.city)
-                    const deptNumber = cityStage?.site.code_postal.substring(0, 2) || ''
+                  return (
+                    <Link
+                      key={nearbyCity.city}
+                      href={`/stages-recuperation-points/${nearbyCity.city.toLowerCase()}`}
+                      style={{
+                        display: 'flex',
+                        height: '35px',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        fontFamily: 'var(--font-poppins)',
+                        color: '#BC4747',
+                        fontSize: '15px',
+                        fontWeight: 400,
+                        lineHeight: '35px',
+                        textDecoration: 'none',
+                        whiteSpace: 'nowrap'
+                      }}
+                      className="hover:underline"
+                    >
+                      Stage {formattedCity} ({deptNumber})
+                    </Link>
+                  )
+                })}
+              </div>
 
-                    return (
-                      <Link
-                        key={nearbyCity.city}
-                        href={`/stages-recuperation-points/${nearbyCity.city.toLowerCase()}`}
-                        style={{
-                          display: 'flex',
-                          height: '35px',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                          fontFamily: 'var(--font-poppins)',
-                          color: '#BC4747',
-                          fontSize: '15px',
-                          fontWeight: 400,
-                          lineHeight: '35px',
-                          textDecoration: 'none',
-                          whiteSpace: 'nowrap'
-                        }}
-                        className="hover:underline"
-                      >
-                        Stage {formattedCity} ({deptNumber})
-                      </Link>
-                    )
-                  })}
-                </div>
-              ))}
+              {/* Column 2 */}
+              <div className="flex flex-col gap-[15px]">
+                {nearbyCities.slice(3, 6).map((nearbyCity) => {
+                  const formattedCity = nearbyCity.city
+                    .split('-')
+                    .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+                    .join(' ')
+                  const cityStage = allStages.find(s => s.site.ville === nearbyCity.city)
+                  const deptNumber = cityStage?.site.code_postal.substring(0, 2) || ''
+
+                  return (
+                    <Link
+                      key={nearbyCity.city}
+                      href={`/stages-recuperation-points/${nearbyCity.city.toLowerCase()}`}
+                      style={{
+                        display: 'flex',
+                        height: '35px',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        fontFamily: 'var(--font-poppins)',
+                        color: '#BC4747',
+                        fontSize: '15px',
+                        fontWeight: 400,
+                        lineHeight: '35px',
+                        textDecoration: 'none',
+                        whiteSpace: 'nowrap'
+                      }}
+                      className="hover:underline"
+                    >
+                      Stage {formattedCity} ({deptNumber})
+                    </Link>
+                  )
+                })}
+              </div>
+
+              {/* Column 3 */}
+              <div className="flex flex-col gap-[15px]">
+                {nearbyCities.slice(6, 9).map((nearbyCity) => {
+                  const formattedCity = nearbyCity.city
+                    .split('-')
+                    .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+                    .join(' ')
+                  const cityStage = allStages.find(s => s.site.ville === nearbyCity.city)
+                  const deptNumber = cityStage?.site.code_postal.substring(0, 2) || ''
+
+                  return (
+                    <Link
+                      key={nearbyCity.city}
+                      href={`/stages-recuperation-points/${nearbyCity.city.toLowerCase()}`}
+                      style={{
+                        display: 'flex',
+                        height: '35px',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        fontFamily: 'var(--font-poppins)',
+                        color: '#BC4747',
+                        fontSize: '15px',
+                        fontWeight: 400,
+                        lineHeight: '35px',
+                        textDecoration: 'none',
+                        whiteSpace: 'nowrap'
+                      }}
+                      className="hover:underline"
+                    >
+                      Stage {formattedCity} ({deptNumber})
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
           </section>
         )}
