@@ -442,8 +442,72 @@ export default function StagesResultsPage() {
         </section>
 
         {/* About Us Section */}
-        <section className="my-16 flex items-stretch gap-8">
-          <div className="flex-1">
+        <section className="my-16 flex flex-col items-center">
+          {/* Top: Europe 1 Recommendation */}
+          <div className="flex items-center justify-center gap-8 mb-[120px]">
+            {/* Left: Recommandé par Europe 1 */}
+            <div className="flex flex-col items-center justify-center" style={{
+              width: '176px',
+              height: '77px',
+              flexShrink: 0
+            }}>
+              <h3 className="text-center" style={{
+                fontFamily: 'var(--font-poppins)',
+                color: '#2C2C2C',
+                fontSize: '20px',
+                fontWeight: 500,
+                lineHeight: '20px',
+                letterSpacing: '1.4px'
+              }}>
+                Recommandé par Europe 1
+              </h3>
+              <p className="text-center mt-4" style={{
+                fontFamily: 'var(--font-poppins)',
+                width: '333px',
+                height: '56px',
+                color: 'rgba(6, 6, 6, 0.80)',
+                fontSize: '15px',
+                fontWeight: 400,
+                lineHeight: '25px'
+              }}>
+                ProStagesPermis cité comme site de confiance par Europe 1
+              </p>
+            </div>
+
+            {/* Vertical Line */}
+            <div style={{
+              width: '1px',
+              height: '172.502px',
+              background: '#000'
+            }}></div>
+
+            {/* Right: Europe 1 Logo */}
+            <div className="flex flex-col items-center justify-center gap-4">
+              <Image
+                src="/europe1-logo.png"
+                alt="Europe 1"
+                width={200}
+                height={100}
+                className="w-auto h-20"
+              />
+              <a
+                href="https://www.youtube.com/watch?v=z1AsmdcGTaw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-red-700 hover:underline"
+                style={{
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '15px',
+                  fontWeight: 400
+                }}
+              >
+                Écouter l'extrait
+              </a>
+            </div>
+          </div>
+
+          {/* Bottom: Qui est ProStagesPermis */}
+          <div className="text-center">
             <h2 className="text-center mb-4 text-[20px] font-[250] leading-[35px]" style={{
               fontFamily: 'var(--font-poppins)',
               color: 'rgba(6, 6, 6, 0.86)',
@@ -454,11 +518,21 @@ export default function StagesResultsPage() {
                 WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)'
               }}>ProStagesPermis</span>
             </h2>
-            <div className="text-gray-800 leading-relaxed space-y-4">
+            <div style={{
+              width: '552px',
+              height: '309px',
+              flexShrink: 0,
+              fontFamily: 'var(--font-poppins)',
+              color: 'rgba(6, 6, 6, 0.94)',
+              fontSize: '15px',
+              fontWeight: 400,
+              lineHeight: '25px',
+              textAlign: 'left'
+            }}>
               <p>
                 Depuis 2008, ProStagesPermis est le site n° 1 spécialisé dans les stages de récupération de points. Notre mission : vous aider à sauver votre permis dans les temps, avec un stage au meilleur prix proche de chez vous. Plus de 857 000 conducteurs nous ont déjà fait confiance.
               </p>
-              <ul className="list-disc list-inside space-y-1">
+              <ul className="list-disc list-inside mt-4 space-y-1">
                 <li>Près de 18 ans d'expérience dans les stages de récupération de points</li>
                 <li>Des dizaines de milliers de conducteurs accompagnés partout en France</li>
                 <li>Un réseau de centres de formation agréés partout en France</li>
@@ -466,29 +540,6 @@ export default function StagesResultsPage() {
               </ul>
             </div>
           </div>
-
-          <div className="w-px bg-gray-300"></div>
-
-          <aside className="flex flex-col items-center justify-center gap-4 w-80">
-            <Image
-              src="/europe1-logo.png"
-              alt="Europe 1"
-              width={200}
-              height={100}
-              className="w-auto h-20"
-            />
-            <p className="text-center text-gray-700">
-              ProStagesPermis cité comme site de confiance par Europe 1
-            </p>
-            <a
-              href="https://www.youtube.com/watch?v=z1AsmdcGTaw"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-red-700 hover:underline"
-            >
-              Écouter l'extrait
-            </a>
-          </aside>
         </section>
 
         {/* FAQ Section */}
