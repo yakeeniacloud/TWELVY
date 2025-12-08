@@ -620,6 +620,63 @@ export default function StagesResultsPage() {
             </button>
           </div>
         </section>
+
+        {/* Nearby Cities Section */}
+        {nearbyCities.length > 0 && (
+          <section className="my-16">
+            <h2 className="text-center mb-8" style={{
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '20px',
+              fontWeight: 400,
+              lineHeight: '35px'
+            }}>
+              Stages Récupération de Points <span style={{ color: '#BC4747' }}>autour de {city.charAt(0) + city.slice(1).toLowerCase()}</span>
+            </h2>
+
+            {/* 3x3 Grid of nearby cities */}
+            <div className="flex flex-col items-center gap-[15px]">
+              {[0, 1, 2].map(rowIndex => (
+                <div key={rowIndex} className="flex gap-[22px]">
+                  {nearbyCities.slice(rowIndex * 3, rowIndex * 3 + 3).map((nearbyCity) => {
+                    // Format city name for display (Title Case)
+                    const formattedCity = nearbyCity.city
+                      .split('-')
+                      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+                      .join(' ')
+
+                    // Get department number from first stage in that city
+                    const cityStage = allStages.find(s => s.site.ville === nearbyCity.city)
+                    const deptNumber = cityStage?.site.code_postal.substring(0, 2) || ''
+
+                    return (
+                      <Link
+                        key={nearbyCity.city}
+                        href={`/stages-recuperation-points/${nearbyCity.city.toLowerCase()}`}
+                        style={{
+                          display: 'flex',
+                          width: '230px',
+                          height: '35px',
+                          flexDirection: 'column',
+                          justifyContent: 'center',
+                          flexShrink: 0,
+                          fontFamily: 'var(--font-poppins)',
+                          color: '#BC4747',
+                          fontSize: '15px',
+                          fontWeight: 400,
+                          lineHeight: '35px',
+                          textDecoration: 'none'
+                        }}
+                        className="hover:underline"
+                      >
+                        Stage {formattedCity} ({deptNumber})
+                      </Link>
+                    )
+                  })}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       {/* Footer */}
