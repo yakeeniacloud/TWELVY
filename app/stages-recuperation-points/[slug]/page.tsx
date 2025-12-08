@@ -444,7 +444,7 @@ export default function StagesResultsPage() {
         {/* About Us Section */}
         <section className="my-16 flex flex-col items-center">
           {/* Top: Europe 1 Recommendation */}
-          <div className="flex items-center justify-center gap-8 mb-[120px]">
+          <div className="flex items-center justify-center mb-[120px]" style={{ gap: '35px' }}>
             {/* Left: Recommandé par Europe 1 */}
             <div className="flex flex-col items-center justify-center" style={{
               width: '176px',
@@ -507,37 +507,43 @@ export default function StagesResultsPage() {
           </div>
 
           {/* Bottom: Qui est ProStagesPermis */}
-          <div className="text-center">
-            <h2 className="text-center mb-4 text-[20px] font-[250] leading-[35px]" style={{
-              fontFamily: 'var(--font-poppins)',
-              color: 'rgba(6, 6, 6, 0.86)',
-              WebkitTextStrokeWidth: '1px',
-              WebkitTextStrokeColor: '#000'
-            }}>
-              Qui est <span style={{
-                WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)'
-              }}>ProStagesPermis</span>
-            </h2>
-            <div style={{
-              width: '552px',
-              height: '309px',
-              flexShrink: 0,
-              fontFamily: 'var(--font-poppins)',
-              color: 'rgba(6, 6, 6, 0.94)',
-              fontSize: '15px',
-              fontWeight: 400,
-              lineHeight: '25px',
-              textAlign: 'left'
-            }}>
-              <p>
-                Depuis 2008, ProStagesPermis est le site n° 1 spécialisé dans les stages de récupération de points. Notre mission : vous aider à sauver votre permis dans les temps, avec un stage au meilleur prix proche de chez vous. Plus de 857 000 conducteurs nous ont déjà fait confiance.
-              </p>
-              <ul className="list-disc list-inside mt-4 space-y-1">
-                <li>Près de 18 ans d'expérience dans les stages de récupération de points</li>
-                <li>Des dizaines de milliers de conducteurs accompagnés partout en France</li>
-                <li>Un réseau de centres de formation agréés partout en France</li>
-                <li>Note Google 4,8/5 avis vérifiés</li>
-              </ul>
+          <div className="flex justify-center items-center" style={{
+            width: '626px',
+            height: '358px',
+            border: '1px solid #000'
+          }}>
+            <div className="text-center">
+              <h2 className="text-center mb-4 text-[20px] font-[250] leading-[35px]" style={{
+                fontFamily: 'var(--font-poppins)',
+                color: 'rgba(6, 6, 6, 0.86)',
+                WebkitTextStrokeWidth: '1px',
+                WebkitTextStrokeColor: '#000'
+              }}>
+                Qui est <span style={{
+                  WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)'
+                }}>ProStagesPermis</span>
+              </h2>
+              <div style={{
+                width: '552px',
+                height: '309px',
+                flexShrink: 0,
+                fontFamily: 'var(--font-poppins)',
+                color: 'rgba(6, 6, 6, 0.94)',
+                fontSize: '15px',
+                fontWeight: 400,
+                lineHeight: '25px',
+                textAlign: 'left'
+              }}>
+                <p>
+                  Depuis 2008, ProStagesPermis est le site n° 1 spécialisé dans les stages de récupération de points. Notre mission : vous aider à sauver votre permis dans les temps, avec un stage au meilleur prix proche de chez vous. Plus de 857 000 conducteurs nous ont déjà fait confiance.
+                </p>
+                <ul className="list-disc list-inside mt-4 space-y-1">
+                  <li>Près de 18 ans d'expérience dans les stages de récupération de points</li>
+                  <li>Des dizaines de milliers de conducteurs accompagnés partout en France</li>
+                  <li>Un réseau de centres de formation agréés partout en France</li>
+                  <li>Note Google 4,8/5 avis vérifiés</li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
