@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import CitySearchBar from '@/components/stages/CitySearchBar'
 
 interface Stage {
   id: number
@@ -41,7 +42,6 @@ export default function StagesResultsPage() {
   const [showCitiesDropdown, setShowCitiesDropdown] = useState(false)
   const [selectedCities, setSelectedCities] = useState<string[]>([])
   const [allCitiesSelected, setAllCitiesSelected] = useState(true)
-  const [searchQuery, setSearchQuery] = useState('')
   const [visibleCount, setVisibleCount] = useState(6)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
@@ -293,17 +293,11 @@ export default function StagesResultsPage() {
 
         {/* Filters Section */}
         <div className="flex items-center justify-center gap-4 mb-8">
-          <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-300">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+          <div className="w-64">
+            <CitySearchBar
               placeholder="Ville ou code postal"
-              className="bg-transparent border-none outline-none text-sm placeholder:text-gray-400"
+              variant="small"
             />
-            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
           </div>
 
           <span className="text-sm text-gray-700">Trier par :</span>
