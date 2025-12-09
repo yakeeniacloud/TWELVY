@@ -192,8 +192,8 @@ export default function CitySearchBar({
         className="relative"
       >
         {isFilter ? (
-          // Filter variant - matches design specs: 172px width, 16px height, search icon
-          <div className="flex items-center gap-2 px-4 rounded-lg border border-[#D9D9D9] bg-white" style={{ height: '16px', width: '172px', padding: '12px 16px' }}>
+          // Filter variant - matches design specs: 204px width, 40px height, search icon
+          <div className="flex items-center gap-2 px-4 rounded-lg border border-[#D9D9D9] bg-white" style={{ height: '40px', width: '204px' }}>
             <input
               ref={inputRef}
               type="text"
