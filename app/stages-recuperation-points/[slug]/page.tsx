@@ -352,9 +352,8 @@ export default function StagesResultsPage() {
                 <label className="flex items-center w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={selectedCities.includes(city)}
+                    checked={!allCitiesSelected && selectedCities.includes(city)}
                     onChange={() => handleCityToggle(city)}
-                    disabled={allCitiesSelected}
                     className="mr-3 w-4 h-4"
                   />
                   <span className="text-sm">{formatCityName(city)}</span>
@@ -363,9 +362,8 @@ export default function StagesResultsPage() {
                   <label key={nearby.city} className="flex items-center w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={selectedCities.includes(nearby.city)}
+                      checked={!allCitiesSelected && selectedCities.includes(nearby.city)}
                       onChange={() => handleCityToggle(nearby.city)}
-                      disabled={allCitiesSelected}
                       className="mr-3 w-4 h-4"
                     />
                     <span className="text-sm">{formatCityName(nearby.city)}</span>
