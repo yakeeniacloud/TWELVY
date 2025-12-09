@@ -328,12 +328,20 @@ export default function StagesResultsPage() {
           <div className="relative" ref={cityDropdownRef}>
             <button
               onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
-              className="flex items-center justify-between gap-4 px-3 py-1.5 rounded-lg border border-black text-sm min-w-[120px]"
-              style={{ height: '35px' }}
+              className="flex items-center justify-between gap-4 px-3 py-1.5 rounded-lg border border-black min-w-[120px]"
+              style={{
+                height: '35px',
+                fontFamily: 'var(--font-poppins)',
+                color: '#060606',
+                fontSize: '12px',
+                fontStyle: 'normal',
+                fontWeight: '400',
+                lineHeight: '35px'
+              }}
             >
               <span>
                 {allCitiesSelected
-                  ? 'Toutes les villes'
+                  ? 'Ville'
                   : selectedCities.length === 1
                     ? formatCityName(selectedCities[0])
                     : `${selectedCities.length} villes`
