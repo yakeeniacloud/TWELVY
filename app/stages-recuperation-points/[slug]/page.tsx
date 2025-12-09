@@ -328,7 +328,7 @@ export default function StagesResultsPage() {
           <div className="relative" ref={cityDropdownRef}>
             <button
               onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
-              className="flex items-center justify-between gap-4 px-3 py-1.5 rounded-lg border border-black min-w-[120px]"
+              className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border border-black min-w-[120px]"
               style={{
                 height: '35px',
                 fontFamily: 'var(--font-poppins)',
@@ -339,7 +339,7 @@ export default function StagesResultsPage() {
                 lineHeight: '35px'
               }}
             >
-              <span>
+              <span className="truncate flex-1 text-left">
                 {allCitiesSelected
                   ? 'Ville'
                   : selectedCities.length === 1
@@ -347,7 +347,7 @@ export default function StagesResultsPage() {
                     : `${selectedCities.length} villes`
                 }
               </span>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
