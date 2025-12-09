@@ -39,7 +39,8 @@ export default function StagesResultsPage() {
   const [sortBy, setSortBy] = useState<'date' | 'prix' | 'proximite' | null>(null)
   const [nearbyCities, setNearbyCities] = useState<{ city: string; distance: number }[]>([])
   const [showCitiesDropdown, setShowCitiesDropdown] = useState(false)
-  const [selectedCity, setSelectedCity] = useState<string | null>(null)
+  const [selectedCities, setSelectedCities] = useState<string[]>([])
+  const [allCitiesSelected, setAllCitiesSelected] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [visibleCount, setVisibleCount] = useState(6)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
@@ -138,8 +139,8 @@ export default function StagesResultsPage() {
   useEffect(() => {
     let filtered = [...allStages]
 
-    if (selectedCity) {
-      filtered = filtered.filter(s => s.site.ville === selectedCity)
+    if (!allCitiesSelected && selectedCities.length > 0) {
+      filtered = filtered.filter(s => selectedCities.includes(s.site.ville))
     }
 
     if (sortBy === 'proximite') {
@@ -157,7 +158,7 @@ export default function StagesResultsPage() {
 
     setStages(filtered)
     setVisibleCount(6)
-  }, [sortBy, selectedCity, allStages, nearbyCities])
+  }, [sortBy, selectedCities, allCitiesSelected, allStages, nearbyCities])
 
   const formatDate = (dateStart: string, dateEnd: string) => {
     const start = new Date(dateStart)
@@ -171,6 +172,36 @@ export default function StagesResultsPage() {
     const capitalizedDayEnd = dayEnd.charAt(0).toUpperCase() + dayEnd.slice(1)
     const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1)
     return `${capitalizedDayStart} ${dayNumStart} et ${capitalizedDayEnd} ${dayNumEnd} ${capitalizedMonth}`
+  }
+
+  const formatCityName = (cityName: string) => {
+    return cityName
+      .split('-')
+      .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+      .join(' ')
+  }
+
+  const handleCityToggle = (cityName: string) => {
+    if (selectedCities.includes(cityName)) {
+      const newSelected = selectedCities.filter(c => c !== cityName)
+      setSelectedCities(newSelected)
+      if (newSelected.length === 0) {
+        setAllCitiesSelected(true)
+      }
+    } else {
+      setSelectedCities([...selectedCities, cityName])
+      setAllCitiesSelected(false)
+    }
+  }
+
+  const handleAllCitiesToggle = () => {
+    if (allCitiesSelected) {
+      setAllCitiesSelected(false)
+      setSelectedCities([])
+    } else {
+      setAllCitiesSelected(true)
+      setSelectedCities([])
+    }
   }
 
   const cheapestStage = stages.length > 0
@@ -276,7 +307,14 @@ export default function StagesResultsPage() {
               onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
               className="flex items-center justify-between gap-4 px-3 py-1.5 rounded-lg border border-black text-sm min-w-[120px]"
             >
-              <span>{selectedCity || 'Ville'}</span>
+              <span>
+                {allCitiesSelected
+                  ? 'Toutes les villes'
+                  : selectedCities.length === 1
+                    ? formatCityName(selectedCities[0])
+                    : `${selectedCities.length} villes`
+                }
+              </span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
@@ -284,26 +322,36 @@ export default function StagesResultsPage() {
 
             {showCitiesDropdown && (
               <div className="absolute top-full mt-2 w-64 bg-white border border-gray-300 rounded shadow-lg z-10 max-h-96 overflow-y-auto">
-                <button
-                  onClick={() => { setSelectedCity(null); setShowCitiesDropdown(false) }}
-                  className="w-full px-4 py-2 text-left hover:bg-gray-100 text-sm font-medium"
-                >
-                  Toutes les villes
-                </button>
-                <button
-                  onClick={() => { setSelectedCity(city); setShowCitiesDropdown(false) }}
-                  className="w-full px-4 py-2 text-left hover:bg-gray-100 text-sm"
-                >
-                  {city}
-                </button>
+                <label className="flex items-center w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={allCitiesSelected}
+                    onChange={handleAllCitiesToggle}
+                    className="mr-3 w-4 h-4"
+                  />
+                  <span className="text-sm font-medium">Toutes les villes</span>
+                </label>
+                <label className="flex items-center w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedCities.includes(city)}
+                    onChange={() => handleCityToggle(city)}
+                    disabled={allCitiesSelected}
+                    className="mr-3 w-4 h-4"
+                  />
+                  <span className="text-sm">{formatCityName(city)}</span>
+                </label>
                 {nearbyCities.map((nearby) => (
-                  <button
-                    key={nearby.city}
-                    onClick={() => { setSelectedCity(nearby.city); setShowCitiesDropdown(false) }}
-                    className="w-full px-4 py-2 text-left hover:bg-gray-100 text-sm"
-                  >
-                    {nearby.city}
-                  </button>
+                  <label key={nearby.city} className="flex items-center w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedCities.includes(nearby.city)}
+                      onChange={() => handleCityToggle(nearby.city)}
+                      disabled={allCitiesSelected}
+                      className="mr-3 w-4 h-4"
+                    />
+                    <span className="text-sm">{formatCityName(nearby.city)}</span>
+                  </label>
                 ))}
               </div>
             )}
