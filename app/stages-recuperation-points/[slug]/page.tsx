@@ -646,26 +646,22 @@ export default function StagesResultsPage() {
                     .join(' ')
                   const cityStage = allStages.find(s => s.site.ville === nearbyCity.city)
                   const deptNumber = cityStage?.site.code_postal.substring(0, 2) || ''
+                  const postalCode = cityStage?.site.code_postal || ''
+                  const citySlug = `${nearbyCity.city}-${postalCode}`
 
                   return (
                     <Link
                       key={nearbyCity.city}
-                      href={`/stages-recuperation-points/${nearbyCity.city.toLowerCase()}`}
+                      href={`/stages-recuperation-points/${citySlug}`}
+                      className="flex items-center gap-2 h-[35px] flex-shrink-0 no-underline hover:underline"
                       style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        height: '35px',
-                        flexShrink: 0,
                         fontFamily: 'var(--font-poppins)',
                         color: '#BC4747',
                         fontSize: '15px',
                         fontWeight: 400,
                         lineHeight: '35px',
-                        textDecoration: 'none',
                         whiteSpace: 'nowrap'
                       }}
-                      className="hover:underline"
                     >
                       <span style={{
                         width: '4px',
@@ -674,7 +670,7 @@ export default function StagesResultsPage() {
                         backgroundColor: '#BC4747',
                         flexShrink: 0
                       }}></span>
-                      Stage {formattedCity} ({deptNumber})
+                      <span>Stage {formattedCity} ({deptNumber})</span>
                     </Link>
                   )
                 })}
@@ -689,26 +685,22 @@ export default function StagesResultsPage() {
                     .join(' ')
                   const cityStage = allStages.find(s => s.site.ville === nearbyCity.city)
                   const deptNumber = cityStage?.site.code_postal.substring(0, 2) || ''
+                  const postalCode = cityStage?.site.code_postal || ''
+                  const citySlug = `${nearbyCity.city}-${postalCode}`
 
                   return (
                     <Link
                       key={nearbyCity.city}
-                      href={`/stages-recuperation-points/${nearbyCity.city.toLowerCase()}`}
+                      href={`/stages-recuperation-points/${citySlug}`}
+                      className="flex items-center gap-2 h-[35px] flex-shrink-0 no-underline hover:underline"
                       style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        height: '35px',
-                        flexShrink: 0,
                         fontFamily: 'var(--font-poppins)',
                         color: '#BC4747',
                         fontSize: '15px',
                         fontWeight: 400,
                         lineHeight: '35px',
-                        textDecoration: 'none',
                         whiteSpace: 'nowrap'
                       }}
-                      className="hover:underline"
                     >
                       <span style={{
                         width: '4px',
@@ -717,7 +709,7 @@ export default function StagesResultsPage() {
                         backgroundColor: '#BC4747',
                         flexShrink: 0
                       }}></span>
-                      Stage {formattedCity} ({deptNumber})
+                      <span>Stage {formattedCity} ({deptNumber})</span>
                     </Link>
                   )
                 })}
@@ -732,26 +724,22 @@ export default function StagesResultsPage() {
                     .join(' ')
                   const cityStage = allStages.find(s => s.site.ville === nearbyCity.city)
                   const deptNumber = cityStage?.site.code_postal.substring(0, 2) || ''
+                  const postalCode = cityStage?.site.code_postal || ''
+                  const citySlug = `${nearbyCity.city}-${postalCode}`
 
                   return (
                     <Link
                       key={nearbyCity.city}
-                      href={`/stages-recuperation-points/${nearbyCity.city.toLowerCase()}`}
+                      href={`/stages-recuperation-points/${citySlug}`}
+                      className="flex items-center gap-2 h-[35px] flex-shrink-0 no-underline hover:underline"
                       style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        height: '35px',
-                        flexShrink: 0,
                         fontFamily: 'var(--font-poppins)',
                         color: '#BC4747',
                         fontSize: '15px',
                         fontWeight: 400,
                         lineHeight: '35px',
-                        textDecoration: 'none',
                         whiteSpace: 'nowrap'
                       }}
-                      className="hover:underline"
                     >
                       <span style={{
                         width: '4px',
@@ -760,7 +748,7 @@ export default function StagesResultsPage() {
                         backgroundColor: '#BC4747',
                         flexShrink: 0
                       }}></span>
-                      Stage {formattedCity} ({deptNumber})
+                      <span>Stage {formattedCity} ({deptNumber})</span>
                     </Link>
                   )
                 })}
