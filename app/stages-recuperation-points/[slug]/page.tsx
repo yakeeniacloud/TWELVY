@@ -638,7 +638,7 @@ export default function StagesResultsPage() {
             {/* 3x3 Grid of nearby cities */}
             <div className="flex justify-center gap-[30px]">
               {/* Column 1 */}
-              <div className="flex flex-col gap-[15px]">
+              <div className="flex flex-col gap-[8px]">
                 {nearbyCities.slice(0, 3).map((nearbyCity) => {
                   const formattedCity = nearbyCity.city
                     .split('-')
@@ -653,9 +653,9 @@ export default function StagesResultsPage() {
                       href={`/stages-recuperation-points/${nearbyCity.city.toLowerCase()}`}
                       style={{
                         display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
                         height: '35px',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
                         flexShrink: 0,
                         fontFamily: 'var(--font-poppins)',
                         color: '#BC4747',
@@ -667,6 +667,13 @@ export default function StagesResultsPage() {
                       }}
                       className="hover:underline"
                     >
+                      <span style={{
+                        width: '4px',
+                        height: '4px',
+                        borderRadius: '50%',
+                        backgroundColor: '#BC4747',
+                        flexShrink: 0
+                      }}></span>
                       Stage {formattedCity} ({deptNumber})
                     </Link>
                   )
@@ -674,7 +681,7 @@ export default function StagesResultsPage() {
               </div>
 
               {/* Column 2 */}
-              <div className="flex flex-col gap-[15px]">
+              <div className="flex flex-col gap-[8px]">
                 {nearbyCities.slice(3, 6).map((nearbyCity) => {
                   const formattedCity = nearbyCity.city
                     .split('-')
@@ -689,9 +696,9 @@ export default function StagesResultsPage() {
                       href={`/stages-recuperation-points/${nearbyCity.city.toLowerCase()}`}
                       style={{
                         display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
                         height: '35px',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
                         flexShrink: 0,
                         fontFamily: 'var(--font-poppins)',
                         color: '#BC4747',
@@ -703,6 +710,13 @@ export default function StagesResultsPage() {
                       }}
                       className="hover:underline"
                     >
+                      <span style={{
+                        width: '4px',
+                        height: '4px',
+                        borderRadius: '50%',
+                        backgroundColor: '#BC4747',
+                        flexShrink: 0
+                      }}></span>
                       Stage {formattedCity} ({deptNumber})
                     </Link>
                   )
@@ -710,7 +724,7 @@ export default function StagesResultsPage() {
               </div>
 
               {/* Column 3 */}
-              <div className="flex flex-col gap-[15px]">
+              <div className="flex flex-col gap-[8px]">
                 {nearbyCities.slice(6, 9).map((nearbyCity) => {
                   const formattedCity = nearbyCity.city
                     .split('-')
@@ -725,9 +739,9 @@ export default function StagesResultsPage() {
                       href={`/stages-recuperation-points/${nearbyCity.city.toLowerCase()}`}
                       style={{
                         display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
                         height: '35px',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
                         flexShrink: 0,
                         fontFamily: 'var(--font-poppins)',
                         color: '#BC4747',
@@ -739,6 +753,13 @@ export default function StagesResultsPage() {
                       }}
                       className="hover:underline"
                     >
+                      <span style={{
+                        width: '4px',
+                        height: '4px',
+                        borderRadius: '50%',
+                        backgroundColor: '#BC4747',
+                        flexShrink: 0
+                      }}></span>
                       Stage {formattedCity} ({deptNumber})
                     </Link>
                   )
