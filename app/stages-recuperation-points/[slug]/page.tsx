@@ -292,7 +292,7 @@ export default function StagesResultsPage() {
         </div>
 
         {/* Filters Section */}
-        <div className="flex items-center justify-center gap-4" style={{ marginBottom: '14px' }}>
+        <div className="flex items-center gap-4 w-[903px] mx-auto" style={{ marginBottom: '14px' }}>
           <CitySearchBar
             placeholder="Ville ou code postal"
             variant="filter"
@@ -305,7 +305,7 @@ export default function StagesResultsPage() {
             color: '#000',
             fontSize: '13px',
             fontStyle: 'normal',
-            fontWeight: 400,
+            fontWeight: '400',
             lineHeight: 'normal',
             letterSpacing: '0.91px'
           }}>
