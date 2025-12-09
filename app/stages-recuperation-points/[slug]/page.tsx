@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -47,6 +47,8 @@ export default function StagesResultsPage() {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
 
   const STAGES_PER_LOAD = 6
+
+  const cityDropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     async function fetchStages() {
@@ -160,6 +162,22 @@ export default function StagesResultsPage() {
     setVisibleCount(6)
   }, [sortBy, selectedCities, allCitiesSelected, allStages, nearbyCities])
 
+  // Click-outside handler to close city dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (cityDropdownRef.current && !cityDropdownRef.current.contains(event.target as Node)) {
+        setShowCitiesDropdown(false)
+      }
+    }
+
+    if (showCitiesDropdown) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside)
+      }
+    }
+  }, [showCitiesDropdown])
+
   const formatDate = (dateStart: string, dateEnd: string) => {
     const start = new Date(dateStart)
     const end = new Date(dateEnd)
@@ -190,7 +208,7 @@ export default function StagesResultsPage() {
       }
     } else {
       setSelectedCities([...selectedCities, cityName])
-      setAllCitiesSelected(false)
+      setAllCitiesSelected(false) // Auto-deselect "All cities" when selecting a specific city
     }
   }
 
@@ -302,7 +320,7 @@ export default function StagesResultsPage() {
             </button>
           ))}
 
-          <div className="relative">
+          <div className="relative" ref={cityDropdownRef}>
             <button
               onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
               className="flex items-center justify-between gap-4 px-3 py-1.5 rounded-lg border border-black text-sm min-w-[120px]"
