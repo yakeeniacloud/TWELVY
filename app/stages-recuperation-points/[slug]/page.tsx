@@ -292,13 +292,25 @@ export default function StagesResultsPage() {
         </div>
 
         {/* Filters Section */}
-        <div className="flex items-center justify-center gap-4 mb-8">
+        <div className="flex items-center justify-center gap-4" style={{ marginBottom: '14px' }}>
           <CitySearchBar
             placeholder="Ville ou code postal"
             variant="filter"
           />
 
-          <span className="text-sm text-gray-700">Trier par :</span>
+          <div className="flex flex-col justify-center flex-shrink-0" style={{
+            width: '76px',
+            height: '35px',
+            fontFamily: 'var(--font-poppins)',
+            color: '#000',
+            fontSize: '13px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: 'normal',
+            letterSpacing: '0.91px'
+          }}>
+            Trier par :
+          </div>
 
           {(['date', 'prix', 'proximite'] as const).map((option) => (
             <button
@@ -307,6 +319,7 @@ export default function StagesResultsPage() {
               className={`px-6 py-1.5 text-xs rounded-lg border border-gray-400 transition-colors ${
                 sortBy === option ? 'bg-[#c4cce1] text-gray-800' : 'bg-white text-gray-700'
               }`}
+              style={{ height: '35px' }}
             >
               {option === 'date' ? 'Date' : option === 'prix' ? 'Prix' : 'Proximité'}
             </button>
@@ -316,6 +329,7 @@ export default function StagesResultsPage() {
             <button
               onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
               className="flex items-center justify-between gap-4 px-3 py-1.5 rounded-lg border border-black text-sm min-w-[120px]"
+              style={{ height: '35px' }}
             >
               <span>
                 {allCitiesSelected
