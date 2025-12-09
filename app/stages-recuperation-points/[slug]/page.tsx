@@ -293,12 +293,10 @@ export default function StagesResultsPage() {
 
         {/* Filters Section */}
         <div className="flex items-center justify-center gap-4 mb-8">
-          <div className="w-64">
-            <CitySearchBar
-              placeholder="Ville ou code postal"
-              variant="small"
-            />
-          </div>
+          <CitySearchBar
+            placeholder="Ville ou code postal"
+            variant="filter"
+          />
 
           <span className="text-sm text-gray-700">Trier par :</span>
 

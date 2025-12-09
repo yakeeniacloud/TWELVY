@@ -7,7 +7,7 @@ import { CITY_POSTAL_MAP } from '@/lib/city-postal-map'
 
 interface CitySearchBarProps {
   placeholder?: string
-  variant?: 'large' | 'small' | 'sidebar'
+  variant?: 'large' | 'small' | 'sidebar' | 'filter'
   onCitySelect?: (city: string) => void
 }
 
@@ -178,6 +178,7 @@ export default function CitySearchBar({
 
   const isLarge = variant === 'large'
   const isSidebar = variant === 'sidebar'
+  const isFilter = variant === 'filter'
 
   return (
     <div className={`relative w-full ${isLarge ? 'max-w-[640px] mx-auto' : ''}`}>
@@ -190,7 +191,29 @@ export default function CitySearchBar({
         }}
         className="relative"
       >
-        {isSidebar ? (
+        {isFilter ? (
+          // Filter variant - matches design specs: 204px width, 44px height, search icon
+          <div className="flex items-center gap-2 px-4 py-3 rounded-lg border border-[#D9D9D9] bg-white" style={{ height: '44px', minWidth: '204px' }}>
+            <input
+              ref={inputRef}
+              type="text"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value)
+                setShowSuggestions(true)
+                setSelectedIndex(-1)
+              }}
+              onFocus={() => setShowSuggestions(true)}
+              onKeyDown={handleKeyDown}
+              placeholder={placeholder}
+              className="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-gray-400"
+              style={{ minWidth: '0' }}
+            />
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0">
+              <path d="M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        ) : isSidebar ? (
           // Sidebar variant - just input field, no button
           <input
             ref={inputRef}
@@ -251,7 +274,7 @@ export default function CitySearchBar({
           <div
             ref={suggestionsRef}
             className={`absolute top-full left-0 right-0 bg-white border border-gray-300 shadow-lg z-50 ${
-              isSidebar ? 'border-t-0 rounded-b' : 'mt-1 border rounded-lg'
+              isSidebar ? 'border-t-0 rounded-b' : isFilter ? 'mt-1 rounded-lg' : 'mt-1 border rounded-lg'
             }`}
             style={{ maxHeight: '300px', overflowY: 'auto' }}
           >
