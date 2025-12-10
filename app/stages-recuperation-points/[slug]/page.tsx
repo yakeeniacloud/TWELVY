@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import CitySearchBar from '@/components/stages/CitySearchBar'
+import StageDetailsModal from '@/components/stages/StageDetailsModal'
 
 interface Stage {
   id: number
@@ -45,6 +46,8 @@ export default function StagesResultsPage() {
   const [visibleCount, setVisibleCount] = useState(6)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
+  const [selectedStage, setSelectedStage] = useState<Stage | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const STAGES_PER_LOAD = 6
 
@@ -461,7 +464,14 @@ export default function StagesResultsPage() {
                     <p className="w-[223px] text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>
                       {formatDate(stage.date_start, stage.date_end)}
                     </p>
-                    <button className="flex items-center gap-[5px] text-[rgba(90,106,147,0.86)] text-[13px] font-normal leading-[13px] hover:underline text-left mt-3" style={{ fontFamily: 'var(--font-poppins)' }}>
+                    <button
+                      onClick={() => {
+                        setSelectedStage(stage)
+                        setIsModalOpen(true)
+                      }}
+                      className="flex items-center gap-[5px] text-[rgba(90,106,147,0.86)] text-[13px] font-normal leading-[13px] hover:underline text-left mt-3"
+                      style={{ fontFamily: 'var(--font-poppins)' }}
+                    >
                       <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" className="w-[13.333px] h-[13.333px] flex-shrink-0">
                         <path d="M7.46665 10.1334V7.46672M7.46665 4.80005H7.47332M14.1333 7.46672C14.1333 11.1486 11.1486 14.1334 7.46665 14.1334C3.78476 14.1334 0.799988 11.1486 0.799988 7.46672C0.799988 3.78482 3.78476 0.800049 7.46665 0.800049C11.1486 0.800049 14.1333 3.78482 14.1333 7.46672Z" stroke="#5A6A93" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
@@ -901,6 +911,20 @@ export default function StagesResultsPage() {
           <p className="text-center text-white text-xs">2025©ProStagesPermis</p>
         </div>
       </footer>
+
+      {/* Stage Details Modal */}
+      {selectedStage && (
+        <StageDetailsModal
+          stage={selectedStage}
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false)
+            setSelectedStage(null)
+          }}
+          city={city}
+          slug={fullSlug}
+        />
+      )}
     </div>
   )
 }
