@@ -73,13 +73,24 @@ export default function StageDetailsModal({
         className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full relative"
         onClick={e => e.stopPropagation()}
       >
-        {/* Close button */}
+        {/* Close button - positioned slightly outside the popup */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center text-white text-3xl hover:bg-gray-500 transition-colors z-10"
+          className="absolute flex items-center justify-center z-10 hover:opacity-80 transition-opacity"
+          style={{
+            top: '-10px',
+            right: '-10px',
+            width: '40px',
+            height: '40px',
+            background: 'transparent',
+            border: 'none',
+            cursor: 'pointer'
+          }}
           aria-label="Fermer"
         >
-          ×
+          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
+            <path d="M28 16L16 28M16 16L28 28M42 22C42 33.0457 33.0457 42 22 42C10.9543 42 2 33.0457 2 22C2 10.9543 10.9543 2 22 2C33.0457 2 42 10.9543 42 22Z" stroke="#A1A1A1" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button>
 
         {/* Content */}
@@ -140,11 +151,27 @@ export default function StageDetailsModal({
                     </clipPath>
                   </defs>
                 </svg>
-                <div>
-                  <p className="text-base text-gray-700">
-                    <strong>Adresse:</strong> {stage.site.adresse}, {stage.site.code_postal}
+                <div style={{ width: '173px' }}>
+                  <p style={{
+                    color: 'rgba(89, 86, 86, 0.86)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: '500',
+                    lineHeight: '23px'
+                  }}>
+                    Adresse: {stage.site.adresse}, {stage.site.code_postal}
                   </p>
-                  <p className="text-base text-gray-700">{stage.site.ville}</p>
+                  <p style={{
+                    color: 'rgba(89, 86, 86, 0.86)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: '500',
+                    lineHeight: '23px'
+                  }}>
+                    {stage.site.ville}
+                  </p>
                 </div>
               </div>
 
@@ -153,11 +180,27 @@ export default function StageDetailsModal({
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-1">
                   <path d="M12.5 6.24999V12.5L16.6667 14.5833M22.9167 12.5C22.9167 18.253 18.253 22.9167 12.5 22.9167C6.74704 22.9167 2.08334 18.253 2.08334 12.5C2.08334 6.74703 6.74704 2.08333 12.5 2.08333C18.253 2.08333 22.9167 6.74703 22.9167 12.5Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <div>
-                  <p className="text-base text-gray-700">
-                    <strong>Horaires:</strong> 08h15-12h30
+                <div style={{ width: '173px' }}>
+                  <p style={{
+                    color: 'rgba(89, 86, 86, 0.86)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: '500',
+                    lineHeight: '23px'
+                  }}>
+                    Horaires: 08h15-12h30
                   </p>
-                  <p className="text-base text-gray-700">et 13h30-16h30</p>
+                  <p style={{
+                    color: 'rgba(89, 86, 86, 0.86)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: '500',
+                    lineHeight: '23px'
+                  }}>
+                    et 13h30-16h30
+                  </p>
                 </div>
               </div>
 
@@ -166,20 +209,34 @@ export default function StageDetailsModal({
                 <Image
                   src="/flag-france.png"
                   alt="Drapeau français"
-                  width={27}
-                  height={18}
+                  width={32}
+                  height={21}
                   className="flex-shrink-0 mt-1 rounded-lg"
                   style={{
-                    height: '17.967px',
-                    aspectRatio: '27.00/17.97',
+                    width: '32px',
+                    height: '21px',
                     borderRadius: '10px'
                   }}
                 />
-                <div>
-                  <p className="text-base text-gray-700">
-                    <strong>Agrement n°: 25</strong>
+                <div style={{ width: '173px' }}>
+                  <p style={{
+                    color: 'rgba(89, 86, 86, 0.86)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: '500',
+                    lineHeight: '23px'
+                  }}>
+                    Agrement n°: 25
                   </p>
-                  <p className="text-base text-gray-700">
+                  <p style={{
+                    color: 'rgba(89, 86, 86, 0.86)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: '500',
+                    lineHeight: '23px'
+                  }}>
                     R130060009006 par la Préfecture des Bouches du Rhône
                   </p>
                 </div>
@@ -258,7 +315,7 @@ export default function StageDetailsModal({
                 fontFamily: 'var(--font-poppins)',
                 fontSize: '15px',
                 fontStyle: 'normal',
-                fontWeight: '300',
+                fontWeight: 300,
                 lineHeight: 'normal',
                 letterSpacing: '1.05px',
                 border: 'none',
@@ -277,7 +334,6 @@ export default function StageDetailsModal({
                 padding: '7px 15px',
                 justifyContent: 'center',
                 alignItems: 'center',
-                gap: '20px',
                 flexShrink: 0,
                 borderRadius: '12px',
                 background: '#41A334',
@@ -286,10 +342,11 @@ export default function StageDetailsModal({
                 fontFamily: 'var(--font-poppins)',
                 fontSize: '15px',
                 fontStyle: 'normal',
-                fontWeight: '400',
+                fontWeight: 400,
                 lineHeight: 'normal',
                 letterSpacing: '1.05px',
-                textDecoration: 'none'
+                textDecoration: 'none',
+                whiteSpace: 'nowrap'
               }}
             >
               Sélectionner ce stage
