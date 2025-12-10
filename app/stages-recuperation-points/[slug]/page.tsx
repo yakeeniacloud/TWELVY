@@ -314,11 +314,10 @@ export default function StagesResultsPage() {
 
           <button
             onClick={() => setSortBy(sortBy === 'date' ? null : 'date')}
-            className={`rounded-lg border border-gray-400 transition-colors ${
+            className={`px-3 rounded-lg border border-gray-400 transition-colors ${
               sortBy === 'date' ? 'bg-[#c4cce1]' : 'bg-white'
             }`}
             style={{
-              width: '48px',
               height: '35px',
               color: 'rgba(4, 4, 4, 0.96)',
               fontFamily: 'var(--font-poppins)',
@@ -333,11 +332,10 @@ export default function StagesResultsPage() {
           </button>
           <button
             onClick={() => setSortBy(sortBy === 'prix' ? null : 'prix')}
-            className={`rounded-lg border border-gray-400 transition-colors ${
+            className={`px-3 rounded-lg border border-gray-400 transition-colors ${
               sortBy === 'prix' ? 'bg-[#c4cce1]' : 'bg-white'
             }`}
             style={{
-              width: '48px',
               height: '35px',
               color: 'rgba(4, 4, 4, 0.96)',
               fontFamily: 'var(--font-poppins)',
@@ -352,11 +350,10 @@ export default function StagesResultsPage() {
           </button>
           <button
             onClick={() => setSortBy(sortBy === 'proximite' ? null : 'proximite')}
-            className={`rounded-lg border border-gray-400 transition-colors ${
+            className={`px-3 rounded-lg border border-gray-400 transition-colors ${
               sortBy === 'proximite' ? 'bg-[#c4cce1]' : 'bg-white'
             }`}
             style={{
-              width: '76px',
               height: '35px',
               color: 'rgba(4, 4, 4, 0.96)',
               fontFamily: 'var(--font-poppins)',
