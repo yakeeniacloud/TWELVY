@@ -244,53 +244,123 @@ export default function StageDetailsModal({
             </div>
 
             {/* Right column - Benefits */}
-            <div className="bg-gray-100 rounded-lg p-6 space-y-4">
+            <div style={{
+              display: 'flex',
+              width: '373px',
+              height: '284px',
+              padding: '15px 10px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              gap: '7px',
+              flexShrink: 0,
+              background: '#F5F5F5',
+              borderRadius: '8px'
+            }}>
               <div className="flex gap-3 items-start">
-                <svg className="w-6 h-6 flex-shrink-0 text-yellow-500" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="26" viewBox="0 0 25 26" fill="none" className="flex-shrink-0" style={{ width: '24.513px', height: '25.252px' }}>
+                  <path d="M9.19219 11.5737L12.2563 14.7302L22.4698 4.20863M21.4485 12.6259V19.991C21.4485 20.5491 21.2332 21.0843 20.8502 21.479C20.4671 21.8736 19.9475 22.0953 19.4057 22.0953H5.10677C4.56501 22.0953 4.04544 21.8736 3.66235 21.479C3.27927 21.0843 3.06406 20.5491 3.06406 19.991V5.26079C3.06406 4.70269 3.27927 4.16745 3.66235 3.77281C4.04544 3.37818 4.56501 3.15647 5.10677 3.15647H16.3417" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <p className="text-sm text-gray-800">
+                <p style={{
+                  width: '305px',
+                  height: '44px',
+                  color: 'rgba(6, 6, 6, 0.86)',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  lineHeight: '22px'
+                }}>
                   Stage agréé tout type de stage (volontaire et obligatoire)
                 </p>
               </div>
 
               <div className="flex gap-3 items-start">
-                <svg className="w-6 h-6 flex-shrink-0 text-yellow-500" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="26" viewBox="0 0 25 26" fill="none" className="flex-shrink-0" style={{ width: '24.513px', height: '25.252px' }}>
+                  <path d="M9.19219 11.5737L12.2563 14.7302L22.4698 4.20863M21.4485 12.6259V19.991C21.4485 20.5491 21.2332 21.0843 20.8502 21.479C20.4671 21.8736 19.9475 22.0953 19.4057 22.0953H5.10677C4.56501 22.0953 4.04544 21.8736 3.66235 21.479C3.27927 21.0843 3.06406 20.5491 3.06406 19.991V5.26079C3.06406 4.70269 3.27927 4.16745 3.66235 3.77281C4.04544 3.37818 4.56501 3.15647 5.10677 3.15647H16.3417" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <p className="text-sm text-gray-800">+4 points en 48h</p>
+                <p style={{
+                  width: '305px',
+                  height: '44px',
+                  color: 'rgba(6, 6, 6, 0.86)',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  lineHeight: '22px'
+                }}>
+                  +4 points en 48h
+                </p>
               </div>
 
               <div className="flex gap-3 items-start">
-                <svg className="w-6 h-6 flex-shrink-0 text-yellow-500" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="26" viewBox="0 0 25 26" fill="none" className="flex-shrink-0" style={{ width: '24.513px', height: '25.252px' }}>
+                  <path d="M9.19219 11.5737L12.2563 14.7302L22.4698 4.20863M21.4485 12.6259V19.991C21.4485 20.5491 21.2332 21.0843 20.8502 21.479C20.4671 21.8736 19.9475 22.0953 19.4057 22.0953H5.10677C4.56501 22.0953 4.04544 21.8736 3.66235 21.479C3.27927 21.0843 3.06406 20.5491 3.06406 19.991V5.26079C3.06406 4.70269 3.27927 4.16745 3.66235 3.77281C4.04544 3.37818 4.56501 3.15647 5.10677 3.15647H16.3417" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <p className="text-sm text-gray-800">Aucun examen</p>
+                <p style={{
+                  width: '305px',
+                  height: '44px',
+                  color: 'rgba(6, 6, 6, 0.86)',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  lineHeight: '22px'
+                }}>
+                  Aucun examen
+                </p>
               </div>
 
               <div className="flex gap-3 items-start">
-                <svg className="w-6 h-6 flex-shrink-0 text-yellow-500" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="26" viewBox="0 0 25 26" fill="none" className="flex-shrink-0" style={{ width: '24.513px', height: '25.252px' }}>
+                  <path d="M9.19219 11.5737L12.2563 14.7302L22.4698 4.20863M21.4485 12.6259V19.991C21.4485 20.5491 21.2332 21.0843 20.8502 21.479C20.4671 21.8736 19.9475 22.0953 19.4057 22.0953H5.10677C4.56501 22.0953 4.04544 21.8736 3.66235 21.479C3.27927 21.0843 3.06406 20.5491 3.06406 19.991V5.26079C3.06406 4.70269 3.27927 4.16745 3.66235 3.77281C4.04544 3.37818 4.56501 3.15647 5.10677 3.15647H16.3417" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <p className="text-sm text-gray-800">
+                <p style={{
+                  width: '305px',
+                  height: '44px',
+                  color: 'rgba(6, 6, 6, 0.86)',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  lineHeight: '22px'
+                }}>
                   Attestation officielle remise le 2ème jour
                 </p>
               </div>
 
               <div className="flex gap-3 items-start">
-                <svg className="w-6 h-6 flex-shrink-0 text-yellow-500" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="26" viewBox="0 0 25 26" fill="none" className="flex-shrink-0" style={{ width: '24.513px', height: '25.252px' }}>
+                  <path d="M9.19219 11.5737L12.2563 14.7302L22.4698 4.20863M21.4485 12.6259V19.991C21.4485 20.5491 21.2332 21.0843 20.8502 21.479C20.4671 21.8736 19.9475 22.0953 19.4057 22.0953H5.10677C4.56501 22.0953 4.04544 21.8736 3.66235 21.479C3.27927 21.0843 3.06406 20.5491 3.06406 19.991V5.26079C3.06406 4.70269 3.27927 4.16745 3.66235 3.77281C4.04544 3.37818 4.56501 3.15647 5.10677 3.15647H16.3417" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <p className="text-sm text-gray-800">
+                <p style={{
+                  width: '305px',
+                  height: '44px',
+                  color: 'rgba(6, 6, 6, 0.86)',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  lineHeight: '22px'
+                }}>
                   Report ou remboursement en quelques clics sur votre Espace Client
                 </p>
               </div>
 
               <div className="flex gap-3 items-start">
-                <svg className="w-6 h-6 flex-shrink-0 text-yellow-500" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="26" viewBox="0 0 25 26" fill="none" className="flex-shrink-0" style={{ width: '24.513px', height: '25.252px' }}>
+                  <path d="M9.19219 11.5737L12.2563 14.7302L22.4698 4.20863M21.4485 12.6259V19.991C21.4485 20.5491 21.2332 21.0843 20.8502 21.479C20.4671 21.8736 19.9475 22.0953 19.4057 22.0953H5.10677C4.56501 22.0953 4.04544 21.8736 3.66235 21.479C3.27927 21.0843 3.06406 20.5491 3.06406 19.991V5.26079C3.06406 4.70269 3.27927 4.16745 3.66235 3.77281C4.04544 3.37818 4.56501 3.15647 5.10677 3.15647H16.3417" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <p className="text-sm text-gray-800">
+                <p style={{
+                  width: '305px',
+                  height: '44px',
+                  color: 'rgba(6, 6, 6, 0.86)',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  lineHeight: '22px'
+                }}>
                   Convocation envoyée immédiatement par email après inscription
                 </p>
               </div>
