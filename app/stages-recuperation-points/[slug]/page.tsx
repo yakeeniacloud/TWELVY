@@ -37,7 +37,7 @@ export default function StagesResultsPage() {
   const [allStages, setAllStages] = useState<Stage[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [sortBy, setSortBy] = useState<'date' | 'prix' | 'proximite' | null>(null)
+  const [sortBy, setSortBy] = useState<'date' | 'prix' | 'proximite' | null>('date')
   const [nearbyCities, setNearbyCities] = useState<{ city: string; distance: number }[]>([])
   const [showCitiesDropdown, setShowCitiesDropdown] = useState(false)
   const [selectedCities, setSelectedCities] = useState<string[]>([])
@@ -312,18 +312,63 @@ export default function StagesResultsPage() {
             Trier par :
           </div>
 
-          {(['date', 'prix', 'proximite'] as const).map((option) => (
-            <button
-              key={option}
-              onClick={() => setSortBy(sortBy === option ? null : option)}
-              className={`px-6 py-1.5 text-xs rounded-lg border border-gray-400 transition-colors ${
-                sortBy === option ? 'bg-[#c4cce1] text-gray-800' : 'bg-white text-gray-700'
-              }`}
-              style={{ height: '35px' }}
-            >
-              {option === 'date' ? 'Date' : option === 'prix' ? 'Prix' : 'Proximité'}
-            </button>
-          ))}
+          <button
+            onClick={() => setSortBy(sortBy === 'date' ? null : 'date')}
+            className={`rounded-lg border border-gray-400 transition-colors ${
+              sortBy === 'date' ? 'bg-[#c4cce1]' : 'bg-white'
+            }`}
+            style={{
+              width: '48px',
+              height: '35px',
+              color: 'rgba(4, 4, 4, 0.96)',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '12px',
+              fontStyle: 'normal',
+              fontWeight: '400',
+              lineHeight: 'normal',
+              letterSpacing: '0.84px'
+            }}
+          >
+            Date
+          </button>
+          <button
+            onClick={() => setSortBy(sortBy === 'prix' ? null : 'prix')}
+            className={`rounded-lg border border-gray-400 transition-colors ${
+              sortBy === 'prix' ? 'bg-[#c4cce1]' : 'bg-white'
+            }`}
+            style={{
+              width: '48px',
+              height: '35px',
+              color: 'rgba(4, 4, 4, 0.96)',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '12px',
+              fontStyle: 'normal',
+              fontWeight: '400',
+              lineHeight: 'normal',
+              letterSpacing: '0.84px'
+            }}
+          >
+            Prix
+          </button>
+          <button
+            onClick={() => setSortBy(sortBy === 'proximite' ? null : 'proximite')}
+            className={`rounded-lg border border-gray-400 transition-colors ${
+              sortBy === 'proximite' ? 'bg-[#c4cce1]' : 'bg-white'
+            }`}
+            style={{
+              width: '76px',
+              height: '35px',
+              color: 'rgba(4, 4, 4, 0.96)',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '12px',
+              fontStyle: 'normal',
+              fontWeight: '400',
+              lineHeight: 'normal',
+              letterSpacing: '0.84px'
+            }}
+          >
+            Proximité
+          </button>
 
           <div className="relative" ref={cityDropdownRef}>
             <button
