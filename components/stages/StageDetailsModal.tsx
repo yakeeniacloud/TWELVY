@@ -281,7 +281,6 @@ export default function StageDetailsModal({
                 </svg>
                 <p style={{
                   width: '305px',
-                  height: '44px',
                   color: 'rgba(6, 6, 6, 0.86)',
                   fontFamily: 'var(--font-poppins)',
                   fontSize: '14px',
@@ -299,7 +298,6 @@ export default function StageDetailsModal({
                 </svg>
                 <p style={{
                   width: '305px',
-                  height: '44px',
                   color: 'rgba(6, 6, 6, 0.86)',
                   fontFamily: 'var(--font-poppins)',
                   fontSize: '14px',
