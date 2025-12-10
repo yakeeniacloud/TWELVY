@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface Stage {
   id: number
@@ -84,12 +85,41 @@ export default function StageDetailsModal({
         {/* Content */}
         <div className="p-12">
           {/* Title */}
-          <h2 className="text-3xl font-normal text-center mb-4 text-black">
+          <h2
+            className="text-center mb-4"
+            style={{
+              width: '499px',
+              height: '34px',
+              flexShrink: 0,
+              color: 'rgba(34, 34, 34, 0.86)',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '22px',
+              fontStyle: 'normal',
+              fontWeight: '500',
+              lineHeight: '35px',
+              margin: '0 auto'
+            }}
+          >
             {formatDate(stage.date_start, stage.date_end)}
           </h2>
 
           {/* Price */}
-          <p className="text-4xl font-normal text-center mb-8 text-red-500">
+          <p
+            className="text-center mb-8"
+            style={{
+              width: '235px',
+              height: '30px',
+              flexShrink: 0,
+              color: 'rgba(188, 71, 71, 0.86)',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '24px',
+              fontStyle: 'normal',
+              fontWeight: '400',
+              lineHeight: '35px',
+              margin: '0 auto 32px'
+            }}
+          >
             {stage.prix.toFixed(0)}€ TTC
           </p>
 
@@ -99,9 +129,16 @@ export default function StageDetailsModal({
             <div className="space-y-6">
               {/* Address */}
               <div className="flex gap-3">
-                <svg className="w-6 h-6 flex-shrink-0 mt-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-1">
+                  <g clipPath="url(#clip0_1_70)">
+                    <path d="M21.875 10.4167C21.875 17.7083 12.5 23.9583 12.5 23.9583C12.5 23.9583 3.125 17.7083 3.125 10.4167C3.125 7.93026 4.11272 5.54569 5.87087 3.78754C7.62903 2.02938 10.0136 1.04166 12.5 1.04166C14.9864 1.04166 17.371 2.02938 19.1291 3.78754C20.8873 5.54569 21.875 7.93026 21.875 10.4167Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12.5 13.5417C14.2259 13.5417 15.625 12.1426 15.625 10.4167C15.625 8.69077 14.2259 7.29166 12.5 7.29166C10.7741 7.29166 9.375 8.69077 9.375 10.4167C9.375 12.1426 10.7741 13.5417 12.5 13.5417Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_1_70">
+                      <rect width="25" height="25" fill="white"/>
+                    </clipPath>
+                  </defs>
                 </svg>
                 <div>
                   <p className="text-base text-gray-700">
@@ -113,9 +150,8 @@ export default function StageDetailsModal({
 
               {/* Hours */}
               <div className="flex gap-3">
-                <svg className="w-6 h-6 flex-shrink-0 mt-1" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <circle cx="12" cy="12" r="10" strokeWidth={2} />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-1">
+                  <path d="M12.5 6.24999V12.5L16.6667 14.5833M22.9167 12.5C22.9167 18.253 18.253 22.9167 12.5 22.9167C6.74704 22.9167 2.08334 18.253 2.08334 12.5C2.08334 6.74703 6.74704 2.08333 12.5 2.08333C18.253 2.08333 22.9167 6.74703 22.9167 12.5Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
                 <div>
                   <p className="text-base text-gray-700">
@@ -127,10 +163,18 @@ export default function StageDetailsModal({
 
               {/* Prefecture agreement */}
               <div className="flex gap-3">
-                <svg className="w-6 h-6 flex-shrink-0 mt-1" viewBox="0 0 24 24" fill="none">
-                  <rect x="4" y="4" width="16" height="16" rx="2" fill="#0055A4" />
-                  <rect x="12" y="4" width="8" height="16" fill="#EF4135" />
-                </svg>
+                <Image
+                  src="/flag-france.png"
+                  alt="Drapeau français"
+                  width={27}
+                  height={18}
+                  className="flex-shrink-0 mt-1 rounded-lg"
+                  style={{
+                    height: '17.967px',
+                    aspectRatio: '27.00/17.97',
+                    borderRadius: '10px'
+                  }}
+                />
                 <div>
                   <p className="text-base text-gray-700">
                     <strong>Agrement n°: 25</strong>
@@ -200,14 +244,53 @@ export default function StageDetailsModal({
           <div className="flex gap-4 justify-center">
             <button
               onClick={onClose}
-              className="px-8 py-3 bg-gray-300 text-gray-800 rounded-full font-medium hover:bg-gray-400 transition-colors"
+              style={{
+                display: 'flex',
+                height: '44px',
+                width: '88px',
+                padding: '7px 15px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '20px',
+                borderRadius: '12px',
+                background: '#E0E0E0',
+                color: '#000',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '15px',
+                fontStyle: 'normal',
+                fontWeight: '300',
+                lineHeight: 'normal',
+                letterSpacing: '1.05px',
+                border: 'none',
+                cursor: 'pointer'
+              }}
             >
               Fermer
             </button>
             <Link
               href={slug ? `/stages-recuperation-points/${slug}/${stage.id}/inscription` : `/stages-recuperation-points/${city.toUpperCase()}-${stage.site.code_postal}/${stage.id}/inscription`}
               onClick={onClose}
-              className="px-8 py-3 bg-green-600 text-white rounded-full font-medium hover:bg-green-700 transition-colors"
+              style={{
+                display: 'flex',
+                width: '197px',
+                height: '44px',
+                padding: '7px 15px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '20px',
+                flexShrink: 0,
+                borderRadius: '12px',
+                background: '#41A334',
+                color: '#FFF',
+                textAlign: 'center',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '15px',
+                fontStyle: 'normal',
+                fontWeight: '400',
+                lineHeight: 'normal',
+                letterSpacing: '1.05px',
+                textDecoration: 'none'
+              }}
             >
               Sélectionner ce stage
             </Link>
