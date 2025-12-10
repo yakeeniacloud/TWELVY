@@ -252,7 +252,7 @@ export default function StageDetailsModal({
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'flex-start',
-              gap: '10px',
+              gap: '5px',
               flexShrink: 0,
               background: '#F5F5F5',
               borderRadius: '0px'
