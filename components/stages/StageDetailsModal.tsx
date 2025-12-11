@@ -115,7 +115,7 @@ export default function StageDetailsModal({
               margin: '0 auto'
             }}
           >
-            Stage
+            Stage {formatDate(stage.date_start, stage.date_end)}
           </h2>
 
           {/* Price */}
