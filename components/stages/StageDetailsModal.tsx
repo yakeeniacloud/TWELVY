@@ -159,7 +159,7 @@ export default function StageDetailsModal({
                     </clipPath>
                   </defs>
                 </svg>
-                <div style={{ width: '173px' }}>
+                <div style={{ width: '280px' }}>
                   <p style={{
                     color: 'rgba(89, 86, 86, 0.86)',
                     fontFamily: 'var(--font-poppins)',
@@ -195,7 +195,7 @@ export default function StageDetailsModal({
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-1">
                   <path d="M12.5 6.24999V12.5L16.6667 14.5833M22.9167 12.5C22.9167 18.253 18.253 22.9167 12.5 22.9167C6.74704 22.9167 2.08334 18.253 2.08334 12.5C2.08334 6.74703 6.74704 2.08333 12.5 2.08333C18.253 2.08333 22.9167 6.74703 22.9167 12.5Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <div style={{ width: '173px' }}>
+                <div style={{ width: '280px' }}>
                   <p style={{
                     color: 'rgba(89, 86, 86, 0.86)',
                     fontFamily: 'var(--font-poppins)',
@@ -240,7 +240,7 @@ export default function StageDetailsModal({
                     borderRadius: '10px'
                   }}
                 />
-                <div style={{ width: '173px' }}>
+                <div style={{ width: '280px' }}>
                   <p style={{
                     color: 'rgba(89, 86, 86, 0.86)',
                     fontFamily: 'var(--font-poppins)',
