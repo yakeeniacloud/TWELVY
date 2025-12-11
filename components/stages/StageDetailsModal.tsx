@@ -51,7 +51,11 @@ export default function StageDetailsModal({
     const month = start.toLocaleDateString('fr-FR', { month: 'long' })
     const year = start.getFullYear()
 
-    return `stage du ${dayStart} ${dayNumStart} et ${dayEnd} ${dayNumEnd} ${month} ${year}`
+    // Capitalize first letter of day names
+    const capitalizedDayStart = dayStart.charAt(0).toUpperCase() + dayStart.slice(1)
+    const capitalizedDayEnd = dayEnd.charAt(0).toUpperCase() + dayEnd.slice(1)
+
+    return `du ${capitalizedDayStart} ${dayNumStart} et ${capitalizedDayEnd} ${dayNumEnd} ${month} ${year}`
   }
 
   // Handle escape key
