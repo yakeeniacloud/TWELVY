@@ -94,7 +94,7 @@ export default function StageDetailsModal({
         </button>
 
         {/* Content */}
-        <div className="p-12">
+        <div className="p-8">
           {/* Title */}
           <h2
             className="text-center mb-4"
@@ -111,7 +111,7 @@ export default function StageDetailsModal({
               margin: '0 auto'
             }}
           >
-            {formatDate(stage.date_start, stage.date_end)}
+            Stage {formatDate(stage.date_start, stage.date_end)}
           </h2>
 
           {/* Price */}
@@ -175,6 +175,13 @@ export default function StageDetailsModal({
                 </div>
               </div>
 
+              {/* Separator line after address */}
+              <div style={{
+                width: '266px',
+                height: '1px',
+                background: '#C4C1C1'
+              }} />
+
               {/* Hours */}
               <div className="flex gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-1">
@@ -203,6 +210,13 @@ export default function StageDetailsModal({
                   </p>
                 </div>
               </div>
+
+              {/* Separator line after hours */}
+              <div style={{
+                width: '266px',
+                height: '1px',
+                background: '#C4C1C1'
+              }} />
 
               {/* Prefecture agreement */}
               <div className="flex gap-3">
