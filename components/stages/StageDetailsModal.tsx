@@ -145,7 +145,7 @@ export default function StageDetailsModal({
           {/* Two column layout */}
           <div className="grid grid-cols-2 gap-6 mb-5">
             {/* Left column */}
-            <div className="space-y-3">
+            <div className="space-y-3" style={{ marginTop: '8px' }}>
               {/* Address */}
               <div className="flex gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-1">
@@ -405,7 +405,7 @@ export default function StageDetailsModal({
                 background: '#E0E0E0',
                 color: '#000',
                 fontFamily: 'var(--font-poppins)',
-                fontSize: '15px',
+                fontSize: '13px',
                 fontStyle: 'normal',
                 fontWeight: 300,
                 lineHeight: 'normal',
@@ -432,7 +432,7 @@ export default function StageDetailsModal({
                 color: '#FFF',
                 textAlign: 'center',
                 fontFamily: 'var(--font-poppins)',
-                fontSize: '15px',
+                fontSize: '13px',
                 fontStyle: 'normal',
                 fontWeight: 400,
                 lineHeight: 'normal',
