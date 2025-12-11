@@ -76,7 +76,7 @@ export default function StageDetailsModal({
       <div
         className="bg-white rounded-2xl shadow-2xl relative overflow-y-auto"
         style={{
-          width: '900px',
+          width: '780px',
           maxHeight: '90vh'
         }}
         onClick={e => e.stopPropagation()}
@@ -102,10 +102,10 @@ export default function StageDetailsModal({
         </button>
 
         {/* Content */}
-        <div className="p-8">
+        <div className="p-6">
           {/* Title */}
           <h2
-            className="text-center mb-4"
+            className="text-center mb-2"
             style={{
               width: '499px',
               height: '34px',
@@ -124,7 +124,7 @@ export default function StageDetailsModal({
 
           {/* Price */}
           <p
-            className="text-center mb-8"
+            className="text-center mb-4"
             style={{
               width: '235px',
               height: '30px',
@@ -136,16 +136,16 @@ export default function StageDetailsModal({
               fontStyle: 'normal',
               fontWeight: '400',
               lineHeight: '35px',
-              margin: '0 auto 32px'
+              margin: '0 auto 16px'
             }}
           >
             {stage.prix.toFixed(0)}€ TTC
           </p>
 
           {/* Two column layout */}
-          <div className="grid grid-cols-2 gap-8 mb-8">
+          <div className="grid grid-cols-2 gap-6 mb-5">
             {/* Left column */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Address */}
               <div className="flex gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-1">
