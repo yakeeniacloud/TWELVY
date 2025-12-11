@@ -272,12 +272,14 @@ export default function StageDetailsModal({
               height: '284px',
               padding: '15px 10px',
               flexDirection: 'column',
-              justifyContent: 'center',
+              justifyContent: 'flex-start',
               alignItems: 'flex-start',
-              gap: '5px',
+              gap: '3px',
               flexShrink: 0,
               background: '#F5F5F5',
-              borderRadius: '0px'
+              borderRadius: '0px',
+              marginLeft: '-10px',
+              marginTop: '8px'
             }}>
               <div className="flex gap-3 items-start">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="26" viewBox="0 0 25 26" fill="none" className="flex-shrink-0" style={{ width: '24.513px', height: '25.252px' }}>
