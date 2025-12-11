@@ -70,10 +70,10 @@ export default function StageDetailsModal({
       aria-modal="true"
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl relative"
+        className="bg-white rounded-2xl shadow-2xl relative overflow-y-auto"
         style={{
-          width: '723px',
-          height: '500px'
+          width: '900px',
+          maxHeight: '90vh'
         }}
         onClick={e => e.stopPropagation()}
       >
