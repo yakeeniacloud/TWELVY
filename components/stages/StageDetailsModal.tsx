@@ -145,7 +145,7 @@ export default function StageDetailsModal({
           {/* Two column layout */}
           <div className="grid grid-cols-2 gap-6 mb-5">
             {/* Left column */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               {/* Address */}
               <div className="flex gap-3">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-1">
@@ -395,8 +395,8 @@ export default function StageDetailsModal({
               onClick={onClose}
               style={{
                 display: 'flex',
-                height: '44px',
-                width: '88px',
+                height: '40px',
+                width: '80px',
                 padding: '7px 15px',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -421,8 +421,8 @@ export default function StageDetailsModal({
               onClick={onClose}
               style={{
                 display: 'flex',
-                width: '197px',
-                height: '44px',
+                width: '180px',
+                height: '40px',
                 padding: '7px 15px',
                 justifyContent: 'center',
                 alignItems: 'center',
