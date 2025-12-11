@@ -70,7 +70,11 @@ export default function StageDetailsModal({
       aria-modal="true"
     >
       <div
-        className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full relative"
+        className="bg-white rounded-2xl shadow-2xl relative"
+        style={{
+          width: '723px',
+          height: '500px'
+        }}
         onClick={e => e.stopPropagation()}
       >
         {/* Close button - positioned slightly outside the popup */}
@@ -111,7 +115,7 @@ export default function StageDetailsModal({
               margin: '0 auto'
             }}
           >
-            Stage {formatDate(stage.date_start, stage.date_end)}
+            Stage
           </h2>
 
           {/* Price */}
