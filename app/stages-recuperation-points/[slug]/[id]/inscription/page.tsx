@@ -515,7 +515,6 @@ export default function InscriptionPage() {
                         style={{
                           display: 'flex',
                           width: '233px',
-                          height: '34px',
                           flexDirection: 'column',
                           justifyContent: 'center'
                         }}
@@ -527,7 +526,7 @@ export default function InscriptionPage() {
                             fontSize: '15px',
                             fontStyle: 'normal',
                             fontWeight: 400,
-                            lineHeight: '35px'
+                            lineHeight: '20px'
                           }}
                         >
                           {benefit}
