@@ -305,38 +305,91 @@ export default function InscriptionPage() {
           </div>
 
           {/* Right Column - Stage Info */}
-          <div>
-            <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-              <h3 className="font-semibold mb-4" style={{ fontSize: '16px', color: '#222' }}>
-                Stage sélectionné
-              </h3>
+          <div style={{ width: '349px' }}>
+            <div className="bg-white rounded-lg border border-gray-200" style={{ padding: '20px' }}>
+              {/* Stage sélectionné Header */}
+              <div
+                className="flex items-center justify-center mb-4"
+                style={{
+                  height: '38px',
+                  padding: '8px 106px',
+                  borderRadius: '8px',
+                  background: '#EFEFEF',
+                  alignSelf: 'stretch'
+                }}
+              >
+                <p
+                  style={{
+                    width: '226px',
+                    color: '#000',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '18px',
+                    fontWeight: 400,
+                    lineHeight: '25px'
+                  }}
+                >
+                  Stage sélectionné
+                </p>
+              </div>
 
+              {/* Stage Date */}
               <div className="mb-4">
-                <p className="font-semibold mb-2" style={{ fontSize: '15px', color: '#222' }}>
+                <p className="font-semibold mb-3" style={{ fontSize: '16px', color: '#000', fontFamily: 'Poppins' }}>
                   Stage du {formatDate(stage.date_start, stage.date_end)}
                 </p>
 
-                {/* Location */}
-                <div className="flex gap-2 mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0 mt-1">
-                    <path d="M14 6.66667C14 11.3333 8 15.3333 8 15.3333C8 15.3333 2 11.3333 2 6.66667C2 5.07536 2.63214 3.54925 3.75736 2.42404C4.88258 1.29882 6.40869 0.666672 8 0.666672C9.59131 0.666672 11.1174 1.29882 12.2426 2.42404C13.3679 3.54925 14 5.07536 14 6.66667Z" stroke="#666" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M8 8.66667C9.10457 8.66667 10 7.77124 10 6.66667C10 5.5621 9.10457 4.66667 8 4.66667C6.89543 4.66667 6 5.5621 6 6.66667C6 7.77124 6.89543 8.66667 8 8.66667Z" stroke="#666" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                {/* Changer de date */}
+                <div className="flex items-center gap-2 mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ width: '20px', height: '20px', flexShrink: 0 }}>
+                    <g clipPath="url(#clip0_180_68)">
+                      <path d="M13.3333 1.66669V5.00002M6.66667 1.66669V5.00002M2.5 8.33335H17.5M4.16667 3.33335H15.8333C16.7538 3.33335 17.5 4.07955 17.5 5.00002V16.6667C17.5 17.5872 16.7538 18.3334 15.8333 18.3334H4.16667C3.24619 18.3334 2.5 17.5872 2.5 16.6667V5.00002C2.5 4.07955 3.24619 3.33335 4.16667 3.33335Z" stroke="#595656" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_180_68">
+                        <rect width="20" height="20" fill="white"/>
+                      </clipPath>
+                    </defs>
                   </svg>
-                  <div>
-                    <p className="text-sm" style={{ color: '#333' }}>Adresse : av de la République</p>
-                    <p className="text-sm" style={{ color: '#333' }}>13001 Marseille</p>
-                  </div>
+                  <a href="#" className="text-blue-600" style={{ fontFamily: 'Poppins', fontSize: '14px' }}>Changer de date</a>
+                </div>
+
+                {/* Location */}
+                <div className="flex gap-2 mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px' }}>
+                    <path d="M21.875 10.4167C21.875 17.7084 12.5 23.9584 12.5 23.9584C12.5 23.9584 3.125 17.7084 3.125 10.4167C3.125 7.93028 4.11272 5.54571 5.87087 3.78756C7.62903 2.02941 10.0136 1.04169 12.5 1.04169C14.9864 1.04169 17.371 2.02941 19.1291 3.78756C20.8873 5.54571 21.875 7.93028 21.875 10.4167Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12.5 13.5417C14.2259 13.5417 15.625 12.1426 15.625 10.4167C15.625 8.6908 14.2259 7.29169 12.5 7.29169C10.7741 7.29169 9.375 8.6908 9.375 10.4167C9.375 12.1426 10.7741 13.5417 12.5 13.5417Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <p
+                    style={{
+                      width: '233px',
+                      color: 'rgba(89, 86, 86, 0.86)',
+                      fontFamily: 'Poppins',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      lineHeight: '23px'
+                    }}
+                  >
+                    {stage.site.adresse}, {stage.site.code_postal} {stage.site.ville}
+                  </p>
                 </div>
 
                 {/* Schedule */}
-                <div className="flex gap-2 mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0 mt-1">
-                    <path d="M8 4V8L10.6667 9.33333M14.6667 8C14.6667 11.6819 11.6819 14.6667 8 14.6667C4.3181 14.6667 1.33333 11.6819 1.33333 8C1.33333 4.3181 4.3181 1.33333 8 1.33333C11.6819 1.33333 14.6667 4.3181 14.6667 8Z" stroke="#666" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <div className="flex gap-2 mb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none" style={{ width: '20.833px', height: '20.833px' }}>
+                    <path d="M11.4167 5.16667V11.4167L15.5833 13.5M21.8333 11.4167C21.8333 17.1696 17.1696 21.8333 11.4167 21.8333C5.6637 21.8333 1 17.1696 1 11.4167C1 5.6637 5.6637 1 11.4167 1C17.1696 1 21.8333 5.6637 21.8333 11.4167Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  <div>
-                    <p className="text-sm" style={{ color: '#333' }}>Horaires: 08h30-12h30 et</p>
-                    <p className="text-sm" style={{ color: '#333' }}>13h30-16h30</p>
-                  </div>
+                  <p
+                    style={{
+                      color: 'rgba(89, 86, 86, 0.86)',
+                      fontFamily: 'Poppins',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      lineHeight: '23px'
+                    }}
+                  >
+                    08h15-12h30 et 13h30-16h30
+                  </p>
                 </div>
 
                 {/* Agreement */}
@@ -344,44 +397,58 @@ export default function InscriptionPage() {
                   <Image
                     src="/flag-france.png"
                     alt="Drapeau français"
-                    width={16}
-                    height={11}
-                    className="flex-shrink-0 mt-1 rounded"
-                    style={{ width: '20px', height: '14px' }}
+                    width={25}
+                    height={17}
+                    className="flex-shrink-0"
+                    style={{
+                      height: '16.636px',
+                      alignSelf: 'stretch',
+                      aspectRatio: '25.00/16.64'
+                    }}
                   />
-                  <p className="text-sm" style={{ color: '#333' }}>
-                    Agrément n° 311300000006A
-                    <br />
-                    par la Préfecture de Marseille
+                  <p
+                    style={{
+                      color: 'rgba(89, 86, 86, 0.86)',
+                      fontFamily: 'Poppins',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      lineHeight: '23px'
+                    }}
+                  >
+                    Agrément n° 25 R130060090064 par la Préfecture des Bouches-du-Rhône
                   </p>
                 </div>
               </div>
 
               {/* Price Box */}
-              <div className="bg-white rounded p-4 mb-4 text-center border border-gray-200">
-                <p className="text-xs mb-1" style={{ color: '#666' }}>Places disponibles</p>
-                <p className="text-3xl font-bold" style={{ color: '#222' }}>
-                  {stage.prix.toFixed(0)}€ <span className="text-base font-normal">TTC</span>
+              <div className="mb-4 text-center" style={{ paddingTop: '16px', paddingBottom: '16px' }}>
+                <p className="text-sm mb-2" style={{ color: '#41A334', fontFamily: 'Poppins', fontWeight: 500 }}>
+                  Places disponibles
+                </p>
+                <p style={{ fontSize: '40px', fontWeight: 700, color: '#000', fontFamily: 'Poppins', lineHeight: '1' }}>
+                  190€ <span style={{ fontSize: '20px', fontWeight: 400 }}>TTC</span>
                 </p>
               </div>
 
               {/* Benefits List */}
-              <div className="space-y-2">
-                {[
-                  'Stage officiel agréé Préfecture',
-                  '+4 points en 48h',
-                  'Aucun examen, aucun contrôle',
-                  'Report ou remboursement en quelques clics',
-                  'Paiement 100% sécurisé',
-                  'Attestation de stage remise le 2ème jour'
-                ].map((benefit, index) => (
-                  <div key={index} className="flex gap-2 items-start">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0 mt-0.5">
-                      <path d="M13.3333 4L6 11.3333L2.66666 8" stroke="#41A334" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    <p className="text-sm" style={{ color: '#333' }}>{benefit}</p>
-                  </div>
-                ))}
+              <div className="border border-gray-300 rounded-lg p-4">
+                <div className="space-y-3">
+                  {[
+                    'Stage officiel agréé Préfecture',
+                    '+4 points en 48h',
+                    '98,7% de clients satisfaits',
+                    'Report ou remboursement en cas d\'imprévu',
+                    'Paiement 100% sécurisé',
+                    'Attestation de stage remise le 2ème jour'
+                  ].map((benefit, index) => (
+                    <div key={index} className="flex gap-3 items-start">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0" style={{ marginTop: '2px' }}>
+                        <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="#C5A052" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <p style={{ fontSize: '13px', color: '#000', fontFamily: 'Poppins', lineHeight: '20px' }}>{benefit}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
