@@ -689,7 +689,7 @@ export default function InscriptionPage() {
         </div>
 
         {/* Informations pratiques sur votre stage */}
-        <div className="bg-gray-50 py-12 -mx-6 px-6">
+        <div className="bg-gray-50 py-8 px-6 rounded-lg">
           <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
             Informations pratiques sur votre stage
           </h2>
