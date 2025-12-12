@@ -537,11 +537,10 @@ export default function InscriptionPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+
 
         {/* Payment Section - Étape 2/2 */}
-        <div className="max-w-[1200px] mx-auto px-6 pb-12">
+        <div className="mt-12">
           <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
             Étape 2/2 - paiement sécurisé
           </h2>
@@ -690,11 +689,10 @@ export default function InscriptionPage() {
         </div>
 
         {/* Informations pratiques sur votre stage */}
-        <div className="bg-gray-50 py-12">
-          <div className="max-w-[1200px] mx-auto px-6">
-            <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
-              Informations pratiques sur votre stage
-            </h2>
+        <div className="bg-gray-50 py-12 -mx-6 px-6">
+          <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
+            Informations pratiques sur votre stage
+          </h2>
 
             {/* Tabs */}
             <div className="flex gap-4 mb-6 border-b border-gray-200">
@@ -756,11 +754,10 @@ export default function InscriptionPage() {
                 </div>
               )}
             </div>
-          </div>
         </div>
 
         {/* Questions fréquentes */}
-        <div className="max-w-[1200px] mx-auto px-6 py-12">
+        <div className="py-12">
           <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
             Questions fréquentes
           </h2>
@@ -811,7 +808,15 @@ export default function InscriptionPage() {
             </button>
           </div>
         </div>
+          </div>
+          {/* End Left Column */}
+
+          {/* Right Column - Stage Info (Sticky) */}
+          {/* Already rendered above */}
+        </div>
+        {/* End Grid */}
       </div>
+      {/* End Max Width Container */}
     </div>
   )
 }
