@@ -436,9 +436,13 @@ export default function InscriptionPage() {
 
               {/* Separator Line */}
               <div className="flex justify-center mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="265" height="2" viewBox="0 0 265 2" fill="none" style={{ width: '264.125px', height: '0', transform: 'rotate(0.013deg)', flexShrink: 0 }}>
-                  <path d="M0.00012207 0.5L264.125 0.561579" stroke="#B6B6B6"/>
-                </svg>
+                <div
+                  style={{
+                    width: '264.125px',
+                    height: '1px',
+                    backgroundColor: '#B6B6B6'
+                  }}
+                />
               </div>
 
               {/* Price Box */}
