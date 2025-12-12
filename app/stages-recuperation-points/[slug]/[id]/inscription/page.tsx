@@ -540,7 +540,7 @@ export default function InscriptionPage() {
 
 
         {/* Payment Section - Étape 2/2 */}
-        <div className="mt-12">
+        <div className="mt-12" style={{ maxWidth: 'calc(100% - 420px)' }}>
           <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
             Étape 2/2 - paiement sécurisé
           </h2>
@@ -689,7 +689,7 @@ export default function InscriptionPage() {
         </div>
 
         {/* Informations pratiques sur votre stage */}
-        <div className="bg-gray-50 py-8 px-6 rounded-lg">
+        <div className="bg-gray-50 py-8 px-6 rounded-lg" style={{ maxWidth: 'calc(100% - 420px)' }}>
           <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
             Informations pratiques sur votre stage
           </h2>
@@ -757,7 +757,7 @@ export default function InscriptionPage() {
         </div>
 
         {/* Questions fréquentes */}
-        <div className="py-12">
+        <div className="py-12" style={{ maxWidth: 'calc(100% - 420px)' }}>
           <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
             Questions fréquentes
           </h2>
