@@ -157,7 +157,7 @@ export default function InscriptionPage() {
 
       {/* Main Content - Two Columns */}
       <div className="max-w-[1200px] mx-auto px-6 pb-12">
-        <div className="grid grid-cols-[1fr_380px] gap-8">
+        <div className="grid grid-cols-[1fr_380px] gap-8 items-start">
           {/* Left Column - Form */}
           <div>
             <div className="mb-6">
@@ -306,8 +306,8 @@ export default function InscriptionPage() {
           </div>
 
           {/* Right Column - Stage Info */}
-          <div className="sticky top-6 self-start" style={{ width: '349px' }}>
-            <div className="bg-white rounded-lg border border-gray-200" style={{ padding: '20px' }}>
+          <div style={{ width: '349px' }}>
+            <div className="bg-white rounded-lg border border-gray-200 sticky top-6" style={{ padding: '20px', maxHeight: 'calc(100vh - 48px)', overflowY: 'auto' }}>
               {/* Stage sélectionné Header */}
               <div
                 className="flex items-center justify-center mb-4"
