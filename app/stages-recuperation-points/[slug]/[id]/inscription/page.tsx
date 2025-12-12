@@ -508,10 +508,31 @@ export default function InscriptionPage() {
                     'Attestation de stage remise le 2ème jour'
                   ].map((benefit, index) => (
                     <div key={index} className="flex gap-3 items-start">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0" style={{ marginTop: '2px' }}>
-                        <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="#C5A052" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="flex-shrink-0" style={{ width: '25px', height: '25px' }}>
+                        <path d="M9.375 11.4583L12.5 14.5833L22.9167 4.16667M21.875 12.5V19.7917C21.875 20.3442 21.6555 20.8741 21.2648 21.2648C20.8741 21.6555 20.3442 21.875 19.7917 21.875H5.20833C4.6558 21.875 4.12589 21.6555 3.73519 21.2648C3.34449 20.8741 3.125 20.3442 3.125 19.7917V5.20833C3.125 4.6558 3.34449 4.12589 3.73519 3.73519C4.12589 3.34449 4.6558 3.125 5.20833 3.125H16.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                      <p style={{ fontSize: '13px', color: '#000', fontFamily: 'Poppins', lineHeight: '20px' }}>{benefit}</p>
+                      <div
+                        style={{
+                          display: 'flex',
+                          width: '233px',
+                          height: '34px',
+                          flexDirection: 'column',
+                          justifyContent: 'center'
+                        }}
+                      >
+                        <p
+                          style={{
+                            color: 'rgba(6, 6, 6, 0.86)',
+                            fontFamily: 'Poppins',
+                            fontSize: '15px',
+                            fontStyle: 'normal',
+                            fontWeight: 400,
+                            lineHeight: '35px'
+                          }}
+                        >
+                          {benefit}
+                        </p>
+                      </div>
                     </div>
                   ))}
                 </div>
