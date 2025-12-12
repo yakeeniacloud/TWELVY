@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { removeStreetNumber } from '@/lib/formatAddress'
 
 interface Stage {
   id: number
@@ -168,7 +169,7 @@ export default function StageDetailsModal({
                     fontWeight: '500',
                     lineHeight: '23px'
                   }}>
-                    Adresse: {stage.site.adresse}, {stage.site.code_postal}
+                    Adresse: {removeStreetNumber(stage.site.adresse)}, {stage.site.code_postal}
                   </p>
                   <p style={{
                     color: 'rgba(89, 86, 86, 0.86)',

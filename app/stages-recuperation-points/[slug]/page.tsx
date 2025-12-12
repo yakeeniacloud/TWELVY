@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import CitySearchBar from '@/components/stages/CitySearchBar'
 import StageDetailsModal from '@/components/stages/StageDetailsModal'
+import { removeStreetNumber } from '@/lib/formatAddress'
 
 interface Stage {
   id: number
@@ -496,7 +497,7 @@ export default function StagesResultsPage() {
                     </div>
                     <div className="flex flex-col justify-center gap-0">
                       <p className="w-[138px] flex-shrink-0 text-[rgba(0,0,0,0.98)] text-[15px] font-normal leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville}</p>
-                      <p className="flex-shrink-0 self-stretch text-[rgba(6,6,6,0.56)] text-[12px] font-normal leading-[12px] mt-3" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.adresse}</p>
+                      <p className="flex-shrink-0 self-stretch text-[rgba(6,6,6,0.56)] text-[12px] font-normal leading-[12px] mt-3" style={{ fontFamily: 'var(--font-poppins)' }}>{removeStreetNumber(stage.site.adresse)}</p>
                     </div>
                   </div>
 

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
+import { removeStreetNumber } from '@/lib/formatAddress'
 
 interface Stage {
   id: number
@@ -115,7 +116,7 @@ export default function InscriptionPage() {
       <div className="border-b border-gray-200 py-4" style={{ background: '#fff' }}>
         <div className="max-w-[1200px] mx-auto px-6">
           <h1 className="text-center font-medium" style={{ fontSize: '18px', color: '#222', marginBottom: '4px' }}>
-            Stage Récupération de points - {stage.site.adresse}, {stage.site.ville} ({stage.site.code_postal.substring(0, 2)})
+            Stage Récupération de points - {removeStreetNumber(stage.site.adresse)}, {stage.site.ville} ({stage.site.code_postal.substring(0, 2)})
           </h1>
           <p className="text-center" style={{ fontSize: '14px', color: '#666' }}>
             Stage agréé Préfecture - Récupération de 4 points en 48h
@@ -382,7 +383,7 @@ export default function InscriptionPage() {
                       lineHeight: '23px'
                     }}
                   >
-                    {stage.site.adresse}, {stage.site.code_postal} {stage.site.ville}
+                    {removeStreetNumber(stage.site.adresse)}, {stage.site.code_postal} {stage.site.ville}
                   </p>
                 </div>
 
