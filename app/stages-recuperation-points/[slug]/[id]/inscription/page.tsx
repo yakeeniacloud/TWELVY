@@ -435,7 +435,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Separator Line */}
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center mb-3">
                 <div
                   style={{
                     width: '264.125px',
@@ -446,7 +446,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Price Box */}
-              <div className="mb-4 flex flex-col items-center">
+              <div className="mb-2 flex flex-col items-center">
                 <div
                   style={{
                     display: 'flex',
@@ -454,7 +454,7 @@ export default function InscriptionPage() {
                     flexDirection: 'column',
                     justifyContent: 'flex-start',
                     flexShrink: 0,
-                    marginBottom: '4px'
+                    marginBottom: '2px'
                   }}
                 >
                   <p
