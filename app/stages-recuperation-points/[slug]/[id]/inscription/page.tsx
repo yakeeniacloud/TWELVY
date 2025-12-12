@@ -435,22 +435,22 @@ export default function InscriptionPage() {
               </div>
 
               {/* Separator Line */}
-              <div className="flex justify-center mb-4">
+              <div className="flex justify-center mb-6">
                 <svg xmlns="http://www.w3.org/2000/svg" width="265" height="2" viewBox="0 0 265 2" fill="none" style={{ width: '264.125px', height: '0', transform: 'rotate(0.013deg)', flexShrink: 0 }}>
-                  <path d="M0.00012207 0.5L264.125 0.561579" stroke="#B6B6B6" strokeWidth="1"/>
+                  <path d="M0.00012207 0.5L264.125 0.561579" stroke="#B6B6B6"/>
                 </svg>
               </div>
 
               {/* Price Box */}
-              <div className="mb-4">
+              <div className="mb-4 flex flex-col items-center">
                 <div
                   style={{
                     display: 'flex',
-                    width: '353px',
                     height: '30px',
                     flexDirection: 'column',
-                    justifyContent: 'center',
-                    flexShrink: 0
+                    justifyContent: 'flex-start',
+                    flexShrink: 0,
+                    marginBottom: '4px'
                   }}
                 >
                   <p
@@ -470,7 +470,6 @@ export default function InscriptionPage() {
                 <div
                   style={{
                     display: 'flex',
-                    width: '353px',
                     height: '37px',
                     flexDirection: 'column',
                     justifyContent: 'center',
