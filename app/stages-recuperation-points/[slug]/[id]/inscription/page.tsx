@@ -434,14 +434,63 @@ export default function InscriptionPage() {
                 </div>
               </div>
 
+              {/* Separator Line */}
+              <div className="flex justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="265" height="2" viewBox="0 0 265 2" fill="none" style={{ width: '264.125px', height: '0', transform: 'rotate(0.013deg)', flexShrink: 0 }}>
+                  <path d="M0.00012207 0.5L264.125 0.561579" stroke="#B6B6B6" strokeWidth="1"/>
+                </svg>
+              </div>
+
               {/* Price Box */}
-              <div className="mb-4 text-center" style={{ paddingTop: '16px', paddingBottom: '16px' }}>
-                <p className="text-sm mb-2" style={{ color: '#41A334', fontFamily: 'Poppins', fontWeight: 500 }}>
-                  Places disponibles
-                </p>
-                <p style={{ fontSize: '40px', fontWeight: 700, color: '#000', fontFamily: 'Poppins', lineHeight: '1' }}>
-                  190€ <span style={{ fontSize: '20px', fontWeight: 400 }}>TTC</span>
-                </p>
+              <div className="mb-4">
+                <div
+                  style={{
+                    display: 'flex',
+                    width: '353px',
+                    height: '30px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                  }}
+                >
+                  <p
+                    style={{
+                      color: 'rgba(38, 126, 28, 0.95)',
+                      textAlign: 'center',
+                      fontFamily: 'Poppins',
+                      fontSize: '15px',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      lineHeight: '25px'
+                    }}
+                  >
+                    Places disponibles
+                  </p>
+                </div>
+                <div
+                  style={{
+                    display: 'flex',
+                    width: '353px',
+                    height: '37px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                  }}
+                >
+                  <p
+                    style={{
+                      color: 'rgba(0, 0, 0, 0.86)',
+                      textAlign: 'center',
+                      fontFamily: 'Poppins',
+                      fontSize: '26px',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      lineHeight: '35px'
+                    }}
+                  >
+                    190€ TTC
+                  </p>
+                </div>
               </div>
 
               {/* Benefits List */}
