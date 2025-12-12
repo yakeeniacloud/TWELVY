@@ -577,8 +577,8 @@ export default function InscriptionPage() {
           {/* End Left Column */}
 
           {/* Right Column - Stage Info */}
-          <div style={{ width: '349px' }}>
-            <div className="bg-white rounded-lg border border-gray-200" style={{ position: 'sticky', top: '24px', padding: '20px' }}>
+          <div style={{ position: 'sticky', top: '24px', alignSelf: 'flex-start' }}>
+            <div className="bg-white rounded-lg border border-gray-200" style={{ width: '349px', padding: '20px' }}>
               {/* Stage sélectionné Header */}
               <div
                 className="flex items-center justify-center mb-4"
