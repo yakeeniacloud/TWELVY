@@ -321,14 +321,14 @@ export default function InscriptionPage() {
               >
                 <p
                   style={{
-                    width: '226px',
                     color: '#000',
                     textAlign: 'center',
                     fontFamily: 'Poppins',
-                    fontSize: '18px',
+                    fontSize: '14px',
                     fontStyle: 'normal',
                     fontWeight: 400,
-                    lineHeight: '25px'
+                    lineHeight: '20px',
+                    whiteSpace: 'nowrap'
                   }}
                 >
                   Stage sélectionné
@@ -342,11 +342,12 @@ export default function InscriptionPage() {
                     color: '#000',
                     textAlign: 'center',
                     fontFamily: 'Poppins',
-                    fontSize: '18px',
+                    fontSize: '14px',
                     fontStyle: 'normal',
                     fontWeight: 500,
-                    lineHeight: '28px',
-                    marginBottom: '12px'
+                    lineHeight: '20px',
+                    marginBottom: '12px',
+                    whiteSpace: 'nowrap'
                   }}
                 >
                   Stage du {formatDate(stage.date_start, stage.date_end)}
