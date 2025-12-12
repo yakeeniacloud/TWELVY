@@ -325,6 +325,7 @@ export default function InscriptionPage() {
                     textAlign: 'center',
                     fontFamily: 'Poppins',
                     fontSize: '18px',
+                    fontStyle: 'normal',
                     fontWeight: 400,
                     lineHeight: '25px'
                   }}
@@ -335,7 +336,18 @@ export default function InscriptionPage() {
 
               {/* Stage Date */}
               <div className="mb-4">
-                <p className="font-semibold mb-3" style={{ fontSize: '16px', color: '#000', fontFamily: 'Poppins' }}>
+                <p
+                  style={{
+                    color: '#000',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '18px',
+                    fontStyle: 'normal',
+                    fontWeight: 500,
+                    lineHeight: '28px',
+                    marginBottom: '12px'
+                  }}
+                >
                   Stage du {formatDate(stage.date_start, stage.date_end)}
                 </p>
 
