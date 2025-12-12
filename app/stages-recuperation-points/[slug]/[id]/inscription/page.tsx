@@ -303,7 +303,278 @@ export default function InscriptionPage() {
                 Valider le formulaire et passer au paiement
               </button>
             </form>
+
+            {/* Payment Section - Étape 2/2 */}
+            <div className="mt-12">
+              <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
+                Étape 2/2 - paiement sécurisé
+              </h2>
+
+              {/* Payment Method Header */}
+              <div className="mb-6">
+                <p className="text-sm mb-3" style={{ color: '#666' }}>
+                  Paiement sécurisé par Crédit Agricole
+                </p>
+                <div className="flex gap-2">
+                  {/* Payment logos */}
+                  <div className="px-3 py-1 border border-gray-300 rounded" style={{ height: '30px', display: 'flex', alignItems: 'center' }}>
+                    <span className="text-xs font-medium" style={{ color: '#333' }}>VISA</span>
+                  </div>
+                  <div className="px-3 py-1 border border-gray-300 rounded" style={{ height: '30px', display: 'flex', alignItems: 'center' }}>
+                    <span className="text-xs font-medium" style={{ color: '#333' }}>MC</span>
+                  </div>
+                  <div className="px-3 py-1 border border-gray-300 rounded" style={{ height: '30px', display: 'flex', alignItems: 'center' }}>
+                    <span className="text-xs font-medium" style={{ color: '#333' }}>CB</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment Form */}
+              <div className="grid grid-cols-2 gap-x-8 max-w-[600px]">
+                {/* Nom sur la carte */}
+                <div className="col-span-2 mb-4">
+                  <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
+                    Nom sur la carte
+                  </label>
+                  <input
+                    type="text"
+                    value={nomCarte}
+                    onChange={(e) => setNomCarte(e.target.value)}
+                    required
+                    placeholder="Nom"
+                    className="w-full px-4 py-2 border border-gray-300 rounded"
+                    style={{ height: '40px', fontSize: '14px' }}
+                  />
+                </div>
+
+                {/* Numéro de carte */}
+                <div className="col-span-2 mb-4">
+                  <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
+                    Numéro de carte
+                  </label>
+                  <input
+                    type="text"
+                    value={numeroCarte}
+                    onChange={(e) => setNumeroCarte(e.target.value)}
+                    required
+                    placeholder="Numéro de carte"
+                    className="w-full px-4 py-2 border border-gray-300 rounded"
+                    style={{ height: '40px', fontSize: '14px' }}
+                    maxLength={16}
+                  />
+                </div>
+
+                {/* Date expiration */}
+                <div className="mb-4">
+                  <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
+                    Date expiration
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={dateExpirationMois}
+                      onChange={(e) => setDateExpirationMois(e.target.value)}
+                      required
+                      placeholder="MM"
+                      className="w-full px-4 py-2 border border-gray-300 rounded"
+                      style={{ height: '40px', fontSize: '14px' }}
+                      maxLength={2}
+                    />
+                    <input
+                      type="text"
+                      value={dateExpirationAnnee}
+                      onChange={(e) => setDateExpirationAnnee(e.target.value)}
+                      required
+                      placeholder="Année"
+                      className="w-full px-4 py-2 border border-gray-300 rounded"
+                      style={{ height: '40px', fontSize: '14px' }}
+                      maxLength={2}
+                    />
+                  </div>
+                </div>
+
+                {/* Code CVV */}
+                <div className="mb-4">
+                  <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
+                    Code (cvv)
+                  </label>
+                  <input
+                    type="text"
+                    value={codeCVV}
+                    onChange={(e) => setCodeCVV(e.target.value)}
+                    required
+                    placeholder="Code"
+                    className="w-full px-4 py-2 border border-gray-300 rounded"
+                    style={{ height: '40px', fontSize: '14px' }}
+                    maxLength={3}
+                  />
+                </div>
+              </div>
+
+              {/* Price Summary */}
+              <div className="max-w-[600px] mt-8 mb-6">
+                <div className="text-center mb-2">
+                  <p className="text-sm" style={{ color: '#666' }}>Stage du vend 5 et sam 6 déc 2025</p>
+                </div>
+                <div className="text-center mb-2">
+                  <p className="text-sm" style={{ color: '#666' }}>Prix du stage : 190€ TTC</p>
+                </div>
+                {garantieSerenite && (
+                  <div className="text-center mb-2">
+                    <p className="text-sm" style={{ color: '#666' }}>Garantie Sérénité : +25€ TTC</p>
+                  </div>
+                )}
+                <div className="text-center mb-6">
+                  <p className="font-semibold" style={{ fontSize: '16px', color: '#222' }}>
+                    Total à payer : {garantieSerenite ? stage?.prix + 25 : stage?.prix}€ TTC
+                  </p>
+                </div>
+
+                {/* Payment Button */}
+                <button
+                  type="submit"
+                  className="w-full text-white font-medium rounded-full flex items-center justify-center gap-2"
+                  style={{
+                    background: '#41A334',
+                    height: '44px',
+                    fontSize: '15px'
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M12 5.33334L6.66667 10.6667L4 8.00001" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Payer {garantieSerenite ? stage?.prix + 25 : stage?.prix}€ TTC
+                </button>
+
+                {/* Payment Disclaimer */}
+                <p className="text-xs text-center mt-4" style={{ color: '#666', lineHeight: '1.5' }}>
+                  Après avoir cliqué sur "Payer", votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez l'attestation par email dans quelques minutes.
+                </p>
+              </div>
+            </div>
+
+            {/* Informations pratiques sur votre stage */}
+            <div className="bg-gray-50 py-8 px-6 rounded-lg">
+              <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
+                Informations pratiques sur votre stage
+              </h2>
+
+                {/* Tabs */}
+                <div className="flex gap-4 mb-6 border-b border-gray-200">
+                  <button
+                    onClick={() => setActiveTab('prix')}
+                    className={`pb-3 px-4 text-sm font-medium transition-colors ${
+                      activeTab === 'prix' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'
+                    }`}
+                  >
+                    Le prix du stage comprend
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('programme')}
+                    className={`pb-3 px-4 text-sm font-medium transition-colors ${
+                      activeTab === 'programme' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'
+                    }`}
+                  >
+                    Programme
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('agrement')}
+                    className={`pb-3 px-4 text-sm font-medium transition-colors ${
+                      activeTab === 'agrement' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'
+                    }`}
+                  >
+                    Agrément
+                  </button>
+                </div>
+
+                {/* Tab Content */}
+                <div className="bg-white rounded-lg p-6">
+                  {activeTab === 'prix' && (
+                    <ul className="space-y-3">
+                      <li className="flex gap-2 items-start">
+                        <span className="text-sm" style={{ color: '#333' }}>• L'intégralité du stage visant la récupération de 4 points</span>
+                      </li>
+                      <li className="flex gap-2 items-start">
+                        <span className="text-sm" style={{ color: '#333' }}>• L'attestation de stage remise le deuxième jour</span>
+                      </li>
+                      <li className="flex gap-2 items-start">
+                        <span className="text-sm" style={{ color: '#333' }}>• La récupération automatique de 4 points</span>
+                      </li>
+                      <li className="flex gap-2 items-start">
+                        <span className="text-sm" style={{ color: '#333' }}>• Le traitement de votre dossier administratif en préfecture</span>
+                      </li>
+                      <li className="flex gap-2 items-start">
+                        <span className="text-sm" style={{ color: '#333' }}>• En cas d'empêchement, le transfert sur une autre stage à raison d'essence</span>
+                      </li>
+                    </ul>
+                  )}
+                  {activeTab === 'programme' && (
+                    <div>
+                      <p className="text-sm mb-3" style={{ color: '#333' }}>Programme détaillé du stage de récupération de points</p>
+                    </div>
+                  )}
+                  {activeTab === 'agrement' && (
+                    <div>
+                      <p className="text-sm mb-3" style={{ color: '#333' }}>Informations sur l'agrément préfectoral</p>
+                    </div>
+                  )}
+                </div>
+            </div>
+
+            {/* Questions fréquentes */}
+            <div className="py-12">
+              <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
+                Questions fréquentes
+              </h2>
+
+              <div className="space-y-4">
+                {[
+                  'À quel moment mes 4 points sont-ils crédités sur mon permis après un stage ?',
+                  'À quel moment mes 4 points sont-ils crédités sur mon permis après un stage ?',
+                  'À quel moment mes 4 points sont-ils crédités sur mon permis après un stage ?'
+                ].map((question, index) => (
+                  <div key={index} className="border border-gray-300 rounded-lg">
+                    <button
+                      onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                      className="w-full flex items-center justify-between p-4 text-left"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0 w-6 h-6 rounded-full border border-gray-400 flex items-center justify-center">
+                          <span className="text-sm" style={{ color: '#666' }}>?</span>
+                        </div>
+                        <span className="text-sm font-medium" style={{ color: '#333' }}>{question}</span>
+                      </div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        className={`flex-shrink-0 transition-transform ${openFaqIndex === index ? 'rotate-180' : ''}`}
+                      >
+                        <path d="M4 6L8 10L12 6" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </button>
+                    {openFaqIndex === index && (
+                      <div className="px-4 pb-4 pl-14">
+                        <p className="text-sm" style={{ color: '#666' }}>
+                          Réponse à la question fréquente...
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Afficher plus de questions */}
+              <div className="text-center mt-6">
+                <button className="text-sm font-medium" style={{ color: '#2b85c9' }}>
+                  Afficher plus de questions
+                </button>
+              </div>
+            </div>
           </div>
+          {/* End Left Column */}
 
           {/* Right Column - Stage Info */}
           <div style={{ width: '349px' }}>
@@ -537,282 +808,8 @@ export default function InscriptionPage() {
                 </div>
               </div>
             </div>
-
-
-        {/* Payment Section - Étape 2/2 */}
-        <div className="mt-12" style={{ maxWidth: 'calc(100% - 420px)' }}>
-          <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
-            Étape 2/2 - paiement sécurisé
-          </h2>
-
-          {/* Payment Method Header */}
-          <div className="mb-6">
-            <p className="text-sm mb-3" style={{ color: '#666' }}>
-              Paiement sécurisé par Crédit Agricole
-            </p>
-            <div className="flex gap-2">
-              {/* Payment logos */}
-              <div className="px-3 py-1 border border-gray-300 rounded" style={{ height: '30px', display: 'flex', alignItems: 'center' }}>
-                <span className="text-xs font-medium" style={{ color: '#333' }}>VISA</span>
-              </div>
-              <div className="px-3 py-1 border border-gray-300 rounded" style={{ height: '30px', display: 'flex', alignItems: 'center' }}>
-                <span className="text-xs font-medium" style={{ color: '#333' }}>MC</span>
-              </div>
-              <div className="px-3 py-1 border border-gray-300 rounded" style={{ height: '30px', display: 'flex', alignItems: 'center' }}>
-                <span className="text-xs font-medium" style={{ color: '#333' }}>CB</span>
-              </div>
-            </div>
           </div>
-
-          {/* Payment Form */}
-          <div className="grid grid-cols-2 gap-x-8 max-w-[600px]">
-            {/* Nom sur la carte */}
-            <div className="col-span-2 mb-4">
-              <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
-                Nom sur la carte
-              </label>
-              <input
-                type="text"
-                value={nomCarte}
-                onChange={(e) => setNomCarte(e.target.value)}
-                required
-                placeholder="Nom"
-                className="w-full px-4 py-2 border border-gray-300 rounded"
-                style={{ height: '40px', fontSize: '14px' }}
-              />
-            </div>
-
-            {/* Numéro de carte */}
-            <div className="col-span-2 mb-4">
-              <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
-                Numéro de carte
-              </label>
-              <input
-                type="text"
-                value={numeroCarte}
-                onChange={(e) => setNumeroCarte(e.target.value)}
-                required
-                placeholder="Numéro de carte"
-                className="w-full px-4 py-2 border border-gray-300 rounded"
-                style={{ height: '40px', fontSize: '14px' }}
-                maxLength={16}
-              />
-            </div>
-
-            {/* Date expiration */}
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
-                Date expiration
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={dateExpirationMois}
-                  onChange={(e) => setDateExpirationMois(e.target.value)}
-                  required
-                  placeholder="MM"
-                  className="w-full px-4 py-2 border border-gray-300 rounded"
-                  style={{ height: '40px', fontSize: '14px' }}
-                  maxLength={2}
-                />
-                <input
-                  type="text"
-                  value={dateExpirationAnnee}
-                  onChange={(e) => setDateExpirationAnnee(e.target.value)}
-                  required
-                  placeholder="Année"
-                  className="w-full px-4 py-2 border border-gray-300 rounded"
-                  style={{ height: '40px', fontSize: '14px' }}
-                  maxLength={2}
-                />
-              </div>
-            </div>
-
-            {/* Code CVV */}
-            <div className="mb-4">
-              <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
-                Code (cvv)
-              </label>
-              <input
-                type="text"
-                value={codeCVV}
-                onChange={(e) => setCodeCVV(e.target.value)}
-                required
-                placeholder="Code"
-                className="w-full px-4 py-2 border border-gray-300 rounded"
-                style={{ height: '40px', fontSize: '14px' }}
-                maxLength={3}
-              />
-            </div>
-          </div>
-
-          {/* Price Summary */}
-          <div className="max-w-[600px] mt-8 mb-6">
-            <div className="text-center mb-2">
-              <p className="text-sm" style={{ color: '#666' }}>Stage du vend 5 et sam 6 déc 2025</p>
-            </div>
-            <div className="text-center mb-2">
-              <p className="text-sm" style={{ color: '#666' }}>Prix du stage : 190€ TTC</p>
-            </div>
-            {garantieSerenite && (
-              <div className="text-center mb-2">
-                <p className="text-sm" style={{ color: '#666' }}>Garantie Sérénité : +25€ TTC</p>
-              </div>
-            )}
-            <div className="text-center mb-6">
-              <p className="font-semibold" style={{ fontSize: '16px', color: '#222' }}>
-                Total à payer : {garantieSerenite ? stage?.prix + 25 : stage?.prix}€ TTC
-              </p>
-            </div>
-
-            {/* Payment Button */}
-            <button
-              type="submit"
-              className="w-full text-white font-medium rounded-full flex items-center justify-center gap-2"
-              style={{
-                background: '#41A334',
-                height: '44px',
-                fontSize: '15px'
-              }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M12 5.33334L6.66667 10.6667L4 8.00001" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              Payer {garantieSerenite ? stage?.prix + 25 : stage?.prix}€ TTC
-            </button>
-
-            {/* Payment Disclaimer */}
-            <p className="text-xs text-center mt-4" style={{ color: '#666', lineHeight: '1.5' }}>
-              Après avoir cliqué sur "Payer", votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez l'attestation par email dans quelques minutes.
-            </p>
-          </div>
-        </div>
-
-        {/* Informations pratiques sur votre stage */}
-        <div className="bg-gray-50 py-8 px-6 rounded-lg" style={{ maxWidth: 'calc(100% - 420px)' }}>
-          <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
-            Informations pratiques sur votre stage
-          </h2>
-
-            {/* Tabs */}
-            <div className="flex gap-4 mb-6 border-b border-gray-200">
-              <button
-                onClick={() => setActiveTab('prix')}
-                className={`pb-3 px-4 text-sm font-medium transition-colors ${
-                  activeTab === 'prix' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'
-                }`}
-              >
-                Le prix du stage comprend
-              </button>
-              <button
-                onClick={() => setActiveTab('programme')}
-                className={`pb-3 px-4 text-sm font-medium transition-colors ${
-                  activeTab === 'programme' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'
-                }`}
-              >
-                Programme
-              </button>
-              <button
-                onClick={() => setActiveTab('agrement')}
-                className={`pb-3 px-4 text-sm font-medium transition-colors ${
-                  activeTab === 'agrement' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'
-                }`}
-              >
-                Agrément
-              </button>
-            </div>
-
-            {/* Tab Content */}
-            <div className="bg-white rounded-lg p-6">
-              {activeTab === 'prix' && (
-                <ul className="space-y-3">
-                  <li className="flex gap-2 items-start">
-                    <span className="text-sm" style={{ color: '#333' }}>• L'intégralité du stage visant la récupération de 4 points</span>
-                  </li>
-                  <li className="flex gap-2 items-start">
-                    <span className="text-sm" style={{ color: '#333' }}>• L'attestation de stage remise le deuxième jour</span>
-                  </li>
-                  <li className="flex gap-2 items-start">
-                    <span className="text-sm" style={{ color: '#333' }}>• La récupération automatique de 4 points</span>
-                  </li>
-                  <li className="flex gap-2 items-start">
-                    <span className="text-sm" style={{ color: '#333' }}>• Le traitement de votre dossier administratif en préfecture</span>
-                  </li>
-                  <li className="flex gap-2 items-start">
-                    <span className="text-sm" style={{ color: '#333' }}>• En cas d'empêchement, le transfert sur une autre stage à raison d'essence</span>
-                  </li>
-                </ul>
-              )}
-              {activeTab === 'programme' && (
-                <div>
-                  <p className="text-sm mb-3" style={{ color: '#333' }}>Programme détaillé du stage de récupération de points</p>
-                </div>
-              )}
-              {activeTab === 'agrement' && (
-                <div>
-                  <p className="text-sm mb-3" style={{ color: '#333' }}>Informations sur l'agrément préfectoral</p>
-                </div>
-              )}
-            </div>
-        </div>
-
-        {/* Questions fréquentes */}
-        <div className="py-12" style={{ maxWidth: 'calc(100% - 420px)' }}>
-          <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
-            Questions fréquentes
-          </h2>
-
-          <div className="space-y-4">
-            {[
-              'À quel moment mes 4 points sont-ils crédités sur mon permis après un stage ?',
-              'À quel moment mes 4 points sont-ils crédités sur mon permis après un stage ?',
-              'À quel moment mes 4 points sont-ils crédités sur mon permis après un stage ?'
-            ].map((question, index) => (
-              <div key={index} className="border border-gray-300 rounded-lg">
-                <button
-                  onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                  className="w-full flex items-center justify-between p-4 text-left"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full border border-gray-400 flex items-center justify-center">
-                      <span className="text-sm" style={{ color: '#666' }}>?</span>
-                    </div>
-                    <span className="text-sm font-medium" style={{ color: '#333' }}>{question}</span>
-                  </div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    className={`flex-shrink-0 transition-transform ${openFaqIndex === index ? 'rotate-180' : ''}`}
-                  >
-                    <path d="M4 6L8 10L12 6" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-                {openFaqIndex === index && (
-                  <div className="px-4 pb-4 pl-14">
-                    <p className="text-sm" style={{ color: '#666' }}>
-                      Réponse à la question fréquente...
-                    </p>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Afficher plus de questions */}
-          <div className="text-center mt-6">
-            <button className="text-sm font-medium" style={{ color: '#2b85c9' }}>
-              Afficher plus de questions
-            </button>
-          </div>
-        </div>
-          </div>
-          {/* End Left Column */}
-
-          {/* Right Column - Stage Info (Sticky) */}
-          {/* Already rendered above */}
+          {/* End Right Column - Stage Info */}
         </div>
         {/* End Grid */}
       </div>
