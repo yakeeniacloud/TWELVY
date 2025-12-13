@@ -292,7 +292,7 @@ export default function InscriptionPage() {
       <div className="max-w-[1200px] mx-auto px-6 pb-12">
         <div className="grid grid-cols-[1fr_380px] gap-8 items-start">
           {/* Left Column - Form */}
-          <div>
+          <div style={{ marginLeft: '20px' }}>
             <div style={{ marginBottom: '28px' }}>
               <h2
                 style={{
