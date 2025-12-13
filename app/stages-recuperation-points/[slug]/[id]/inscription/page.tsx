@@ -113,12 +113,12 @@ export default function InscriptionPage() {
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: 'var(--font-poppins)' }}>
       {/* Header with stage info */}
-      <div className="border-b border-gray-200 py-6" style={{ background: '#fff' }}>
+      <div className="py-6" style={{ background: '#fff' }}>
         <div className="max-w-[1200px] mx-auto px-6">
           <h1
             className="text-center font-normal mb-2"
             style={{
-              width: '829px',
+              maxWidth: '829px',
               margin: '0 auto',
               color: '#000',
               fontFamily: 'Poppins',
@@ -133,8 +133,7 @@ export default function InscriptionPage() {
           <p
             className="text-center"
             style={{
-              width: '582px',
-              height: '34px',
+              maxWidth: '582px',
               margin: '0 auto',
               color: 'rgba(6, 6, 6, 0.86)',
               fontFamily: 'Poppins',
@@ -151,136 +150,131 @@ export default function InscriptionPage() {
 
       {/* Progress Steps */}
       <div className="max-w-[1200px] mx-auto px-6 py-12">
-        <div className="flex justify-center items-center" style={{ gap: '0px', position: 'relative' }}>
+        <div className="flex justify-center items-start" style={{ position: 'relative' }}>
           {/* Step 1 - Active */}
-          <div className="flex flex-col items-center" style={{ position: 'relative', zIndex: 2 }}>
-            <div className="flex items-center justify-center" style={{ position: 'relative' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none">
+          <div className="flex flex-col items-center" style={{ width: '200px' }}>
+            <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
                 <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#030303"/>
               </svg>
               <span
                 style={{
-                  position: 'absolute',
-                  width: '24px',
-                  height: '20px',
+                  position: 'relative',
+                  zIndex: 1,
                   color: '#000',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
                   fontSize: '20px',
                   fontStyle: 'normal',
                   fontWeight: 400,
-                  lineHeight: '28px'
+                  lineHeight: '20px'
                 }}
               >
                 1
               </span>
-              {/* Line to step 2 */}
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '33px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  width: '400px',
-                  height: '1px',
-                  background: '#D9D9D9'
-                }}
-              />
             </div>
             <p
-              className="mt-3"
               style={{
                 color: '#000',
                 textAlign: 'center',
                 fontFamily: 'Poppins',
                 fontSize: '16px',
-                fontWeight: 400
+                fontWeight: 400,
+                lineHeight: '24px'
               }}
             >
               Coordonnées
             </p>
           </div>
 
+          {/* Line 1 to 2 */}
+          <div
+            style={{
+              width: '400px',
+              height: '1px',
+              background: '#D9D9D9',
+              marginTop: '15px',
+              flexShrink: 0
+            }}
+          />
+
           {/* Step 2 - Inactive */}
-          <div className="flex flex-col items-center" style={{ position: 'relative', zIndex: 2, marginLeft: '400px' }}>
-            <div className="flex items-center justify-center" style={{ position: 'relative' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none">
+          <div className="flex flex-col items-center" style={{ width: '200px' }}>
+            <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
                 <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#D9D9D9"/>
               </svg>
               <span
                 style={{
-                  position: 'absolute',
-                  width: '24px',
-                  height: '20px',
+                  position: 'relative',
+                  zIndex: 1,
                   color: '#C4C4C4',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
                   fontSize: '20px',
                   fontStyle: 'normal',
                   fontWeight: 400,
-                  lineHeight: '28px'
+                  lineHeight: '20px'
                 }}
               >
                 2
               </span>
-              {/* Line to step 3 */}
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '33px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  width: '400px',
-                  height: '1px',
-                  background: '#D9D9D9'
-                }}
-              />
             </div>
             <p
-              className="mt-3"
               style={{
                 color: '#C4C4C4',
                 textAlign: 'center',
                 fontFamily: 'Poppins',
                 fontSize: '16px',
-                fontWeight: 400
+                fontWeight: 400,
+                lineHeight: '24px'
               }}
             >
               Paiement sécurisé
             </p>
           </div>
 
+          {/* Line 2 to 3 */}
+          <div
+            style={{
+              width: '400px',
+              height: '1px',
+              background: '#D9D9D9',
+              marginTop: '15px',
+              flexShrink: 0
+            }}
+          />
+
           {/* Step 3 - Inactive */}
-          <div className="flex flex-col items-center" style={{ position: 'relative', zIndex: 2, marginLeft: '400px' }}>
-            <div className="flex items-center justify-center" style={{ position: 'relative' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none">
+          <div className="flex flex-col items-center" style={{ width: '200px' }}>
+            <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
                 <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#D9D9D9"/>
               </svg>
               <span
                 style={{
-                  position: 'absolute',
-                  width: '24px',
-                  height: '20px',
+                  position: 'relative',
+                  zIndex: 1,
                   color: '#C4C4C4',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
                   fontSize: '20px',
                   fontStyle: 'normal',
                   fontWeight: 400,
-                  lineHeight: '28px'
+                  lineHeight: '20px'
                 }}
               >
                 3
               </span>
             </div>
             <p
-              className="mt-3"
               style={{
                 color: '#C4C4C4',
                 textAlign: 'center',
                 fontFamily: 'Poppins',
                 fontSize: '16px',
-                fontWeight: 400
+                fontWeight: 400,
+                lineHeight: '24px'
               }}
             >
               Confirmation
