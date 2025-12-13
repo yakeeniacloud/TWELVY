@@ -293,12 +293,38 @@ export default function InscriptionPage() {
         <div className="grid grid-cols-[1fr_380px] gap-8 items-start">
           {/* Left Column - Form */}
           <div>
-            <div className="mb-6">
-              <h2 className="font-semibold mb-1" style={{ fontSize: '16px', color: '#222' }}>
+            <div style={{ marginBottom: '35px' }}>
+              <h2
+                style={{
+                  display: 'flex',
+                  width: '673px',
+                  height: '43px',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  color: '#000',
+                  fontFamily: 'Poppins',
+                  fontSize: '18px',
+                  fontStyle: 'normal',
+                  fontWeight: 500,
+                  lineHeight: '25px'
+                }}
+              >
                 Étape 1/2 - vos coordonnées personnelles pour l'inscription
               </h2>
-              <p className="text-sm" style={{ color: '#666' }}>
-                * Tous les champs sont obligatoires
+              <p
+                style={{
+                  marginTop: '35px',
+                  width: '297px',
+                  flexShrink: 0,
+                  color: '#363636',
+                  fontFamily: 'Poppins',
+                  fontSize: '13px',
+                  fontStyle: 'italic',
+                  fontWeight: 400,
+                  lineHeight: '25px'
+                }}
+              >
+                • Tous les champs sont obligatoires
               </p>
             </div>
 
