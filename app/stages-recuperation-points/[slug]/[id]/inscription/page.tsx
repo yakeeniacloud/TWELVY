@@ -556,24 +556,24 @@ export default function InscriptionPage() {
               </div>
 
               {/* Garantie Sérénité */}
-              <div className="mb-6" style={{ marginLeft: '20px' }}>
+              <div className="mb-6" style={{ marginLeft: '100px' }}>
                 <div
                   style={{
                     display: 'flex',
                     width: '477px',
                     height: '119px',
-                    padding: '5px 10px',
+                    padding: '10px 15px',
                     flexDirection: 'column',
                     justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '-5px',
+                    alignItems: 'flex-start',
+                    gap: '8px',
                     flexShrink: 0,
                     borderRadius: '14px',
                     background: '#EFEFEF'
                   }}
                 >
                   {/* Header with shield icon and title */}
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
                       <g clipPath="url(#clip0_122_55)">
                         <path d="M12.5 22.9166C12.5 22.9166 20.8334 18.75 20.8334 12.5V5.20831L12.5 2.08331L4.16669 5.20831V12.5C4.16669 18.75 12.5 22.9166 12.5 22.9166Z" fill="#EFEFEF" stroke="#696868" strokeOpacity="0.96" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -599,7 +599,7 @@ export default function InscriptionPage() {
                   </div>
 
                   {/* Checkbox with text */}
-                  <label className="flex items-start gap-2 cursor-pointer w-full">
+                  <label className="flex items-start gap-2 cursor-pointer" style={{ marginLeft: '30px' }}>
                     <input
                       type="checkbox"
                       checked={garantieSerenite}
@@ -628,7 +628,7 @@ export default function InscriptionPage() {
                   </label>
 
                   {/* Voir le détail link */}
-                  <div className="flex items-center gap-1 cursor-pointer">
+                  <div className="flex items-center gap-1 cursor-pointer" style={{ marginLeft: '10px' }}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                       <path d="M4 6L8 10L12 6" stroke="#0B0B0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
