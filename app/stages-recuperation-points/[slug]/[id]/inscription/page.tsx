@@ -113,44 +113,178 @@ export default function InscriptionPage() {
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: 'var(--font-poppins)' }}>
       {/* Header with stage info */}
-      <div className="border-b border-gray-200 py-4" style={{ background: '#fff' }}>
+      <div className="border-b border-gray-200 py-6" style={{ background: '#fff' }}>
         <div className="max-w-[1200px] mx-auto px-6">
-          <h1 className="text-center font-medium" style={{ fontSize: '18px', color: '#222', marginBottom: '4px' }}>
+          <h1
+            className="text-center font-normal mb-2"
+            style={{
+              width: '829px',
+              margin: '0 auto',
+              color: '#000',
+              fontFamily: 'Poppins',
+              fontSize: '25px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px'
+            }}
+          >
             Stage Récupération de points - {removeStreetNumber(stage.site.adresse)}, {stage.site.ville} ({stage.site.code_postal.substring(0, 2)})
           </h1>
-          <p className="text-center" style={{ fontSize: '14px', color: '#666' }}>
+          <p
+            className="text-center"
+            style={{
+              width: '582px',
+              height: '34px',
+              margin: '0 auto',
+              color: 'rgba(6, 6, 6, 0.86)',
+              fontFamily: 'Poppins',
+              fontSize: '15px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '28px'
+            }}
+          >
             Stage agréé Préfecture - Récupération de 4 points en 48h
           </p>
         </div>
       </div>
 
       {/* Progress Steps */}
-      <div className="max-w-[600px] mx-auto px-6 py-8">
-        <div className="flex justify-center items-center gap-20">
+      <div className="max-w-[1200px] mx-auto px-6 py-12">
+        <div className="flex justify-center items-center" style={{ gap: '0px', position: 'relative' }}>
           {/* Step 1 - Active */}
-          <div className="flex flex-col items-center">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white border-2 border-gray-400 relative">
-              <span className="text-gray-800 font-medium" style={{ fontSize: '16px' }}>1</span>
-              <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-16 h-0.5 bg-gray-300" />
+          <div className="flex flex-col items-center" style={{ position: 'relative', zIndex: 2 }}>
+            <div className="flex items-center justify-center" style={{ position: 'relative' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none">
+                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#030303"/>
+              </svg>
+              <span
+                style={{
+                  position: 'absolute',
+                  width: '24px',
+                  height: '20px',
+                  color: '#000',
+                  textAlign: 'center',
+                  fontFamily: 'Poppins',
+                  fontSize: '20px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '28px'
+                }}
+              >
+                1
+              </span>
+              {/* Line to step 2 */}
+              <div
+                style={{
+                  position: 'absolute',
+                  left: '33px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  width: '400px',
+                  height: '1px',
+                  background: '#D9D9D9'
+                }}
+              />
             </div>
-            <p className="mt-2 text-sm text-gray-700">Coordonnées</p>
+            <p
+              className="mt-3"
+              style={{
+                color: '#000',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '16px',
+                fontWeight: 400
+              }}
+            >
+              Coordonnées
+            </p>
           </div>
 
-          {/* Step 2 */}
-          <div className="flex flex-col items-center">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white border-2 border-gray-300 relative">
-              <span className="text-gray-400 font-medium" style={{ fontSize: '16px' }}>2</span>
-              <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-16 h-0.5 bg-gray-300" />
+          {/* Step 2 - Inactive */}
+          <div className="flex flex-col items-center" style={{ position: 'relative', zIndex: 2, marginLeft: '400px' }}>
+            <div className="flex items-center justify-center" style={{ position: 'relative' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none">
+                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#D9D9D9"/>
+              </svg>
+              <span
+                style={{
+                  position: 'absolute',
+                  width: '24px',
+                  height: '20px',
+                  color: '#C4C4C4',
+                  textAlign: 'center',
+                  fontFamily: 'Poppins',
+                  fontSize: '20px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '28px'
+                }}
+              >
+                2
+              </span>
+              {/* Line to step 3 */}
+              <div
+                style={{
+                  position: 'absolute',
+                  left: '33px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  width: '400px',
+                  height: '1px',
+                  background: '#D9D9D9'
+                }}
+              />
             </div>
-            <p className="mt-2 text-sm text-gray-400">Paiement sécurisé</p>
+            <p
+              className="mt-3"
+              style={{
+                color: '#C4C4C4',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '16px',
+                fontWeight: 400
+              }}
+            >
+              Paiement sécurisé
+            </p>
           </div>
 
-          {/* Step 3 */}
-          <div className="flex flex-col items-center">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white border-2 border-gray-300">
-              <span className="text-gray-400 font-medium" style={{ fontSize: '16px' }}>3</span>
+          {/* Step 3 - Inactive */}
+          <div className="flex flex-col items-center" style={{ position: 'relative', zIndex: 2, marginLeft: '400px' }}>
+            <div className="flex items-center justify-center" style={{ position: 'relative' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none">
+                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#D9D9D9"/>
+              </svg>
+              <span
+                style={{
+                  position: 'absolute',
+                  width: '24px',
+                  height: '20px',
+                  color: '#C4C4C4',
+                  textAlign: 'center',
+                  fontFamily: 'Poppins',
+                  fontSize: '20px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '28px'
+                }}
+              >
+                3
+              </span>
             </div>
-            <p className="mt-2 text-sm text-gray-400">Confirmation</p>
+            <p
+              className="mt-3"
+              style={{
+                color: '#C4C4C4',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '16px',
+                fontWeight: 400
+              }}
+            >
+              Confirmation
+            </p>
           </div>
         </div>
       </div>
