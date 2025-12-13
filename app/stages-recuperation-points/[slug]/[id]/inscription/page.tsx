@@ -150,9 +150,9 @@ export default function InscriptionPage() {
 
       {/* Progress Steps */}
       <div className="max-w-[1200px] mx-auto px-6 py-12">
-        <div className="flex justify-center items-start" style={{ position: 'relative' }}>
+        <div className="flex justify-center items-center" style={{ width: '500px', margin: '0 auto' }}>
           {/* Step 1 - Active */}
-          <div className="flex flex-col items-center" style={{ width: '200px' }}>
+          <div className="flex flex-col items-center">
             <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
                 <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#030303"/>
@@ -167,7 +167,7 @@ export default function InscriptionPage() {
                   fontSize: '20px',
                   fontStyle: 'normal',
                   fontWeight: 400,
-                  lineHeight: '20px'
+                  lineHeight: '28px'
                 }}
               >
                 1
@@ -180,7 +180,8 @@ export default function InscriptionPage() {
                 fontFamily: 'Poppins',
                 fontSize: '16px',
                 fontWeight: 400,
-                lineHeight: '24px'
+                lineHeight: '24px',
+                whiteSpace: 'nowrap'
               }}
             >
               Coordonnées
@@ -190,16 +191,15 @@ export default function InscriptionPage() {
           {/* Line 1 to 2 */}
           <div
             style={{
-              width: '400px',
+              flex: 1,
               height: '1px',
               background: '#D9D9D9',
-              marginTop: '15px',
-              flexShrink: 0
+              marginBottom: '42px'
             }}
           />
 
           {/* Step 2 - Inactive */}
-          <div className="flex flex-col items-center" style={{ width: '200px' }}>
+          <div className="flex flex-col items-center">
             <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
                 <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#D9D9D9"/>
@@ -208,13 +208,13 @@ export default function InscriptionPage() {
                 style={{
                   position: 'relative',
                   zIndex: 1,
-                  color: '#C4C4C4',
+                  color: '#828282',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
                   fontSize: '20px',
                   fontStyle: 'normal',
                   fontWeight: 400,
-                  lineHeight: '20px'
+                  lineHeight: '28px'
                 }}
               >
                 2
@@ -222,12 +222,13 @@ export default function InscriptionPage() {
             </div>
             <p
               style={{
-                color: '#C4C4C4',
+                color: '#828282',
                 textAlign: 'center',
                 fontFamily: 'Poppins',
                 fontSize: '16px',
                 fontWeight: 400,
-                lineHeight: '24px'
+                lineHeight: '24px',
+                whiteSpace: 'nowrap'
               }}
             >
               Paiement sécurisé
@@ -237,16 +238,15 @@ export default function InscriptionPage() {
           {/* Line 2 to 3 */}
           <div
             style={{
-              width: '400px',
+              flex: 1,
               height: '1px',
               background: '#D9D9D9',
-              marginTop: '15px',
-              flexShrink: 0
+              marginBottom: '42px'
             }}
           />
 
           {/* Step 3 - Inactive */}
-          <div className="flex flex-col items-center" style={{ width: '200px' }}>
+          <div className="flex flex-col items-center">
             <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
                 <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#D9D9D9"/>
@@ -255,13 +255,13 @@ export default function InscriptionPage() {
                 style={{
                   position: 'relative',
                   zIndex: 1,
-                  color: '#C4C4C4',
+                  color: '#828282',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
                   fontSize: '20px',
                   fontStyle: 'normal',
                   fontWeight: 400,
-                  lineHeight: '20px'
+                  lineHeight: '28px'
                 }}
               >
                 3
@@ -269,12 +269,13 @@ export default function InscriptionPage() {
             </div>
             <p
               style={{
-                color: '#C4C4C4',
+                color: '#828282',
                 textAlign: 'center',
                 fontFamily: 'Poppins',
                 fontSize: '16px',
                 fontWeight: 400,
-                lineHeight: '24px'
+                lineHeight: '24px',
+                whiteSpace: 'nowrap'
               }}
             >
               Confirmation
