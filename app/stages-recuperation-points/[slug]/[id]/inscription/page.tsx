@@ -191,10 +191,11 @@ export default function InscriptionPage() {
           {/* Line 1 to 2 */}
           <div
             style={{
-              flex: 1,
+              width: '150px',
               height: '1px',
               background: '#D9D9D9',
-              marginBottom: '42px'
+              marginBottom: '42px',
+              flexShrink: 0
             }}
           />
 
@@ -202,7 +203,7 @@ export default function InscriptionPage() {
           <div className="flex flex-col items-center">
             <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
-                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#D9D9D9"/>
+                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="#F5F5F5" stroke="#D9D9D9"/>
               </svg>
               <span
                 style={{
@@ -238,10 +239,11 @@ export default function InscriptionPage() {
           {/* Line 2 to 3 */}
           <div
             style={{
-              flex: 1,
+              width: '150px',
               height: '1px',
               background: '#D9D9D9',
-              marginBottom: '42px'
+              marginBottom: '42px',
+              flexShrink: 0
             }}
           />
 
@@ -249,7 +251,7 @@ export default function InscriptionPage() {
           <div className="flex flex-col items-center">
             <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
-                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#D9D9D9"/>
+                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="#F5F5F5" stroke="#D9D9D9"/>
               </svg>
               <span
                 style={{
