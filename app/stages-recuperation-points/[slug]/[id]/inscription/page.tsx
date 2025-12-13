@@ -330,7 +330,7 @@ export default function InscriptionPage() {
 
             <form onSubmit={handleSubmit}>
               {/* Civilité */}
-              <div className="flex items-center mb-6" style={{ position: 'relative' }}>
+              <div className="flex items-center mb-6" style={{ position: 'relative', marginLeft: '20px' }}>
                 <label
                   style={{
                     position: 'absolute',
@@ -371,7 +371,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Nom */}
-              <div className="flex items-center mb-6" style={{ position: 'relative' }}>
+              <div className="flex items-center mb-6" style={{ position: 'relative', marginLeft: '20px' }}>
                 <label
                   style={{
                     position: 'absolute',
@@ -410,7 +410,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Prénom */}
-              <div className="flex items-center mb-6" style={{ position: 'relative' }}>
+              <div className="flex items-center mb-6" style={{ position: 'relative', marginLeft: '20px' }}>
                 <label
                   style={{
                     position: 'absolute',
@@ -449,7 +449,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Email */}
-              <div className="flex items-center mb-6" style={{ position: 'relative' }}>
+              <div className="flex items-center mb-6" style={{ position: 'relative', marginLeft: '20px' }}>
                 <label
                   style={{
                     position: 'absolute',
@@ -488,7 +488,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Téléphone mobile */}
-              <div className="flex items-start mb-2" style={{ position: 'relative' }}>
+              <div className="flex items-start mb-2" style={{ position: 'relative', marginLeft: '20px' }}>
                 <label
                   style={{
                     position: 'absolute',
@@ -524,8 +524,17 @@ export default function InscriptionPage() {
                         border: '1px solid #000'
                       }}
                     />
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full border border-gray-400 flex items-center justify-center">
-                      <span className="text-sm" style={{ color: '#666' }}>i</span>
+                    <div style={{ width: '24px', height: '24px', flexShrink: 0 }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <g clipPath="url(#clip0_156_42)">
+                          <path d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="#1E1E1E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_156_42">
+                            <rect width="24" height="24" fill="white"/>
+                          </clipPath>
+                        </defs>
+                      </svg>
                     </div>
                   </div>
                   <p className="text-xs mt-2" style={{ color: '#666', fontStyle: 'italic' }}>
