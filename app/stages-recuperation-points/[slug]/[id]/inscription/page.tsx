@@ -537,7 +537,19 @@ export default function InscriptionPage() {
                       </svg>
                     </div>
                   </div>
-                  <p className="text-xs mt-2" style={{ color: '#666', fontStyle: 'italic' }}>
+                  <p
+                    style={{
+                      width: '424px',
+                      flexShrink: 0,
+                      color: '#2E2E2E',
+                      fontFamily: 'Poppins',
+                      fontSize: '13px',
+                      fontStyle: 'italic',
+                      fontWeight: 400,
+                      lineHeight: '18px',
+                      marginTop: '8px'
+                    }}
+                  >
                     Important : indiquez un numéro de mobile valide. Il servira au SMS de confirmation et aux infos essentielles sur votre stage.
                   </p>
                 </div>
