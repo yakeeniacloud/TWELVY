@@ -293,7 +293,7 @@ export default function InscriptionPage() {
         <div className="grid grid-cols-[1fr_380px] gap-8 items-start">
           {/* Left Column - Form */}
           <div>
-            <div style={{ marginBottom: '35px' }}>
+            <div style={{ marginBottom: '28px' }}>
               <h2
                 style={{
                   display: 'flex',
@@ -313,7 +313,7 @@ export default function InscriptionPage() {
               </h2>
               <p
                 style={{
-                  marginTop: '35px',
+                  marginTop: '28px',
                   width: '297px',
                   flexShrink: 0,
                   color: '#363636',
@@ -330,27 +330,51 @@ export default function InscriptionPage() {
 
             <form onSubmit={handleSubmit}>
               {/* Civilité */}
-              <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
-                  Civilité
+              <div className="flex items-center mb-6">
+                <label
+                  style={{
+                    width: '52px',
+                    flexShrink: 0,
+                    color: '#000',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '25px',
+                    marginRight: '24px'
+                  }}
+                >
+                  Civilité *
                 </label>
                 <select
                   value={civilite}
                   onChange={(e) => setCivilite(e.target.value)}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 rounded"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded"
                   style={{ height: '40px', fontSize: '14px' }}
                 >
-                  <option value="">Sélectionner</option>
+                  <option value="">Monsieur</option>
                   <option value="Monsieur">Monsieur</option>
                   <option value="Madame">Madame</option>
                 </select>
               </div>
 
               {/* Nom */}
-              <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
-                  Nom
+              <div className="flex items-center mb-6">
+                <label
+                  style={{
+                    width: '52px',
+                    flexShrink: 0,
+                    color: '#000',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '25px',
+                    marginRight: '24px'
+                  }}
+                >
+                  Nom *
                 </label>
                 <input
                   type="text"
@@ -358,15 +382,27 @@ export default function InscriptionPage() {
                   onChange={(e) => setNom(e.target.value)}
                   required
                   placeholder="Nom"
-                  className="w-full px-4 py-2 border border-gray-300 rounded"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded"
                   style={{ height: '40px', fontSize: '14px' }}
                 />
               </div>
 
               {/* Prénom */}
-              <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
-                  Prénom
+              <div className="flex items-center mb-6">
+                <label
+                  style={{
+                    width: '52px',
+                    flexShrink: 0,
+                    color: '#000',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '25px',
+                    marginRight: '24px'
+                  }}
+                >
+                  Prénom *
                 </label>
                 <input
                   type="text"
@@ -374,15 +410,27 @@ export default function InscriptionPage() {
                   onChange={(e) => setPrenom(e.target.value)}
                   required
                   placeholder="Prénom"
-                  className="w-full px-4 py-2 border border-gray-300 rounded"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded"
                   style={{ height: '40px', fontSize: '14px' }}
                 />
               </div>
 
               {/* Email */}
-              <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
-                  Email
+              <div className="flex items-center mb-6">
+                <label
+                  style={{
+                    width: '52px',
+                    flexShrink: 0,
+                    color: '#000',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '25px',
+                    marginRight: '24px'
+                  }}
+                >
+                  Email *
                 </label>
                 <input
                   type="email"
@@ -390,25 +438,47 @@ export default function InscriptionPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="Email"
-                  className="w-full px-4 py-2 border border-gray-300 rounded"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded"
                   style={{ height: '40px', fontSize: '14px' }}
                 />
               </div>
 
               {/* Téléphone mobile */}
-              <div className="mb-6">
-                <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
-                  Téléphone mobile
+              <div className="flex items-start mb-2">
+                <label
+                  style={{
+                    width: '52px',
+                    flexShrink: 0,
+                    color: '#000',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '25px',
+                    marginRight: '24px'
+                  }}
+                >
+                  Téléphone mobile *
                 </label>
-                <input
-                  type="tel"
-                  value={telephone}
-                  onChange={(e) => setTelephone(e.target.value)}
-                  required
-                  placeholder="Téléphone"
-                  className="w-full px-4 py-2 border border-gray-300 rounded"
-                  style={{ height: '40px', fontSize: '14px' }}
-                />
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="tel"
+                      value={telephone}
+                      onChange={(e) => setTelephone(e.target.value)}
+                      required
+                      placeholder="Téléphone"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded"
+                      style={{ height: '40px', fontSize: '14px' }}
+                    />
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full border border-gray-400 flex items-center justify-center">
+                      <span className="text-sm" style={{ color: '#666' }}>i</span>
+                    </div>
+                  </div>
+                  <p className="text-xs mt-2" style={{ color: '#666', fontStyle: 'italic' }}>
+                    Important : indiquez un numéro de mobile valide. Il servira au SMS de confirmation et aux infos essentielles sur votre stage.
+                  </p>
+                </div>
               </div>
 
               {/* Garantie Sérénité */}
