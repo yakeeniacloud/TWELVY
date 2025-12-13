@@ -556,21 +556,97 @@ export default function InscriptionPage() {
               </div>
 
               {/* Garantie Sérénité */}
-              <div className="mb-4">
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={garantieSerenite}
-                    onChange={(e) => setGarantieSerenite(e.target.checked)}
-                    className="mt-1"
-                  />
-                  <div>
-                    <span className="text-sm font-medium" style={{ color: '#333' }}>Garantie Sérénité</span>
-                    <p className="text-xs" style={{ color: '#666', marginTop: '2px' }}>
-                      Je souscris à la garantie Sérénité +25€ (TTC, à régler maintenant) qui me permettra de reporter ou annuler l'inscription jusqu'à 12 jours du stage
-                    </p>
+              <div className="mb-6" style={{ marginLeft: '20px' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    width: '477px',
+                    height: '119px',
+                    padding: '5px 10px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '-5px',
+                    flexShrink: 0,
+                    borderRadius: '14px',
+                    background: '#EFEFEF'
+                  }}
+                >
+                  {/* Header with shield icon and title */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+                      <g clipPath="url(#clip0_122_55)">
+                        <path d="M12.5 22.9166C12.5 22.9166 20.8334 18.75 20.8334 12.5V5.20831L12.5 2.08331L4.16669 5.20831V12.5C4.16669 18.75 12.5 22.9166 12.5 22.9166Z" fill="#EFEFEF" stroke="#696868" strokeOpacity="0.96" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </g>
+                      <rect x="0.5" y="0.5" width="24" height="24" stroke="#EFEFEF"/>
+                      <defs>
+                        <clipPath id="clip0_122_55">
+                          <rect width="25" height="25" fill="white"/>
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '150px',
+                        height: '25px',
+                        flexDirection: 'column',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <span style={{ textDecoration: 'underline', fontWeight: 500 }}>Garantie Sérénité</span>
+                    </div>
                   </div>
-                </label>
+
+                  {/* Checkbox with text */}
+                  <label className="flex items-start gap-2 cursor-pointer w-full">
+                    <input
+                      type="checkbox"
+                      checked={garantieSerenite}
+                      onChange={(e) => setGarantieSerenite(e.target.checked)}
+                      className="mt-1 flex-shrink-0"
+                      style={{ width: '20px', height: '20px' }}
+                    />
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '411px',
+                        height: '54px',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        color: '#000',
+                        fontFamily: 'Poppins',
+                        fontSize: '14px',
+                        fontStyle: 'normal',
+                        fontWeight: 300,
+                        lineHeight: '22px'
+                      }}
+                    >
+                      Je souscris à la Garantie Sérénité: +57€ TTC (supplement facturé en plus du stage)
+                    </div>
+                  </label>
+
+                  {/* Voir le détail link */}
+                  <div className="flex items-center gap-1 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M4 6L8 10L12 6" stroke="#0B0B0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span
+                      style={{
+                        width: '226px',
+                        color: '#0B0B0B',
+                        fontFamily: 'Poppins',
+                        fontSize: '14px',
+                        fontStyle: 'normal',
+                        fontWeight: 500,
+                        lineHeight: '25px'
+                      }}
+                    >
+                      Voir le détail de la garantie
+                    </span>
+                  </div>
+                </div>
               </div>
 
               {/* CGV */}
