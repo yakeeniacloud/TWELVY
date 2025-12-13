@@ -330,137 +330,180 @@ export default function InscriptionPage() {
 
             <form onSubmit={handleSubmit}>
               {/* Civilité */}
-              <div className="flex items-center mb-6">
+              <div className="flex items-center mb-6" style={{ position: 'relative' }}>
                 <label
                   style={{
-                    width: '52px',
-                    flexShrink: 0,
+                    position: 'absolute',
+                    left: 0,
                     color: '#000',
                     fontFamily: 'Poppins',
                     fontSize: '15px',
                     fontStyle: 'normal',
                     fontWeight: 400,
-                    lineHeight: '25px',
-                    marginRight: '24px'
+                    lineHeight: '25px'
                   }}
                 >
                   Civilité *
                 </label>
-                <select
-                  value={civilite}
-                  onChange={(e) => setCivilite(e.target.value)}
-                  required
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded"
-                  style={{ height: '40px', fontSize: '14px' }}
-                >
-                  <option value="">Monsieur</option>
-                  <option value="Monsieur">Monsieur</option>
-                  <option value="Madame">Madame</option>
-                </select>
+                <div style={{ marginLeft: '164px' }}>
+                  <select
+                    value={civilite}
+                    onChange={(e) => setCivilite(e.target.value)}
+                    required
+                    className="border border-black"
+                    style={{
+                      display: 'flex',
+                      width: '413px',
+                      height: '35px',
+                      padding: '7px 15px',
+                      alignItems: 'center',
+                      gap: '10px',
+                      flexShrink: 0,
+                      borderRadius: '8px',
+                      border: '1px solid #000'
+                    }}
+                  >
+                    <option value="">Monsieur</option>
+                    <option value="Monsieur">Monsieur</option>
+                    <option value="Madame">Madame</option>
+                  </select>
+                </div>
               </div>
 
               {/* Nom */}
-              <div className="flex items-center mb-6">
+              <div className="flex items-center mb-6" style={{ position: 'relative' }}>
                 <label
                   style={{
-                    width: '52px',
-                    flexShrink: 0,
+                    position: 'absolute',
+                    left: 0,
                     color: '#000',
                     fontFamily: 'Poppins',
                     fontSize: '15px',
                     fontStyle: 'normal',
                     fontWeight: 400,
-                    lineHeight: '25px',
-                    marginRight: '24px'
+                    lineHeight: '25px'
                   }}
                 >
                   Nom *
                 </label>
-                <input
-                  type="text"
-                  value={nom}
-                  onChange={(e) => setNom(e.target.value)}
-                  required
-                  placeholder="Nom"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded"
-                  style={{ height: '40px', fontSize: '14px' }}
-                />
+                <div style={{ marginLeft: '164px' }}>
+                  <input
+                    type="text"
+                    value={nom}
+                    onChange={(e) => setNom(e.target.value)}
+                    required
+                    placeholder="Nom"
+                    className="border border-black"
+                    style={{
+                      display: 'flex',
+                      width: '413px',
+                      height: '35px',
+                      padding: '7px 15px',
+                      alignItems: 'center',
+                      gap: '10px',
+                      flexShrink: 0,
+                      borderRadius: '8px',
+                      border: '1px solid #000'
+                    }}
+                  />
+                </div>
               </div>
 
               {/* Prénom */}
-              <div className="flex items-center mb-6">
+              <div className="flex items-center mb-6" style={{ position: 'relative' }}>
                 <label
                   style={{
-                    width: '52px',
-                    flexShrink: 0,
+                    position: 'absolute',
+                    left: 0,
                     color: '#000',
                     fontFamily: 'Poppins',
                     fontSize: '15px',
                     fontStyle: 'normal',
                     fontWeight: 400,
-                    lineHeight: '25px',
-                    marginRight: '24px'
+                    lineHeight: '25px'
                   }}
                 >
                   Prénom *
                 </label>
-                <input
-                  type="text"
-                  value={prenom}
-                  onChange={(e) => setPrenom(e.target.value)}
-                  required
-                  placeholder="Prénom"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded"
-                  style={{ height: '40px', fontSize: '14px' }}
-                />
+                <div style={{ marginLeft: '164px' }}>
+                  <input
+                    type="text"
+                    value={prenom}
+                    onChange={(e) => setPrenom(e.target.value)}
+                    required
+                    placeholder="Prénom"
+                    className="border border-black"
+                    style={{
+                      display: 'flex',
+                      width: '413px',
+                      height: '35px',
+                      padding: '7px 15px',
+                      alignItems: 'center',
+                      gap: '10px',
+                      flexShrink: 0,
+                      borderRadius: '8px',
+                      border: '1px solid #000'
+                    }}
+                  />
+                </div>
               </div>
 
               {/* Email */}
-              <div className="flex items-center mb-6">
+              <div className="flex items-center mb-6" style={{ position: 'relative' }}>
                 <label
                   style={{
-                    width: '52px',
-                    flexShrink: 0,
+                    position: 'absolute',
+                    left: 0,
                     color: '#000',
                     fontFamily: 'Poppins',
                     fontSize: '15px',
                     fontStyle: 'normal',
                     fontWeight: 400,
-                    lineHeight: '25px',
-                    marginRight: '24px'
+                    lineHeight: '25px'
                   }}
                 >
                   Email *
                 </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="Email"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded"
-                  style={{ height: '40px', fontSize: '14px' }}
-                />
+                <div style={{ marginLeft: '164px' }}>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    placeholder="Email"
+                    className="border border-black"
+                    style={{
+                      display: 'flex',
+                      width: '413px',
+                      height: '35px',
+                      padding: '7px 15px',
+                      alignItems: 'center',
+                      gap: '10px',
+                      flexShrink: 0,
+                      borderRadius: '8px',
+                      border: '1px solid #000'
+                    }}
+                  />
+                </div>
               </div>
 
               {/* Téléphone mobile */}
-              <div className="flex items-start mb-2">
+              <div className="flex items-start mb-2" style={{ position: 'relative' }}>
                 <label
                   style={{
-                    width: '52px',
-                    flexShrink: 0,
+                    position: 'absolute',
+                    left: 0,
                     color: '#000',
                     fontFamily: 'Poppins',
                     fontSize: '15px',
                     fontStyle: 'normal',
                     fontWeight: 400,
-                    lineHeight: '25px',
-                    marginRight: '24px'
+                    lineHeight: '25px'
                   }}
                 >
                   Téléphone mobile *
                 </label>
-                <div className="flex-1">
+                <div style={{ marginLeft: '164px' }}>
                   <div className="flex items-center gap-2">
                     <input
                       type="tel"
@@ -468,8 +511,18 @@ export default function InscriptionPage() {
                       onChange={(e) => setTelephone(e.target.value)}
                       required
                       placeholder="Téléphone"
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded"
-                      style={{ height: '40px', fontSize: '14px' }}
+                      className="border border-black"
+                      style={{
+                        display: 'flex',
+                        width: '413px',
+                        height: '35px',
+                        padding: '7px 15px',
+                        alignItems: 'center',
+                        gap: '10px',
+                        flexShrink: 0,
+                        borderRadius: '8px',
+                        border: '1px solid #000'
+                      }}
                     />
                     <div className="flex-shrink-0 w-6 h-6 rounded-full border border-gray-400 flex items-center justify-center">
                       <span className="text-sm" style={{ color: '#666' }}>i</span>
