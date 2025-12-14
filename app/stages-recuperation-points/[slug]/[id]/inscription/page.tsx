@@ -768,18 +768,6 @@ export default function InscriptionPage() {
                 >
                   Paiement sécurisé par Crédit Agricole
                 </p>
-                <div className="flex gap-2" style={{ marginBottom: '12px' }}>
-                  {/* Payment logos */}
-                  <div className="px-3 py-1 border border-gray-300 rounded" style={{ height: '30px', display: 'flex', alignItems: 'center' }}>
-                    <span className="text-xs font-medium" style={{ color: '#333' }}>VISA</span>
-                  </div>
-                  <div className="px-3 py-1 border border-gray-300 rounded" style={{ height: '30px', display: 'flex', alignItems: 'center' }}>
-                    <span className="text-xs font-medium" style={{ color: '#333' }}>MC</span>
-                  </div>
-                  <div className="px-3 py-1 border border-gray-300 rounded" style={{ height: '30px', display: 'flex', alignItems: 'center' }}>
-                    <span className="text-xs font-medium" style={{ color: '#333' }}>CB</span>
-                  </div>
-                </div>
 
                 {/* Security Disclaimer */}
                 <p
@@ -799,7 +787,7 @@ export default function InscriptionPage() {
 
                 {/* Payment Card Logos */}
                 <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
-                  <img src="/cards.png" alt="Visa, Mastercard, Discover, American Express" style={{ height: 'auto', maxWidth: '100%' }} />
+                  <img src="/cards.png" alt="Visa, Mastercard, Discover, American Express" style={{ width: '160px', height: '31px' }} />
                 </div>
               </div>
 
