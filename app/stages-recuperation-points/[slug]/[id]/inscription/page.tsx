@@ -87,7 +87,7 @@ export default function InscriptionPage() {
     const dayEnd = end.toLocaleDateString('fr-FR', { weekday: 'short' }).replace('.', '')
     const dayNumStart = start.getDate()
     const dayNumEnd = end.getDate()
-    const month = start.toLocaleDateString('fr-FR', { month: 'long' })
+    const month = start.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')
     const year = start.getFullYear()
 
     const capitalizedDayStart = dayStart.charAt(0).toUpperCase() + dayStart.slice(1)
