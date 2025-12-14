@@ -1142,15 +1142,16 @@ export default function InscriptionPage() {
                     flexDirection: 'column',
                     justifyContent: 'center',
                     flexShrink: 0,
-                    alignSelf: 'stretch',
                     color: '#000',
-                    textAlign: 'center',
+                    textAlign: 'left',
                     fontFamily: 'Poppins',
                     fontSize: '14px',
                     fontStyle: 'italic',
                     fontWeight: 400,
                     lineHeight: '22px',
-                    marginTop: '10px'
+                    marginTop: '10px',
+                    marginLeft: '-170px',
+                    width: '501px'
                   }}
                 >
                   Après avoir cliqué sur "Payer", votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédtiatement par email votre convocation au stage.
