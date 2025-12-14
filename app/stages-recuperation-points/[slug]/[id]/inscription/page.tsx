@@ -979,43 +979,129 @@ export default function InscriptionPage() {
                 </div>
               </div>
 
-              {/* Price Summary */}
-              <div className="max-w-[600px] mt-8 mb-6">
-                <div className="text-center mb-2">
-                  <p className="text-sm" style={{ color: '#666' }}>Stage du vend 5 et sam 6 déc 2025</p>
-                </div>
-                <div className="text-center mb-2">
-                  <p className="text-sm" style={{ color: '#666' }}>Prix du stage : 190€ TTC</p>
-                </div>
-                {garantieSerenite && (
-                  <div className="text-center mb-2">
-                    <p className="text-sm" style={{ color: '#666' }}>Garantie Sérénité : +25€ TTC</p>
+              {/* Price Summary - Grey Box */}
+              <div style={{ marginTop: '40px' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    width: '331px',
+                    height: '129px',
+                    padding: '8px 0',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    flexShrink: 0,
+                    borderRadius: '15px',
+                    background: '#EFEFEF'
+                  }}
+                >
+                  {/* Date */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      height: '21px',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      alignSelf: 'stretch',
+                      color: '#000',
+                      textAlign: 'center',
+                      fontFamily: 'Poppins',
+                      fontSize: '15px',
+                      fontStyle: 'normal',
+                      fontWeight: 500,
+                      lineHeight: '22px'
+                    }}
+                  >
+                    {formatDate(stage.date_start, stage.date_end)}
                   </div>
-                )}
-                <div className="text-center mb-6">
-                  <p className="font-semibold" style={{ fontSize: '16px', color: '#222' }}>
-                    Total à payer : {garantieSerenite ? stage?.prix + 25 : stage?.prix}€ TTC
-                  </p>
+
+                  {/* Prix du stage */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: '189px',
+                      height: '30px',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      color: '#000',
+                      textAlign: 'center',
+                      fontFamily: 'Poppins',
+                      fontSize: '14px',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      lineHeight: '22px'
+                    }}
+                  >
+                    Prix du stage : {stage?.prix}€ TTC
+                  </div>
+
+                  {/* Garantie Sérénité */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: '226px',
+                      height: '30px',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      color: '#000',
+                      textAlign: 'center',
+                      fontFamily: 'Poppins',
+                      fontSize: '14px',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      lineHeight: '22px'
+                    }}
+                  >
+                    Garantie Sérénité : {garantieSerenite ? '+57€ TTC' : 'N/A'}
+                  </div>
+
+                  {/* Total à payer */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: '227px',
+                      height: '30px',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      color: '#000',
+                      textAlign: 'center',
+                      fontFamily: 'Poppins',
+                      fontSize: '15px',
+                      fontStyle: 'normal',
+                      fontWeight: 500,
+                      lineHeight: '22px'
+                    }}
+                  >
+                    Total à payer : {garantieSerenite ? stage?.prix + 57 : stage?.prix}€ TTC
+                  </div>
                 </div>
 
                 {/* Payment Button */}
                 <button
                   type="submit"
-                  className="w-full text-white font-medium rounded-full flex items-center justify-center gap-2"
+                  className="text-white font-medium rounded-full flex items-center justify-center gap-2"
                   style={{
                     background: '#41A334',
+                    width: '331px',
                     height: '44px',
-                    fontSize: '15px'
+                    fontSize: '15px',
+                    marginTop: '20px',
+                    border: 'none',
+                    cursor: 'pointer'
                   }}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M12 5.33334L6.66667 10.6667L4 8.00001" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  Payer {garantieSerenite ? stage?.prix + 25 : stage?.prix}€ TTC
+                  Payer {garantieSerenite ? stage?.prix + 57 : stage?.prix}€ TTC
                 </button>
 
                 {/* Payment Disclaimer */}
-                <p className="text-xs text-center mt-4" style={{ color: '#666', lineHeight: '1.5' }}>
+                <p style={{ fontSize: '12px', textAlign: 'center', marginTop: '16px', color: '#666', lineHeight: '1.5', width: '331px' }}>
                   Après avoir cliqué sur "Payer", votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez l'attestation par email dans quelques minutes.
                 </p>
               </div>
