@@ -792,54 +792,120 @@ export default function InscriptionPage() {
               </div>
 
               {/* Payment Form */}
-              <div className="grid grid-cols-2 gap-x-8 max-w-[600px]">
+              <div style={{ marginTop: '40px' }}>
                 {/* Nom sur la carte */}
-                <div className="col-span-2 mb-4">
-                  <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
+                <div className="flex items-center mb-6" style={{ position: 'relative' }}>
+                  <label
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      color: '#000',
+                      fontFamily: 'Poppins',
+                      fontSize: '15px',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      lineHeight: '25px'
+                    }}
+                  >
                     Nom sur la carte
                   </label>
-                  <input
-                    type="text"
-                    value={nomCarte}
-                    onChange={(e) => setNomCarte(e.target.value)}
-                    required
-                    placeholder="Nom"
-                    className="w-full px-4 py-2 border border-gray-300 rounded"
-                    style={{ height: '40px', fontSize: '14px' }}
-                  />
+                  <div style={{ marginLeft: '170px' }}>
+                    <input
+                      type="text"
+                      value={nomCarte}
+                      onChange={(e) => setNomCarte(e.target.value)}
+                      required
+                      placeholder="Nom"
+                      className="border border-black"
+                      style={{
+                        display: 'flex',
+                        width: '369px',
+                        height: '35px',
+                        padding: '7px 15px',
+                        alignItems: 'center',
+                        gap: '10px',
+                        borderRadius: '8px',
+                        border: '1px solid #000'
+                      }}
+                    />
+                  </div>
                 </div>
 
                 {/* Numéro de carte */}
-                <div className="col-span-2 mb-4">
-                  <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
+                <div className="flex items-center mb-6" style={{ position: 'relative' }}>
+                  <label
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      color: '#000',
+                      fontFamily: 'Poppins',
+                      fontSize: '15px',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      lineHeight: '25px'
+                    }}
+                  >
                     Numéro de carte
                   </label>
-                  <input
-                    type="text"
-                    value={numeroCarte}
-                    onChange={(e) => setNumeroCarte(e.target.value)}
-                    required
-                    placeholder="Numéro de carte"
-                    className="w-full px-4 py-2 border border-gray-300 rounded"
-                    style={{ height: '40px', fontSize: '14px' }}
-                    maxLength={16}
-                  />
+                  <div style={{ marginLeft: '170px' }}>
+                    <input
+                      type="text"
+                      value={numeroCarte}
+                      onChange={(e) => setNumeroCarte(e.target.value)}
+                      required
+                      placeholder="Numéro de carte"
+                      className="border border-black"
+                      style={{
+                        display: 'flex',
+                        width: '369px',
+                        height: '35px',
+                        padding: '7px 15px',
+                        alignItems: 'center',
+                        gap: '10px',
+                        borderRadius: '8px',
+                        border: '1px solid #000'
+                      }}
+                      maxLength={16}
+                    />
+                  </div>
                 </div>
 
                 {/* Date expiration */}
-                <div className="mb-4">
-                  <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
-                    Date expiration
+                <div className="flex items-center mb-6" style={{ position: 'relative' }}>
+                  <label
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      color: '#000',
+                      fontFamily: 'Poppins',
+                      fontSize: '15px',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      lineHeight: '25px'
+                    }}
+                  >
+                    Date d'expiration
                   </label>
-                  <div className="flex gap-2">
+                  <div style={{ marginLeft: '170px', display: 'flex', gap: '15px' }}>
                     <input
                       type="text"
                       value={dateExpirationMois}
                       onChange={(e) => setDateExpirationMois(e.target.value)}
                       required
-                      placeholder="MM"
-                      className="w-full px-4 py-2 border border-gray-300 rounded"
-                      style={{ height: '40px', fontSize: '14px' }}
+                      placeholder="Mois"
+                      className="border border-black"
+                      style={{
+                        display: 'flex',
+                        width: '60px',
+                        height: '35px',
+                        padding: '7px 15px',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '10px',
+                        flexShrink: 0,
+                        borderRadius: '8px',
+                        border: '1px solid #000'
+                      }}
                       maxLength={2}
                     />
                     <input
@@ -848,28 +914,65 @@ export default function InscriptionPage() {
                       onChange={(e) => setDateExpirationAnnee(e.target.value)}
                       required
                       placeholder="Année"
-                      className="w-full px-4 py-2 border border-gray-300 rounded"
-                      style={{ height: '40px', fontSize: '14px' }}
+                      className="border border-black"
+                      style={{
+                        width: '59px',
+                        height: '35px',
+                        padding: '7px 15px',
+                        flexShrink: 0,
+                        color: 'rgba(83, 83, 83, 0.64)',
+                        textAlign: 'center',
+                        fontFamily: 'Poppins',
+                        fontSize: '14px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '25px',
+                        borderRadius: '8px',
+                        border: '1px solid #000'
+                      }}
                       maxLength={2}
                     />
                   </div>
                 </div>
 
                 {/* Code CVV */}
-                <div className="mb-4">
-                  <label className="block mb-2 text-sm font-medium" style={{ color: '#333' }}>
+                <div className="flex items-center mb-6" style={{ position: 'relative' }}>
+                  <label
+                    style={{
+                      position: 'absolute',
+                      left: 0,
+                      color: '#000',
+                      fontFamily: 'Poppins',
+                      fontSize: '15px',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      lineHeight: '25px'
+                    }}
+                  >
                     Code (cvv)
                   </label>
-                  <input
-                    type="text"
-                    value={codeCVV}
-                    onChange={(e) => setCodeCVV(e.target.value)}
-                    required
-                    placeholder="Code"
-                    className="w-full px-4 py-2 border border-gray-300 rounded"
-                    style={{ height: '40px', fontSize: '14px' }}
-                    maxLength={3}
-                  />
+                  <div style={{ marginLeft: '170px' }}>
+                    <input
+                      type="text"
+                      value={codeCVV}
+                      onChange={(e) => setCodeCVV(e.target.value)}
+                      required
+                      placeholder="Code"
+                      className="border border-black"
+                      style={{
+                        display: 'flex',
+                        width: '137px',
+                        height: '35px',
+                        padding: '7px 15px',
+                        alignItems: 'center',
+                        gap: '10px',
+                        flexShrink: 0,
+                        borderRadius: '8px',
+                        border: '1px solid #000'
+                      }}
+                      maxLength={3}
+                    />
+                  </div>
                 </div>
               </div>
 
