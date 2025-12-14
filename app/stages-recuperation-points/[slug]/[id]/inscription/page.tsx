@@ -96,6 +96,16 @@ export default function InscriptionPage() {
     return `${capitalizedDayStart} ${dayNumStart} et ${capitalizedDayEnd} ${dayNumEnd} ${month} ${year}`
   }
 
+  const formatCityName = (cityName: string) => {
+    // Remove arrondissement suffix (e.g., "-15eme", "-1er", "-2eme")
+    let formatted = cityName.replace(/-\d+(er|eme|ème)$/i, '')
+
+    // Convert to proper case (first letter uppercase, rest lowercase)
+    formatted = formatted.charAt(0).toUpperCase() + formatted.slice(1).toLowerCase()
+
+    return formatted
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -1007,13 +1017,13 @@ export default function InscriptionPage() {
                       color: '#000',
                       textAlign: 'center',
                       fontFamily: 'Poppins',
-                      fontSize: (`Stage du ${formatDate(stage.date_start, stage.date_end)} à ${stage.site.ville}`).length > 50 ? '12px' : '15px',
+                      fontSize: '15px',
                       fontStyle: 'normal',
                       fontWeight: 500,
                       lineHeight: '22px'
                     }}
                   >
-                    Stage du {formatDate(stage.date_start, stage.date_end)} à {stage.site.ville}
+                    Stage du {formatDate(stage.date_start, stage.date_end)} à {formatCityName(stage.site.ville)}
                   </div>
 
                   {/* Prix du stage */}
