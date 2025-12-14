@@ -88,12 +88,11 @@ export default function InscriptionPage() {
     const dayNumStart = start.getDate()
     const dayNumEnd = end.getDate()
     const month = start.toLocaleDateString('fr-FR', { month: 'short' }).replace('.', '')
-    const year = start.getFullYear()
 
     const capitalizedDayStart = dayStart.charAt(0).toUpperCase() + dayStart.slice(1)
     const capitalizedDayEnd = dayEnd.charAt(0).toUpperCase() + dayEnd.slice(1)
 
-    return `${capitalizedDayStart} ${dayNumStart} et ${capitalizedDayEnd} ${dayNumEnd} ${month} ${year}`
+    return `${capitalizedDayStart} ${dayNumStart} et ${capitalizedDayEnd} ${dayNumEnd} ${month}`
   }
 
   const formatCityName = (cityName: string) => {
