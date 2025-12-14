@@ -898,15 +898,16 @@ export default function InscriptionPage() {
                         display: 'flex',
                         width: '60px',
                         height: '35px',
-                        padding: '7px 10px',
+                        padding: '7px 8px',
                         justifyContent: 'center',
                         alignItems: 'center',
                         gap: '10px',
                         flexShrink: 0,
                         borderRadius: '8px',
                         border: '1px solid #000',
-                        fontSize: '12px',
-                        fontFamily: 'Poppins'
+                        fontSize: '13px',
+                        fontFamily: 'Poppins',
+                        textAlign: 'center'
                       }}
                       maxLength={2}
                     />
@@ -921,15 +922,16 @@ export default function InscriptionPage() {
                         display: 'flex',
                         width: '66px',
                         height: '35px',
-                        padding: '7px 10px',
+                        padding: '7px 8px',
                         justifyContent: 'center',
                         alignItems: 'center',
                         gap: '10px',
                         flexShrink: 0,
                         borderRadius: '8px',
                         border: '1px solid #000',
-                        fontSize: '12px',
-                        fontFamily: 'Poppins'
+                        fontSize: '13px',
+                        fontFamily: 'Poppins',
+                        textAlign: 'center'
                       }}
                       maxLength={2}
                     />
