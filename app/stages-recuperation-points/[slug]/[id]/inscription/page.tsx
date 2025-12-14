@@ -989,7 +989,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Price Summary - Grey Box */}
-              <div style={{ marginTop: '40px', marginLeft: '170px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ marginTop: '40px', marginLeft: '170px' }}>
                 <div
                   style={{
                     display: 'flex',
@@ -1105,7 +1105,8 @@ export default function InscriptionPage() {
                     background: '#41A334',
                     border: 'none',
                     cursor: 'pointer',
-                    marginTop: '20px'
+                    marginTop: '20px',
+                    marginLeft: '64px'
                   }}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
