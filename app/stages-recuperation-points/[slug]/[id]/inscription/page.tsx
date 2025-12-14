@@ -726,15 +726,46 @@ export default function InscriptionPage() {
               </div>
             </form>
 
+            {/* Separator Line */}
+            <div style={{ marginTop: '60px', marginBottom: '60px' }}>
+              <div style={{ width: '672px', height: '1px', background: '#D9D9D9' }} />
+            </div>
+
             {/* Payment Section - Étape 2/2 */}
-            <div className="mt-12">
-              <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
+            <div>
+              <h2
+                style={{
+                  display: 'flex',
+                  width: '673px',
+                  height: '43px',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  color: '#000',
+                  fontFamily: 'Poppins',
+                  fontSize: '20px',
+                  fontStyle: 'normal',
+                  fontWeight: 500,
+                  lineHeight: '25px'
+                }}
+              >
                 Étape 2/2 - paiement sécurisé
               </h2>
 
               {/* Payment Method Header */}
-              <div className="mb-6">
-                <p className="text-sm mb-3" style={{ color: '#666' }}>
+              <div style={{ marginTop: '35px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <p
+                  style={{
+                    width: '464px',
+                    color: '#000',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 500,
+                    lineHeight: '25px',
+                    marginBottom: '20px'
+                  }}
+                >
                   Paiement sécurisé par Crédit Agricole
                 </p>
                 <div className="flex gap-2">
