@@ -796,6 +796,11 @@ export default function InscriptionPage() {
                 >
                   Vos données bancaires sont chiffrées par la solution Up2Pay-Crédit Agricole (cryptage SSL) et ne sont jamais stockées par ProStagesPermis
                 </p>
+
+                {/* Payment Card Logos */}
+                <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
+                  <img src="/cards.png" alt="Visa, Mastercard, Discover, American Express" style={{ height: 'auto', maxWidth: '100%' }} />
+                </div>
               </div>
 
               {/* Payment Form */}
