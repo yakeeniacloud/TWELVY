@@ -752,7 +752,7 @@ export default function InscriptionPage() {
               </h2>
 
               {/* Payment Method Header */}
-              <div style={{ marginTop: '35px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ marginTop: '28px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <p
                   style={{
                     width: '464px',
@@ -768,7 +768,7 @@ export default function InscriptionPage() {
                 >
                   Paiement sécurisé par Crédit Agricole
                 </p>
-                <div className="flex gap-2">
+                <div className="flex gap-2" style={{ marginBottom: '12px' }}>
                   {/* Payment logos */}
                   <div className="px-3 py-1 border border-gray-300 rounded" style={{ height: '30px', display: 'flex', alignItems: 'center' }}>
                     <span className="text-xs font-medium" style={{ color: '#333' }}>VISA</span>
@@ -780,6 +780,22 @@ export default function InscriptionPage() {
                     <span className="text-xs font-medium" style={{ color: '#333' }}>CB</span>
                   </div>
                 </div>
+
+                {/* Security Disclaimer */}
+                <p
+                  style={{
+                    alignSelf: 'stretch',
+                    color: '#5C5C5C',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '13px',
+                    fontStyle: 'italic',
+                    fontWeight: 500,
+                    lineHeight: '22px'
+                  }}
+                >
+                  Vos données bancaires sont chiffrées par la solution Up2Pay-Crédit Agricole (cryptage SSL) et ne sont jamais stockées par ProStagesPermis
+                </p>
               </div>
 
               {/* Payment Form */}
