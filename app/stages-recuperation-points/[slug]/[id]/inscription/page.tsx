@@ -1007,7 +1007,7 @@ export default function InscriptionPage() {
                       color: '#000',
                       textAlign: 'center',
                       fontFamily: 'Poppins',
-                      fontSize: '15px',
+                      fontSize: stage.site.ville.length > 15 ? '13px' : '15px',
                       fontStyle: 'normal',
                       fontWeight: 500,
                       lineHeight: '22px'
