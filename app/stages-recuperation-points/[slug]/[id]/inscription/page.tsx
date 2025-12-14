@@ -980,7 +980,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Price Summary - Grey Box */}
-              <div style={{ marginTop: '40px' }}>
+              <div style={{ marginTop: '40px', marginLeft: '170px' }}>
                 <div
                   style={{
                     display: 'flex',
@@ -1013,7 +1013,7 @@ export default function InscriptionPage() {
                       lineHeight: '22px'
                     }}
                   >
-                    {formatDate(stage.date_start, stage.date_end)}
+                    Stage du {formatDate(stage.date_start, stage.date_end)} à {stage.site.ville}
                   </div>
 
                   {/* Prix du stage */}
