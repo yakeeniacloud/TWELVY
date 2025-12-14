@@ -1151,7 +1151,7 @@ export default function InscriptionPage() {
                     lineHeight: '22px',
                     marginTop: '10px',
                     marginLeft: '-170px',
-                    width: '501px'
+                    width: '650px'
                   }}
                 >
                   Après avoir cliqué sur "Payer", votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédtiatement par email votre convocation au stage.
