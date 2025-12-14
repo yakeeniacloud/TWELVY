@@ -1143,7 +1143,7 @@ export default function InscriptionPage() {
                     justifyContent: 'center',
                     flexShrink: 0,
                     color: '#000',
-                    textAlign: 'left',
+                    textAlign: 'center',
                     fontFamily: 'Poppins',
                     fontSize: '14px',
                     fontStyle: 'italic',
