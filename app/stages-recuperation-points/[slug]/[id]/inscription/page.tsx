@@ -590,8 +590,8 @@ export default function InscriptionPage() {
                 <div
                   style={{
                     display: 'flex',
-                    width: '477px',
-                    height: '119px',
+                    width: '482px',
+                    height: '124px',
                     padding: '10px 15px',
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -702,7 +702,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Submit Button */}
-              <div style={{ marginLeft: '100px' }}>
+              <div style={{ marginLeft: '110px' }}>
                 <button
                   type="submit"
                   disabled={!cgvAccepted}
