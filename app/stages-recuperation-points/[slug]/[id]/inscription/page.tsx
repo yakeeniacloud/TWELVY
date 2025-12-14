@@ -556,7 +556,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Garantie Sérénité */}
-              <div className="mb-6" style={{ marginLeft: '100px' }}>
+              <div className="mb-6" style={{ marginLeft: '100px', marginTop: '50px' }}>
                 <div
                   style={{
                     display: 'flex',
@@ -574,24 +574,27 @@ export default function InscriptionPage() {
                 >
                   {/* Header with shield icon and title */}
                   <div className="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
-                      <g clipPath="url(#clip0_122_55)">
-                        <path d="M12.5 22.9166C12.5 22.9166 20.8334 18.75 20.8334 12.5V5.20831L12.5 2.08331L4.16669 5.20831V12.5C4.16669 18.75 12.5 22.9166 12.5 22.9166Z" fill="#EFEFEF" stroke="#696868" strokeOpacity="0.96" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </g>
-                      <rect x="0.5" y="0.5" width="24" height="24" stroke="#EFEFEF"/>
-                      <defs>
-                        <clipPath id="clip0_122_55">
-                          <rect width="25" height="25" fill="white"/>
-                        </clipPath>
-                      </defs>
-                    </svg>
+                    <div style={{ width: '25px', height: '25px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+                        <g clipPath="url(#clip0_122_55)">
+                          <path d="M12.5 22.9166C12.5 22.9166 20.8334 18.75 20.8334 12.5V5.20831L12.5 2.08331L4.16669 5.20831V12.5C4.16669 18.75 12.5 22.9166 12.5 22.9166Z" fill="#EFEFEF" stroke="#696868" strokeOpacity="0.96" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </g>
+                        <rect x="0.5" y="0.5" width="24" height="24" stroke="#EFEFEF"/>
+                        <defs>
+                          <clipPath id="clip0_122_55">
+                            <rect width="25" height="25" fill="white"/>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </div>
                     <div
                       style={{
                         display: 'flex',
                         width: '150px',
                         height: '25px',
                         flexDirection: 'column',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
+                        fontSize: '14px'
                       }}
                     >
                       <span style={{ textDecoration: 'underline', fontWeight: 500 }}>Garantie Sérénité</span>
