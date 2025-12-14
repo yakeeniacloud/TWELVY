@@ -96,10 +96,40 @@ export default function InscriptionPage() {
     return `${capitalizedDayStart} ${dayNumStart} et ${capitalizedDayEnd} ${dayNumEnd} ${month} ${year}`
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Submit to database
-    console.log('Form submitted:', { civilite, nom, prenom, email, telephone, garantieSerenite, cgvAccepted })
+
+    try {
+      const response = await fetch('/api/stagiaire/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          stage_id: id,
+          civilite,
+          nom,
+          prenom,
+          email,
+          telephone_mobile: telephone,
+          guarantee_serenite: garantieSerenite,
+          cgv_accepted: cgvAccepted
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        alert('Erreur lors de l\'inscription: ' + (data.error || 'Erreur inconnue'))
+        return
+      }
+
+      // Redirect to confirmation page
+      window.location.href = `/stages-recuperation-points/${city.toLowerCase()}/${id}/merci?ref=${data.booking_reference || ''}`
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      alert('Une erreur est survenue lors de l\'inscription')
+    }
   }
 
   if (loading) {
@@ -653,7 +683,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* CGV */}
-              <div className="mb-6">
+              <div className="mb-6" style={{ marginLeft: '50px' }}>
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
@@ -675,11 +705,16 @@ export default function InscriptionPage() {
               <button
                 type="submit"
                 disabled={!cgvAccepted}
-                className="w-full text-white font-medium rounded-full disabled:opacity-50"
+                className="text-white font-medium disabled:opacity-50"
                 style={{
+                  display: 'flex',
+                  padding: '10px',
+                  alignItems: 'flex-start',
+                  gap: '10px',
+                  borderRadius: '30px',
                   background: '#41A334',
-                  height: '44px',
-                  fontSize: '15px'
+                  border: 'none',
+                  cursor: cgvAccepted ? 'pointer' : 'not-allowed'
                 }}
               >
                 Valider le formulaire et passer au paiement
