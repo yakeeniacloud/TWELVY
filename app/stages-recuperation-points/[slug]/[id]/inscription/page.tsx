@@ -702,23 +702,28 @@ export default function InscriptionPage() {
               </div>
 
               {/* Submit Button */}
-              <button
-                type="submit"
-                disabled={!cgvAccepted}
-                className="text-white font-medium disabled:opacity-50"
-                style={{
-                  display: 'flex',
-                  padding: '10px',
-                  alignItems: 'flex-start',
-                  gap: '10px',
-                  borderRadius: '30px',
-                  background: '#41A334',
-                  border: 'none',
-                  cursor: cgvAccepted ? 'pointer' : 'not-allowed'
-                }}
-              >
-                Valider le formulaire et passer au paiement
-              </button>
+              <div style={{ marginLeft: '100px' }}>
+                <button
+                  type="submit"
+                  disabled={!cgvAccepted}
+                  className="text-white font-medium disabled:opacity-50"
+                  style={{
+                    display: 'flex',
+                    width: '432px',
+                    height: '50px',
+                    padding: '10px',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                    borderRadius: '30px',
+                    background: '#41A334',
+                    border: 'none',
+                    cursor: cgvAccepted ? 'pointer' : 'not-allowed'
+                  }}
+                >
+                  Valider le formulaire et passer au paiement
+                </button>
+              </div>
             </form>
 
             {/* Payment Section - Étape 2/2 */}
