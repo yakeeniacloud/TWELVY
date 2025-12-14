@@ -916,17 +916,14 @@ export default function InscriptionPage() {
                       placeholder="Année"
                       className="border border-black"
                       style={{
-                        width: '59px',
+                        display: 'flex',
+                        width: '66px',
                         height: '35px',
                         padding: '7px 15px',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '10px',
                         flexShrink: 0,
-                        color: 'rgba(83, 83, 83, 0.64)',
-                        textAlign: 'center',
-                        fontFamily: 'Poppins',
-                        fontSize: '14px',
-                        fontStyle: 'normal',
-                        fontWeight: 400,
-                        lineHeight: '25px',
                         borderRadius: '8px',
                         border: '1px solid #000'
                       }}
