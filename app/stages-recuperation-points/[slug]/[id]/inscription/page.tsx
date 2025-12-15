@@ -1259,7 +1259,8 @@ export default function InscriptionPage() {
                         letterSpacing: '0.98px',
                         transition: 'background 0.2s',
                         whiteSpace: 'nowrap',
-                        padding: '0 15px'
+                        padding: '0 15px',
+                        marginLeft: '-5px'
                       }}
                     >
                       Le prix du stage comprend
@@ -1317,7 +1318,8 @@ export default function InscriptionPage() {
                         letterSpacing: '0.98px',
                         transition: 'background 0.2s',
                         whiteSpace: 'nowrap',
-                        padding: '0 15px'
+                        padding: '0 15px',
+                        marginRight: '-5px'
                       }}
                     >
                       Agrément
