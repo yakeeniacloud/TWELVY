@@ -1228,7 +1228,7 @@ export default function InscriptionPage() {
                       display: 'flex',
                       width: '638px',
                       height: '43px',
-                      padding: '2px 0',
+                      padding: '2px 5px',
                       alignItems: 'center',
                       gap: '11px',
                       borderRadius: '10px',
@@ -1258,7 +1258,8 @@ export default function InscriptionPage() {
                         lineHeight: 'normal',
                         letterSpacing: '0.98px',
                         transition: 'background 0.2s',
-                        whiteSpace: 'nowrap'
+                        whiteSpace: 'nowrap',
+                        padding: '0 15px'
                       }}
                     >
                       Le prix du stage comprend
@@ -1285,7 +1286,9 @@ export default function InscriptionPage() {
                         fontWeight: 500,
                         lineHeight: 'normal',
                         letterSpacing: '0.98px',
-                        transition: 'background 0.2s'
+                        transition: 'background 0.2s',
+                        whiteSpace: 'nowrap',
+                        padding: '0 15px'
                       }}
                     >
                       Programme
@@ -1312,7 +1315,9 @@ export default function InscriptionPage() {
                         fontWeight: 500,
                         lineHeight: 'normal',
                         letterSpacing: '0.98px',
-                        transition: 'background 0.2s'
+                        transition: 'background 0.2s',
+                        whiteSpace: 'nowrap',
+                        padding: '0 15px'
                       }}
                     >
                       Agrément
