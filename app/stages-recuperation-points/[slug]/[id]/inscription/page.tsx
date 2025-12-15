@@ -1392,18 +1392,18 @@ export default function InscriptionPage() {
                   minHeight: '402px',
                   padding: '30px 20px',
                   flexDirection: 'column',
-                  alignItems: 'flex-start',
+                  alignItems: 'center',
                   gap: '0',
                   background: '#F6F6F6'
                 }}
               >
                 {/* Title: Questions Fréquentes - on one line */}
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px', width: '100%' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
                   {/* Questions */}
                   <span
                     style={{
                       color: 'rgba(6, 6, 6, 0.86)',
-                      textAlign: 'left',
+                      textAlign: 'center',
                       WebkitTextStrokeWidth: '1px',
                       WebkitTextStrokeColor: '#000',
                       fontFamily: 'Poppins',
@@ -1420,7 +1420,7 @@ export default function InscriptionPage() {
                   <span
                     style={{
                       color: 'rgba(6, 6, 6, 0.86)',
-                      textAlign: 'left',
+                      textAlign: 'center',
                       WebkitTextStrokeWidth: '1px',
                       WebkitTextStrokeColor: 'rgba(188, 71, 71, 0.73)',
                       fontFamily: 'Poppins',
@@ -1438,7 +1438,7 @@ export default function InscriptionPage() {
                 <div
                   style={{
                     color: '#000',
-                    textAlign: 'left',
+                    textAlign: 'center',
                     fontFamily: 'Poppins',
                     fontSize: '15px',
                     fontStyle: 'normal',
