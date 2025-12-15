@@ -1390,20 +1390,20 @@ export default function InscriptionPage() {
                   display: 'flex',
                   width: '692px',
                   minHeight: '402px',
-                  padding: '30px 60px',
+                  padding: '30px 20px',
                   flexDirection: 'column',
-                  alignItems: 'center',
+                  alignItems: 'flex-start',
                   gap: '0',
                   background: '#F6F6F6'
                 }}
               >
                 {/* Title: Questions Fréquentes - on one line */}
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px', width: '100%' }}>
                   {/* Questions */}
                   <span
                     style={{
                       color: 'rgba(6, 6, 6, 0.86)',
-                      textAlign: 'center',
+                      textAlign: 'left',
                       WebkitTextStrokeWidth: '1px',
                       WebkitTextStrokeColor: '#000',
                       fontFamily: 'Poppins',
@@ -1420,7 +1420,7 @@ export default function InscriptionPage() {
                   <span
                     style={{
                       color: 'rgba(6, 6, 6, 0.86)',
-                      textAlign: 'center',
+                      textAlign: 'left',
                       WebkitTextStrokeWidth: '1px',
                       WebkitTextStrokeColor: 'rgba(188, 71, 71, 0.73)',
                       fontFamily: 'Poppins',
@@ -1438,21 +1438,22 @@ export default function InscriptionPage() {
                 <div
                   style={{
                     color: '#000',
-                    textAlign: 'center',
+                    textAlign: 'left',
                     fontFamily: 'Poppins',
                     fontSize: '15px',
                     fontStyle: 'normal',
                     fontWeight: 400,
                     lineHeight: '20px',
                     marginTop: '15px',
-                    marginBottom: '25px'
+                    marginBottom: '25px',
+                    width: '100%'
                   }}
                 >
                   Réponses aux questions que se posent le plus souvent les conducteurs
                 </div>
 
                 {/* Question 1 with arrow */}
-                <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
+                <div style={{ width: '100%' }}>
                   <div
                     onClick={() => setOpenFaqIndex(openFaqIndex === 0 ? null : 0)}
                     style={{
@@ -1493,10 +1494,10 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* Line 1 */}
-                <div style={{ width: 'calc(100% - 40px)', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px', marginLeft: '20px' }} />
+                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
 
                 {/* Question 2 with arrow */}
-                <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
+                <div style={{ width: '100%' }}>
                   <div
                     onClick={() => setOpenFaqIndex(openFaqIndex === 1 ? null : 1)}
                     style={{
@@ -1537,10 +1538,10 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* Line 2 */}
-                <div style={{ width: 'calc(100% - 40px)', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px', marginLeft: '20px' }} />
+                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
 
                 {/* Question 3 with arrow */}
-                <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
+                <div style={{ width: '100%' }}>
                   <div
                     onClick={() => setOpenFaqIndex(openFaqIndex === 2 ? null : 2)}
                     style={{
@@ -1581,7 +1582,7 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* Line 3 */}
-                <div style={{ width: 'calc(100% - 40px)', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '50px', marginLeft: '20px' }} />
+                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '50px' }} />
 
                 {/* Afficher plus de questions */}
                 <div
