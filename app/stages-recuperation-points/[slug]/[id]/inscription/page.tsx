@@ -1452,7 +1452,7 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* Question 1 with arrow */}
-                <div style={{ width: '100%' }}>
+                <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
                   <div
                     onClick={() => setOpenFaqIndex(openFaqIndex === 0 ? null : 0)}
                     style={{
@@ -1460,19 +1460,23 @@ export default function InscriptionPage() {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      gap: '10px'
                     }}
                   >
                     <div
                       style={{
                         flex: 1,
                         color: '#060606',
-                        textAlign: 'center',
+                        textAlign: 'left',
                         fontFamily: 'Poppins',
                         fontSize: '15px',
                         fontStyle: 'normal',
                         fontWeight: 400,
-                        lineHeight: '35px'
+                        lineHeight: '35px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
                       }}
                     >
                       A quel moment mes 4 points sont il crédités sur mon permis après un stage
@@ -1482,17 +1486,17 @@ export default function InscriptionPage() {
                     </svg>
                   </div>
                   {openFaqIndex === 0 && (
-                    <div style={{ padding: '15px', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'center' }}>
+                    <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
                       Réponse à la question - Texte placeholder pour la réponse détaillée concernant le crédit des points sur le permis de conduire.
                     </div>
                   )}
                 </div>
 
                 {/* Line 1 */}
-                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
+                <div style={{ width: 'calc(100% - 40px)', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px', marginLeft: '20px' }} />
 
                 {/* Question 2 with arrow */}
-                <div style={{ width: '100%' }}>
+                <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
                   <div
                     onClick={() => setOpenFaqIndex(openFaqIndex === 1 ? null : 1)}
                     style={{
@@ -1500,19 +1504,23 @@ export default function InscriptionPage() {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      gap: '10px'
                     }}
                   >
                     <div
                       style={{
                         flex: 1,
                         color: '#060606',
-                        textAlign: 'center',
+                        textAlign: 'left',
                         fontFamily: 'Poppins',
                         fontSize: '15px',
                         fontStyle: 'normal',
                         fontWeight: 400,
-                        lineHeight: '35px'
+                        lineHeight: '35px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
                       }}
                     >
                       A quel moment mes 4 points sont il crédités sur mon permis après un stage
@@ -1522,17 +1530,17 @@ export default function InscriptionPage() {
                     </svg>
                   </div>
                   {openFaqIndex === 1 && (
-                    <div style={{ padding: '15px', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'center' }}>
+                    <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
                       Réponse à la question - Texte placeholder pour la réponse détaillée concernant le crédit des points sur le permis de conduire.
                     </div>
                   )}
                 </div>
 
                 {/* Line 2 */}
-                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
+                <div style={{ width: 'calc(100% - 40px)', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px', marginLeft: '20px' }} />
 
                 {/* Question 3 with arrow */}
-                <div style={{ width: '100%' }}>
+                <div style={{ width: '100%', paddingLeft: '20px', paddingRight: '20px' }}>
                   <div
                     onClick={() => setOpenFaqIndex(openFaqIndex === 2 ? null : 2)}
                     style={{
@@ -1540,19 +1548,23 @@ export default function InscriptionPage() {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      gap: '10px'
                     }}
                   >
                     <div
                       style={{
                         flex: 1,
                         color: '#060606',
-                        textAlign: 'center',
+                        textAlign: 'left',
                         fontFamily: 'Poppins',
                         fontSize: '15px',
                         fontStyle: 'normal',
                         fontWeight: 400,
-                        lineHeight: '35px'
+                        lineHeight: '35px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
                       }}
                     >
                       A quel moment mes 4 points sont il crédités sur mon permis après un stage
@@ -1562,14 +1574,14 @@ export default function InscriptionPage() {
                     </svg>
                   </div>
                   {openFaqIndex === 2 && (
-                    <div style={{ padding: '15px', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'center' }}>
+                    <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
                       Réponse à la question - Texte placeholder pour la réponse détaillée concernant le crédit des points sur le permis de conduire.
                     </div>
                   )}
                 </div>
 
                 {/* Line 3 */}
-                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '50px' }} />
+                <div style={{ width: 'calc(100% - 40px)', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '50px', marginLeft: '20px' }} />
 
                 {/* Afficher plus de questions */}
                 <div
