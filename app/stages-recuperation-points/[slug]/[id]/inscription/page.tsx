@@ -1384,55 +1384,155 @@ export default function InscriptionPage() {
             </div>
 
             {/* Questions fréquentes */}
-            <div className="py-12">
-              <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
-                Questions fréquentes
-              </h2>
-
-              <div className="space-y-4">
-                {[
-                  'À quel moment mes 4 points sont-ils crédités sur mon permis après un stage ?',
-                  'À quel moment mes 4 points sont-ils crédités sur mon permis après un stage ?',
-                  'À quel moment mes 4 points sont-ils crédités sur mon permis après un stage ?'
-                ].map((question, index) => (
-                  <div key={index} className="border border-gray-300 rounded-lg">
-                    <button
-                      onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                      className="w-full flex items-center justify-between p-4 text-left"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="flex-shrink-0 w-6 h-6 rounded-full border border-gray-400 flex items-center justify-center">
-                          <span className="text-sm" style={{ color: '#666' }}>?</span>
-                        </div>
-                        <span className="text-sm font-medium" style={{ color: '#333' }}>{question}</span>
-                      </div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        className={`flex-shrink-0 transition-transform ${openFaqIndex === index ? 'rotate-180' : ''}`}
-                      >
-                        <path d="M4 6L8 10L12 6" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </button>
-                    {openFaqIndex === index && (
-                      <div className="px-4 pb-4 pl-14">
-                        <p className="text-sm" style={{ color: '#666' }}>
-                          Réponse à la question fréquente...
-                        </p>
-                      </div>
-                    )}
+            <div style={{ marginTop: '40px', marginLeft: '-170px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  width: '692px',
+                  minHeight: '402px',
+                  padding: '30px 60px',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '0',
+                  background: '#F6F6F6'
+                }}
+              >
+                {/* Title: Questions Fréquentes */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  {/* Questions */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      color: 'rgba(6, 6, 6, 0.86)',
+                      textAlign: 'center',
+                      WebkitTextStrokeWidth: '1px',
+                      WebkitTextStrokeColor: '#000',
+                      fontFamily: 'Poppins',
+                      fontSize: '20px',
+                      fontStyle: 'normal',
+                      fontWeight: 250,
+                      lineHeight: '35px'
+                    }}
+                  >
+                    Questions
                   </div>
-                ))}
-              </div>
 
-              {/* Afficher plus de questions */}
-              <div className="text-center mt-6">
-                <button className="text-sm font-medium" style={{ color: '#2b85c9' }}>
+                  {/* Fréquentes */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      color: 'rgba(6, 6, 6, 0.86)',
+                      textAlign: 'center',
+                      WebkitTextStrokeWidth: '1px',
+                      WebkitTextStrokeColor: 'rgba(188, 71, 71, 0.73)',
+                      fontFamily: 'Poppins',
+                      fontSize: '20px',
+                      fontStyle: 'normal',
+                      fontWeight: 275,
+                      lineHeight: '35px'
+                    }}
+                  >
+                    Fréquentes
+                  </div>
+                </div>
+
+                {/* Subtitle */}
+                <div
+                  style={{
+                    color: '#000',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '20px',
+                    marginTop: '15px',
+                    marginBottom: '25px'
+                  }}
+                >
+                  Réponses aux questions que se posent le plus souvent les conducteurs
+                </div>
+
+                {/* Question 1 */}
+                <div
+                  style={{
+                    width: '100%',
+                    flexShrink: 0,
+                    color: '#060606',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '35px'
+                  }}
+                >
+                  A quel moment mes 4 points sont il crédités sur mon permis après un stage
+                </div>
+
+                {/* Line 1 */}
+                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '30px', marginBottom: '30px' }} />
+
+                {/* Question 2 */}
+                <div
+                  style={{
+                    width: '100%',
+                    flexShrink: 0,
+                    color: '#060606',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '35px'
+                  }}
+                >
+                  A quel moment mes 4 points sont il crédités sur mon permis après un stage
+                </div>
+
+                {/* Line 2 */}
+                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '30px', marginBottom: '30px' }} />
+
+                {/* Question 3 */}
+                <div
+                  style={{
+                    width: '100%',
+                    flexShrink: 0,
+                    color: '#060606',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '35px'
+                  }}
+                >
+                  A quel moment mes 4 points sont il crédités sur mon permis après un stage
+                </div>
+
+                {/* Line 3 */}
+                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '30px', marginBottom: '50px' }} />
+
+                {/* Afficher plus de questions */}
+                <div
+                  style={{
+                    color: '#000',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 500,
+                    lineHeight: 'normal',
+                    letterSpacing: '1.05px',
+                    textDecoration: 'underline',
+                    cursor: 'pointer'
+                  }}
+                >
                   Afficher plus de questions
-                </button>
+                </div>
               </div>
             </div>
           </div>
