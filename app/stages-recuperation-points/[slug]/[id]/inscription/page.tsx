@@ -1193,75 +1193,165 @@ export default function InscriptionPage() {
                 >
                   Après avoir cliqué sur "Payer", votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédtiatement par email votre convocation au stage.
                 </div>
+
+                {/* Spacing and separator line */}
+                <div style={{ marginTop: '40px', marginLeft: '-170px' }}>
+                  <div
+                    style={{
+                      width: '680px',
+                      height: '1px',
+                      background: '#DEDDDD'
+                    }}
+                  />
+                </div>
+
+                {/* Informations pratiques section */}
+                <div style={{ marginTop: '40px', marginLeft: '-170px' }}>
+                  {/* Title */}
+                  <h2
+                    style={{
+                      color: '#000',
+                      fontFamily: 'Poppins',
+                      fontSize: '20px',
+                      fontStyle: 'normal',
+                      fontWeight: 500,
+                      lineHeight: '25px',
+                      marginBottom: '10px'
+                    }}
+                  >
+                    Informations pratiques sur votre stage
+                  </h2>
+
+                  {/* Tab widget */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: '638px',
+                      height: '43px',
+                      padding: '2px 0',
+                      alignItems: 'center',
+                      gap: '11px',
+                      borderRadius: '10px',
+                      border: '1px solid #C5C5C5',
+                      background: '#DEDDDD'
+                    }}
+                  >
+                    {/* Tab 1: Le prix du stage comprend */}
+                    <button
+                      onClick={() => setActiveTab('prix')}
+                      style={{
+                        flex: 1,
+                        height: '39px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: '8px',
+                        background: activeTab === 'prix' ? '#FFFFFF' : 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: '#000',
+                        textAlign: 'center',
+                        fontFamily: 'Poppins',
+                        fontSize: '14px',
+                        fontStyle: 'normal',
+                        fontWeight: 500,
+                        lineHeight: 'normal',
+                        letterSpacing: '0.98px',
+                        transition: 'background 0.2s'
+                      }}
+                    >
+                      Le prix du stage comprend
+                    </button>
+
+                    {/* Tab 2: Programme */}
+                    <button
+                      onClick={() => setActiveTab('programme')}
+                      style={{
+                        flex: 1,
+                        height: '39px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: '8px',
+                        background: activeTab === 'programme' ? '#FFFFFF' : 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: '#000',
+                        textAlign: 'center',
+                        fontFamily: 'Poppins',
+                        fontSize: '14px',
+                        fontStyle: 'normal',
+                        fontWeight: 500,
+                        lineHeight: 'normal',
+                        letterSpacing: '0.98px',
+                        transition: 'background 0.2s'
+                      }}
+                    >
+                      Programme
+                    </button>
+
+                    {/* Tab 3: Agrément */}
+                    <button
+                      onClick={() => setActiveTab('agrement')}
+                      style={{
+                        flex: 1,
+                        height: '39px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        borderRadius: '8px',
+                        background: activeTab === 'agrement' ? '#FFFFFF' : 'transparent',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: '#000',
+                        textAlign: 'center',
+                        fontFamily: 'Poppins',
+                        fontSize: '14px',
+                        fontStyle: 'normal',
+                        fontWeight: 500,
+                        lineHeight: 'normal',
+                        letterSpacing: '0.98px',
+                        transition: 'background 0.2s'
+                      }}
+                    >
+                      Agrément
+                    </button>
+                  </div>
+
+                  {/* Tab Content */}
+                  <div style={{ marginTop: '20px' }}>
+                    {activeTab === 'prix' && (
+                      <ul className="space-y-3">
+                        <li className="flex gap-2 items-start">
+                          <span className="text-sm" style={{ color: '#333' }}>• 14 heures de formation</span>
+                        </li>
+                        <li className="flex gap-2 items-start">
+                          <span className="text-sm" style={{ color: '#333' }}>• L'attestation de stage remise le deuxième jour</span>
+                        </li>
+                        <li className="flex gap-2 items-start">
+                          <span className="text-sm" style={{ color: '#333' }}>• La récupération automatique de 4 points</span>
+                        </li>
+                        <li className="flex gap-2 items-start">
+                          <span className="text-sm" style={{ color: '#333' }}>• Le traitement de votre dossier administratif en préfecture</span>
+                        </li>
+                        <li className="flex gap-2 items-start">
+                          <span className="text-sm" style={{ color: '#333' }}>• En cas d'empêchement, le transfert sur un autre stage de notre réseau</span>
+                        </li>
+                      </ul>
+                    )}
+                    {activeTab === 'programme' && (
+                      <div>
+                        <p className="text-sm mb-3" style={{ color: '#333' }}>Programme détaillé du stage de récupération de points</p>
+                      </div>
+                    )}
+                    {activeTab === 'agrement' && (
+                      <div>
+                        <p className="text-sm mb-3" style={{ color: '#333' }}>Informations sur l'agrément préfectoral</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-
-            {/* Informations pratiques sur votre stage */}
-            <div className="bg-gray-50 py-8 px-6 rounded-lg">
-              <h2 className="font-semibold mb-6" style={{ fontSize: '18px', color: '#222' }}>
-                Informations pratiques sur votre stage
-              </h2>
-
-                {/* Tabs */}
-                <div className="flex gap-4 mb-6 border-b border-gray-200">
-                  <button
-                    onClick={() => setActiveTab('prix')}
-                    className={`pb-3 px-4 text-sm font-medium transition-colors ${
-                      activeTab === 'prix' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'
-                    }`}
-                  >
-                    Le prix du stage comprend
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('programme')}
-                    className={`pb-3 px-4 text-sm font-medium transition-colors ${
-                      activeTab === 'programme' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'
-                    }`}
-                  >
-                    Programme
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('agrement')}
-                    className={`pb-3 px-4 text-sm font-medium transition-colors ${
-                      activeTab === 'agrement' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'
-                    }`}
-                  >
-                    Agrément
-                  </button>
-                </div>
-
-                {/* Tab Content */}
-                <div className="bg-white rounded-lg p-6">
-                  {activeTab === 'prix' && (
-                    <ul className="space-y-3">
-                      <li className="flex gap-2 items-start">
-                        <span className="text-sm" style={{ color: '#333' }}>• L'intégralité du stage visant la récupération de 4 points</span>
-                      </li>
-                      <li className="flex gap-2 items-start">
-                        <span className="text-sm" style={{ color: '#333' }}>• L'attestation de stage remise le deuxième jour</span>
-                      </li>
-                      <li className="flex gap-2 items-start">
-                        <span className="text-sm" style={{ color: '#333' }}>• La récupération automatique de 4 points</span>
-                      </li>
-                      <li className="flex gap-2 items-start">
-                        <span className="text-sm" style={{ color: '#333' }}>• Le traitement de votre dossier administratif en préfecture</span>
-                      </li>
-                      <li className="flex gap-2 items-start">
-                        <span className="text-sm" style={{ color: '#333' }}>• En cas d'empêchement, le transfert sur une autre stage à raison d'essence</span>
-                      </li>
-                    </ul>
-                  )}
-                  {activeTab === 'programme' && (
-                    <div>
-                      <p className="text-sm mb-3" style={{ color: '#333' }}>Programme détaillé du stage de récupération de points</p>
-                    </div>
-                  )}
-                  {activeTab === 'agrement' && (
-                    <div>
-                      <p className="text-sm mb-3" style={{ color: '#333' }}>Informations sur l'agrément préfectoral</p>
-                    </div>
-                  )}
-                </div>
             </div>
 
             {/* Questions fréquentes */}
