@@ -563,7 +563,10 @@ export default function InscriptionPage() {
                         border: '1px solid #000'
                       }}
                     />
-                    <div style={{ width: '24px', height: '24px', flexShrink: 0 }}>
+                    <div
+                      style={{ width: '24px', height: '24px', flexShrink: 0, position: 'relative', cursor: 'pointer' }}
+                      className="group"
+                    >
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <g clipPath="url(#clip0_156_42)">
                           <path d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="#1E1E1E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -574,6 +577,40 @@ export default function InscriptionPage() {
                           </clipPath>
                         </defs>
                       </svg>
+                      {/* Tooltip */}
+                      <div
+                        className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+                        style={{
+                          position: 'absolute',
+                          top: '-80px',
+                          left: '30px',
+                          width: '300px',
+                          padding: '12px 16px',
+                          backgroundColor: '#2E2E2E',
+                          color: '#FFFFFF',
+                          borderRadius: '8px',
+                          fontFamily: 'Poppins',
+                          fontSize: '13px',
+                          fontWeight: 400,
+                          lineHeight: '18px',
+                          zIndex: 1000,
+                          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+                        }}
+                      >
+                        Nous utilisons ce numéro uniquement pour le SMS de confirmation et les informations essentielles liées à votre stage. Aucun démarchage commercial.
+                        {/* Arrow */}
+                        <div
+                          style={{
+                            position: 'absolute',
+                            bottom: '-6px',
+                            left: '10px',
+                            width: '12px',
+                            height: '12px',
+                            backgroundColor: '#2E2E2E',
+                            transform: 'rotate(45deg)'
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
                   <p
