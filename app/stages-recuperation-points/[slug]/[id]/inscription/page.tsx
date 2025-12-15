@@ -1257,7 +1257,8 @@ export default function InscriptionPage() {
                         fontWeight: 500,
                         lineHeight: 'normal',
                         letterSpacing: '0.98px',
-                        transition: 'background 0.2s'
+                        transition: 'background 0.2s',
+                        whiteSpace: 'nowrap'
                       }}
                     >
                       Le prix du stage comprend
@@ -1318,37 +1319,58 @@ export default function InscriptionPage() {
                     </button>
                   </div>
 
-                  {/* Tab Content */}
-                  <div style={{ marginTop: '20px' }}>
-                    {activeTab === 'prix' && (
-                      <ul className="space-y-3">
-                        <li className="flex gap-2 items-start">
-                          <span className="text-sm" style={{ color: '#333' }}>• 14 heures de formation</span>
-                        </li>
-                        <li className="flex gap-2 items-start">
-                          <span className="text-sm" style={{ color: '#333' }}>• L'attestation de stage remise le deuxième jour</span>
-                        </li>
-                        <li className="flex gap-2 items-start">
-                          <span className="text-sm" style={{ color: '#333' }}>• La récupération automatique de 4 points</span>
-                        </li>
-                        <li className="flex gap-2 items-start">
-                          <span className="text-sm" style={{ color: '#333' }}>• Le traitement de votre dossier administratif en préfecture</span>
-                        </li>
-                        <li className="flex gap-2 items-start">
-                          <span className="text-sm" style={{ color: '#333' }}>• En cas d'empêchement, le transfert sur un autre stage de notre réseau</span>
-                        </li>
-                      </ul>
-                    )}
-                    {activeTab === 'programme' && (
-                      <div>
-                        <p className="text-sm mb-3" style={{ color: '#333' }}>Programme détaillé du stage de récupération de points</p>
-                      </div>
-                    )}
-                    {activeTab === 'agrement' && (
-                      <div>
-                        <p className="text-sm mb-3" style={{ color: '#333' }}>Informations sur l'agrément préfectoral</p>
-                      </div>
-                    )}
+                  {/* Tab Content Box */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: '638px',
+                      height: '177px',
+                      padding: '11px 24px 8px 24px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderRadius: '20px',
+                      border: '1px solid #B2B2B2',
+                      background: '#FFF',
+                      marginTop: '5px'
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        width: '590px',
+                        height: '158px',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        color: '#000',
+                        fontFamily: 'Poppins',
+                        fontSize: '14px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '25px',
+                        letterSpacing: '0.98px'
+                      }}
+                    >
+                      {activeTab === 'prix' && (
+                        <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                          <li>• 14 heures de formation</li>
+                          <li>• L'attestation de stage remise le deuxième jour</li>
+                          <li>• La récupération automatique de 4 points</li>
+                          <li>• Le traitement de votre dossier administratif en préfecture</li>
+                          <li>• En cas d'empêchement, le transfert sur un autre stage de notre réseau</li>
+                        </ul>
+                      )}
+                      {activeTab === 'programme' && (
+                        <div>
+                          <p>Programme détaillé du stage de récupération de points</p>
+                        </div>
+                      )}
+                      {activeTab === 'agrement' && (
+                        <div>
+                          <p>Informations sur l'agrément préfectoral</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
