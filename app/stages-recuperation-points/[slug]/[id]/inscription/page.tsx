@@ -1384,7 +1384,7 @@ export default function InscriptionPage() {
             </div>
 
             {/* Questions fréquentes */}
-            <div style={{ marginTop: '40px', marginLeft: '-170px' }}>
+            <div style={{ marginTop: '40px' }}>
               <div
                 style={{
                   display: 'flex',
@@ -1397,14 +1397,11 @@ export default function InscriptionPage() {
                   background: '#F6F6F6'
                 }}
               >
-                {/* Title: Questions Fréquentes */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                {/* Title: Questions Fréquentes - on one line */}
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px' }}>
                   {/* Questions */}
-                  <div
+                  <span
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
                       color: 'rgba(6, 6, 6, 0.86)',
                       textAlign: 'center',
                       WebkitTextStrokeWidth: '1px',
@@ -1417,14 +1414,11 @@ export default function InscriptionPage() {
                     }}
                   >
                     Questions
-                  </div>
+                  </span>
 
                   {/* Fréquentes */}
-                  <div
+                  <span
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
                       color: 'rgba(6, 6, 6, 0.86)',
                       textAlign: 'center',
                       WebkitTextStrokeWidth: '1px',
@@ -1437,7 +1431,7 @@ export default function InscriptionPage() {
                     }}
                   >
                     Fréquentes
-                  </div>
+                  </span>
                 </div>
 
                 {/* Subtitle */}
@@ -1457,65 +1451,125 @@ export default function InscriptionPage() {
                   Réponses aux questions que se posent le plus souvent les conducteurs
                 </div>
 
-                {/* Question 1 */}
-                <div
-                  style={{
-                    width: '100%',
-                    flexShrink: 0,
-                    color: '#060606',
-                    textAlign: 'center',
-                    fontFamily: 'Poppins',
-                    fontSize: '15px',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    lineHeight: '35px'
-                  }}
-                >
-                  A quel moment mes 4 points sont il crédités sur mon permis après un stage
+                {/* Question 1 with arrow */}
+                <div style={{ width: '100%' }}>
+                  <div
+                    onClick={() => setOpenFaqIndex(openFaqIndex === 0 ? null : 0)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: 1,
+                        color: '#060606',
+                        textAlign: 'center',
+                        fontFamily: 'Poppins',
+                        fontSize: '15px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '35px'
+                      }}
+                    >
+                      A quel moment mes 4 points sont il crédités sur mon permis après un stage
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === 0 ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                      <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  {openFaqIndex === 0 && (
+                    <div style={{ padding: '15px', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'center' }}>
+                      Réponse à la question - Texte placeholder pour la réponse détaillée concernant le crédit des points sur le permis de conduire.
+                    </div>
+                  )}
                 </div>
 
                 {/* Line 1 */}
-                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '30px', marginBottom: '30px' }} />
+                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
 
-                {/* Question 2 */}
-                <div
-                  style={{
-                    width: '100%',
-                    flexShrink: 0,
-                    color: '#060606',
-                    textAlign: 'center',
-                    fontFamily: 'Poppins',
-                    fontSize: '15px',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    lineHeight: '35px'
-                  }}
-                >
-                  A quel moment mes 4 points sont il crédités sur mon permis après un stage
+                {/* Question 2 with arrow */}
+                <div style={{ width: '100%' }}>
+                  <div
+                    onClick={() => setOpenFaqIndex(openFaqIndex === 1 ? null : 1)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: 1,
+                        color: '#060606',
+                        textAlign: 'center',
+                        fontFamily: 'Poppins',
+                        fontSize: '15px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '35px'
+                      }}
+                    >
+                      A quel moment mes 4 points sont il crédités sur mon permis après un stage
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === 1 ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                      <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  {openFaqIndex === 1 && (
+                    <div style={{ padding: '15px', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'center' }}>
+                      Réponse à la question - Texte placeholder pour la réponse détaillée concernant le crédit des points sur le permis de conduire.
+                    </div>
+                  )}
                 </div>
 
                 {/* Line 2 */}
-                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '30px', marginBottom: '30px' }} />
+                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
 
-                {/* Question 3 */}
-                <div
-                  style={{
-                    width: '100%',
-                    flexShrink: 0,
-                    color: '#060606',
-                    textAlign: 'center',
-                    fontFamily: 'Poppins',
-                    fontSize: '15px',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    lineHeight: '35px'
-                  }}
-                >
-                  A quel moment mes 4 points sont il crédités sur mon permis après un stage
+                {/* Question 3 with arrow */}
+                <div style={{ width: '100%' }}>
+                  <div
+                    onClick={() => setOpenFaqIndex(openFaqIndex === 2 ? null : 2)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: 1,
+                        color: '#060606',
+                        textAlign: 'center',
+                        fontFamily: 'Poppins',
+                        fontSize: '15px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '35px'
+                      }}
+                    >
+                      A quel moment mes 4 points sont il crédités sur mon permis après un stage
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === 2 ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                      <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  {openFaqIndex === 2 && (
+                    <div style={{ padding: '15px', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'center' }}>
+                      Réponse à la question - Texte placeholder pour la réponse détaillée concernant le crédit des points sur le permis de conduire.
+                    </div>
+                  )}
                 </div>
 
                 {/* Line 3 */}
-                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '30px', marginBottom: '50px' }} />
+                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '50px' }} />
 
                 {/* Afficher plus de questions */}
                 <div
