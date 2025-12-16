@@ -2108,7 +2108,7 @@ export default function InscriptionPage() {
                       </div>
 
                       {/* Right side container */}
-                      <div style={{ position: 'absolute', right: '12px', top: '10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                      <div style={{ position: 'absolute', right: '12px', top: isCurrentStage ? '5px' : '10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: isCurrentStage ? '2px' : '5px' }}>
                         {/* "Stage sélectionné" badge for current stage */}
                         {isCurrentStage && (
                           <div
@@ -2118,7 +2118,7 @@ export default function InscriptionPage() {
                               fontSize: '11px',
                               fontWeight: 400,
                               textAlign: 'center',
-                              marginBottom: '2px'
+                              marginBottom: '0px'
                             }}
                           >
                             Stage sélectionné
