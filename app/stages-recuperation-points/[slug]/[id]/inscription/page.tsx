@@ -2067,7 +2067,7 @@ export default function InscriptionPage() {
                       {/* Left: Date and Time */}
                       <div className="flex flex-col justify-center gap-0 ml-3" style={{ width: '220px' }}>
                         {/* Top Left: Date */}
-                        <p className="text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'Poppins', whiteSpace: 'nowrap' }}>
+                        <p className="text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'Poppins', whiteSpace: 'nowrap', marginBottom: '3px' }}>
                           {formatDate(stageItem.date_start, stageItem.date_end)}
                         </p>
                         {/* Bottom Left: Time */}
@@ -2078,7 +2078,7 @@ export default function InscriptionPage() {
                             fontSize: '13px',
                             fontWeight: 400,
                             lineHeight: '20px',
-                            marginTop: '5px',
+                            marginTop: '8px',
                             whiteSpace: 'nowrap'
                           }}
                         >
