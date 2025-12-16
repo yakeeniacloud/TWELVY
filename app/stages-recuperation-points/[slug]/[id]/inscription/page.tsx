@@ -2041,8 +2041,8 @@ export default function InscriptionPage() {
                 paddingLeft: '5px',
                 paddingRight: '5px',
                 position: 'relative',
-                maskImage: 'linear-gradient(to bottom, black calc(100% - 100px), transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, black calc(100% - 100px), transparent 100%)'
+                maskImage: 'linear-gradient(to bottom, black calc(100% - 140px), transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, black calc(100% - 140px), transparent 100%)'
               }}
             >
               {loadingStages ? (
