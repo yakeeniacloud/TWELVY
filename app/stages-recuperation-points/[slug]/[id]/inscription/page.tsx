@@ -2057,15 +2057,15 @@ export default function InscriptionPage() {
                       style={{
                         borderColor: isCurrentStage ? '#BC4747' : '#BBB',
                         backgroundColor: isCurrentStage ? '#FFF5F5' : 'white',
-                        minHeight: '85px',
-                        paddingBottom: '45px',
+                        width: '589px',
+                        height: '85px',
                         paddingTop: '7px',
                         paddingLeft: '7px',
                         paddingRight: '7px'
                       }}
                     >
                       {/* Left: Date and Time */}
-                      <div className="flex flex-col flex-shrink-0 gap-0 ml-3" style={{ width: '223px', alignSelf: 'center' }}>
+                      <div className="flex flex-col justify-center gap-0 ml-3" style={{ width: '140px' }}>
                         {/* Top Left: Date */}
                         <p className="text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'Poppins' }}>
                           {formatDate(stageItem.date_start, stageItem.date_end)}
@@ -2073,46 +2073,20 @@ export default function InscriptionPage() {
                         {/* Bottom Left: Time */}
                         <p
                           style={{
-                            width: '223px',
                             color: 'rgba(66, 66, 66, 0.86)',
                             fontFamily: 'Poppins',
                             fontSize: '13px',
                             fontWeight: 400,
-                            lineHeight: '35px',
+                            lineHeight: '20px',
                             marginTop: '5px'
                           }}
                         >
-                          08h15-12h30 / 13h30-16h30
+                          8h15-12h30 / 13h30-16h30
                         </p>
                       </div>
 
-                      {/* Top Right: "Stage sélectionné" badge for current stage */}
-                      {isCurrentStage && (
-                        <div
-                          style={{
-                            position: 'absolute',
-                            top: '7px',
-                            right: '12px',
-                            display: 'flex',
-                            width: '117px',
-                            height: '17px',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            flexShrink: 0,
-                            color: '#336FF0',
-                            textAlign: 'center',
-                            fontFamily: 'Poppins',
-                            fontSize: '13px',
-                            fontWeight: 400,
-                            lineHeight: '35px'
-                          }}
-                        >
-                          Stage sélectionné
-                        </div>
-                      )}
-
-                      {/* Center: Location Pin + City + Address - Vertically centered and more to the left */}
-                      <div className="flex items-center gap-2.5" style={{ position: 'absolute', left: '200px', top: '50%', transform: 'translateY(-50%)' }}>
+                      {/* Center: Location Pin + City + Address - Vertically centered */}
+                      <div className="flex items-center gap-2.5" style={{ position: 'absolute', left: '160px', top: '50%', transform: 'translateY(-50%)' }}>
                         <div className="flex w-[38px] h-[38px] p-[9px] justify-center items-center gap-2.5 flex-shrink-0 rounded-full bg-gray-200">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
                             <g clipPath="url(#clip0_2180_399)">
@@ -2132,65 +2106,76 @@ export default function InscriptionPage() {
                         </div>
                       </div>
 
-                      {/* Top Right: Price - Centered above button (only for non-current stages) */}
-                      {!isCurrentStage && (
+                      {/* Right side container */}
+                      <div style={{ position: 'absolute', right: '12px', top: '10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+                        {/* "Stage sélectionné" badge for current stage */}
+                        {isCurrentStage && (
+                          <div
+                            style={{
+                              color: '#336FF0',
+                              fontFamily: 'Poppins',
+                              fontSize: '11px',
+                              fontWeight: 400,
+                              textAlign: 'center',
+                              marginBottom: '2px'
+                            }}
+                          >
+                            Stage sélectionné
+                          </div>
+                        )}
+
+                        {/* Price */}
                         <div
                           style={{
-                            position: 'absolute',
-                            top: '7px',
-                            right: '12px',
                             color: 'rgba(6,6,6,0.86)',
                             fontFamily: 'Poppins',
                             fontSize: '20px',
                             fontWeight: 400,
-                            lineHeight: '35px',
-                            textAlign: 'center',
-                            width: '125px'
+                            lineHeight: '1',
+                            textAlign: 'center'
                           }}
                         >
                           {stageItem.prix}€
                         </div>
-                      )}
 
-                      {/* Bottom Right: Green Button */}
-                      <button
-                        onClick={() => handleStageSelect(stageItem)}
-                        disabled={isCurrentStage}
-                        style={{
-                          position: 'absolute',
-                          bottom: '7px',
-                          right: '12px',
-                          display: 'flex',
-                          width: '125px',
-                          height: '31px',
-                          padding: '7px',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          gap: '20px',
-                          borderRadius: '12px',
-                          background: isCurrentStage ? '#ccc' : '#41A334',
-                          border: 'none',
-                          color: 'white',
-                          fontFamily: 'Poppins',
-                          fontSize: '11px',
-                          fontWeight: 400,
-                          cursor: isCurrentStage ? 'not-allowed' : 'pointer',
-                          transition: 'background 0.2s'
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!isCurrentStage) {
-                            e.currentTarget.style.background = '#389c2e'
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!isCurrentStage) {
-                            e.currentTarget.style.background = '#41A334'
-                          }
-                        }}
-                      >
-                        Choisir cette date
-                      </button>
+                        {/* Green Button */}
+                        <button
+                          onClick={() => handleStageSelect(stageItem)}
+                          disabled={isCurrentStage}
+                          style={{
+                            display: 'flex',
+                            width: '125px',
+                            height: '31px',
+                            padding: '7px',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '20px',
+                            borderRadius: '12px',
+                            background: isCurrentStage ? '#ccc' : '#41A334',
+                            border: 'none',
+                            color: 'white',
+                            fontFamily: 'Poppins',
+                            fontSize: '11px',
+                            fontWeight: 400,
+                            cursor: isCurrentStage ? 'not-allowed' : 'pointer',
+                            transition: 'background 0.2s',
+                            marginTop: '5px'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!isCurrentStage) {
+                              e.currentTarget.style.background = '#389c2e'
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!isCurrentStage) {
+                              e.currentTarget.style.background = '#41A334'
+                            }
+                          }}
+                        >
+                          Choisir cette date
+                        </button>
+                      </div>
                     </article>
                   )
                 })
