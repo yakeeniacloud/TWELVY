@@ -2053,16 +2053,19 @@ export default function InscriptionPage() {
                   return (
                     <article
                       key={stageItem.id}
-                      className="flex w-full p-[0_7px] items-center mb-3 rounded-[10px] border bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] relative"
+                      className="flex w-full mb-3 rounded-[10px] border bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] relative"
                       style={{
                         borderColor: isCurrentStage ? '#BC4747' : '#BBB',
                         backgroundColor: isCurrentStage ? '#FFF5F5' : 'white',
                         minHeight: '85px',
-                        paddingBottom: '45px'
+                        paddingBottom: '45px',
+                        paddingTop: '7px',
+                        paddingLeft: '7px',
+                        paddingRight: '7px'
                       }}
                     >
                       {/* Left: Date */}
-                      <div className="flex flex-col flex-shrink-0 gap-0 ml-3" style={{ width: '223px' }}>
+                      <div className="flex flex-col flex-shrink-0 gap-0 ml-3" style={{ width: '223px', alignSelf: 'center' }}>
                         <p className="text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'Poppins' }}>
                           {formatDate(stageItem.date_start, stageItem.date_end)}
                         </p>
@@ -2073,8 +2076,8 @@ export default function InscriptionPage() {
                         )}
                       </div>
 
-                      {/* Center: Location Pin + City + Address */}
-                      <div className="flex items-center gap-2.5 flex-1 mx-4">
+                      {/* Center: Location Pin + City + Address - Vertically centered and more to the left */}
+                      <div className="flex items-center gap-2.5" style={{ position: 'absolute', left: '250px', top: '50%', transform: 'translateY(-50%)' }}>
                         <div className="flex w-[38px] h-[38px] p-[9px] justify-center items-center gap-2.5 flex-shrink-0 rounded-full bg-gray-200">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
                             <g clipPath="url(#clip0_2180_399)">
@@ -2094,17 +2097,19 @@ export default function InscriptionPage() {
                         </div>
                       </div>
 
-                      {/* Top Right: Price */}
+                      {/* Top Right: Price - Centered above button */}
                       <div
                         style={{
                           position: 'absolute',
                           top: '7px',
-                          right: '12px',
+                          right: '50px',
                           color: 'rgba(6,6,6,0.86)',
                           fontFamily: 'Poppins',
                           fontSize: '20px',
                           fontWeight: 400,
-                          lineHeight: '35px'
+                          lineHeight: '35px',
+                          textAlign: 'center',
+                          width: '125px'
                         }}
                       >
                         {stageItem.prix}€
