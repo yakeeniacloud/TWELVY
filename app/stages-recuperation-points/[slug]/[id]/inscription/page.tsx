@@ -2064,17 +2064,52 @@ export default function InscriptionPage() {
                         paddingRight: '7px'
                       }}
                     >
-                      {/* Left: Date */}
+                      {/* Left: Date and Time */}
                       <div className="flex flex-col flex-shrink-0 gap-0 ml-3" style={{ width: '223px', alignSelf: 'center' }}>
+                        {/* Top Left: Date */}
                         <p className="text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'Poppins' }}>
                           {formatDate(stageItem.date_start, stageItem.date_end)}
                         </p>
-                        {isCurrentStage && (
-                          <p className="text-[#BC4747] text-[11px] font-normal leading-[13px] mt-2" style={{ fontFamily: 'Poppins' }}>
-                            Stage actuel
-                          </p>
-                        )}
+                        {/* Bottom Left: Time */}
+                        <p
+                          style={{
+                            width: '223px',
+                            color: 'rgba(66, 66, 66, 0.86)',
+                            fontFamily: 'Poppins',
+                            fontSize: '13px',
+                            fontWeight: 400,
+                            lineHeight: '35px',
+                            marginTop: '5px'
+                          }}
+                        >
+                          08h15-12h30 / 13h30-16h30
+                        </p>
                       </div>
+
+                      {/* Top Right: "Stage sélectionné" badge for current stage */}
+                      {isCurrentStage && (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: '7px',
+                            right: '12px',
+                            display: 'flex',
+                            width: '117px',
+                            height: '17px',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+                            color: '#336FF0',
+                            textAlign: 'center',
+                            fontFamily: 'Poppins',
+                            fontSize: '13px',
+                            fontWeight: 400,
+                            lineHeight: '35px'
+                          }}
+                        >
+                          Stage sélectionné
+                        </div>
+                      )}
 
                       {/* Center: Location Pin + City + Address - Vertically centered and more to the left */}
                       <div className="flex items-center gap-2.5" style={{ position: 'absolute', left: '200px', top: '50%', transform: 'translateY(-50%)' }}>
@@ -2097,23 +2132,25 @@ export default function InscriptionPage() {
                         </div>
                       </div>
 
-                      {/* Top Right: Price - Centered above button */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '7px',
-                          right: '12px',
-                          color: 'rgba(6,6,6,0.86)',
-                          fontFamily: 'Poppins',
-                          fontSize: '20px',
-                          fontWeight: 400,
-                          lineHeight: '35px',
-                          textAlign: 'center',
-                          width: '125px'
-                        }}
-                      >
-                        {stageItem.prix}€
-                      </div>
+                      {/* Top Right: Price - Centered above button (only for non-current stages) */}
+                      {!isCurrentStage && (
+                        <div
+                          style={{
+                            position: 'absolute',
+                            top: '7px',
+                            right: '12px',
+                            color: 'rgba(6,6,6,0.86)',
+                            fontFamily: 'Poppins',
+                            fontSize: '20px',
+                            fontWeight: 400,
+                            lineHeight: '35px',
+                            textAlign: 'center',
+                            width: '125px'
+                          }}
+                        >
+                          {stageItem.prix}€
+                        </div>
+                      )}
 
                       {/* Bottom Right: Green Button */}
                       <button
@@ -2152,7 +2189,7 @@ export default function InscriptionPage() {
                           }
                         }}
                       >
-                        {isCurrentStage ? 'Sélectionné' : 'Choisir cette date'}
+                        Choisir cette date
                       </button>
                     </article>
                   )
