@@ -1844,7 +1844,7 @@ export default function InscriptionPage() {
                       lineHeight: '35px'
                     }}
                   >
-                    190€ TTC
+                    {stage.prix}€ TTC
                   </p>
                 </div>
               </div>
