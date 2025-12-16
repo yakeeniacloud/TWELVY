@@ -2026,7 +2026,7 @@ export default function InscriptionPage() {
                   fontWeight: 400,
                   lineHeight: '22px',
                   textDecoration: 'underline',
-                  margin: '0 auto 15px auto'
+                  margin: '0 0 15px 0'
                 }}
               >
                 Liste des stages :
@@ -2051,62 +2051,105 @@ export default function InscriptionPage() {
                 availableStages.map((stageItem) => {
                   const isCurrentStage = stage && stageItem.id === stage.id
                   return (
-                    <article
-                      key={stageItem.id}
-                      className="flex w-full h-[85px] p-[0_7px] items-center mb-3 rounded-[10px] border bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)]"
-                      style={{
-                        borderColor: isCurrentStage ? '#BC4747' : '#BBB',
-                        backgroundColor: isCurrentStage ? '#FFF5F5' : 'white'
-                      }}
-                    >
-                      {/* Left: Date and Details Link */}
-                      <div className="flex flex-col flex-shrink-0 gap-0 ml-3" style={{ width: '223px' }}>
-                        <p className="text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'Poppins' }}>
-                          {formatDate(stageItem.date_start, stageItem.date_end)}
-                        </p>
-                        {isCurrentStage && (
-                          <p className="text-[#BC4747] text-[11px] font-normal leading-[13px] mt-2" style={{ fontFamily: 'Poppins' }}>
-                            Stage actuel
-                          </p>
-                        )}
-                      </div>
-
-                      {/* Center: Location Pin + City + Address */}
-                      <div className="flex items-center gap-2.5 flex-1 mx-4">
-                        <div className="flex w-[38px] h-[38px] p-[9px] justify-center items-center gap-2.5 flex-shrink-0 rounded-full bg-gray-200">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
-                            <g clipPath="url(#clip0_2180_399)">
-                              <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </g>
-                            <defs>
-                              <clipPath id="clip0_2180_399">
-                                <rect width="20" height="20" fill="white"/>
-                              </clipPath>
-                            </defs>
-                          </svg>
-                        </div>
-                        <div className="flex flex-col justify-center gap-0">
-                          <p className="flex-shrink-0 text-[rgba(0,0,0,0.98)] text-[15px] font-normal leading-[15px]" style={{ fontFamily: 'Poppins' }}>{stageItem.site.ville}</p>
-                          <p className="flex-shrink-0 text-[rgba(6,6,6,0.56)] text-[12px] font-normal leading-[12px] mt-3" style={{ fontFamily: 'Poppins' }}>{removeStreetNumber(stageItem.site.adresse)}</p>
-                        </div>
-                      </div>
-
-                      {/* Right: Price */}
-                      <div className="w-[60px] h-[31px] flex-shrink-0">
-                        <p className="text-[rgba(6,6,6,0.86)] text-center text-[20px] font-normal leading-[35px]" style={{ fontFamily: 'Poppins' }}>{stageItem.prix}€</p>
-                      </div>
-
-                      {/* Right: Green Button */}
-                      <button
-                        onClick={() => handleStageSelect(stageItem)}
-                        className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap flex-shrink-0 ml-4 mr-[10px]"
-                        style={{ fontFamily: 'Poppins' }}
-                        disabled={isCurrentStage}
+                    <div key={stageItem.id} style={{ marginBottom: '12px' }}>
+                      {/* Price centered above card */}
+                      <p
+                        style={{
+                          textAlign: 'center',
+                          color: 'rgba(6,6,6,0.86)',
+                          fontFamily: 'Poppins',
+                          fontSize: '20px',
+                          fontWeight: 400,
+                          lineHeight: '35px',
+                          marginBottom: '5px'
+                        }}
                       >
-                        {isCurrentStage ? 'Sélectionné' : 'Choisir ce stage'}
-                      </button>
-                    </article>
+                        {stageItem.prix}€
+                      </p>
+
+                      <article
+                        className="flex w-full p-[0_7px] items-center rounded-[10px] border bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] relative"
+                        style={{
+                          borderColor: isCurrentStage ? '#BC4747' : '#BBB',
+                          backgroundColor: isCurrentStage ? '#FFF5F5' : 'white',
+                          minHeight: '85px',
+                          paddingBottom: '45px'
+                        }}
+                      >
+                        {/* Left: Date */}
+                        <div className="flex flex-col flex-shrink-0 gap-0 ml-3" style={{ width: '223px' }}>
+                          <p className="text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'Poppins' }}>
+                            {formatDate(stageItem.date_start, stageItem.date_end)}
+                          </p>
+                          {isCurrentStage && (
+                            <p className="text-[#BC4747] text-[11px] font-normal leading-[13px] mt-2" style={{ fontFamily: 'Poppins' }}>
+                              Stage actuel
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Center: Location Pin + City + Address */}
+                        <div className="flex items-center gap-2.5 flex-1 mx-4">
+                          <div className="flex w-[38px] h-[38px] p-[9px] justify-center items-center gap-2.5 flex-shrink-0 rounded-full bg-gray-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
+                              <g clipPath="url(#clip0_2180_399)">
+                                <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </g>
+                              <defs>
+                                <clipPath id="clip0_2180_399">
+                                  <rect width="20" height="20" fill="white"/>
+                                </clipPath>
+                              </defs>
+                            </svg>
+                          </div>
+                          <div className="flex flex-col justify-center gap-0">
+                            <p className="flex-shrink-0 text-[rgba(0,0,0,0.98)] text-[15px] font-normal leading-[15px]" style={{ fontFamily: 'Poppins' }}>{stageItem.site.ville}</p>
+                            <p className="flex-shrink-0 text-[rgba(6,6,6,0.56)] text-[12px] font-normal leading-[12px] mt-3" style={{ fontFamily: 'Poppins' }}>{removeStreetNumber(stageItem.site.adresse)}</p>
+                          </div>
+                        </div>
+
+                        {/* Bottom Left: Green Button */}
+                        <button
+                          onClick={() => handleStageSelect(stageItem)}
+                          disabled={isCurrentStage}
+                          style={{
+                            position: 'absolute',
+                            bottom: '7px',
+                            left: '7px',
+                            display: 'flex',
+                            width: '125px',
+                            height: '31px',
+                            padding: '7px',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '20px',
+                            borderRadius: '12px',
+                            background: isCurrentStage ? '#ccc' : '#41A334',
+                            border: 'none',
+                            color: 'white',
+                            fontFamily: 'Poppins',
+                            fontSize: '11px',
+                            fontWeight: 400,
+                            cursor: isCurrentStage ? 'not-allowed' : 'pointer',
+                            transition: 'background 0.2s'
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!isCurrentStage) {
+                              e.currentTarget.style.background = '#389c2e'
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!isCurrentStage) {
+                              e.currentTarget.style.background = '#41A334'
+                            }
+                          }}
+                        >
+                          {isCurrentStage ? 'Sélectionné' : 'Choisir cette date'}
+                        </button>
+                      </article>
+                    </div>
                   )
                 })
               )}
