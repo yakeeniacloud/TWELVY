@@ -2086,7 +2086,7 @@ export default function InscriptionPage() {
                       </div>
 
                       {/* Center: Location Pin + City + Address - Vertically centered */}
-                      <div className="flex items-center gap-2.5" style={{ position: 'absolute', left: '200px', top: '50%', transform: 'translateY(-50%)' }}>
+                      <div className="flex items-center gap-2.5" style={{ position: 'absolute', left: '240px', top: '50%', transform: 'translateY(-50%)' }}>
                         <div className="flex w-[38px] h-[38px] p-[9px] justify-center items-center gap-2.5 flex-shrink-0 rounded-full bg-gray-200">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
                             <g clipPath="url(#clip0_2180_399)">
