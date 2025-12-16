@@ -2026,7 +2026,8 @@ export default function InscriptionPage() {
                   fontWeight: 400,
                   lineHeight: '22px',
                   textDecoration: 'underline',
-                  margin: '0 0 15px 0'
+                  margin: '0 0 10px 0',
+                  paddingLeft: '7px'
                 }}
               >
                 Liste des stages :
@@ -2056,7 +2057,7 @@ export default function InscriptionPage() {
                       className="flex w-full mb-3 rounded-[10px] border bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] relative"
                       style={{
                         borderColor: isCurrentStage ? '#BC4747' : '#BBB',
-                        backgroundColor: isCurrentStage ? '#FFF5F5' : 'white',
+                        backgroundColor: isCurrentStage ? '#F2DDDD' : 'white',
                         width: '589px',
                         height: '85px',
                         paddingTop: '7px',
