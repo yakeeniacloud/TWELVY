@@ -2026,7 +2026,7 @@ export default function InscriptionPage() {
                   fontWeight: 400,
                   lineHeight: '22px',
                   textDecoration: 'underline',
-                  margin: '20px 0 8px -30px'
+                  margin: '30px 0 6px -28px'
                 }}
               >
                 Liste des stages :
