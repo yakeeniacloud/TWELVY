@@ -394,8 +394,8 @@ export default function Home() {
           }}>proches de chez vous</span>
         </div>
 
-        {/* 20px spacing */}
-        <div style={{ height: '20px' }}></div>
+        {/* 35px spacing */}
+        <div style={{ height: '35px' }}></div>
 
         {/* 4 Widgets Row */}
         <div className="flex justify-center items-start" style={{ gap: '40px' }}>
@@ -429,7 +429,7 @@ export default function Home() {
               fontSize: '16px',
               fontStyle: 'normal',
               fontWeight: 400,
-              lineHeight: '35px'
+              lineHeight: '20px'
             }}>Marseille</p>
             <p style={{
               width: '202px',
@@ -440,21 +440,23 @@ export default function Home() {
               fontSize: '17px',
               fontStyle: 'normal',
               fontWeight: 400,
-              lineHeight: '35px'
+              lineHeight: '28px'
             }}>199 €</p>
-            <button style={{
-              display: 'flex',
-              width: '103px',
-              height: '31px',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '10px',
-              flexShrink: 0,
-              borderRadius: '12px',
-              background: '#41A334',
-              border: 'none',
-              cursor: 'pointer'
-            }}>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              style={{
+                display: 'flex',
+                width: '103px',
+                height: '31px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '10px',
+                flexShrink: 0,
+                borderRadius: '12px',
+                background: '#41A334',
+                border: 'none',
+                cursor: 'pointer'
+              }}>
               <span style={{
                 width: '83px',
                 height: '20px',
@@ -500,7 +502,7 @@ export default function Home() {
               fontSize: '16px',
               fontStyle: 'normal',
               fontWeight: 400,
-              lineHeight: '35px'
+              lineHeight: '20px'
             }}>Toulon</p>
             <p style={{
               width: '202px',
@@ -511,21 +513,23 @@ export default function Home() {
               fontSize: '17px',
               fontStyle: 'normal',
               fontWeight: 400,
-              lineHeight: '35px'
+              lineHeight: '28px'
             }}>219 €</p>
-            <button style={{
-              display: 'flex',
-              width: '103px',
-              height: '31px',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '10px',
-              flexShrink: 0,
-              borderRadius: '12px',
-              background: '#41A334',
-              border: 'none',
-              cursor: 'pointer'
-            }}>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              style={{
+                display: 'flex',
+                width: '103px',
+                height: '31px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '10px',
+                flexShrink: 0,
+                borderRadius: '12px',
+                background: '#41A334',
+                border: 'none',
+                cursor: 'pointer'
+              }}>
               <span style={{
                 width: '83px',
                 height: '20px',
@@ -571,7 +575,7 @@ export default function Home() {
               fontSize: '16px',
               fontStyle: 'normal',
               fontWeight: 400,
-              lineHeight: '35px'
+              lineHeight: '20px'
             }}>Nice</p>
             <p style={{
               width: '202px',
@@ -582,21 +586,23 @@ export default function Home() {
               fontSize: '17px',
               fontStyle: 'normal',
               fontWeight: 400,
-              lineHeight: '35px'
+              lineHeight: '28px'
             }}>189 €</p>
-            <button style={{
-              display: 'flex',
-              width: '103px',
-              height: '31px',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '10px',
-              flexShrink: 0,
-              borderRadius: '12px',
-              background: '#41A334',
-              border: 'none',
-              cursor: 'pointer'
-            }}>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              style={{
+                display: 'flex',
+                width: '103px',
+                height: '31px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '10px',
+                flexShrink: 0,
+                borderRadius: '12px',
+                background: '#41A334',
+                border: 'none',
+                cursor: 'pointer'
+              }}>
               <span style={{
                 width: '83px',
                 height: '20px',
@@ -642,7 +648,7 @@ export default function Home() {
               fontSize: '16px',
               fontStyle: 'normal',
               fontWeight: 400,
-              lineHeight: '35px'
+              lineHeight: '20px'
             }}>Lyon</p>
             <p style={{
               width: '202px',
@@ -653,21 +659,23 @@ export default function Home() {
               fontSize: '17px',
               fontStyle: 'normal',
               fontWeight: 400,
-              lineHeight: '35px'
+              lineHeight: '28px'
             }}>209 €</p>
-            <button style={{
-              display: 'flex',
-              width: '103px',
-              height: '31px',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '10px',
-              flexShrink: 0,
-              borderRadius: '12px',
-              background: '#41A334',
-              border: 'none',
-              cursor: 'pointer'
-            }}>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              style={{
+                display: 'flex',
+                width: '103px',
+                height: '31px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '10px',
+                flexShrink: 0,
+                borderRadius: '12px',
+                background: '#41A334',
+                border: 'none',
+                cursor: 'pointer'
+              }}>
               <span style={{
                 width: '83px',
                 height: '20px',
