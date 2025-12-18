@@ -708,6 +708,68 @@ export default function Home() {
           style={{ maxWidth: '746px', height: 'auto' }}
         />
       </section>
+
+      {/* 100px spacing */}
+      <div style={{ height: '100px' }}></div>
+
+      {/* Europe 1 Recommendation Section */}
+      <section className="flex items-center justify-center">
+        {/* Left: Recommandé par Europe 1 with subtitle */}
+        <div className="flex flex-col items-center justify-center">
+          <h3 className="text-center" style={{
+            fontFamily: 'var(--font-poppins)',
+            color: '#2C2C2C',
+            fontSize: '20px',
+            fontWeight: 500,
+            lineHeight: '20px',
+            letterSpacing: '1.4px',
+            width: '176px',
+            height: '77px',
+            flexShrink: 0
+          }}>
+            Recommandé par Europe 1
+          </h3>
+          <p className="text-center mt-4" style={{
+            fontFamily: 'var(--font-poppins)',
+            width: '333px',
+            height: '56px',
+            color: 'rgba(6, 6, 6, 0.80)',
+            fontSize: '15px',
+            fontWeight: 400,
+            lineHeight: '25px',
+            marginRight: '35px'
+          }}>
+            ProStagesPermis cité comme site de confiance par Europe 1
+          </p>
+        </div>
+
+        {/* Vertical Line */}
+        <div style={{
+          width: '1px',
+          height: '172.502px',
+          background: '#000',
+          marginRight: '35px'
+        }}></div>
+
+        {/* Right: Europe 1 Logo */}
+        <div className="flex flex-col items-center justify-center gap-4">
+          <img
+            src="/europe1-logo.png"
+            alt="Europe 1"
+            width={200}
+            height={100}
+            className="w-auto h-20"
+          />
+          <a href="https://www.youtube.com/watch?v=z1AsmdcGTaw" target="_blank" rel="noopener noreferrer"
+             className="text-red-700 hover:underline" style={{
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '15px',
+            fontWeight: 400
+          }}>
+            Écouter l'extrait
+          </a>
+        </div>
+      </section>
     </div>
   )
 }
