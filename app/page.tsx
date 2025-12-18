@@ -356,6 +356,334 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* 50px spacing */}
+      <div style={{ height: '50px' }}></div>
+
+      {/* Prochains stages Section */}
+      <section className="flex flex-col items-center">
+        {/* Title: Prochains stages proches de chez vous */}
+        <div className="flex items-center justify-center">
+          <span style={{
+            display: 'flex',
+            width: '201px',
+            height: '42px',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            color: 'rgba(6, 6, 6, 0.86)',
+            textAlign: 'center',
+            WebkitTextStrokeWidth: '1px',
+            WebkitTextStrokeColor: '#000',
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '23px',
+            fontStyle: 'normal',
+            fontWeight: 250,
+            lineHeight: '35px'
+          }}>Prochains stages</span>
+          <span style={{
+            width: '261px',
+            color: 'rgba(6, 6, 6, 0.86)',
+            textAlign: 'center',
+            WebkitTextStrokeWidth: '1px',
+            WebkitTextStrokeColor: 'rgba(188, 71, 71, 0.73)',
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '23px',
+            fontStyle: 'normal',
+            fontWeight: 275,
+            lineHeight: '35px'
+          }}>proches de chez vous</span>
+        </div>
+
+        {/* 20px spacing */}
+        <div style={{ height: '20px' }}></div>
+
+        {/* 4 Widgets Row */}
+        <div className="flex justify-center items-start" style={{ gap: '40px' }}>
+          {/* Widget 1 - Marseille */}
+          <div className="flex flex-col items-center">
+            <div style={{
+              width: '176px',
+              height: '176px',
+              flexShrink: 0,
+              aspectRatio: '1/1',
+              borderRadius: '15px',
+              background: 'url(/widget.png) lightgray 50% / cover no-repeat'
+            }}></div>
+            <p style={{
+              width: '199px',
+              color: '#000',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '17px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px',
+              marginTop: '8px'
+            }}>Vend 5 et sam 6 déc</p>
+            <p style={{
+              width: '202px',
+              flexShrink: 0,
+              color: '#6A6969',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '16px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px'
+            }}>Marseille</p>
+            <p style={{
+              width: '202px',
+              flexShrink: 0,
+              color: '#BC4747',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '17px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px'
+            }}>199 €</p>
+            <button style={{
+              display: 'flex',
+              width: '103px',
+              height: '31px',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '10px',
+              flexShrink: 0,
+              borderRadius: '12px',
+              background: '#41A334',
+              border: 'none',
+              cursor: 'pointer'
+            }}>
+              <span style={{
+                width: '83px',
+                height: '20px',
+                flexShrink: 0,
+                color: '#FFF',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '11px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: 'normal',
+                letterSpacing: '0.77px'
+              }}>Voir ce stage</span>
+            </button>
+          </div>
+
+          {/* Widget 2 - Toulon */}
+          <div className="flex flex-col items-center">
+            <div style={{
+              width: '176px',
+              height: '176px',
+              flexShrink: 0,
+              aspectRatio: '1/1',
+              borderRadius: '15px',
+              background: 'url(/widget.png) lightgray 50% / cover no-repeat'
+            }}></div>
+            <p style={{
+              width: '199px',
+              color: '#000',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '17px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px',
+              marginTop: '8px'
+            }}>Sam 7 et dim 8 déc</p>
+            <p style={{
+              width: '202px',
+              flexShrink: 0,
+              color: '#6A6969',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '16px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px'
+            }}>Toulon</p>
+            <p style={{
+              width: '202px',
+              flexShrink: 0,
+              color: '#BC4747',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '17px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px'
+            }}>219 €</p>
+            <button style={{
+              display: 'flex',
+              width: '103px',
+              height: '31px',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '10px',
+              flexShrink: 0,
+              borderRadius: '12px',
+              background: '#41A334',
+              border: 'none',
+              cursor: 'pointer'
+            }}>
+              <span style={{
+                width: '83px',
+                height: '20px',
+                flexShrink: 0,
+                color: '#FFF',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '11px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: 'normal',
+                letterSpacing: '0.77px'
+              }}>Voir ce stage</span>
+            </button>
+          </div>
+
+          {/* Widget 3 - Nice */}
+          <div className="flex flex-col items-center">
+            <div style={{
+              width: '176px',
+              height: '176px',
+              flexShrink: 0,
+              aspectRatio: '1/1',
+              borderRadius: '15px',
+              background: 'url(/widget.png) lightgray 50% / cover no-repeat'
+            }}></div>
+            <p style={{
+              width: '199px',
+              color: '#000',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '17px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px',
+              marginTop: '8px'
+            }}>Vend 12 et sam 13 déc</p>
+            <p style={{
+              width: '202px',
+              flexShrink: 0,
+              color: '#6A6969',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '16px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px'
+            }}>Nice</p>
+            <p style={{
+              width: '202px',
+              flexShrink: 0,
+              color: '#BC4747',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '17px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px'
+            }}>189 €</p>
+            <button style={{
+              display: 'flex',
+              width: '103px',
+              height: '31px',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '10px',
+              flexShrink: 0,
+              borderRadius: '12px',
+              background: '#41A334',
+              border: 'none',
+              cursor: 'pointer'
+            }}>
+              <span style={{
+                width: '83px',
+                height: '20px',
+                flexShrink: 0,
+                color: '#FFF',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '11px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: 'normal',
+                letterSpacing: '0.77px'
+              }}>Voir ce stage</span>
+            </button>
+          </div>
+
+          {/* Widget 4 - Lyon */}
+          <div className="flex flex-col items-center">
+            <div style={{
+              width: '176px',
+              height: '176px',
+              flexShrink: 0,
+              aspectRatio: '1/1',
+              borderRadius: '15px',
+              background: 'url(/widget.png) lightgray 50% / cover no-repeat'
+            }}></div>
+            <p style={{
+              width: '199px',
+              color: '#000',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '17px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px',
+              marginTop: '8px'
+            }}>Sam 14 et dim 15 déc</p>
+            <p style={{
+              width: '202px',
+              flexShrink: 0,
+              color: '#6A6969',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '16px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px'
+            }}>Lyon</p>
+            <p style={{
+              width: '202px',
+              flexShrink: 0,
+              color: '#BC4747',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '17px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px'
+            }}>209 €</p>
+            <button style={{
+              display: 'flex',
+              width: '103px',
+              height: '31px',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '10px',
+              flexShrink: 0,
+              borderRadius: '12px',
+              background: '#41A334',
+              border: 'none',
+              cursor: 'pointer'
+            }}>
+              <span style={{
+                width: '83px',
+                height: '20px',
+                flexShrink: 0,
+                color: '#FFF',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '11px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: 'normal',
+                letterSpacing: '0.77px'
+              }}>Voir ce stage</span>
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
