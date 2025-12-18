@@ -1102,7 +1102,7 @@ export default function Home() {
         <div
           style={{
             display: 'flex',
-            maxWidth: '1200px',
+            width: '692px',
             minHeight: '402px',
             margin: '0 auto',
             flexDirection: 'column',
