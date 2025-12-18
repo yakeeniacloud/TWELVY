@@ -455,7 +455,8 @@ export default function Home() {
                 borderRadius: '12px',
                 background: '#41A334',
                 border: 'none',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                marginTop: '8px'
               }}>
               <span style={{
                 width: '83px',
@@ -528,7 +529,8 @@ export default function Home() {
                 borderRadius: '12px',
                 background: '#41A334',
                 border: 'none',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                marginTop: '8px'
               }}>
               <span style={{
                 width: '83px',
@@ -601,7 +603,8 @@ export default function Home() {
                 borderRadius: '12px',
                 background: '#41A334',
                 border: 'none',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                marginTop: '8px'
               }}>
               <span style={{
                 width: '83px',
@@ -674,7 +677,8 @@ export default function Home() {
                 borderRadius: '12px',
                 background: '#41A334',
                 border: 'none',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                marginTop: '8px'
               }}>
               <span style={{
                 width: '83px',
@@ -690,6 +694,31 @@ export default function Home() {
               }}>Voir ce stage</span>
             </button>
           </div>
+        </div>
+      </section>
+
+      {/* 100px spacing */}
+      <div style={{ height: '100px' }}></div>
+
+      {/* Benefit Box 2 - Pourquoi réserver */}
+      <section className="flex justify-center">
+        <div style={{
+          display: 'flex',
+          width: '746px',
+          height: '308px',
+          padding: '10px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '10px',
+          flexShrink: 0,
+          borderRadius: '16px',
+          background: 'rgba(230, 230, 230, 0.20)'
+        }}>
+          <img
+            src="/benefitbox2.png"
+            alt="Pourquoi réserver votre stage chez ProStagesPermis"
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          />
         </div>
       </section>
     </div>
