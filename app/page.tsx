@@ -843,7 +843,7 @@ export default function Home() {
                     fontWeight: 400,
                     lineHeight: '22px'
                   }}>Je viens de commettre une infraction</p>
-                  <div style={{ height: '15px' }}></div>
+                  <div style={{ height: '8px' }}></div>
                   <span style={{
                     display: 'flex',
                     width: '141px',
@@ -895,7 +895,7 @@ export default function Home() {
                     fontWeight: 400,
                     lineHeight: '22px'
                   }}>Je dois vérifier mes points</p>
-                  <div style={{ height: '15px' }}></div>
+                  <div style={{ height: '8px' }}></div>
                   <span style={{
                     display: 'flex',
                     width: '141px',
@@ -950,7 +950,7 @@ export default function Home() {
                     fontWeight: 400,
                     lineHeight: '22px'
                   }}>J'ai reçu une lettre (48n, 48m)</p>
-                  <div style={{ height: '15px' }}></div>
+                  <div style={{ height: '8px' }}></div>
                   <span style={{
                     display: 'flex',
                     width: '141px',
@@ -1002,7 +1002,7 @@ export default function Home() {
                     fontWeight: 400,
                     lineHeight: '22px'
                   }}>Je suis en permis probatoire</p>
-                  <div style={{ height: '15px' }}></div>
+                  <div style={{ height: '8px' }}></div>
                   <span style={{
                     display: 'flex',
                     width: '141px',
@@ -1029,6 +1029,40 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* 200px spacing */}
+      <div style={{ height: '200px' }}></div>
+
+      {/* Trouver un stage button */}
+      <section className="flex justify-center">
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          style={{
+            display: 'flex',
+            width: '460px',
+            height: '69px',
+            padding: '7px 15px',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '20px',
+            flexShrink: 0,
+            borderRadius: '40px',
+            background: '#41A334',
+            border: 'none',
+            cursor: 'pointer'
+          }}
+        >
+          <span style={{
+            color: '#FFF',
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '20px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: 'normal',
+            letterSpacing: '1.4px'
+          }}>Trouver un stage près de chez moi</span>
+        </button>
       </section>
     </div>
   )
