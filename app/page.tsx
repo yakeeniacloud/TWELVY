@@ -819,7 +819,7 @@ export default function Home() {
           <div className="flex" style={{ gap: '30px' }}>
             {/* Widget 1 with line below */}
             <div className="flex flex-col">
-              <div className="flex items-center" style={{ gap: '15px' }}>
+              <div className="flex items-start" style={{ gap: '15px' }}>
                 <div style={{
                   width: '140px',
                   height: '93px',
@@ -828,20 +828,37 @@ export default function Home() {
                   borderRadius: '12px',
                   background: 'url(/widget2.png) lightgray 50% / cover no-repeat'
                 }}></div>
-                <p style={{
-                  display: 'flex',
-                  width: '196px',
-                  height: '57px',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  color: '#000',
-                  fontFamily: 'var(--font-poppins)',
-                  fontSize: '16px',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  lineHeight: '22px'
-                }}>Je viens de commettre une infraction</p>
+                <div className="flex flex-col">
+                  <p style={{
+                    display: 'flex',
+                    width: '196px',
+                    height: '57px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    color: '#000',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '22px'
+                  }}>Je viens de commettre une infraction</p>
+                  <div style={{ height: '15px' }}></div>
+                  <span style={{
+                    display: 'flex',
+                    width: '141px',
+                    height: '24px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    color: '#BC4747',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '25px'
+                  }}>Lire la suite</span>
+                </div>
               </div>
               {/* Line below widget 1 */}
               <div style={{
@@ -854,7 +871,7 @@ export default function Home() {
 
             {/* Widget 2 with line below */}
             <div className="flex flex-col">
-              <div className="flex items-center" style={{ gap: '15px' }}>
+              <div className="flex items-start" style={{ gap: '15px' }}>
                 <div style={{
                   width: '140px',
                   height: '93px',
@@ -863,20 +880,37 @@ export default function Home() {
                   borderRadius: '12px',
                   background: 'url(/widget2.png) lightgray 50% / cover no-repeat'
                 }}></div>
-                <p style={{
-                  display: 'flex',
-                  width: '196px',
-                  height: '57px',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  color: '#000',
-                  fontFamily: 'var(--font-poppins)',
-                  fontSize: '16px',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  lineHeight: '22px'
-                }}>Je dois vérifier mes points</p>
+                <div className="flex flex-col">
+                  <p style={{
+                    display: 'flex',
+                    width: '196px',
+                    height: '57px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    color: '#000',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '22px'
+                  }}>Je dois vérifier mes points</p>
+                  <div style={{ height: '15px' }}></div>
+                  <span style={{
+                    display: 'flex',
+                    width: '141px',
+                    height: '24px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    color: '#BC4747',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '25px'
+                  }}>Lire la suite</span>
+                </div>
               </div>
               {/* Line below widget 2 */}
               <div style={{
@@ -892,7 +926,7 @@ export default function Home() {
           <div className="flex" style={{ gap: '30px' }}>
             {/* Widget 3 with line below */}
             <div className="flex flex-col">
-              <div className="flex items-center" style={{ gap: '15px' }}>
+              <div className="flex items-start" style={{ gap: '15px' }}>
                 <div style={{
                   width: '140px',
                   height: '93px',
@@ -901,20 +935,37 @@ export default function Home() {
                   borderRadius: '12px',
                   background: 'url(/widget2.png) lightgray 50% / cover no-repeat'
                 }}></div>
-                <p style={{
-                  display: 'flex',
-                  width: '196px',
-                  height: '57px',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  color: '#000',
-                  fontFamily: 'var(--font-poppins)',
-                  fontSize: '16px',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  lineHeight: '22px'
-                }}>J'ai reçu une lettre (48n, 48m)</p>
+                <div className="flex flex-col">
+                  <p style={{
+                    display: 'flex',
+                    width: '196px',
+                    height: '57px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    color: '#000',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '22px'
+                  }}>J'ai reçu une lettre (48n, 48m)</p>
+                  <div style={{ height: '15px' }}></div>
+                  <span style={{
+                    display: 'flex',
+                    width: '141px',
+                    height: '24px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    color: '#BC4747',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '25px'
+                  }}>Lire la suite</span>
+                </div>
               </div>
               {/* Line below widget 3 */}
               <div style={{
@@ -927,7 +978,7 @@ export default function Home() {
 
             {/* Widget 4 with line below */}
             <div className="flex flex-col">
-              <div className="flex items-center" style={{ gap: '15px' }}>
+              <div className="flex items-start" style={{ gap: '15px' }}>
                 <div style={{
                   width: '140px',
                   height: '93px',
@@ -936,20 +987,37 @@ export default function Home() {
                   borderRadius: '12px',
                   background: 'url(/widget2.png) lightgray 50% / cover no-repeat'
                 }}></div>
-                <p style={{
-                  display: 'flex',
-                  width: '196px',
-                  height: '57px',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  color: '#000',
-                  fontFamily: 'var(--font-poppins)',
-                  fontSize: '16px',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  lineHeight: '22px'
-                }}>Je suis en permis probatoire</p>
+                <div className="flex flex-col">
+                  <p style={{
+                    display: 'flex',
+                    width: '196px',
+                    height: '57px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    color: '#000',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '22px'
+                  }}>Je suis en permis probatoire</p>
+                  <div style={{ height: '15px' }}></div>
+                  <span style={{
+                    display: 'flex',
+                    width: '141px',
+                    height: '24px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    color: '#BC4747',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '25px'
+                  }}>Lire la suite</span>
+                </div>
               </div>
               {/* Line below widget 4 */}
               <div style={{
