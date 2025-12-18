@@ -770,6 +770,180 @@ export default function Home() {
           </a>
         </div>
       </section>
+
+      {/* 100px spacing */}
+      <div style={{ height: '100px' }}></div>
+
+      {/* Dans quelle situation êtes-vous Section */}
+      <section className="flex flex-col items-center">
+        {/* Title: Dans quelle situation êtes-vous */}
+        <div className="flex items-center justify-center">
+          <span style={{
+            display: 'flex',
+            width: '241px',
+            height: '42px',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            flexShrink: 0,
+            color: 'rgba(6, 6, 6, 0.86)',
+            textAlign: 'center',
+            WebkitTextStrokeWidth: '1px',
+            WebkitTextStrokeColor: '#000',
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '23px',
+            fontStyle: 'normal',
+            fontWeight: 250,
+            lineHeight: '35px'
+          }}>Dans quelle situation</span>
+          <span style={{
+            width: '120px',
+            flexShrink: 0,
+            color: 'rgba(6, 6, 6, 0.86)',
+            textAlign: 'center',
+            WebkitTextStrokeWidth: '1px',
+            WebkitTextStrokeColor: 'rgba(188, 71, 71, 0.73)',
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '23px',
+            fontStyle: 'normal',
+            fontWeight: 275,
+            lineHeight: '35px'
+          }}>êtes-vous</span>
+        </div>
+
+        {/* 25px spacing */}
+        <div style={{ height: '25px' }}></div>
+
+        {/* Widgets Grid */}
+        <div className="flex flex-col items-center" style={{ gap: '30px' }}>
+          {/* First Row */}
+          <div className="flex items-center" style={{ gap: '30px' }}>
+            {/* Widget 1 */}
+            <div className="flex items-center" style={{ gap: '15px' }}>
+              <div style={{
+                width: '140px',
+                height: '93px',
+                flexShrink: 0,
+                aspectRatio: '140/93',
+                borderRadius: '12px',
+                background: 'url(/widget2.png) lightgray 50% / cover no-repeat'
+              }}></div>
+              <p style={{
+                display: 'flex',
+                width: '196px',
+                height: '57px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flexShrink: 0,
+                color: '#000',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '16px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '22px'
+              }}>Je viens de commettre une infraction</p>
+            </div>
+
+            {/* Widget 2 */}
+            <div className="flex items-center" style={{ gap: '15px' }}>
+              <div style={{
+                width: '140px',
+                height: '93px',
+                flexShrink: 0,
+                aspectRatio: '140/93',
+                borderRadius: '12px',
+                background: 'url(/widget2.png) lightgray 50% / cover no-repeat'
+              }}></div>
+              <p style={{
+                display: 'flex',
+                width: '196px',
+                height: '57px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flexShrink: 0,
+                color: '#000',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '16px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '22px'
+              }}>Je dois vérifier mes points</p>
+            </div>
+          </div>
+
+          {/* Line between rows - aligned with first widget */}
+          <div style={{
+            width: '358px',
+            height: '1px',
+            background: '#000',
+            alignSelf: 'flex-start',
+            marginLeft: '0px'
+          }}></div>
+
+          {/* Second Row */}
+          <div className="flex items-center" style={{ gap: '30px' }}>
+            {/* Widget 3 */}
+            <div className="flex items-center" style={{ gap: '15px' }}>
+              <div style={{
+                width: '140px',
+                height: '93px',
+                flexShrink: 0,
+                aspectRatio: '140/93',
+                borderRadius: '12px',
+                background: 'url(/widget2.png) lightgray 50% / cover no-repeat'
+              }}></div>
+              <p style={{
+                display: 'flex',
+                width: '196px',
+                height: '57px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flexShrink: 0,
+                color: '#000',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '16px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '22px'
+              }}>J'ai reçu une lettre (48n, 48m)</p>
+            </div>
+
+            {/* Widget 4 */}
+            <div className="flex items-center" style={{ gap: '15px' }}>
+              <div style={{
+                width: '140px',
+                height: '93px',
+                flexShrink: 0,
+                aspectRatio: '140/93',
+                borderRadius: '12px',
+                background: 'url(/widget2.png) lightgray 50% / cover no-repeat'
+              }}></div>
+              <p style={{
+                display: 'flex',
+                width: '196px',
+                height: '57px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flexShrink: 0,
+                color: '#000',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '16px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '22px'
+              }}>Je suis en permis probatoire</p>
+            </div>
+          </div>
+
+          {/* Line after second row - aligned with end of second widget */}
+          <div style={{
+            width: '358px',
+            height: '1px',
+            background: '#000',
+            alignSelf: 'flex-end',
+            marginRight: '0px'
+          }}></div>
+        </div>
+      </section>
     </div>
   )
 }
