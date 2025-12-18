@@ -729,7 +729,7 @@ export default function Home() {
           }}>
             Recommandé par Europe 1
           </h3>
-          <p className="text-center mt-4" style={{
+          <p className="text-center mt-2" style={{
             fontFamily: 'var(--font-poppins)',
             width: '333px',
             height: '56px',
