@@ -794,7 +794,8 @@ export default function Home() {
             fontStyle: 'normal',
             fontWeight: 250,
             lineHeight: '35px'
-          }}>Dans quelle situation </span>
+          }}>Dans quelle situation</span>
+          <span style={{ width: '8px' }}></span>
           <span style={{
             width: '120px',
             flexShrink: 0,
@@ -1063,6 +1064,239 @@ export default function Home() {
             letterSpacing: '1.4px'
           }}>Trouver un stage près de chez moi</span>
         </button>
+      </section>
+
+      {/* 100px spacing */}
+      <div style={{ height: '100px' }}></div>
+
+      {/* Google Reviews Placeholder */}
+      <section className="flex justify-center">
+        <div style={{
+          width: '800px',
+          padding: '40px',
+          background: '#F6F6F6',
+          borderRadius: '12px',
+          textAlign: 'center'
+        }}>
+          <h3 style={{
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '24px',
+            fontWeight: 500,
+            color: '#000',
+            marginBottom: '20px'
+          }}>Avis Google</h3>
+          <p style={{
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '16px',
+            color: '#666',
+            lineHeight: '24px'
+          }}>Section en cours de construction - Les avis clients seront bientôt disponibles</p>
+        </div>
+      </section>
+
+      {/* 100px spacing */}
+      <div style={{ height: '100px' }}></div>
+
+      {/* Questions fréquentes */}
+      <section className="flex justify-center">
+        <div
+          style={{
+            display: 'flex',
+            width: '692px',
+            minHeight: '402px',
+            padding: '30px 20px',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0',
+            background: '#F6F6F6'
+          }}
+        >
+          {/* Title: Questions Fréquentes - on one line */}
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+            {/* Questions */}
+            <span
+              style={{
+                color: 'rgba(6, 6, 6, 0.86)',
+                textAlign: 'center',
+                WebkitTextStrokeWidth: '1px',
+                WebkitTextStrokeColor: '#000',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '20px',
+                fontStyle: 'normal',
+                fontWeight: 250,
+                lineHeight: '35px'
+              }}
+            >
+              Questions
+            </span>
+
+            {/* Fréquentes */}
+            <span
+              style={{
+                color: 'rgba(6, 6, 6, 0.86)',
+                textAlign: 'center',
+                WebkitTextStrokeWidth: '1px',
+                WebkitTextStrokeColor: 'rgba(188, 71, 71, 0.73)',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '20px',
+                fontStyle: 'normal',
+                fontWeight: 275,
+                lineHeight: '35px'
+              }}
+            >
+              Fréquentes
+            </span>
+          </div>
+
+          {/* Subtitle */}
+          <div
+            style={{
+              color: '#000',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '15px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '20px',
+              marginTop: '15px',
+              marginBottom: '25px',
+              width: '100%'
+            }}
+          >
+            Réponses aux questions que se posent le plus souvent les conducteurs
+          </div>
+
+          {/* Question 1 with arrow */}
+          <div style={{ width: '100%' }}>
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                cursor: 'pointer',
+                gap: '10px'
+              }}
+            >
+              <div
+                style={{
+                  flex: 1,
+                  color: '#060606',
+                  textAlign: 'left',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '15px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '35px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}
+              >
+                A quel moment mes 4 points sont il crédités sur mon permis après un stage
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0 }}>
+                <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          {/* Line 1 */}
+          <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
+
+          {/* Question 2 with arrow */}
+          <div style={{ width: '100%' }}>
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                cursor: 'pointer',
+                gap: '10px'
+              }}
+            >
+              <div
+                style={{
+                  flex: 1,
+                  color: '#060606',
+                  textAlign: 'left',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '15px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '35px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}
+              >
+                A quel moment mes 4 points sont il crédités sur mon permis après un stage
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0 }}>
+                <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          {/* Line 2 */}
+          <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
+
+          {/* Question 3 with arrow */}
+          <div style={{ width: '100%' }}>
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                cursor: 'pointer',
+                gap: '10px'
+              }}
+            >
+              <div
+                style={{
+                  flex: 1,
+                  color: '#060606',
+                  textAlign: 'left',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '15px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '35px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis'
+                }}
+              >
+                A quel moment mes 4 points sont il crédités sur mon permis après un stage
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0 }}>
+                <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
+
+          {/* Line 3 */}
+          <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '50px' }} />
+
+          {/* Afficher plus de questions */}
+          <div
+            style={{
+              color: '#000',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '15px',
+              fontStyle: 'normal',
+              fontWeight: 500,
+              lineHeight: 'normal',
+              letterSpacing: '1.05px',
+              textDecoration: 'underline',
+              cursor: 'pointer'
+            }}
+          >
+            Afficher plus de questions
+          </div>
+        </div>
       </section>
     </div>
   )
