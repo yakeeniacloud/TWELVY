@@ -1,73 +1,187 @@
 'use client'
 
-import CitySearchBar from '@/components/stages/CitySearchBar'
-import { useWordPressContent } from '@/lib/useWordPressContent'
+import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
-  const { content, loading } = useWordPressContent('homepage')
+  const router = useRouter()
+  const [searchQuery, setSearchQuery] = useState('')
+  const [allCities, setAllCities] = useState<string[]>([])
+  const [suggestions, setSuggestions] = useState<string[]>([])
+  const [showSuggestions, setShowSuggestions] = useState(false)
+  const searchRef = useRef<HTMLDivElement>(null)
 
-  // Split content at [SEARCH_BAR] delimiter
-  const contentAbove = content?.content.split('[SEARCH_BAR]')[0] || ''
-  const contentBelow = content?.content.split('[SEARCH_BAR]')[1] || ''
+  // Fetch all cities on mount
+  useEffect(() => {
+    async function fetchCities() {
+      try {
+        const response = await fetch('/api/cities')
+        const data = await response.json()
+        setAllCities(data.cities || [])
+      } catch {
+        setAllCities([])
+      }
+    }
+    fetchCities()
+  }, [])
+
+  // Click outside to close suggestions
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  // Filter cities based on input
+  const handleInputChange = (value: string) => {
+    setSearchQuery(value)
+    if (value.length >= 2) {
+      const filtered = allCities
+        .filter(city => city.toLowerCase().includes(value.toLowerCase()))
+        .slice(0, 8)
+      setSuggestions(filtered)
+      setShowSuggestions(filtered.length > 0)
+    } else {
+      setSuggestions([])
+      setShowSuggestions(false)
+    }
+  }
+
+  const handleCitySelect = (city: string) => {
+    setSearchQuery(city)
+    setShowSuggestions(false)
+    // Navigate to city page
+    const slug = city.toUpperCase().replace(/ /g, '-')
+    router.push(`/stages-recuperation-points/${slug}`)
+  }
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      const slug = searchQuery.toUpperCase().replace(/ /g, '-')
+      router.push(`/stages-recuperation-points/${slug}`)
+    }
+  }
 
   return (
-    <div>
-      {/* Hero Section with Background */}
-      <div className="relative bg-gradient-to-b from-gray-800 to-gray-900 min-h-[560px] flex items-center justify-center">
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/40"></div>
+    <div className="bg-white min-h-screen">
+      {/* Hero Section */}
+      <section className="pt-12 pb-8">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          {/* Main Title */}
+          <h1 style={{
+            fontFamily: 'var(--font-poppins)',
+            color: '#000',
+            textAlign: 'center',
+            fontSize: '25px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: '35px'
+          }}>
+            Tous les Stages de Récupération de Points au Meilleur Prix
+          </h1>
 
-        {/* Hero Content */}
-        <div className="relative z-10 mx-auto max-w-[880px] px-4 sm:px-6 lg:px-8 text-center">
-          {/* WordPress Content ABOVE Search Bar */}
-          {contentAbove && (
-            <div
-              className="mb-8 text-white"
-              style={{
-                fontSize: '48px',
-                fontWeight: 700,
-                lineHeight: 1.1,
-                textShadow: '0 2px 8px rgba(0,0,0,0.45)',
-              }}
-              dangerouslySetInnerHTML={{ __html: contentAbove }}
-            />
-          )}
+          {/* Subtitle */}
+          <p style={{
+            fontFamily: 'var(--font-poppins)',
+            width: '672px',
+            height: '34px',
+            flexShrink: 0,
+            color: 'rgba(6, 6, 6, 0.86)',
+            textAlign: 'center',
+            fontSize: '17px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: '28px',
+            margin: '0 auto',
+            marginTop: '8px'
+          }}>
+            Trouvez rapidement un stage près de chez vous et récupérez 4 points en 48h
+          </p>
 
-          {/* Fallback if no WordPress content */}
-          {!loading && !contentAbove && (
-            <div
-              className="mb-8"
-              style={{
-                fontSize: '48px',
-                fontWeight: 700,
-                lineHeight: 1.1,
-                color: '#ffffff',
-                textShadow: '0 2px 8px rgba(0,0,0,0.45)',
-              }}
-            >
-              <h1>Stage de Récupération de Points</h1>
-              <p className="text-3xl mt-3">Récupérez 4 points en 48h</p>
-            </div>
-          )}
+          {/* Stats line */}
+          <p style={{
+            fontFamily: 'var(--font-poppins)',
+            width: '576px',
+            height: '34px',
+            color: 'rgba(52, 52, 52, 0.86)',
+            textAlign: 'center',
+            fontSize: '16px',
+            fontStyle: 'italic',
+            fontWeight: 400,
+            lineHeight: '28px',
+            margin: '0 auto',
+            marginTop: '8px'
+          }}>
+            Plus de 857 000 conducteurs accompagnés depuis 2008
+          </p>
 
           {/* Search Bar */}
-          <div className="max-w-[640px] mx-auto">
-            <CitySearchBar placeholder="Saisir une ville pour trouver un stage" variant="large" />
-          </div>
-        </div>
-      </div>
-
-      {/* WordPress Content Section BELOW Search Bar */}
-      {contentBelow && (
-        <div className="bg-white border-b border-gray-200">
-          <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+          <div className="mt-8 flex justify-center">
             <div
-              className="prose prose-sm prose-indigo max-w-none text-gray-700"
-              dangerouslySetInnerHTML={{ __html: contentBelow }}
-            />
+              ref={searchRef}
+              className="relative"
+              style={{
+                display: 'flex',
+                width: '672px',
+                height: '61px',
+                padding: '1px 20px',
+                alignItems: 'center',
+                gap: '15px',
+                flexShrink: 0,
+                borderRadius: '20px',
+                border: '1px solid #000',
+                background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.20) 100%), #FFF'
+              }}
+            >
+              {/* Search Icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ flexShrink: 0 }}>
+                <path d="M15.75 15.75L12.4875 12.4875M14.25 8.25C14.25 11.5637 11.5637 14.25 8.25 14.25C4.93629 14.25 2.25 11.5637 2.25 8.25C2.25 4.93629 4.93629 2.25 8.25 2.25C11.5637 2.25 14.25 4.93629 14.25 8.25Z" stroke="#727171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+
+              {/* Input */}
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleInputChange(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                placeholder="Entrez votre ville ou code postal"
+                style={{
+                  flex: 1,
+                  border: 'none',
+                  outline: 'none',
+                  background: 'transparent',
+                  fontFamily: 'Inter, sans-serif',
+                  color: searchQuery ? '#000' : '#949393',
+                  fontSize: '17px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '100%'
+                }}
+              />
+
+              {/* Suggestions Dropdown */}
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                  {suggestions.map((city, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleCitySelect(city)}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm"
+                      style={{ fontFamily: 'var(--font-poppins)' }}
+                    >
+                      {city}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      )}
+      </section>
     </div>
   )
 }
