@@ -9,6 +9,7 @@ export default function Home() {
   const [allCities, setAllCities] = useState<string[]>([])
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const searchRef = useRef<HTMLDivElement>(null)
 
   // Fetch all cities on mount
@@ -1168,6 +1169,7 @@ export default function Home() {
           {/* Question 1 with arrow */}
           <div style={{ width: '100%' }}>
             <div
+              onClick={() => setOpenFaqIndex(openFaqIndex === 0 ? null : 0)}
               style={{
                 width: '100%',
                 display: 'flex',
@@ -1194,10 +1196,15 @@ export default function Home() {
               >
                 A quel moment mes 4 points sont il crédités sur mon permis après un stage
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0 }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === 0 ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
                 <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
+            {openFaqIndex === 0 && (
+              <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
+                Réponse à la question - Texte placeholder pour la réponse détaillée concernant le crédit des points sur le permis de conduire après avoir effectué un stage de récupération de points.
+              </div>
+            )}
           </div>
 
           {/* Line 1 */}
@@ -1206,6 +1213,7 @@ export default function Home() {
           {/* Question 2 with arrow */}
           <div style={{ width: '100%' }}>
             <div
+              onClick={() => setOpenFaqIndex(openFaqIndex === 1 ? null : 1)}
               style={{
                 width: '100%',
                 display: 'flex',
@@ -1232,10 +1240,15 @@ export default function Home() {
               >
                 A quel moment mes 4 points sont il crédités sur mon permis après un stage
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0 }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === 1 ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
                 <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
+            {openFaqIndex === 1 && (
+              <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
+                Réponse à la question - Texte placeholder pour la réponse détaillée concernant le crédit des points sur le permis de conduire après avoir effectué un stage de récupération de points.
+              </div>
+            )}
           </div>
 
           {/* Line 2 */}
@@ -1244,6 +1257,7 @@ export default function Home() {
           {/* Question 3 with arrow */}
           <div style={{ width: '100%' }}>
             <div
+              onClick={() => setOpenFaqIndex(openFaqIndex === 2 ? null : 2)}
               style={{
                 width: '100%',
                 display: 'flex',
@@ -1270,10 +1284,15 @@ export default function Home() {
               >
                 A quel moment mes 4 points sont il crédités sur mon permis après un stage
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0 }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === 2 ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
                 <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
+            {openFaqIndex === 2 && (
+              <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
+                Réponse à la question - Texte placeholder pour la réponse détaillée concernant le crédit des points sur le permis de conduire après avoir effectué un stage de récupération de points.
+              </div>
+            )}
           </div>
 
           {/* Line 3 */}
