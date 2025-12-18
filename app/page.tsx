@@ -1098,17 +1098,16 @@ export default function Home() {
       <div style={{ height: '100px' }}></div>
 
       {/* Questions fréquentes */}
-      <section className="flex justify-center">
+      <section style={{ width: '100%', background: '#F6F6F6', padding: '30px 20px' }}>
         <div
           style={{
             display: 'flex',
-            width: '692px',
+            maxWidth: '1200px',
             minHeight: '402px',
-            padding: '30px 20px',
+            margin: '0 auto',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '0',
-            background: '#F6F6F6'
+            gap: '0'
           }}
         >
           {/* Title: Questions Fréquentes - on one line */}
@@ -1298,6 +1297,33 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* 100px spacing */}
+      <div style={{ height: '100px' }}></div>
+
+      {/* Footer */}
+      <footer className="bg-[#343435] py-6">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-center gap-6 mb-3">
+            <a href="/qui-sommes-nous" className="text-white text-xs hover:underline">
+              Qui sommes-nous
+            </a>
+            <a href="/aide-et-contact" className="text-white text-xs hover:underline">
+              Aide et contact
+            </a>
+            <a href="/conditions-generales" className="text-white text-xs hover:underline">
+              Conditions générales de vente
+            </a>
+            <a href="/mentions-legales" className="text-white text-xs hover:underline">
+              Mentions légales
+            </a>
+            <a href="/espace-client" className="text-white text-xs hover:underline">
+              Espace Client
+            </a>
+          </div>
+          <p className="text-center text-white text-xs">2025©ProStagesPermis</p>
+        </div>
+      </footer>
     </div>
   )
 }
