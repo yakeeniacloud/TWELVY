@@ -204,6 +204,13 @@ export default function StagesResultsPage() {
   }
 
   const handleCityToggle = (cityName: string) => {
+    // If "all cities" is selected, deselect it and select only this city
+    if (allCitiesSelected) {
+      setAllCitiesSelected(false)
+      setSelectedCities([cityName])
+      return
+    }
+
     if (selectedCities.includes(cityName)) {
       const newSelected = selectedCities.filter(c => c !== cityName)
       setSelectedCities(newSelected)
@@ -212,7 +219,6 @@ export default function StagesResultsPage() {
       }
     } else {
       setSelectedCities([...selectedCities, cityName])
-      setAllCitiesSelected(false) // Auto-deselect "All cities" when selecting a specific city
     }
   }
 
