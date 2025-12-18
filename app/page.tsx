@@ -186,13 +186,175 @@ export default function Home() {
       {/* Spacing */}
       <div style={{ height: '60px' }}></div>
 
-      {/* Nos Engagements Section - Using image */}
-      <section style={{ width: '100%' }}>
-        <img
-          src="/benefit-box.png"
-          alt="Nos Engagements"
-          style={{ width: '100%', height: 'auto', display: 'block' }}
-        />
+      {/* Nos Engagements Section */}
+      <section style={{
+        display: 'flex',
+        width: '100%',
+        height: '250px',
+        padding: '10px',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#EFEFEF'
+      }}>
+        {/* Title: Nos Engagements */}
+        <div className="flex items-center justify-center">
+          <span style={{
+            display: 'flex',
+            width: '50px',
+            height: '36px',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            flexShrink: 0,
+            color: '#000',
+            textAlign: 'center',
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '23px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: 'normal'
+          }}>Nos</span>
+          <span style={{
+            display: 'flex',
+            width: '168px',
+            height: '35px',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            flexShrink: 0,
+            color: '#BC4747',
+            textAlign: 'center',
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '23px',
+            fontStyle: 'normal',
+            fontWeight: 400,
+            lineHeight: 'normal'
+          }}>Engagements</span>
+        </div>
+
+        {/* Separator Line */}
+        <div style={{
+          display: 'flex',
+          width: '973px',
+          padding: '10px',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '10px'
+        }}>
+          <div style={{ flex: 1, height: '1px', backgroundColor: '#B9B9B9' }}></div>
+        </div>
+
+        {/* 4 Benefits Row */}
+        <div className="flex justify-center items-start gap-16 mt-4">
+          {/* Benefit 1: Stages Agréés Préfecture */}
+          <div className="flex flex-col items-center text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" style={{ flexShrink: 0 }}>
+              <path d="M20 36.6667C20 36.6667 33.3333 30 33.3333 20V8.33337L20 3.33337L6.66666 8.33337V20C6.66666 30 20 36.6667 20 36.6667Z" stroke="#C4A226" strokeOpacity="0.96" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <p style={{
+              display: 'flex',
+              height: '51px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              flexShrink: 0,
+              alignSelf: 'stretch',
+              color: 'rgba(6, 6, 6, 0.84)',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '18px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '25px'
+            }}>
+              Stages Agréés<br/>Préfecture
+            </p>
+          </div>
+
+          {/* Benefit 2: + 4 points en 48h */}
+          <div className="flex flex-col items-center text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" style={{ flexShrink: 0 }}>
+              <path d="M20 10V20L26.6666 23.3334M36.6666 20C36.6666 29.2048 29.2047 36.6667 20 36.6667C10.7952 36.6667 3.33331 29.2048 3.33331 20C3.33331 10.7953 10.7952 3.33337 20 3.33337C29.2047 3.33337 36.6666 10.7953 36.6666 20Z" stroke="#C4A226" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <p style={{
+              display: 'flex',
+              height: '35px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              flexShrink: 0,
+              alignSelf: 'stretch',
+              color: 'rgba(6, 6, 6, 0.84)',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '18px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '35px'
+            }}>
+              + 4 points en 48h
+            </p>
+          </div>
+
+          {/* Benefit 3: Prix le plus bas garanti */}
+          <div className="flex flex-col items-center text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" style={{ flexShrink: 0 }}>
+              <g clipPath="url(#clip0_prix)">
+                <path d="M38.3334 30L22.5 14.1667L14.1667 22.5L1.66669 10M38.3334 30H28.3334M38.3334 30V20" stroke="#C4A226" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_prix">
+                  <rect width="40" height="40" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            <p style={{
+              display: 'flex',
+              height: '51px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              flexShrink: 0,
+              alignSelf: 'stretch',
+              color: 'rgba(6, 6, 6, 0.84)',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '18px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '25px'
+            }}>
+              Prix le plus bas<br/>garanti
+            </p>
+          </div>
+
+          {/* Benefit 4: Report ou remboursement */}
+          <div className="flex flex-col items-center text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none" style={{ flexShrink: 0 }}>
+              <g clipPath="url(#clip0_report)">
+                <path d="M1.66663 6.66662V16.6666M1.66663 16.6666H11.6666M1.66663 16.6666L9.39996 9.39996C11.7015 7.10232 14.6874 5.61491 17.9078 5.16182C21.1281 4.70873 24.4085 5.31451 27.2547 6.8879C30.1008 8.46128 32.3586 10.917 33.6877 13.8851C35.0168 16.8532 35.3453 20.1729 34.6237 23.3439C33.902 26.5149 32.1694 29.3655 29.6868 31.4662C27.2043 33.5669 24.1062 34.8039 20.8595 34.9907C17.6128 35.1776 14.3933 34.3042 11.6861 32.5022C8.97885 30.7003 6.93062 28.0673 5.84996 25" stroke="#C4A226" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_report">
+                  <rect width="40" height="40" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            <p style={{
+              display: 'flex',
+              height: '51px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              flexShrink: 0,
+              alignSelf: 'stretch',
+              color: 'rgba(6, 6, 6, 0.84)',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '18px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '25px'
+            }}>
+              Report ou<br/>remboursement
+            </p>
+          </div>
+        </div>
       </section>
     </div>
   )
