@@ -183,68 +183,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 120px spacing */}
-      <div style={{ height: '120px' }}></div>
+      {/* Spacing */}
+      <div style={{ height: '60px' }}></div>
 
-      {/* Nos Engagements Section */}
-      <section style={{ backgroundColor: '#EFEFEF', width: '100%', padding: '40px 0' }}>
-        <div className="max-w-5xl mx-auto px-4">
-          {/* Title with lines */}
-          <div className="flex items-center justify-center gap-4 mb-10">
-            <div style={{ flex: 1, height: '1px', backgroundColor: '#C4A574' }}></div>
-            <h2 style={{ fontFamily: 'var(--font-poppins)', fontSize: '20px', fontWeight: 500 }}>
-              <span style={{ color: '#000' }}>Nos </span>
-              <span style={{ color: '#B22222' }}>Engagements</span>
-            </h2>
-            <div style={{ flex: 1, height: '1px', backgroundColor: '#C4A574' }}></div>
-          </div>
-
-          {/* 4 Benefits */}
-          <div className="flex justify-center items-start gap-16">
-            {/* Benefit 1: Stages Agréés Préfecture */}
-            <div className="flex flex-col items-center text-center">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C4A574" strokeWidth="1.5">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#333', marginTop: '12px', lineHeight: '1.4' }}>
-                Stages Agréés<br/>Préfecture
-              </p>
-            </div>
-
-            {/* Benefit 2: + 4 points en 48h */}
-            <div className="flex flex-col items-center text-center">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C4A574" strokeWidth="1.5">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M12 6v6l4 2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#333', marginTop: '12px', lineHeight: '1.4' }}>
-                + 4 points en 48h
-              </p>
-            </div>
-
-            {/* Benefit 3: Prix le plus bas garanti */}
-            <div className="flex flex-col items-center text-center">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C4A574" strokeWidth="1.5">
-                <path d="M23 6l-9.5 9.5-5-5L1 18" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M17 6h6v6" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#333', marginTop: '12px', lineHeight: '1.4' }}>
-                Prix le plus bas<br/>garanti
-              </p>
-            </div>
-
-            {/* Benefit 4: Report ou remboursement */}
-            <div className="flex flex-col items-center text-center">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C4A574" strokeWidth="1.5">
-                <path d="M1 4v6h6" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#333', marginTop: '12px', lineHeight: '1.4' }}>
-                Report ou<br/>remboursement
-              </p>
-            </div>
-          </div>
-        </div>
+      {/* Nos Engagements Section - Using image */}
+      <section style={{ width: '100%' }}>
+        <img
+          src="/benefit-box.png"
+          alt="Nos Engagements"
+          style={{ width: '100%', height: 'auto', display: 'block' }}
+        />
       </section>
     </div>
   )
