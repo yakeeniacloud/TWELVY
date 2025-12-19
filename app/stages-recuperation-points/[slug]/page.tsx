@@ -473,53 +473,54 @@ export default function StagesResultsPage() {
                   className="flex flex-col md:flex-row w-full md:w-[903px] md:h-[85px] p-3 md:p-[0_7px] md:items-center mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
                 >
                   {/* Mobile Layout */}
-                  <div className="flex md:hidden flex-col w-full">
-                    {/* Date at top */}
-                    <p className="text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px] mb-3" style={{ fontFamily: 'var(--font-poppins)' }}>
-                      {formatDate(stage.date_start, stage.date_end)}
-                    </p>
+                  <div className="flex md:hidden w-full">
+                    {/* Left side: Date, Location, Details link */}
+                    <div className="flex flex-col flex-1">
+                      {/* Date at top */}
+                      <p className="text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px] mb-2" style={{ fontFamily: 'var(--font-poppins)' }}>
+                        {formatDate(stage.date_start, stage.date_end)}
+                      </p>
 
-                    {/* Location pin + City + Address */}
-                    <div className="flex items-start gap-2 mb-2">
-                      <div className="flex w-[24px] h-[24px] justify-center items-center flex-shrink-0 rounded-full bg-gray-200 mt-0.5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none" className="w-3.5 h-3.5 flex-shrink-0">
-                          <g clipPath="url(#clip0_2180_399)">
-                            <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </g>
-                          <defs>
-                            <clipPath id="clip0_2180_399">
-                              <rect width="20" height="20" fill="white"/>
-                            </clipPath>
-                          </defs>
-                        </svg>
+                      {/* Location pin + City + Address */}
+                      <div className="flex items-start gap-2 mb-1">
+                        <div className="flex w-[20px] h-[20px] justify-center items-center flex-shrink-0 rounded-full bg-gray-200 mt-0.5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 20 20" fill="none" className="w-3 h-3 flex-shrink-0">
+                            <g clipPath="url(#clip0_2180_399)">
+                              <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </g>
+                            <defs>
+                              <clipPath id="clip0_2180_399">
+                                <rect width="20" height="20" fill="white"/>
+                              </clipPath>
+                            </defs>
+                          </svg>
+                        </div>
+                        <div className="flex flex-col">
+                          <p className="text-[rgba(0,0,0,0.98)] text-[14px] font-medium leading-[14px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville}</p>
+                          <p className="text-[rgba(6,6,6,0.56)] text-[11px] font-normal leading-[11px] mt-1" style={{ fontFamily: 'var(--font-poppins)' }}>{removeStreetNumber(stage.site.adresse)}</p>
+                        </div>
                       </div>
-                      <div className="flex flex-col flex-1">
-                        <p className="text-[rgba(0,0,0,0.98)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville}</p>
-                        <p className="text-[rgba(6,6,6,0.56)] text-[12px] font-normal leading-[12px] mt-1" style={{ fontFamily: 'var(--font-poppins)' }}>{removeStreetNumber(stage.site.adresse)}</p>
-                      </div>
+
+                      {/* Details link */}
+                      <button
+                        onClick={() => {
+                          setSelectedStage(stage)
+                          setIsModalOpen(true)
+                        }}
+                        className="flex items-center text-[rgba(90,106,147,0.86)] text-[12px] font-normal leading-[12px] hover:underline text-left mt-1"
+                        style={{ fontFamily: 'var(--font-poppins)' }}
+                      >
+                        Détails du stage
+                      </button>
                     </div>
 
-                    {/* Details link */}
-                    <button
-                      onClick={() => {
-                        setSelectedStage(stage)
-                        setIsModalOpen(true)
-                      }}
-                      className="flex items-center gap-[5px] text-[rgba(90,106,147,0.86)] text-[13px] font-normal leading-[13px] hover:underline text-left mb-3"
-                      style={{ fontFamily: 'var(--font-poppins)' }}
-                    >
-                      Détails du stage
-                    </button>
-
-                    {/* Price and Button Row */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-[rgba(6,6,6,0.86)] text-[20px] font-normal leading-[35px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.prix}€</p>
-                      </div>
+                    {/* Right side: Price and Button */}
+                    <div className="flex flex-col items-end justify-start gap-2 ml-4">
+                      <p className="text-[rgba(6,6,6,0.86)] text-[20px] font-normal leading-[20px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.prix}€</p>
                       <Link
                         href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
-                        className="flex px-[15px] py-[7px] justify-center items-center rounded-xl bg-[#41A334] text-white text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap"
+                        className="flex px-4 py-2 justify-center items-center rounded-lg bg-[#41A334] text-white text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap"
                         style={{ fontFamily: 'var(--font-poppins)' }}
                       >
                         Sélectionner
