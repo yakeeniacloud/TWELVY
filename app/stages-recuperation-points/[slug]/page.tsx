@@ -1097,13 +1097,12 @@ export default function StagesResultsPage() {
 
           {/* Mobile: Grey box with title, subtitle, and questions */}
           <div className="md:hidden flex flex-col items-center">
-            {/* Grey box container */}
+            {/* Grey box container - dynamic height */}
             <div style={{
               display: 'flex',
               width: '382px',
-              height: '424px',
+              minHeight: '424px',
               flexDirection: 'column',
-              justifyContent: 'center',
               alignItems: 'center',
               background: '#F6F6F6',
               padding: '20px 0'
@@ -1178,6 +1177,24 @@ export default function StagesResultsPage() {
                   )}
                 </div>
               ))}
+            </div>
+
+            {/* "Afficher plus de questions" button - OUTSIDE grey box, mobile only */}
+            <div className="flex justify-center mt-6">
+              <button className="text-sm" style={{
+                fontFamily: 'var(--font-poppins)',
+                color: '#000',
+                fontWeight: 500,
+                letterSpacing: '1.05px',
+                textDecoration: 'underline',
+                textDecorationStyle: 'solid',
+                textDecorationSkipInk: 'auto',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer'
+              }}>
+                Afficher plus de questions
+              </button>
             </div>
           </div>
 
