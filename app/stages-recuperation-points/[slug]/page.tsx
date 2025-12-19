@@ -1177,24 +1177,24 @@ export default function StagesResultsPage() {
                   )}
                 </div>
               ))}
-            </div>
 
-            {/* "Afficher plus de questions" button - OUTSIDE grey box, mobile only */}
-            <div className="flex justify-center mt-6">
-              <button className="text-sm" style={{
-                fontFamily: 'var(--font-poppins)',
-                color: '#000',
-                fontWeight: 500,
-                letterSpacing: '1.05px',
-                textDecoration: 'underline',
-                textDecorationStyle: 'solid',
-                textDecorationSkipInk: 'auto',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer'
-              }}>
-                Afficher plus de questions
-              </button>
+              {/* "Afficher plus de questions" button - INSIDE grey box at bottom */}
+              <div className="flex justify-center mt-6">
+                <button className="text-sm" style={{
+                  fontFamily: 'var(--font-poppins)',
+                  color: '#000',
+                  fontWeight: 500,
+                  letterSpacing: '1.05px',
+                  textDecoration: 'underline',
+                  textDecorationStyle: 'solid',
+                  textDecorationSkipInk: 'auto',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}>
+                  Afficher plus de questions
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1238,8 +1238,8 @@ export default function StagesResultsPage() {
             ))}
           </div>
 
-          {/* Show More Questions Button */}
-          <div className="flex justify-center mt-6 md:mt-8">
+          {/* Show More Questions Button - Desktop only */}
+          <div className="hidden md:flex justify-center mt-6 md:mt-8">
             <button className="text-sm md:text-base" style={{
               fontFamily: 'var(--font-poppins)',
               color: '#000',
