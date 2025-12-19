@@ -432,12 +432,52 @@ export default function StagesResultsPage() {
 
         {/* Prefecture Badge */}
         <div className="flex items-center justify-center mb-4 md:mb-6">
+          {/* Mobile: Custom badge with flag and text */}
+          <div className="md:hidden flex" style={{
+            padding: '5px 26px',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '5px',
+            borderRadius: '12px',
+            background: 'rgba(219, 206, 157, 0.69)'
+          }}>
+            {/* French Flag */}
+            <img
+              src="/flag.png"
+              alt="Drapeau français"
+              style={{
+                width: '16px',
+                height: '11px',
+                flexShrink: 0,
+                aspectRatio: '16/11',
+                borderRadius: '10px',
+                objectFit: 'cover'
+              }}
+            />
+            {/* Text */}
+            <span style={{
+              width: '171px',
+              flexShrink: 0,
+              color: '#2C2C2C',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: 'normal',
+              letterSpacing: '0.7px'
+            }}>
+              Agréés préfecture 13
+            </span>
+          </div>
+
+          {/* Desktop: Original image */}
           <Image
             src="/prefecture-badge.png"
             alt="Stages Agréés par la Préfecture des Bouches-du-Rhône (13)"
             width={800}
             height={60}
-            className="h-10 md:h-14 w-auto max-w-full px-4"
+            className="hidden md:block h-14 w-auto max-w-full px-4"
           />
         </div>
 
