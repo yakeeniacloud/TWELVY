@@ -675,7 +675,7 @@ export default function StageDetailsModal({
               <div style={{
                 display: 'flex',
                 width: '330px',
-                height: '323px',
+                height: '250px',
                 padding: '0 16px',
                 flexDirection: 'column',
                 justifyContent: 'center',
