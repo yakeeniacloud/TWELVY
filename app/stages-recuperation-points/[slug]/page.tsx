@@ -938,10 +938,21 @@ export default function StagesResultsPage() {
         {/* About Us Section */}
         <section className="my-8 md:my-16 flex flex-col items-center px-4">
           {/* Top: Europe 1 Recommendation */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0 mb-12 md:mb-[120px]">
+          <div className="flex flex-row items-center justify-center gap-0 mb-12 md:mb-[120px]">
             {/* Left: Recommandé par Europe 1 with subtitle */}
             <div className="flex flex-col items-center justify-center">
-              <h3 className="text-center" style={{
+              <h3 className="text-center md:hidden" style={{
+                fontFamily: 'var(--font-poppins)',
+                color: '#2C2C2C',
+                fontSize: '14px',
+                fontWeight: 500,
+                lineHeight: '18px',
+                letterSpacing: '0.8px',
+                width: '120px'
+              }}>
+                Recommandé par Europe 1
+              </h3>
+              <h3 className="hidden md:block text-center" style={{
                 fontFamily: 'var(--font-poppins)',
                 color: '#2C2C2C',
                 fontSize: '18px',
@@ -951,7 +962,17 @@ export default function StagesResultsPage() {
               }}>
                 Recommandé par Europe 1
               </h3>
-              <p className="text-center mt-2 px-4" style={{
+              <p className="text-center mt-2 md:hidden" style={{
+                fontFamily: 'var(--font-poppins)',
+                width: '200px',
+                color: 'rgba(6, 6, 6, 0.80)',
+                fontSize: '12px',
+                fontWeight: 400,
+                lineHeight: '18px'
+              }}>
+                ProStagesPermis cité comme site de confiance par Europe 1
+              </p>
+              <p className="hidden md:block text-center mt-2 px-4" style={{
                 fontFamily: 'var(--font-poppins)',
                 maxWidth: '333px',
                 color: 'rgba(6, 6, 6, 0.80)',
@@ -963,7 +984,16 @@ export default function StagesResultsPage() {
               </p>
             </div>
 
-            {/* Vertical Line - Hidden on mobile */}
+            {/* Vertical Line - Mobile version */}
+            <div className="md:hidden" style={{
+              width: '1px',
+              height: '120px',
+              background: '#000',
+              marginLeft: '15px',
+              marginRight: '15px'
+            }}></div>
+
+            {/* Vertical Line - Desktop version */}
             <div className="hidden md:block" style={{
               width: '1px',
               height: '172.502px',
@@ -973,21 +1003,22 @@ export default function StagesResultsPage() {
             }}></div>
 
             {/* Right: Europe 1 Logo */}
-            <div className="flex flex-col items-center justify-center gap-4">
+            <div className="flex flex-col items-center justify-center md:gap-4 gap-2">
               <Image
                 src="/europe1-logo.png"
                 alt="Europe 1"
                 width={200}
                 height={100}
-                className="w-auto h-16 md:h-20"
+                className="w-auto h-12 md:h-20"
               />
               <a
                 href="https://www.youtube.com/watch?v=z1AsmdcGTaw"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-red-700 hover:underline text-sm md:text-base"
+                className="text-red-700 hover:underline"
                 style={{
                   fontFamily: 'var(--font-poppins)',
+                  fontSize: '12px',
                   fontWeight: 400
                 }}
               >
