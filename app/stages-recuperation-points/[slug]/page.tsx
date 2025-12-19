@@ -276,12 +276,10 @@ export default function StagesResultsPage() {
 
         {/* Search bar - centered below logo/hamburger */}
         <div className="pb-3 flex justify-center">
-          <div className="w-11/12 max-w-md">
-            <CitySearchBar
-              placeholder="Ville ou code postal"
-              variant="filter"
-            />
-          </div>
+          <CitySearchBar
+            placeholder="Ville ou code postal"
+            variant="filter"
+          />
         </div>
       </header>
 

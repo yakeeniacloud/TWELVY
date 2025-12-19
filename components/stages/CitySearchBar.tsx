@@ -192,8 +192,22 @@ export default function CitySearchBar({
         className="relative"
       >
         {isFilter ? (
-          // Filter variant - matches design specs: 204px width, 35px height, search icon
-          <div className="flex items-center gap-2 px-4 rounded-lg border border-[#D9D9D9] bg-white" style={{ height: '35px', width: '204px' }}>
+          // Filter variant - mobile header search bar specs
+          <div
+            className="flex items-center gap-3.5"
+            style={{
+              width: '283px',
+              height: '36px',
+              padding: '1px 20px',
+              borderRadius: '20px',
+              border: '1px solid #989898',
+              background: 'linear-gradient(0deg, rgba(176, 175, 175, 0.20) 0%, rgba(176, 175, 175, 0.20) 100%), #FFF',
+              flexShrink: 0
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0">
+              <path d="M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
             <input
               ref={inputRef}
               type="text"
@@ -209,9 +223,6 @@ export default function CitySearchBar({
               className="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-gray-400"
               style={{ minWidth: '0' }}
             />
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0">
-              <path d="M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
           </div>
         ) : isSidebar ? (
           // Sidebar variant - just input field, no button
