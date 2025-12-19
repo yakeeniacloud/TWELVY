@@ -1060,6 +1060,23 @@ export default function StagesResultsPage() {
                   <li>Note Google 4,8/5 avis vérifiés</li>
                 </ul>
               </div>
+              {/* Mobile only: En savoir plus button */}
+              <div className="md:hidden flex justify-center mt-4">
+                <button
+                  style={{
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    color: '#000',
+                    textDecoration: 'underline',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'default'
+                  }}
+                >
+                  En savoir plus
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -1077,7 +1094,80 @@ export default function StagesResultsPage() {
             }}>Fréquentes</span>
           </h2>
 
-          <div className="space-y-3 md:space-y-4">
+          {/* Mobile: New text + grey box with questions */}
+          <div className="md:hidden flex flex-col items-center">
+            {/* New introductory text */}
+            <p className="mb-6" style={{
+              width: '339px',
+              color: '#000',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '15px',
+              fontStyle: 'normal',
+              fontWeight: 400,
+              lineHeight: '20px',
+              textAlign: 'center'
+            }}>
+              Depuis 2008, ProStagesPermis est le site n° 1 spécialisé dans les stages de récupération de points. Notre mission : vous aider à sauver votre permis dans les temps, avec un stage au meilleur prix proche de chez vous. Plus de 857 000 conducteurs nous ont déjà fait confiance.
+            </p>
+
+            {/* Grey box container */}
+            <div style={{
+              display: 'flex',
+              width: '382px',
+              height: '424px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              background: '#F6F6F6'
+            }}>
+              {faqData.map((faq, index) => (
+                <div key={faq.id} className="w-full">
+                  <button
+                    className="flex items-center justify-between p-3 w-full text-left"
+                    onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                  >
+                    <p className="text-gray-900 text-sm flex-1" style={{
+                      fontFamily: 'var(--font-poppins)',
+                      fontSize: '15px',
+                      fontWeight: 400
+                    }}>{faq.question}</p>
+                    <svg
+                      className={`w-5 h-5 text-gray-600 transition-transform flex-shrink-0 ${openFaqIndex === index ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {openFaqIndex === index && (
+                    <div className="px-3 pb-3 pt-2">
+                      <p className="text-gray-700 leading-relaxed text-sm">
+                        Ceci est un placeholder pour la réponse à la question. Le contenu sera ajouté ultérieurement.
+                        Cette section peut contenir des informations détaillées sur la récupération de points,
+                        les délais, les conditions et toutes les informations pertinentes pour répondre à la question posée.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Line separator (except after last question) */}
+                  {index < faqData.length - 1 && (
+                    <div className="flex justify-center">
+                      <div style={{
+                        width: '320px',
+                        height: '1px',
+                        background: '#D0D0D0'
+                      }}></div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: Original layout */}
+          <div className="hidden md:block space-y-3 md:space-y-4">
             {faqData.map((faq, index) => (
               <article
                 key={faq.id}
