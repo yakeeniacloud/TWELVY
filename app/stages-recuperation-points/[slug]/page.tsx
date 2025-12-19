@@ -274,8 +274,8 @@ export default function StagesResultsPage() {
           </button>
         </div>
 
-        {/* Search bar - centered below logo/hamburger */}
-        <div className="pb-3 flex justify-center">
+        {/* Search bar - positioned to the right */}
+        <div className="pb-3 flex justify-end px-4">
           <CitySearchBar
             placeholder="Ville ou code postal"
             variant="filter"
