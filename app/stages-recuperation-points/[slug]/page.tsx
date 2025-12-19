@@ -49,6 +49,7 @@ export default function StagesResultsPage() {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0)
   const [selectedStage, setSelectedStage] = useState<Stage | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [showMobileMenu, setShowMobileMenu] = useState(false)
 
   const STAGES_PER_LOAD = 6
 
@@ -250,9 +251,10 @@ export default function StagesResultsPage() {
     <div className="bg-white w-full min-h-screen">
       {/* Mobile Header - Only shown on mobile */}
       <header className="md:hidden bg-white border-b border-gray-200 sticky top-0 z-50">
+        {/* Top row: Logo and Hamburger */}
         <div className="flex items-center justify-between px-4 py-3">
           {/* Logo */}
-          <div className="flex items-center">
+          <Link href="/">
             <Image
               src="/prostages-logo.png"
               alt="ProStagesPermis"
@@ -260,24 +262,100 @@ export default function StagesResultsPage() {
               height={30}
               className="h-6 w-auto"
             />
-          </div>
+          </Link>
 
           {/* Hamburger Menu */}
-          <button className="flex flex-col gap-1 p-2">
+          <button
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="flex flex-col gap-1 p-2"
+            aria-label="Toggle menu"
+          >
             <span className="w-6 h-0.5 bg-black"></span>
             <span className="w-6 h-0.5 bg-black"></span>
             <span className="w-6 h-0.5 bg-black"></span>
           </button>
         </div>
 
-        {/* Search bar in mobile header */}
-        <div className="px-4 pb-3">
-          <CitySearchBar
-            placeholder="Ville ou code postal"
-            variant="filter"
-          />
+        {/* Search bar - centered below logo/hamburger */}
+        <div className="px-4 pb-3 flex justify-center">
+          <div className="w-full max-w-md">
+            <CitySearchBar
+              placeholder="Ville ou code postal"
+              variant="filter"
+            />
+          </div>
         </div>
       </header>
+
+      {/* Mobile Side Menu - Slides in from right */}
+      {showMobileMenu && (
+        <>
+          {/* Overlay */}
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden"
+            onClick={() => setShowMobileMenu(false)}
+          />
+
+          {/* Side Menu */}
+          <div className="fixed top-0 right-0 h-full w-64 bg-[#3d3d3d] z-50 md:hidden shadow-lg">
+            {/* Close button */}
+            <button
+              onClick={() => setShowMobileMenu(false)}
+              className="absolute top-4 right-4 text-white p-2"
+              aria-label="Close menu"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Menu items */}
+            <nav className="pt-16 px-6">
+              <ul className="flex flex-col gap-4">
+                <li>
+                  <Link
+                    href="/services"
+                    className="text-white text-sm hover:text-gray-200 block py-2"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    Services
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/retrait-de-points"
+                    className="text-white text-sm hover:text-gray-200 block py-2"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    Le retrait de points
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/stages"
+                    className="text-white text-sm hover:text-gray-200 block py-2"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    Les stages
+                  </Link>
+                </li>
+                <li className="pt-4 border-t border-gray-600">
+                  <Link
+                    href="/espace-client"
+                    className="text-white text-sm hover:text-gray-200 flex items-center gap-2 py-2"
+                    onClick={() => setShowMobileMenu(false)}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Espace Client
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </>
+      )}
 
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 md:px-4 py-4 md:py-8">

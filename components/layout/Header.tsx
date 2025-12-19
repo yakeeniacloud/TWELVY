@@ -61,7 +61,7 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white border-b border-gray-200">
+    <header className="hidden md:block bg-white border-b border-gray-200">
       {/* Top Bar - White background with Logo and Espace Client */}
       <div className="flex items-center justify-between px-8 py-3">
         <Link href="/">
