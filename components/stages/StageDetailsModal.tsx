@@ -674,7 +674,7 @@ export default function StageDetailsModal({
               {/* Nested Benefits Widget */}
               <div style={{
                 display: 'flex',
-                width: '340px',
+                width: '330px',
                 height: '323px',
                 padding: '0 16px',
                 flexDirection: 'column',
