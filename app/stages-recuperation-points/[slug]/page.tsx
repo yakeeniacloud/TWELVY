@@ -829,14 +829,87 @@ export default function StagesResultsPage() {
           </>
         )}
 
-        {/* Pourquoi Réserver Section */}
+        {/* Benefit Box Section - Mobile Widget */}
         <section className="my-8 md:my-16 flex justify-center px-4">
+          {/* Mobile: New benefit widget */}
+          <div className="md:hidden" style={{
+            display: 'flex',
+            width: '340px',
+            height: '377px',
+            padding: '10px 0',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '25px',
+            borderRadius: '20px',
+            border: '1px solid #F1F1F1',
+            background: '#FFF',
+            boxShadow: '0 4px 12px 2px rgba(0, 0, 0, 0.20)'
+          }}>
+            {/* Top grey header */}
+            <div style={{
+              display: 'flex',
+              width: '310px',
+              height: '53px',
+              padding: '8px 106px',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '10px',
+              flexShrink: 0,
+              borderRadius: '8px',
+              background: '#EFEFEF'
+            }}>
+              <span style={{
+                width: '237px',
+                flexShrink: 0,
+                color: '#000',
+                textAlign: 'center',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '17px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '25px'
+              }}>
+                Vos Garanties ProStagesPermis
+              </span>
+            </div>
+
+            {/* Benefit items */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', paddingLeft: '20px', paddingRight: '20px' }}>
+              {[
+                'Stage officiel agréé Préfecture',
+                '+4 points en 48h',
+                '98,7% de clients satisfaits',
+                'Report ou remboursement en cas d\'imprévu',
+                'Paiement 100% sécurisé',
+                'Attestation de stage remise le 2ème jour'
+              ].map((benefit, index) => (
+                <div key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                  {/* Yellow checkmark icon */}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
+                    <path d="M9.375 11.4583L12.5 14.5833L22.9167 4.16667M21.875 12.5V19.7917C21.875 20.3442 21.6555 20.8741 21.2648 21.2648C20.8741 21.6555 20.3442 21.875 19.7917 21.875H5.20833C4.6558 21.875 4.12589 21.6555 3.73519 21.2648C3.34449 20.8741 3.125 20.3442 3.125 19.7917V5.20833C3.125 4.6558 3.34449 4.12589 3.73519 3.73519C4.12589 3.34449 4.6558 3.125 5.20833 3.125H16.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span style={{
+                    color: 'rgba(6, 6, 6, 0.86)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '20px'
+                  }}>
+                    {benefit}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: Original image */}
           <Image
             src="/pourquoi-reserver.png"
             alt="Pourquoi réserver votre stage chez ProStagesPermis"
             width={900}
             height={350}
-            className="w-full md:w-auto h-auto max-w-3xl"
+            className="hidden md:block w-auto h-auto max-w-3xl"
           />
         </section>
 
