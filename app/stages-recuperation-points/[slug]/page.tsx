@@ -1028,7 +1028,7 @@ export default function StagesResultsPage() {
           </div>
 
           {/* Bottom: Qui est ProStagesPermis */}
-          <div className="flex justify-center items-center w-full md:w-[626px] p-6 md:p-8 border border-black">
+          <div className="flex justify-center items-center w-full md:w-[626px] p-6 md:p-8 md:border md:border-black">
             <div className="w-full">
               <h2 className="text-center mb-4 text-[18px] md:text-[20px] font-[250] leading-[30px] md:leading-[35px]" style={{
                 fontFamily: 'var(--font-poppins)',
@@ -1051,7 +1051,9 @@ export default function StagesResultsPage() {
                 <p>
                   Depuis 2008, ProStagesPermis est le site n° 1 spécialisé dans les stages de récupération de points. Notre mission : vous aider à sauver votre permis dans les temps, avec un stage au meilleur prix proche de chez vous. Plus de 857 000 conducteurs nous ont déjà fait confiance.
                 </p>
-                <ul className="list-disc list-inside mt-4 space-y-1">
+                {/* Mobile: No bullet points */}
+                {/* Desktop: Show bullet points */}
+                <ul className="hidden md:block list-disc list-inside mt-4 space-y-1">
                   <li>Près de 18 ans d'expérience dans les stages de récupération de points</li>
                   <li>Des dizaines de milliers de conducteurs accompagnés partout en France</li>
                   <li>Un réseau de centres de formation agréés partout en France</li>
