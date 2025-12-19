@@ -535,7 +535,7 @@ export default function StageDetailsModal({
           </div>
 
           {/* Content */}
-          <div className="px-4 pb-6">
+          <div className="px-4 pb-6 flex flex-col items-center">
             {/* Title */}
             <h2
               className="text-center mb-1"
@@ -567,8 +567,23 @@ export default function StageDetailsModal({
               {stage.prix.toFixed(0)}€ TTC
             </p>
 
-            {/* Address */}
-            <div className="flex gap-2 mb-3">
+            {/* Main Widget Container */}
+            <div style={{
+              display: 'flex',
+              width: '366px',
+              height: '511px',
+              padding: '10px 8px',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '10px',
+              flexShrink: 0,
+              borderRadius: '20px',
+              border: '1px solid #EAEAEA',
+              background: '#FFF',
+              boxShadow: '0 4px 12px 2px rgba(0, 0, 0, 0.20)'
+            }}>
+              {/* Address */}
+              <div className="flex gap-2 mb-3">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-0.5">
                 <g clipPath="url(#clip0_1_70)">
                   <path d="M21.875 10.4167C21.875 17.7083 12.5 23.9583 12.5 23.9583C12.5 23.9583 3.125 17.7083 3.125 10.4167C3.125 7.93026 4.11272 5.54569 5.87087 3.78754C7.62903 2.02938 10.0136 1.04166 12.5 1.04166C14.9864 1.04166 17.371 2.02938 19.1291 3.78754C20.8873 5.54569 21.875 7.93026 21.875 10.4167Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -641,64 +656,81 @@ export default function StageDetailsModal({
               </div>
             </div>
 
-            {/* Place disponibles */}
-            <p
-              className="text-center mb-4"
-              style={{
-                color: '#000',
-                fontFamily: 'var(--font-poppins)',
-                fontSize: '13px',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                lineHeight: '18px'
-              }}
-            >
-              Place disponibles
-            </p>
+              {/* Place disponibles */}
+              <p
+                className="text-center mb-2"
+                style={{
+                  color: '#267E1C',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '13px',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  lineHeight: '18px'
+                }}
+              >
+                Place disponibles
+              </p>
 
-            {/* Benefits list */}
-            <div className="space-y-2 mb-6">
-              {[
-                'Stage agréé Préfecture tout type de stage (volontaire et obligatoire)',
-                '+4 points en 48h',
-                'Aucun examen',
-                'Attestation officielle remise le 2ème jour',
-                'Report ou remboursement en quelques clics sur votre Espace Client',
-                'Convocation envoyée immédiatement par email après inscription'
-              ].map((benefit, index) => (
-                <div key={index} className="flex gap-2 items-start">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 26" fill="none" className="flex-shrink-0 mt-0.5">
-                    <path d="M9.19219 11.5737L12.2563 14.7302L22.4698 4.20863M21.4485 12.6259V19.991C21.4485 20.5491 21.2332 21.0843 20.8502 21.479C20.4671 21.8736 19.9475 22.0953 19.4057 22.0953H5.10677C4.56501 22.0953 4.04544 21.8736 3.66235 21.479C3.27927 21.0843 3.06406 20.5491 3.06406 19.991V5.26079C3.06406 4.70269 3.27927 4.16745 3.66235 3.77281C4.04544 3.37818 4.56501 3.15647 5.10677 3.15647H16.3417" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <p style={{
-                    color: 'rgba(6, 6, 6, 0.86)',
-                    fontFamily: 'var(--font-poppins)',
-                    fontSize: '12px',
-                    fontStyle: 'normal',
-                    fontWeight: '400',
-                    lineHeight: '18px'
-                  }}>
-                    {benefit}
-                  </p>
+              {/* Nested Benefits Widget */}
+              <div style={{
+                display: 'flex',
+                width: '318px',
+                height: '323px',
+                padding: '0 16px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                flexShrink: 0,
+                borderRadius: '8px',
+                border: '1px solid #9B9A9A'
+              }}>
+                {/* Benefits list */}
+                <div className="space-y-2">
+                  {[
+                    'Stage agréé Préfecture tout type de stage (volontaire et obligatoire)',
+                    '+4 points en 48h',
+                    'Aucun examen',
+                    'Attestation officielle remise le 2ème jour',
+                    'Report ou remboursement en quelques clics sur votre Espace Client',
+                    'Convocation envoyée immédiatement par email après inscription'
+                  ].map((benefit, index) => (
+                    <div key={index} className="flex gap-2 items-start">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 26" fill="none" className="flex-shrink-0 mt-0.5">
+                        <path d="M9.19219 11.5737L12.2563 14.7302L22.4698 4.20863M21.4485 12.6259V19.991C21.4485 20.5491 21.2332 21.0843 20.8502 21.479C20.4671 21.8736 19.9475 22.0953 19.4057 22.0953H5.10677C4.56501 22.0953 4.04544 21.8736 3.66235 21.479C3.27927 21.0843 3.06406 20.5491 3.06406 19.991V5.26079C3.06406 4.70269 3.27927 4.16745 3.66235 3.77281C4.04544 3.37818 4.56501 3.15647 5.10677 3.15647H16.3417" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <p style={{
+                        color: 'rgba(6, 6, 6, 0.86)',
+                        fontFamily: 'var(--font-poppins)',
+                        fontSize: '12px',
+                        fontStyle: 'normal',
+                        fontWeight: '400',
+                        lineHeight: '18px'
+                      }}>
+                        {benefit}
+                      </p>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
 
-            {/* Buttons */}
-            <div className="flex gap-3 justify-center">
+            {/* Buttons - Outside main widget, stacked vertically */}
+            <div className="flex flex-col gap-2 mt-4 items-center">
               <button
                 onClick={handleClose}
                 style={{
                   display: 'flex',
-                  height: '40px',
-                  padding: '7px 20px',
+                  height: '44px',
+                  padding: '7px 15px',
                   justifyContent: 'center',
                   alignItems: 'center',
+                  gap: '20px',
+                  flexShrink: 0,
                   borderRadius: '12px',
                   background: '#E0E0E0',
                   color: '#000',
-                  fontFamily: 'var(--font-poppins)',
-                  fontSize: '13px',
+                  fontFamily: 'Poppins',
+                  fontSize: '15px',
                   fontStyle: 'normal',
                   fontWeight: 300,
                   lineHeight: 'normal',
@@ -714,16 +746,17 @@ export default function StageDetailsModal({
                 onClick={handleClose}
                 style={{
                   display: 'flex',
-                  height: '40px',
-                  padding: '7px 20px',
+                  width: '197px',
+                  padding: '7px 15px',
                   justifyContent: 'center',
                   alignItems: 'center',
+                  gap: '20px',
                   borderRadius: '12px',
                   background: '#41A334',
                   color: '#FFF',
                   textAlign: 'center',
-                  fontFamily: 'var(--font-poppins)',
-                  fontSize: '13px',
+                  fontFamily: 'Poppins',
+                  fontSize: '15px',
                   fontStyle: 'normal',
                   fontWeight: 400,
                   lineHeight: 'normal',
