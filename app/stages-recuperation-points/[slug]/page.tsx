@@ -255,12 +255,10 @@ export default function StagesResultsPage() {
         <div className="flex items-center justify-between px-4 py-3">
           {/* Logo */}
           <Link href="/">
-            <Image
-              src="/prostages-logo.png"
+            <img
+              src="/prostagespermis-logo.png"
               alt="ProStagesPermis"
-              width={120}
-              height={30}
-              className="h-6 w-auto"
+              className="h-8 w-auto"
             />
           </Link>
 
@@ -277,8 +275,8 @@ export default function StagesResultsPage() {
         </div>
 
         {/* Search bar - centered below logo/hamburger */}
-        <div className="px-4 pb-3 flex justify-center">
-          <div className="w-full max-w-md">
+        <div className="pb-3 flex justify-center">
+          <div className="w-11/12 max-w-md">
             <CitySearchBar
               placeholder="Ville ou code postal"
               variant="filter"
