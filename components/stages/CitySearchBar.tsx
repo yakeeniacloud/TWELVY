@@ -181,7 +181,7 @@ export default function CitySearchBar({
   const isFilter = variant === 'filter'
 
   return (
-    <div className={`relative w-full ${isLarge ? 'max-w-[640px] mx-auto' : ''}`}>
+    <div className={`relative ${isFilter ? '' : 'w-full'} ${isLarge ? 'max-w-[640px] mx-auto' : ''}`}>
       <form
         role="search"
         aria-label="Rechercher un stage par ville"
