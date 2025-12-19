@@ -249,17 +249,17 @@ export default function StagesResultsPage() {
   return (
     <div className="bg-white w-full min-h-screen">
       {/* Main Content */}
-      <main className="max-w-5xl mx-auto px-4 py-8">
-        <h1 className="text-2xl font-normal text-center mb-3">
+      <main className="max-w-5xl mx-auto px-4 md:px-4 py-4 md:py-8">
+        <h1 className="text-lg md:text-2xl font-normal text-center mb-3">
           Stage Récupération de Points à {city.charAt(0) + city.slice(1).toLowerCase()}
         </h1>
 
-        <p className="text-center text-gray-700 mb-6">
+        <p className="text-center text-sm md:text-base text-gray-700 mb-4 md:mb-6 px-2">
           Réservez votre stage agréé en quelques clics et récupérez 4 points en 2 jours
         </p>
 
-        {/* Reassurance Icons */}
-        <div className="flex items-center justify-center gap-8 mb-6">
+        {/* Reassurance Icons - Hidden on mobile, shown on desktop */}
+        <div className="hidden md:flex items-center justify-center gap-8 mb-6">
           <Image
             src="/agree-prefecture.png"
             alt="Agréé Préfecture"
@@ -291,118 +291,123 @@ export default function StagesResultsPage() {
         </div>
 
         {/* Prefecture Badge */}
-        <div className="flex items-center justify-center mb-6">
+        <div className="flex items-center justify-center mb-4 md:mb-6">
           <Image
             src="/prefecture-badge.png"
             alt="Stages Agréés par la Préfecture des Bouches-du-Rhône (13)"
             width={800}
             height={60}
-            className="h-14 w-auto"
+            className="h-10 md:h-14 w-auto max-w-full px-4"
           />
         </div>
 
         {/* Filters Section */}
-        <div className="flex items-center gap-4 w-[903px] mx-auto" style={{ marginBottom: '14px' }}>
-          <CitySearchBar
-            placeholder="Ville ou code postal"
-            variant="filter"
-          />
-
-          <div className="flex flex-col justify-center flex-shrink-0" style={{
-            width: '76px',
-            height: '35px',
-            fontFamily: 'var(--font-poppins)',
-            color: '#000',
-            fontSize: '13px',
-            fontStyle: 'normal',
-            fontWeight: '400',
-            lineHeight: 'normal',
-            letterSpacing: '0.91px'
-          }}>
-            Trier par :
+        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 w-full md:w-[903px] mx-auto mb-4">
+          {/* Search bar - full width on mobile */}
+          <div className="w-full md:w-auto md:flex-1">
+            <CitySearchBar
+              placeholder="Ville ou code postal"
+              variant="filter"
+            />
           </div>
 
-          <button
-            onClick={() => setSortBy(sortBy === 'date' ? null : 'date')}
-            className={`px-3 rounded-lg border border-gray-400 transition-colors ${
-              sortBy === 'date' ? 'bg-[#c4cce1]' : 'bg-white'
-            }`}
-            style={{
+          {/* Filter buttons row */}
+          <div className="flex items-center gap-2 md:gap-4 overflow-x-auto">
+            <div className="flex flex-col justify-center flex-shrink-0" style={{
+              width: '76px',
               height: '35px',
-              color: 'rgba(4, 4, 4, 0.96)',
               fontFamily: 'var(--font-poppins)',
-              fontSize: '12px',
+              color: '#000',
+              fontSize: '13px',
               fontStyle: 'normal',
               fontWeight: '400',
               lineHeight: 'normal',
-              letterSpacing: '0.84px'
-            }}
-          >
-            Date
-          </button>
-          <button
-            onClick={() => setSortBy(sortBy === 'prix' ? null : 'prix')}
-            className={`px-3 rounded-lg border border-gray-400 transition-colors ${
-              sortBy === 'prix' ? 'bg-[#c4cce1]' : 'bg-white'
-            }`}
-            style={{
-              height: '35px',
-              color: 'rgba(4, 4, 4, 0.96)',
-              fontFamily: 'var(--font-poppins)',
-              fontSize: '12px',
-              fontStyle: 'normal',
-              fontWeight: '400',
-              lineHeight: 'normal',
-              letterSpacing: '0.84px'
-            }}
-          >
-            Prix
-          </button>
-          <button
-            onClick={() => setSortBy(sortBy === 'proximite' ? null : 'proximite')}
-            className={`px-3 rounded-lg border border-gray-400 transition-colors ${
-              sortBy === 'proximite' ? 'bg-[#c4cce1]' : 'bg-white'
-            }`}
-            style={{
-              height: '35px',
-              color: 'rgba(4, 4, 4, 0.96)',
-              fontFamily: 'var(--font-poppins)',
-              fontSize: '12px',
-              fontStyle: 'normal',
-              fontWeight: '400',
-              lineHeight: 'normal',
-              letterSpacing: '0.84px'
-            }}
-          >
-            Proximité
-          </button>
+              letterSpacing: '0.91px'
+            }}>
+              Trier par :
+            </div>
 
-          <div className="relative" ref={cityDropdownRef}>
             <button
-              onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
-              className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border border-black min-w-[120px]"
+              onClick={() => setSortBy(sortBy === 'date' ? null : 'date')}
+              className={`px-3 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
+                sortBy === 'date' ? 'bg-[#c4cce1]' : 'bg-white'
+              }`}
               style={{
                 height: '35px',
+                color: 'rgba(4, 4, 4, 0.96)',
                 fontFamily: 'var(--font-poppins)',
-                color: '#060606',
                 fontSize: '12px',
                 fontStyle: 'normal',
                 fontWeight: '400',
-                lineHeight: '35px'
+                lineHeight: 'normal',
+                letterSpacing: '0.84px'
               }}
             >
-              <span className="truncate flex-1 text-left">
-                {allCitiesSelected
-                  ? 'Ville'
-                  : selectedCities.length === 1
-                    ? formatCityName(selectedCities[0])
-                    : `${selectedCities.length} villes`
-                }
-              </span>
-              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+              Date
             </button>
+            <button
+              onClick={() => setSortBy(sortBy === 'prix' ? null : 'prix')}
+              className={`px-3 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
+                sortBy === 'prix' ? 'bg-[#c4cce1]' : 'bg-white'
+              }`}
+              style={{
+                height: '35px',
+                color: 'rgba(4, 4, 4, 0.96)',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '12px',
+                fontStyle: 'normal',
+                fontWeight: '400',
+                lineHeight: 'normal',
+                letterSpacing: '0.84px'
+              }}
+            >
+              Prix
+            </button>
+            <button
+              onClick={() => setSortBy(sortBy === 'proximite' ? null : 'proximite')}
+              className={`px-3 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
+                sortBy === 'proximite' ? 'bg-[#c4cce1]' : 'bg-white'
+              }`}
+              style={{
+                height: '35px',
+                color: 'rgba(4, 4, 4, 0.96)',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '12px',
+                fontStyle: 'normal',
+                fontWeight: '400',
+                lineHeight: 'normal',
+                letterSpacing: '0.84px'
+              }}
+            >
+              Proximité
+            </button>
+
+            <div className="relative flex-shrink-0" ref={cityDropdownRef}>
+              <button
+                onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
+                className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border border-black min-w-[120px]"
+                style={{
+                  height: '35px',
+                  fontFamily: 'var(--font-poppins)',
+                  color: '#060606',
+                  fontSize: '12px',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  lineHeight: '35px'
+                }}
+              >
+                <span className="truncate flex-1 text-left">
+                  {allCitiesSelected
+                    ? 'Ville'
+                    : selectedCities.length === 1
+                      ? formatCityName(selectedCities[0])
+                      : `${selectedCities.length} villes`
+                  }
+                </span>
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
 
             {showCitiesDropdown && (
               <div className="absolute top-full mt-2 w-64 bg-white border border-gray-300 rounded shadow-lg z-10 max-h-96 overflow-y-auto">
@@ -439,6 +444,7 @@ export default function StagesResultsPage() {
             )}
           </div>
         </div>
+      </div>
 
         {/* Stages List */}
         {loading && (
@@ -464,70 +470,128 @@ export default function StagesResultsPage() {
             {visibleStages.map((stage) => (
                 <article
                   key={stage.id}
-                  className="flex w-[903px] h-[85px] p-[0_7px] items-center mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
+                  className="flex flex-col md:flex-row w-full md:w-[903px] md:h-[85px] p-3 md:p-[0_7px] md:items-center mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
                 >
-                  {/* Left: Date and Details Link */}
-                  <div className="flex flex-col flex-shrink-0 gap-0 ml-3">
-                    <p className="w-[223px] text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>
+                  {/* Mobile Layout */}
+                  <div className="flex md:hidden flex-col w-full">
+                    {/* Date at top */}
+                    <p className="text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px] mb-3" style={{ fontFamily: 'var(--font-poppins)' }}>
                       {formatDate(stage.date_start, stage.date_end)}
                     </p>
+
+                    {/* Location pin + City + Address */}
+                    <div className="flex items-start gap-2 mb-2">
+                      <div className="flex w-[24px] h-[24px] justify-center items-center flex-shrink-0 rounded-full bg-gray-200 mt-0.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none" className="w-3.5 h-3.5 flex-shrink-0">
+                          <g clipPath="url(#clip0_2180_399)">
+                            <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_2180_399">
+                              <rect width="20" height="20" fill="white"/>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                      <div className="flex flex-col flex-1">
+                        <p className="text-[rgba(0,0,0,0.98)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville}</p>
+                        <p className="text-[rgba(6,6,6,0.56)] text-[12px] font-normal leading-[12px] mt-1" style={{ fontFamily: 'var(--font-poppins)' }}>{removeStreetNumber(stage.site.adresse)}</p>
+                      </div>
+                    </div>
+
+                    {/* Details link */}
                     <button
                       onClick={() => {
                         setSelectedStage(stage)
                         setIsModalOpen(true)
                       }}
-                      className="flex items-center gap-[5px] text-[rgba(90,106,147,0.86)] text-[13px] font-normal leading-[13px] hover:underline text-left mt-3"
+                      className="flex items-center gap-[5px] text-[rgba(90,106,147,0.86)] text-[13px] font-normal leading-[13px] hover:underline text-left mb-3"
                       style={{ fontFamily: 'var(--font-poppins)' }}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" className="w-[13.333px] h-[13.333px] flex-shrink-0">
-                        <path d="M7.46665 10.1334V7.46672M7.46665 4.80005H7.47332M14.1333 7.46672C14.1333 11.1486 11.1486 14.1334 7.46665 14.1334C3.78476 14.1334 0.799988 11.1486 0.799988 7.46672C0.799988 3.78482 3.78476 0.800049 7.46665 0.800049C11.1486 0.800049 14.1333 3.78482 14.1333 7.46672Z" stroke="#5A6A93" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      <span>Détails du stage</span>
+                      Détails du stage
                     </button>
-                  </div>
 
-                  {/* Center: Location Pin + City + Address */}
-                  <div className="flex items-center gap-2.5 flex-1 mx-[70px]">
-                    <div className="flex w-[38px] h-[38px] p-[9px] justify-center items-center gap-2.5 flex-shrink-0 rounded-full bg-gray-200">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
-                        <g clipPath="url(#clip0_2180_399)">
-                          <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </g>
-                        <defs>
-                          <clipPath id="clip0_2180_399">
-                            <rect width="20" height="20" fill="white"/>
-                          </clipPath>
-                        </defs>
-                      </svg>
-                    </div>
-                    <div className="flex flex-col justify-center gap-0">
-                      <p className="w-[138px] flex-shrink-0 text-[rgba(0,0,0,0.98)] text-[15px] font-normal leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville}</p>
-                      <p className="flex-shrink-0 self-stretch text-[rgba(6,6,6,0.56)] text-[12px] font-normal leading-[12px] mt-3" style={{ fontFamily: 'var(--font-poppins)' }}>{removeStreetNumber(stage.site.adresse)}</p>
+                    {/* Price and Button Row */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-[rgba(6,6,6,0.86)] text-[20px] font-normal leading-[35px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.prix}€</p>
+                      </div>
+                      <Link
+                        href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
+                        className="flex px-[15px] py-[7px] justify-center items-center rounded-xl bg-[#41A334] text-white text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap"
+                        style={{ fontFamily: 'var(--font-poppins)' }}
+                      >
+                        Sélectionner
+                      </Link>
                     </div>
                   </div>
 
-                  {/* Right: Price */}
-                  <div className="w-[121px] h-[31px] flex-shrink-0">
-                    <p className="text-[rgba(6,6,6,0.86)] text-center text-[20px] font-normal leading-[35px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.prix}€</p>
-                  </div>
+                  {/* Desktop Layout */}
+                  <div className="hidden md:flex md:items-center md:w-full">
+                    {/* Left: Date and Details Link */}
+                    <div className="flex flex-col flex-shrink-0 gap-0 ml-3">
+                      <p className="w-[223px] text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>
+                        {formatDate(stage.date_start, stage.date_end)}
+                      </p>
+                      <button
+                        onClick={() => {
+                          setSelectedStage(stage)
+                          setIsModalOpen(true)
+                        }}
+                        className="flex items-center gap-[5px] text-[rgba(90,106,147,0.86)] text-[13px] font-normal leading-[13px] hover:underline text-left mt-3"
+                        style={{ fontFamily: 'var(--font-poppins)' }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" className="w-[13.333px] h-[13.333px] flex-shrink-0">
+                          <path d="M7.46665 10.1334V7.46672M7.46665 4.80005H7.47332M14.1333 7.46672C14.1333 11.1486 11.1486 14.1334 7.46665 14.1334C3.78476 14.1334 0.799988 11.1486 0.799988 7.46672C0.799988 3.78482 3.78476 0.800049 7.46665 0.800049C11.1486 0.800049 14.1333 3.78482 14.1333 7.46672Z" stroke="#5A6A93" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span>Détails du stage</span>
+                      </button>
+                    </div>
 
-                  {/* Right: Green Button */}
-                  <Link
-                    href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
-                    className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap flex-shrink-0 ml-[70px] mr-[25px]"
-                    style={{ fontFamily: 'var(--font-poppins)' }}
-                  >
-                    Sélectionner
-                  </Link>
+                    {/* Center: Location Pin + City + Address */}
+                    <div className="flex items-center gap-2.5 flex-1 mx-[70px]">
+                      <div className="flex w-[38px] h-[38px] p-[9px] justify-center items-center gap-2.5 flex-shrink-0 rounded-full bg-gray-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
+                          <g clipPath="url(#clip0_2180_399)">
+                            <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_2180_399">
+                              <rect width="20" height="20" fill="white"/>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </div>
+                      <div className="flex flex-col justify-center gap-0">
+                        <p className="w-[138px] flex-shrink-0 text-[rgba(0,0,0,0.98)] text-[15px] font-normal leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville}</p>
+                        <p className="flex-shrink-0 self-stretch text-[rgba(6,6,6,0.56)] text-[12px] font-normal leading-[12px] mt-3" style={{ fontFamily: 'var(--font-poppins)' }}>{removeStreetNumber(stage.site.adresse)}</p>
+                      </div>
+                    </div>
+
+                    {/* Right: Price */}
+                    <div className="w-[121px] h-[31px] flex-shrink-0">
+                      <p className="text-[rgba(6,6,6,0.86)] text-center text-[20px] font-normal leading-[35px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.prix}€</p>
+                    </div>
+
+                    {/* Right: Green Button */}
+                    <Link
+                      href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
+                      className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap flex-shrink-0 ml-[70px] mr-[25px]"
+                      style={{ fontFamily: 'var(--font-poppins)' }}
+                    >
+                      Sélectionner
+                    </Link>
+                  </div>
                 </article>
             ))}
 
-            <div className="flex items-center justify-center gap-4 mt-6">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 mt-6 px-4">
               {visibleCount > STAGES_PER_LOAD && (
                 <button
                   onClick={() => setVisibleCount(STAGES_PER_LOAD)}
-                  className="px-8 py-2 bg-white border-2 border-[#c4cce1] text-gray-800 text-sm rounded-2xl hover:bg-gray-50 transition-colors"
+                  className="w-full md:w-auto px-6 md:px-8 py-2 bg-white border-2 border-[#c4cce1] text-gray-800 text-sm rounded-2xl hover:bg-gray-50 transition-colors"
                 >
                   Afficher moins de stages
                 </button>
@@ -536,7 +600,7 @@ export default function StagesResultsPage() {
               {hasMore && (
                 <button
                   onClick={() => setVisibleCount(prev => prev + STAGES_PER_LOAD)}
-                  className="px-8 py-2 bg-[#c4cce1] text-gray-800 text-sm rounded-2xl hover:bg-[#b3bdd4] transition-colors"
+                  className="w-full md:w-auto px-6 md:px-8 py-2 bg-[#c4cce1] text-gray-800 text-sm rounded-2xl hover:bg-[#b3bdd4] transition-colors"
                 >
                   Voir plus de stages
                 </button>
@@ -546,21 +610,21 @@ export default function StagesResultsPage() {
         )}
 
         {/* Pourquoi Réserver Section */}
-        <section className="my-16 flex justify-center">
+        <section className="my-8 md:my-16 flex justify-center px-4">
           <Image
             src="/pourquoi-reserver.png"
             alt="Pourquoi réserver votre stage chez ProStagesPermis"
             width={900}
             height={350}
-            className="w-auto h-auto max-w-3xl"
+            className="w-full md:w-auto h-auto max-w-3xl"
           />
         </section>
 
         {/* Customer Reviews Section */}
-        <section className="my-16">
-          <div className="flex items-center justify-center gap-4 mb-8">
-            <div className="h-px w-16 bg-gray-300" />
-            <h2 className="text-center text-[20px] font-[250] leading-[35px]" style={{
+        <section className="my-8 md:my-16 px-4">
+          <div className="flex items-center justify-center gap-2 md:gap-4 mb-6 md:mb-8">
+            <div className="h-px w-8 md:w-16 bg-gray-300" />
+            <h2 className="text-center text-[16px] md:text-[20px] font-[250] leading-[25px] md:leading-[35px]" style={{
               fontFamily: 'var(--font-poppins)',
               color: 'rgba(6, 6, 6, 0.86)',
               WebkitTextStrokeWidth: '1px',
@@ -570,52 +634,48 @@ export default function StagesResultsPage() {
                 WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)'
               }}>Clients</span>
             </h2>
-            <div className="h-px w-16 bg-gray-300" />
+            <div className="h-px w-8 md:w-16 bg-gray-300" />
           </div>
 
-          <div className="bg-gray-100 rounded-lg p-12 flex items-center justify-center">
-            <p className="text-gray-500">Section Avis Clients - Placeholder</p>
+          <div className="bg-gray-100 rounded-lg p-6 md:p-12 flex items-center justify-center">
+            <p className="text-gray-500 text-sm md:text-base">Section Avis Clients - Placeholder</p>
           </div>
         </section>
 
         {/* About Us Section */}
-        <section className="my-16 flex flex-col items-center">
+        <section className="my-8 md:my-16 flex flex-col items-center px-4">
           {/* Top: Europe 1 Recommendation */}
-          <div className="flex items-center justify-center mb-[120px]">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-0 mb-12 md:mb-[120px]">
             {/* Left: Recommandé par Europe 1 with subtitle */}
             <div className="flex flex-col items-center justify-center">
               <h3 className="text-center" style={{
                 fontFamily: 'var(--font-poppins)',
                 color: '#2C2C2C',
-                fontSize: '20px',
+                fontSize: '18px',
                 fontWeight: 500,
-                lineHeight: '20px',
-                letterSpacing: '1.4px',
-                width: '176px',
-                height: '77px',
-                flexShrink: 0
+                lineHeight: '22px',
+                letterSpacing: '1.2px'
               }}>
                 Recommandé par Europe 1
               </h3>
-              <p className="text-center mt-2" style={{
+              <p className="text-center mt-2 px-4" style={{
                 fontFamily: 'var(--font-poppins)',
-                width: '333px',
-                height: '56px',
+                maxWidth: '333px',
                 color: 'rgba(6, 6, 6, 0.80)',
-                fontSize: '15px',
+                fontSize: '14px',
                 fontWeight: 400,
-                lineHeight: '25px',
-                marginRight: '35px'
+                lineHeight: '22px'
               }}>
                 ProStagesPermis cité comme site de confiance par Europe 1
               </p>
             </div>
 
-            {/* Vertical Line */}
-            <div style={{
+            {/* Vertical Line - Hidden on mobile */}
+            <div className="hidden md:block" style={{
               width: '1px',
               height: '172.502px',
               background: '#000',
+              marginLeft: '35px',
               marginRight: '35px'
             }}></div>
 
@@ -626,16 +686,15 @@ export default function StagesResultsPage() {
                 alt="Europe 1"
                 width={200}
                 height={100}
-                className="w-auto h-20"
+                className="w-auto h-16 md:h-20"
               />
               <a
                 href="https://www.youtube.com/watch?v=z1AsmdcGTaw"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-red-700 hover:underline"
+                className="text-red-700 hover:underline text-sm md:text-base"
                 style={{
                   fontFamily: 'var(--font-poppins)',
-                  fontSize: '15px',
                   fontWeight: 400
                 }}
               >
@@ -645,13 +704,9 @@ export default function StagesResultsPage() {
           </div>
 
           {/* Bottom: Qui est ProStagesPermis */}
-          <div className="flex justify-center items-center" style={{
-            width: '626px',
-            height: '358px',
-            border: '1px solid #000'
-          }}>
-            <div className="text-center">
-              <h2 className="text-center mb-4 text-[20px] font-[250] leading-[35px]" style={{
+          <div className="flex justify-center items-center w-full md:w-[626px] p-6 md:p-8 border border-black">
+            <div className="w-full">
+              <h2 className="text-center mb-4 text-[18px] md:text-[20px] font-[250] leading-[30px] md:leading-[35px]" style={{
                 fontFamily: 'var(--font-poppins)',
                 color: 'rgba(6, 6, 6, 0.86)',
                 WebkitTextStrokeWidth: '1px',
@@ -661,15 +716,12 @@ export default function StagesResultsPage() {
                   WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)'
                 }}>ProStagesPermis</span>
               </h2>
-              <div style={{
-                width: '552px',
-                height: '309px',
-                flexShrink: 0,
+              <div className="w-full" style={{
                 fontFamily: 'var(--font-poppins)',
                 color: 'rgba(6, 6, 6, 0.94)',
-                fontSize: '15px',
+                fontSize: '14px',
                 fontWeight: 400,
-                lineHeight: '25px',
+                lineHeight: '22px',
                 textAlign: 'left'
               }}>
                 <p>
@@ -687,8 +739,8 @@ export default function StagesResultsPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="my-16">
-          <h2 className="text-center mb-8 text-[20px] font-[250] leading-[35px]" style={{
+        <section className="my-8 md:my-16 px-4">
+          <h2 className="text-center mb-6 md:mb-8 text-[18px] md:text-[20px] font-[250] leading-[30px] md:leading-[35px]" style={{
             fontFamily: 'var(--font-poppins)',
             color: 'rgba(6, 6, 6, 0.86)',
             WebkitTextStrokeWidth: '1px',
@@ -699,24 +751,24 @@ export default function StagesResultsPage() {
             }}>Fréquentes</span>
           </h2>
 
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             {faqData.map((faq, index) => (
               <article
                 key={faq.id}
                 className="rounded border border-black overflow-hidden"
               >
                 <button
-                  className="flex items-center justify-between p-4 w-full text-left hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between p-3 md:p-4 w-full text-left hover:bg-gray-50 transition-colors"
                   onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
                 >
-                  <div className="flex items-center gap-3 flex-1">
-                    <svg className="w-6 h-6 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-2 md:gap-3 flex-1">
+                    <svg className="w-5 h-5 md:w-6 md:h-6 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <p className="text-gray-900">{faq.question}</p>
+                    <p className="text-gray-900 text-sm md:text-base">{faq.question}</p>
                   </div>
                   <svg
-                    className={`w-5 h-5 text-gray-600 transition-transform ${openFaqIndex === index ? 'rotate-180' : ''}`}
+                    className={`w-4 h-4 md:w-5 md:h-5 text-gray-600 transition-transform flex-shrink-0 ${openFaqIndex === index ? 'rotate-180' : ''}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -726,8 +778,8 @@ export default function StagesResultsPage() {
                 </button>
 
                 {openFaqIndex === index && (
-                  <div className="px-4 pb-4 pt-2 bg-gray-50 border-t border-gray-200">
-                    <p className="text-gray-700 leading-relaxed">
+                  <div className="px-3 md:px-4 pb-3 md:pb-4 pt-2 bg-gray-50 border-t border-gray-200">
+                    <p className="text-gray-700 leading-relaxed text-sm md:text-base">
                       Ceci est un placeholder pour la réponse à la question. Le contenu sera ajouté ultérieurement.
                       Cette section peut contenir des informations détaillées sur la récupération de points,
                       les délais, les conditions et toutes les informations pertinentes pour répondre à la question posée.
@@ -739,11 +791,10 @@ export default function StagesResultsPage() {
           </div>
 
           {/* Show More Questions Button */}
-          <div className="flex justify-center" style={{ marginTop: '25px' }}>
-            <button style={{
+          <div className="flex justify-center mt-6 md:mt-8">
+            <button className="text-sm md:text-base" style={{
               fontFamily: 'var(--font-poppins)',
               color: '#000',
-              fontSize: '15px',
               fontWeight: 500,
               letterSpacing: '1.05px',
               textDecoration: 'underline',
@@ -760,8 +811,8 @@ export default function StagesResultsPage() {
 
         {/* Nearby Cities Section */}
         {nearbyCities.length > 0 && (
-          <section className="my-16">
-            <h2 className="text-center mb-8 text-[20px] font-[250] leading-[35px]" style={{
+          <section className="my-8 md:my-16 px-4">
+            <h2 className="text-center mb-6 md:mb-8 text-[18px] md:text-[20px] font-[250] leading-[30px] md:leading-[35px]" style={{
               fontFamily: 'var(--font-poppins)',
               color: 'rgba(6, 6, 6, 0.86)',
               WebkitTextStrokeWidth: '1px',
@@ -772,8 +823,8 @@ export default function StagesResultsPage() {
               }}>autour de {city.charAt(0) + city.slice(1).toLowerCase()}</span>
             </h2>
 
-            {/* 3x3 Grid of nearby cities */}
-            <div className="flex justify-center gap-[30px]">
+            {/* 3x3 Grid of nearby cities (single column on mobile) */}
+            <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-[30px]">
               {/* Column 1 */}
               <div className="flex flex-col gap-[8px]">
                 {nearbyCities.slice(0, 3).map((nearbyCity) => {
@@ -896,9 +947,9 @@ export default function StagesResultsPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#343435] py-6 mt-32">
+      <footer className="bg-[#343435] py-6 mt-16 md:mt-32">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-center gap-6 mb-3">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6 mb-3">
             {[
               { text: 'Qui sommes-nous', href: '/qui-sommes-nous' },
               { text: 'Aide et contact', href: '/aide-et-contact' },
