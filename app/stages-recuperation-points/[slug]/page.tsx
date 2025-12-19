@@ -1083,7 +1083,8 @@ export default function StagesResultsPage() {
 
         {/* FAQ Section */}
         <section className="my-8 md:my-16 px-4">
-          <h2 className="text-center mb-6 md:mb-8 text-[18px] md:text-[20px] font-[250] leading-[30px] md:leading-[35px]" style={{
+          {/* Desktop: Title */}
+          <h2 className="hidden md:block text-center mb-6 md:mb-8 text-[18px] md:text-[20px] font-[250] leading-[30px] md:leading-[35px]" style={{
             fontFamily: 'var(--font-poppins)',
             color: 'rgba(6, 6, 6, 0.86)',
             WebkitTextStrokeWidth: '1px',
@@ -1094,22 +1095,8 @@ export default function StagesResultsPage() {
             }}>Fréquentes</span>
           </h2>
 
-          {/* Mobile: New text + grey box with questions */}
+          {/* Mobile: Grey box with title, subtitle, and questions */}
           <div className="md:hidden flex flex-col items-center">
-            {/* New introductory text */}
-            <p className="mb-6" style={{
-              width: '339px',
-              color: '#000',
-              fontFamily: 'var(--font-poppins)',
-              fontSize: '15px',
-              fontStyle: 'normal',
-              fontWeight: 400,
-              lineHeight: '20px',
-              textAlign: 'center'
-            }}>
-              Depuis 2008, ProStagesPermis est le site n° 1 spécialisé dans les stages de récupération de points. Notre mission : vous aider à sauver votre permis dans les temps, avec un stage au meilleur prix proche de chez vous. Plus de 857 000 conducteurs nous ont déjà fait confiance.
-            </p>
-
             {/* Grey box container */}
             <div style={{
               display: 'flex',
@@ -1118,8 +1105,36 @@ export default function StagesResultsPage() {
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
-              background: '#F6F6F6'
+              background: '#F6F6F6',
+              padding: '20px 0'
             }}>
+              {/* Title inside grey box */}
+              <h2 className="text-center mb-3 text-[18px] font-[250] leading-[30px]" style={{
+                fontFamily: 'var(--font-poppins)',
+                color: 'rgba(6, 6, 6, 0.86)',
+                WebkitTextStrokeWidth: '1px',
+                WebkitTextStrokeColor: '#000'
+              }}>
+                Questions <span style={{
+                  WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)'
+                }}>Fréquentes</span>
+              </h2>
+
+              {/* Subtitle inside grey box */}
+              <p className="mb-4" style={{
+                width: '339px',
+                color: '#000',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '15px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '20px',
+                textAlign: 'center'
+              }}>
+                Réponses aux questions que se posent le plus souvent les conducteurs
+              </p>
+
+              {/* FAQ questions */}
               {faqData.map((faq, index) => (
                 <div key={faq.id} className="w-full">
                   <button
