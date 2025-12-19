@@ -361,7 +361,40 @@ export default function StagesResultsPage() {
           Stage Récupération de Points à {city.charAt(0) + city.slice(1).toLowerCase()}
         </h1>
 
-        <p className="text-center text-sm md:text-base text-gray-700 mb-4 md:mb-6 px-2">
+        {/* Mobile subtitle */}
+        <div className="md:hidden flex flex-col items-center gap-4 mb-4 px-2">
+          <p style={{
+            width: '379px',
+            height: '27px',
+            flexShrink: 0,
+            color: 'rgba(6, 6, 6, 0.86)',
+            textAlign: 'center',
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '15px',
+            fontStyle: 'normal',
+            fontWeight: 300,
+            lineHeight: '22px'
+          }}>
+            Récupérez 4 points en 48h au meilleur prix
+          </p>
+          <p style={{
+            width: '376px',
+            height: '23px',
+            color: '#000',
+            textAlign: 'center',
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '12px',
+            fontStyle: 'italic',
+            fontWeight: 400,
+            lineHeight: 'normal',
+            letterSpacing: '0.6px'
+          }}>
+            Plus de 857 000 conducteurs accompagnés depuis 2008
+          </p>
+        </div>
+
+        {/* Desktop subtitle */}
+        <p className="hidden md:block text-center text-base text-gray-700 mb-6 px-2">
           Réservez votre stage agréé en quelques clics et récupérez 4 points en 2 jours
         </p>
 
@@ -624,14 +657,52 @@ export default function StagesResultsPage() {
                     </div>
 
                     {/* Right side: Price and Button */}
-                    <div className="flex flex-col items-end justify-start gap-2 ml-4">
-                      <p className="text-[rgba(6,6,6,0.86)] text-[20px] font-normal leading-[20px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.prix}€</p>
+                    <div className="flex flex-col items-center ml-4" style={{ gap: '6px', paddingTop: '2px' }}>
+                      <p style={{
+                        display: 'flex',
+                        width: '79px',
+                        height: '27px',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        color: 'rgba(6, 6, 6, 0.86)',
+                        textAlign: 'center',
+                        fontFamily: 'var(--font-poppins)',
+                        fontSize: '20px',
+                        fontStyle: 'normal',
+                        fontWeight: 500,
+                        lineHeight: '35px',
+                        marginRight: '2px'
+                      }}>{stage.prix}€</p>
                       <Link
                         href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
-                        className="flex px-4 py-2 justify-center items-center rounded-lg bg-[#41A334] text-white text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap"
-                        style={{ fontFamily: 'var(--font-poppins)' }}
+                        style={{
+                          display: 'flex',
+                          width: '109px',
+                          height: '40px',
+                          padding: '7px 0',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          borderRadius: '12px',
+                          background: '#41A334',
+                          textDecoration: 'none'
+                        }}
+                        className="hover:bg-[#389c2e] transition-colors"
                       >
-                        Sélectionner
+                        <span style={{
+                          width: '106px',
+                          flexShrink: 0,
+                          color: '#FFF',
+                          textAlign: 'center',
+                          fontFamily: 'var(--font-poppins)',
+                          fontSize: '15px',
+                          fontStyle: 'normal',
+                          fontWeight: 400,
+                          lineHeight: 'normal',
+                          letterSpacing: '0.3px'
+                        }}>
+                          Sélectionner
+                        </span>
                       </Link>
                     </div>
                   </div>
