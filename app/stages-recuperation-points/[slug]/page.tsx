@@ -248,6 +248,37 @@ export default function StagesResultsPage() {
 
   return (
     <div className="bg-white w-full min-h-screen">
+      {/* Mobile Header - Only shown on mobile */}
+      <header className="md:hidden bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div className="flex items-center justify-between px-4 py-3">
+          {/* Logo */}
+          <div className="flex items-center">
+            <Image
+              src="/prostages-logo.png"
+              alt="ProStagesPermis"
+              width={120}
+              height={30}
+              className="h-6 w-auto"
+            />
+          </div>
+
+          {/* Hamburger Menu */}
+          <button className="flex flex-col gap-1 p-2">
+            <span className="w-6 h-0.5 bg-black"></span>
+            <span className="w-6 h-0.5 bg-black"></span>
+            <span className="w-6 h-0.5 bg-black"></span>
+          </button>
+        </div>
+
+        {/* Search bar in mobile header */}
+        <div className="px-4 pb-3">
+          <CitySearchBar
+            placeholder="Ville ou code postal"
+            variant="filter"
+          />
+        </div>
+      </header>
+
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 md:px-4 py-4 md:py-8">
         <h1 className="text-lg md:text-2xl font-normal text-center mb-3">
@@ -303,16 +334,16 @@ export default function StagesResultsPage() {
 
         {/* Filters Section */}
         <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 w-full md:w-[903px] mx-auto mb-4">
-          {/* Search bar - full width on mobile */}
-          <div className="w-full md:w-auto md:flex-1">
+          {/* Search bar - only shown on desktop */}
+          <div className="hidden md:block md:flex-1">
             <CitySearchBar
               placeholder="Ville ou code postal"
               variant="filter"
             />
           </div>
 
-          {/* Filter buttons row */}
-          <div className="flex items-center gap-2 md:gap-4 overflow-x-auto">
+          {/* Filter buttons row - centered on mobile, left-aligned on desktop */}
+          <div className="flex items-center justify-center md:justify-start gap-2 md:gap-4">
             <div className="flex flex-col justify-center flex-shrink-0" style={{
               width: '76px',
               height: '35px',
@@ -382,7 +413,8 @@ export default function StagesResultsPage() {
               Proximité
             </button>
 
-            <div className="relative flex-shrink-0" ref={cityDropdownRef}>
+            {/* Ville dropdown - only shown on desktop */}
+            <div className="hidden md:block relative flex-shrink-0" ref={cityDropdownRef}>
               <button
                 onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
                 className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border border-black min-w-[120px]"
