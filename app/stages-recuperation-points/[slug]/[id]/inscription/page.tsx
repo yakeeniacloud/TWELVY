@@ -304,108 +304,103 @@ export default function InscriptionPage() {
       {/* MOBILE VERSION - Only visible on mobile */}
       <div className="md:hidden">
         {/* Mobile Header */}
-        <div className="flex justify-between items-center px-4 py-3 bg-white border-b border-gray-200">
-          <Image src="/logo-prostages.png" alt="ProStagesPermis" width={120} height={30} />
-          <div className="text-sm text-blue-600">Aide et contact</div>
+        <div className="flex justify-between items-center px-3 py-2 bg-white border-b border-gray-200">
+          <Image src="/logo-prostages.png" alt="ProStagesPermis" width={100} height={24} className="h-6" />
+          <div className="text-xs text-blue-600">Aide et contact</div>
         </div>
 
         {/* Mobile Title */}
-        <div className="px-4 py-4 bg-white">
-          <h1 className="text-center text-lg font-normal leading-tight" style={{ fontFamily: 'Poppins' }}>
+        <div className="px-3 py-3 bg-white">
+          <h1 className="text-center font-normal leading-tight" style={{ fontFamily: 'Poppins', fontSize: '15px' }}>
             Stage Récupération de Points - av République, Marseille (13)
           </h1>
-          <p className="text-center text-sm text-gray-600 mt-1" style={{ fontFamily: 'Poppins' }}>
+          <p className="text-center text-gray-600 mt-1" style={{ fontFamily: 'Poppins', fontSize: '11px' }}>
             + 4 points en 48h - Agréé Préfecture
           </p>
         </div>
 
         {/* Mobile Progress Steps */}
-        <div className="flex justify-center items-center px-4 py-6 gap-4">
+        <div className="flex justify-center items-center px-3 py-4 gap-2">
           {/* Step 1 */}
           <div className="flex flex-col items-center">
-            <div className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center mb-2">
-              <span className="text-lg font-normal">1</span>
+            <div className="w-7 h-7 rounded-full border-2 border-black bg-white flex items-center justify-center mb-1">
+              <span className="text-sm font-normal">1</span>
             </div>
-            <p className="text-xs text-center">Coordonnées</p>
+            <p style={{ fontSize: '10px' }} className="text-center">Coordonnées</p>
           </div>
 
           {/* Line */}
-          <div className="flex-1 h-px bg-gray-300 mb-6" />
+          <div className="flex-1 h-px bg-gray-300 mb-4" style={{ maxWidth: '60px' }} />
 
           {/* Step 2 */}
           <div className="flex flex-col items-center">
-            <div className="w-8 h-8 rounded-full border-2 border-gray-300 bg-gray-100 flex items-center justify-center mb-2">
-              <span className="text-lg text-gray-400">2</span>
+            <div className="w-7 h-7 rounded-full border-2 border-gray-300 bg-gray-100 flex items-center justify-center mb-1">
+              <span className="text-sm text-gray-400">2</span>
             </div>
-            <p className="text-xs text-center text-gray-400">Paiement</p>
+            <p style={{ fontSize: '10px' }} className="text-center text-gray-400">Paiement</p>
           </div>
 
           {/* Line */}
-          <div className="flex-1 h-px bg-gray-300 mb-6" />
+          <div className="flex-1 h-px bg-gray-300 mb-4" style={{ maxWidth: '60px' }} />
 
           {/* Step 3 */}
           <div className="flex flex-col items-center">
-            <div className="w-8 h-8 rounded-full border-2 border-gray-300 bg-gray-100 flex items-center justify-center mb-2">
-              <span className="text-lg text-gray-400">3</span>
+            <div className="w-7 h-7 rounded-full border-2 border-gray-300 bg-gray-100 flex items-center justify-center mb-1">
+              <span className="text-sm text-gray-400">3</span>
             </div>
-            <p className="text-xs text-center text-gray-400">Confirmation</p>
+            <p style={{ fontSize: '10px' }} className="text-center text-gray-400">Confirmation</p>
           </div>
         </div>
 
         {/* Back Link */}
-        <div className="px-4 py-2">
-          <a href={`/stages-recuperation-points/${city.toLowerCase()}`} className="text-sm text-gray-700">
+        <div className="px-3 py-1">
+          <a href={`/stages-recuperation-points/${city.toLowerCase()}`} className="text-gray-700" style={{ fontSize: '11px' }}>
             &lt; Retour aux stages à {formatCityName(city)}
           </a>
         </div>
 
         {/* Stage Card */}
-        <div id="mobile-stage-card" className="mx-4 my-4 p-4 bg-gray-100 rounded-lg">
-          <div className="bg-white rounded-lg p-3 mb-3">
-            <p className="text-center text-sm font-normal mb-2">Stage sélectionné</p>
+        <div id="mobile-stage-card" className="mx-3 my-3 p-3 bg-gray-100 rounded-lg">
+          <div className="bg-white rounded-lg p-2 mb-2">
+            <p className="text-center font-normal" style={{ fontSize: '13px' }}>Stage sélectionné</p>
           </div>
 
-          <p className="text-center font-medium mb-2">Stage du {stage && formatDate(stage.date_start, stage.date_end)}</p>
+          <p className="text-center font-medium mb-2" style={{ fontSize: '14px' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)}</p>
 
-          <div className="flex items-center gap-2 mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
               <g clipPath="url(#clip0_180_68)">
                 <path d="M13.3333 1.66669V5.00002M6.66667 1.66669V5.00002M2.5 8.33335H17.5M4.16667 3.33335H15.8333C16.7538 3.33335 17.5 4.07955 17.5 5.00002V16.6667C17.5 17.5872 16.7538 18.3334 15.8333 18.3334H4.16667C3.24619 18.3334 2.5 17.5872 2.5 16.6667V5.00002C2.5 4.07955 3.24619 3.33335 4.16667 3.33335Z" stroke="#595656" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
               </g>
-              <defs>
-                <clipPath id="clip0_180_68">
-                  <rect width="20" height="20" fill="white"/>
-                </clipPath>
-              </defs>
             </svg>
-            <button onClick={handleChangeDateClick} className="text-sm text-blue-600">Changer de date</button>
+            <button onClick={handleChangeDateClick} className="text-blue-600" style={{ fontSize: '12px' }}>Changer de date</button>
           </div>
 
-          <div className="flex gap-2 mb-2 text-sm text-gray-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <div className="flex gap-1.5 mb-1.5 text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
               <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <p>{stage && `av de Saint Menet, 13001 ${formatCityName(stage.site.ville)}`}</p>
+            <p style={{ fontSize: '11px' }}>{stage && `av de Saint Menet, 13001 ${formatCityName(stage.site.ville)}`}</p>
           </div>
 
-          <div className="flex gap-2 mb-2 text-sm text-gray-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <div className="flex gap-1.5 mb-1.5 text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
               <path d="M10 5V10L13.3333 11.6667M18.3333 10C18.3333 14.6024 14.6024 18.3333 10 18.3333C5.39763 18.3333 1.66667 14.6024 1.66667 10C1.66667 5.39763 5.39763 1.66667 10 1.66667C14.6024 1.66667 18.3333 5.39763 18.3333 10Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <p>08h15-12h30 et 13h30-16h30</p>
+            <p style={{ fontSize: '11px' }}>08h15-12h30 et 13h30-16h30</p>
           </div>
 
-          <div className="flex gap-2 mb-3 text-sm text-gray-600">
-            <Image src="/flag-france.png" alt="Drapeau français" width={20} height={13} />
-            <p className="text-xs">Agrément n° 25 R130060090064 par la Préfecture des Bouches-du-Rhône</p>
+          <div className="flex gap-1.5 mb-2 text-gray-600">
+            <Image src="/flag-france.png" alt="Drapeau français" width={16} height={11} className="flex-shrink-0" />
+            <p style={{ fontSize: '10px' }}>Agrément n° 25 R130060090064 par la Préfecture des Bouches-du-Rhône</p>
           </div>
 
-          <p className="text-center text-green-700 text-sm mb-1">Place disponibles</p>
-          <p className="text-center text-3xl font-normal mb-3">{stage?.prix}€ TTC</p>
+          <p className="text-center text-green-700 mb-0.5" style={{ fontSize: '11px' }}>Place disponibles</p>
+          <p className="text-center font-normal mb-2" style={{ fontSize: '26px' }}>{stage?.prix}€ TTC</p>
 
           {/* Benefits with yellow checkmarks */}
-          <div className="space-y-2">
+          <div className="border border-gray-300 rounded-lg p-2.5 space-y-1.5">
             {[
               'Stage officiel agréé Préfecture',
               '+4 points en 48h',
@@ -414,28 +409,28 @@ export default function InscriptionPage() {
               'Paiement 100% sécurisé',
               '98,7% de clients satisfaits'
             ].map((benefit, index) => (
-              <div key={index} className="flex gap-2 items-start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none" className="flex-shrink-0">
+              <div key={index} className="flex gap-1.5 items-start">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-0.5">
                   <path d="M9.375 11.4583L12.5 14.5833L22.9167 4.16667M21.875 12.5V19.7917C21.875 20.3442 21.6555 20.8741 21.2648 21.2648C20.8741 21.6555 20.3442 21.875 19.7917 21.875H5.20833C4.6558 21.875 4.12589 21.6555 3.73519 21.2648C3.34449 20.8741 3.125 20.3442 3.125 19.7917V5.20833C3.125 4.6558 3.34449 4.12589 3.73519 3.73519C4.12589 3.34449 4.6558 3.125 5.20833 3.125H16.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <p className="text-sm text-gray-800">{benefit}</p>
+                <p className="text-gray-800" style={{ fontSize: '11px', lineHeight: '1.4' }}>{benefit}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Form Section */}
-        <div className="px-4 py-4">
+        <div className="px-3 py-3">
           {!formValidated ? (
             <>
-              <h2 className="text-lg font-medium mb-1">Étape 1/2 : coordonnées personnelles</h2>
-              <p className="text-sm italic text-gray-600 mb-4">• Tous les champs sont obligatoires</p>
+              <h2 className="font-medium mb-1" style={{ fontSize: '14px' }}>Étape 1/2 : coordonnées personnelles</h2>
+              <p className="italic text-gray-600 mb-3" style={{ fontSize: '11px' }}>• Tous les champs sont obligatoires</p>
 
               {/* Form fields */}
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div>
-                  <label className="block text-sm mb-1">Civilité *</label>
-                  <select value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-3 py-2">
+                  <label className="block mb-1" style={{ fontSize: '12px' }}>Civilité *</label>
+                  <select value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }}>
                     <option value="">Sélectionner</option>
                     <option value="Monsieur">Monsieur</option>
                     <option value="Madame">Madame</option>
@@ -443,60 +438,60 @@ export default function InscriptionPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm mb-1">Nom *</label>
-                  <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Nom" className="w-full border border-black rounded-lg px-3 py-2" />
+                  <label className="block mb-1" style={{ fontSize: '12px' }}>Nom *</label>
+                  <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Nom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
 
                 <div>
-                  <label className="block text-sm mb-1">Prénom *</label>
-                  <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} placeholder="Prénom" className="w-full border border-black rounded-lg px-3 py-2" />
+                  <label className="block mb-1" style={{ fontSize: '12px' }}>Prénom *</label>
+                  <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} placeholder="Prénom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
 
                 <div>
-                  <label className="block text-sm mb-1">Email *</label>
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full border border-black rounded-lg px-3 py-2" />
+                  <label className="block mb-1" style={{ fontSize: '12px' }}>Email *</label>
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
 
                 <div>
-                  <label className="block text-sm mb-1">Téléphone mobile *</label>
-                  <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="Téléphone" className="w-full border border-black rounded-lg px-3 py-2" />
-                  <p className="text-xs italic text-gray-600 mt-1">Important : indiquez un numéro de mobile valide</p>
+                  <label className="block mb-1" style={{ fontSize: '12px' }}>Téléphone mobile *</label>
+                  <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="Téléphone" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                  <p className="italic text-gray-600 mt-1" style={{ fontSize: '10px' }}>Important : indiquez un numéro de mobile valide</p>
                 </div>
 
                 {/* Garantie Sérénité */}
-                <div className="bg-gray-100 rounded-lg p-4">
-                  <div className="flex items-center gap-2 mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none">
+                <div className="bg-gray-100 rounded-lg p-2.5">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 25 25" fill="none">
                       <g clipPath="url(#clip0_122_55)">
                         <path d="M12.5 22.9166C12.5 22.9166 20.8334 18.75 20.8334 12.5V5.20831L12.5 2.08331L4.16669 5.20831V12.5C4.16669 18.75 12.5 22.9166 12.5 22.9166Z" fill="#EFEFEF" stroke="#696868" strokeOpacity="0.96" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </g>
-                      <rect x="0.5" y="0.5" width="24" height="24" stroke="#EFEFEF"/>
                       <defs>
                         <clipPath id="clip0_122_55">
                           <rect width="25" height="25" fill="white"/>
                         </clipPath>
                       </defs>
                     </svg>
-                    <span className="text-sm font-medium underline">Garantie Sérénité</span>
+                    <span className="font-medium underline" style={{ fontSize: '12px' }}>Garantie Sérénité</span>
                   </div>
-                  <label className="flex items-start gap-2 cursor-pointer mb-2">
-                    <input type="checkbox" checked={garantieSerenite} onChange={(e) => setGarantieSerenite(e.target.checked)} className="mt-1" />
-                    <span className="text-sm">Je souscris à la Garantie Sérénité: +57€ TTC</span>
+                  <label className="flex items-start gap-1.5 cursor-pointer mb-1.5">
+                    <input type="checkbox" checked={garantieSerenite} onChange={(e) => setGarantieSerenite(e.target.checked)} className="mt-0.5" />
+                    <span style={{ fontSize: '11px' }}>Je souscris à la Garantie Sérénité: +57€ TTC</span>
                   </label>
-                  <div className="text-sm font-medium cursor-pointer">Voir le détail de la garantie</div>
+                  <div className="font-medium cursor-pointer" style={{ fontSize: '11px' }}>Voir le détail de la garantie</div>
                 </div>
 
                 {/* CGV */}
-                <label className="flex items-start gap-2 cursor-pointer">
-                  <input type="checkbox" checked={cgvAccepted} onChange={(e) => setCgvAccepted(e.target.checked)} className="mt-1" />
-                  <span className="text-sm">J'accepte les <a href="#" className="text-blue-600 underline">conditions générales de vente</a></span>
+                <label className="flex items-start gap-1.5 cursor-pointer">
+                  <input type="checkbox" checked={cgvAccepted} onChange={(e) => setCgvAccepted(e.target.checked)} className="mt-0.5" />
+                  <span style={{ fontSize: '11px' }}>J'accepte les <a href="#" className="text-blue-600 underline">conditions générales de vente</a></span>
                 </label>
 
                 {/* Submit Button */}
                 <button
                   onClick={handleValidateForm}
                   disabled={!isFormComplete}
-                  className="w-full bg-green-600 text-white py-3 rounded-full font-medium disabled:opacity-50"
+                  className="w-full bg-green-600 text-white py-2 rounded-full font-medium disabled:opacity-50"
+                  style={{ fontSize: '13px' }}
                 >
                   Valider le formulaire et passer au paiement
                 </button>
