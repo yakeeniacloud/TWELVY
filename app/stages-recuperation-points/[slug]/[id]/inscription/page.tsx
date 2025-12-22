@@ -501,57 +501,55 @@ export default function InscriptionPage() {
             <>
               {/* Form Summary */}
               {!isFormExpanded ? (
-                <div className="border rounded-lg p-4 mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="#41A334" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      <h3 className="font-medium">Étape 1/2 : coordonnées personnelles renseignées</h3>
-                    </div>
+                <div className="border rounded-lg p-2.5 mb-3">
+                  <div className="flex items-center gap-1.5 mb-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
+                      <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="#41A334" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <h3 className="font-medium" style={{ fontSize: '13px' }}>Étape 1/2 : coordonnées personnelles renseignées</h3>
                   </div>
-                  <div className="text-sm text-gray-700 space-y-1">
+                  <div className="text-gray-700 space-y-0.5" style={{ fontSize: '11px' }}>
                     <p>{prenom} {nom}</p>
                     <p>Mail: {email}</p>
                     <p>Tel: {telephone}</p>
                   </div>
-                  <button onClick={handleModifierClick} className="mt-3 px-6 py-2 bg-gray-300 rounded-full text-sm">
+                  <button onClick={handleModifierClick} className="mt-2 px-4 py-1.5 bg-gray-300 rounded-full" style={{ fontSize: '12px' }}>
                     Modifier
                   </button>
                 </div>
               ) : (
                 <>
                   {/* Expanded Form */}
-                  <h2 className="text-lg font-medium mb-4">Étape 1/2 : coordonnées personnelles</h2>
-                  <div className="space-y-4">
+                  <h2 className="font-medium mb-3" style={{ fontSize: '14px' }}>Étape 1/2 : coordonnées personnelles</h2>
+                  <div className="space-y-3">
                     <div>
-                      <label className="block text-sm mb-1">Civilité *</label>
-                      <select value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-3 py-2">
+                      <label className="block mb-1" style={{ fontSize: '12px' }}>Civilité *</label>
+                      <select value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }}>
                         <option value="Monsieur">Monsieur</option>
                         <option value="Madame">Madame</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm mb-1">Nom *</label>
-                      <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} className="w-full border border-black rounded-lg px-3 py-2" />
+                      <label className="block mb-1" style={{ fontSize: '12px' }}>Nom *</label>
+                      <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
                     <div>
-                      <label className="block text-sm mb-1">Prénom *</label>
-                      <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} className="w-full border border-black rounded-lg px-3 py-2" />
+                      <label className="block mb-1" style={{ fontSize: '12px' }}>Prénom *</label>
+                      <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
                     <div>
-                      <label className="block text-sm mb-1">Email *</label>
-                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border border-black rounded-lg px-3 py-2" />
+                      <label className="block mb-1" style={{ fontSize: '12px' }}>Email *</label>
+                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
                     <div>
-                      <label className="block text-sm mb-1">Téléphone mobile *</label>
-                      <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} className="w-full border border-black rounded-lg px-3 py-2" />
+                      <label className="block mb-1" style={{ fontSize: '12px' }}>Téléphone mobile *</label>
+                      <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
 
                     {/* Buttons */}
-                    <div className="flex gap-3">
-                      <button onClick={handleAnnulerClick} className="flex-1 bg-gray-300 py-3 rounded-full">Annuler</button>
-                      <button onClick={handleReturnToPayment} className="flex-1 bg-green-600 text-white py-3 rounded-full">Valider le formulaire et revenir au paiement</button>
+                    <div className="flex gap-2">
+                      <button onClick={handleAnnulerClick} className="flex-1 bg-gray-300 py-2 rounded-full" style={{ fontSize: '12px' }}>Annuler</button>
+                      <button onClick={handleReturnToPayment} className="flex-1 bg-green-600 text-white py-2 rounded-full" style={{ fontSize: '11px' }}>Valider le formulaire et revenir au paiement</button>
                     </div>
                   </div>
                 </>
@@ -562,53 +560,56 @@ export default function InscriptionPage() {
 
         {/* Payment Section */}
         {paymentBlockVisible && (
-          <div id="mobile-payment-section" className="px-4 py-4 bg-gray-50">
-            <h2 className="text-lg font-medium mb-4">Étape 2/2 : paiement sécurisé</h2>
+          <div id="mobile-payment-section" className="px-3 py-3 bg-gray-50">
+            <h2 className="font-medium mb-3" style={{ fontSize: '14px' }}>Étape 2/2 : paiement sécurisé</h2>
 
-            <p className="text-center font-medium mb-2">Paiement sécurisé par Crédit Agricole</p>
-            <p className="text-xs text-center italic text-gray-600 mb-3">
+            <p className="text-center font-medium mb-1" style={{ fontSize: '13px' }}>Paiement sécurisé par Crédit Agricole</p>
+            <p className="text-center italic text-gray-600 mb-2" style={{ fontSize: '10px' }}>
               Vos données bancaires sont chiffrées par la solution Up2Pay-Crédit Agricole (cryptage SSL) et ne sont jamais stockées par ProStagesPermis
             </p>
 
-            <div className="flex justify-center mb-4">
-              <img src="/cards.png" alt="Cards" className="h-8" />
+            <div className="flex justify-center mb-3">
+              <img src="/cards.png" alt="Cards" className="h-6" />
             </div>
 
             {/* Payment Fields */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div>
-                <label className="block text-sm mb-1">Nom sur la carte</label>
+                <label className="block mb-1" style={{ fontSize: '12px' }}>Nom sur la carte</label>
                 <input
                   type="text"
                   value={nomCarte}
                   onChange={(e) => setNomCarte(e.target.value)}
                   placeholder="Nom"
-                  className="w-full border border-black rounded-lg px-3 py-2"
+                  className="w-full border border-black rounded-lg px-2 py-1.5"
+                  style={{ fontSize: '12px' }}
                 />
               </div>
 
               <div>
-                <label className="block text-sm mb-1">Numéro de carte</label>
+                <label className="block mb-1" style={{ fontSize: '12px' }}>Numéro de carte</label>
                 <input
                   type="text"
                   value={numeroCarte}
                   onChange={(e) => setNumeroCarte(e.target.value)}
                   placeholder="Numéro de carte"
                   maxLength={16}
-                  className="w-full border border-black rounded-lg px-3 py-2"
+                  className="w-full border border-black rounded-lg px-2 py-1.5"
+                  style={{ fontSize: '12px' }}
                 />
               </div>
 
               <div>
-                <label className="block text-sm mb-1">Date d&apos;expiration</label>
-                <div className="flex gap-3">
+                <label className="block mb-1" style={{ fontSize: '12px' }}>Date d&apos;expiration</label>
+                <div className="flex gap-2">
                   <input
                     type="text"
                     value={dateExpirationMois}
                     onChange={(e) => setDateExpirationMois(e.target.value)}
                     placeholder="Mois"
                     maxLength={2}
-                    className="w-20 border border-black rounded-lg px-3 py-2 text-center"
+                    className="w-16 border border-black rounded-lg px-2 py-1.5 text-center"
+                    style={{ fontSize: '12px' }}
                   />
                   <input
                     type="text"
@@ -616,29 +617,31 @@ export default function InscriptionPage() {
                     onChange={(e) => setDateExpirationAnnee(e.target.value)}
                     placeholder="Année"
                     maxLength={2}
-                    className="w-20 border border-black rounded-lg px-3 py-2 text-center"
+                    className="w-16 border border-black rounded-lg px-2 py-1.5 text-center"
+                    style={{ fontSize: '12px' }}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm mb-1">Code (cvv)</label>
+                <label className="block mb-1" style={{ fontSize: '12px' }}>Code (cvv)</label>
                 <input
                   type="text"
                   value={codeCVV}
                   onChange={(e) => setCodeCVV(e.target.value)}
                   placeholder="Code"
                   maxLength={3}
-                  className="w-32 border border-black rounded-lg px-3 py-2"
+                  className="w-24 border border-black rounded-lg px-2 py-1.5"
+                  style={{ fontSize: '12px' }}
                 />
               </div>
 
               {/* Price Summary */}
-              <div className="bg-gray-200 rounded-lg p-4 text-center">
-                <p className="font-medium mb-2">Stage du {stage && formatDate(stage.date_start, stage.date_end)} à {stage && formatCityName(stage.site.ville)}</p>
-                <p className="text-sm">Prix du stage : {stage?.prix}€ TTC</p>
-                <p className="text-sm">Garantie Sérénité : {garantieSerenite ? '+57€ TTC' : 'N/A'}</p>
-                <p className="font-medium mt-2">Total à payer : {totalPrice}€ TTC</p>
+              <div className="bg-gray-200 rounded-lg p-2.5 text-center">
+                <p className="font-medium mb-1" style={{ fontSize: '12px' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)} à {stage && formatCityName(stage.site.ville)}</p>
+                <p style={{ fontSize: '11px' }}>Prix du stage : {stage?.prix}€ TTC</p>
+                <p style={{ fontSize: '11px' }}>Garantie Sérénité : {garantieSerenite ? '+57€ TTC' : 'N/A'}</p>
+                <p className="font-medium mt-1" style={{ fontSize: '13px' }}>Total à payer : {totalPrice}€ TTC</p>
               </div>
 
               {/* Payer Button */}
@@ -646,52 +649,56 @@ export default function InscriptionPage() {
                 id="mobile-payer-button"
                 onClick={handleSubmit}
                 disabled={isFormExpanded}
-                className="w-full bg-green-600 text-white py-3 rounded-full font-medium flex items-center justify-center gap-2 disabled:bg-gray-400"
+                className="w-full bg-green-600 text-white py-2 rounded-full font-medium flex items-center justify-center gap-1.5 disabled:bg-gray-400"
+                style={{ fontSize: '13px' }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 25" fill="none">
                   <path d="M7.29167 11.4584V7.29171C7.29167 5.91037 7.8404 4.58561 8.81715 3.60886C9.7939 2.63211 11.1187 2.08337 12.5 2.08337C13.8813 2.08337 15.2061 2.63211 16.1828 3.60886C17.1596 4.58561 17.7083 5.91037 17.7083 7.29171V11.4584M5.20833 11.4584H19.7917C20.9423 11.4584 21.875 12.3911 21.875 13.5417V20.8334C21.875 21.984 20.9423 22.9167 19.7917 22.9167H5.20833C4.05774 22.9167 3.125 21.984 3.125 20.8334V13.5417C3.125 12.3911 4.05774 11.4584 5.20833 11.4584Z" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
                 Payer {totalPrice}€ TTC
               </button>
 
-              <p className="text-xs text-center italic mt-3">
+              <p className="text-center italic mt-2" style={{ fontSize: '10px' }}>
                 Après avoir cliqué sur &quot;Payer&quot;, votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédiatement par email votre convocation au stage.
               </p>
             </div>
 
             {/* Info pratiques section */}
-            <div className="mt-6 border-t pt-6">
-              <h3 className="font-medium text-lg mb-2">Informations pratiques sur votre stage</h3>
-              <p className="text-sm text-gray-700 mb-3">
+            <div className="mt-4 border-t pt-4">
+              <h3 className="font-medium mb-1.5" style={{ fontSize: '13px' }}>Informations pratiques sur votre stage</h3>
+              <p className="text-gray-700 mb-2" style={{ fontSize: '11px' }}>
                 Pour en savoir plus sur ce que comprends le prix de votre stage (programme, déroulement, agrément.
               </p>
 
               {/* Tabs */}
-              <div className="border border-gray-300 rounded-lg bg-gray-200 flex p-1 mb-2">
+              <div className="border border-gray-300 rounded-lg bg-gray-200 flex p-0.5 mb-1.5">
                 <button
                   onClick={() => setActiveTab('prix')}
-                  className={`flex-1 py-2 px-2 rounded-lg text-xs font-medium ${activeTab === 'prix' ? 'bg-white' : 'bg-transparent'}`}
+                  className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'prix' ? 'bg-white' : 'bg-transparent'}`}
+                  style={{ fontSize: '10px' }}
                 >
                   Détails du stage
                 </button>
                 <button
                   onClick={() => setActiveTab('agrement')}
-                  className={`flex-1 py-2 px-2 rounded-lg text-xs font-medium ${activeTab === 'agrement' ? 'bg-white' : 'bg-transparent'}`}
+                  className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'agrement' ? 'bg-white' : 'bg-transparent'}`}
+                  style={{ fontSize: '10px' }}
                 >
                   Agrément
                 </button>
                 <button
                   onClick={() => setActiveTab('programme')}
-                  className={`flex-1 py-2 px-2 rounded-lg text-xs font-medium ${activeTab === 'programme' ? 'bg-white' : 'bg-transparent'}`}
+                  className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'programme' ? 'bg-white' : 'bg-transparent'}`}
+                  style={{ fontSize: '10px' }}
                 >
                   Programme
                 </button>
               </div>
 
               {/* Tab Content */}
-              <div className="border border-gray-300 rounded-lg p-4 bg-white">
+              <div className="border border-gray-300 rounded-lg p-2.5 bg-white">
                 {activeTab === 'prix' && (
-                  <ul className="text-sm space-y-2">
+                  <ul className="space-y-1" style={{ fontSize: '11px' }}>
                     <li>• 14 heures de formation</li>
                     <li>• L&apos;attestation de stage remise le deuxième jour</li>
                     <li>• La récupération automatique de 4 points</li>
@@ -700,10 +707,10 @@ export default function InscriptionPage() {
                   </ul>
                 )}
                 {activeTab === 'agrement' && (
-                  <p className="text-sm">Informations sur l&apos;agrément préfectoral</p>
+                  <p style={{ fontSize: '11px' }}>Informations sur l&apos;agrément préfectoral</p>
                 )}
                 {activeTab === 'programme' && (
-                  <p className="text-sm">Programme détaillé du stage de récupération de points</p>
+                  <p style={{ fontSize: '11px' }}>Programme détaillé du stage de récupération de points</p>
                 )}
               </div>
             </div>
@@ -711,40 +718,41 @@ export default function InscriptionPage() {
         )}
 
         {/* Questions fréquentes */}
-        <div className="px-4 py-6 bg-gray-100">
-          <h3 className="text-center text-lg font-normal mb-2">
+        <div className="px-3 py-4 bg-gray-100">
+          <h3 className="text-center font-normal mb-1.5" style={{ fontSize: '14px' }}>
             <span className="font-light">Questions </span>
             <span className="font-medium">Fréquentes</span>
           </h3>
-          <p className="text-center text-sm mb-4">Vous vous posez encore des questions ?</p>
+          <p className="text-center mb-3" style={{ fontSize: '11px' }}>Vous vous posez encore des questions ?</p>
 
           {/* FAQ Items */}
           {[0, 1, 2].map((index) => (
-            <div key={index} className="mb-3">
+            <div key={index} className="mb-2">
               <div
                 onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                className="flex justify-between items-center cursor-pointer py-2"
+                className="flex justify-between items-center cursor-pointer py-1.5"
               >
-                <p className="text-sm flex-1">A quel moment mes 4 points sont il crédités sur mon permis après un stage</p>
+                <p className="flex-1" style={{ fontSize: '11px' }}>A quel moment mes 4 points sont il crédités sur mon permis après un stage</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
+                  width="16"
+                  height="16"
                   viewBox="0 0 25 25"
                   fill="none"
+                  className="flex-shrink-0"
                   style={{ transform: openFaqIndex === index ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
                 >
                   <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
               {openFaqIndex === index && (
-                <p className="text-sm text-gray-600 py-2">Réponse à la question - Texte placeholder</p>
+                <p className="text-gray-600 py-1.5" style={{ fontSize: '10px' }}>Réponse à la question - Texte placeholder</p>
               )}
-              {index < 2 && <div className="h-px bg-gray-300 mt-2" />}
+              {index < 2 && <div className="h-px bg-gray-300 mt-1.5" />}
             </div>
           ))}
 
-          <button className="text-sm font-medium underline mt-4 block mx-auto">
+          <button className="font-medium underline mt-3 block mx-auto" style={{ fontSize: '11px' }}>
             Afficher plus de questions
           </button>
         </div>
@@ -754,13 +762,13 @@ export default function InscriptionPage() {
           <>
             {/* CAS 1b: Form not validated, stage card not visible */}
             {showStickyType1b && (
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-4 shadow-lg z-50">
-                <div className="flex items-center justify-between mb-2">
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-2.5 shadow-lg z-50">
+                <div className="flex items-center justify-between mb-1.5">
                   <div className="flex-1">
-                    <p className="text-sm font-medium">{stage && formatDate(stage.date_start, stage.date_end)}</p>
-                    <p className="text-lg font-semibold">{totalPrice}€ TTC</p>
+                    <p className="font-medium" style={{ fontSize: '11px' }}>{stage && formatDate(stage.date_start, stage.date_end)}</p>
+                    <p className="font-semibold" style={{ fontSize: '15px' }}>{totalPrice}€ TTC</p>
                   </div>
-                  <div className="flex flex-col gap-1 text-xs">
+                  <div className="flex flex-col gap-0.5" style={{ fontSize: '10px' }}>
                     <button onClick={handleChangeDateClick} className="text-blue-600">Changer de date</button>
                     <button onClick={() => {
                       const card = document.getElementById('mobile-stage-card')
@@ -776,7 +784,8 @@ export default function InscriptionPage() {
                       alert('Veuillez remplir tous les champs obligatoires')
                     }
                   }}
-                  className="w-full bg-green-600 text-white py-3 rounded-full font-medium"
+                  className="w-full bg-green-600 text-white py-2 rounded-full font-medium"
+                  style={{ fontSize: '13px' }}
                 >
                   S&apos;inscrire
                 </button>
@@ -785,16 +794,16 @@ export default function InscriptionPage() {
 
             {/* CAS 2a1 / 2a3: Payment block visible, Payer button not visible, payment fields not filled */}
             {(showStickyType2a1 || showStickyType2a3) && (
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-4 shadow-lg z-50">
-                <div className="flex items-center justify-between mb-2">
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-2.5 shadow-lg z-50">
+                <div className="flex items-center justify-between mb-1.5">
                   <div className="flex-1">
-                    <p className="text-sm font-medium">{stage && formatDate(stage.date_start, stage.date_end)}</p>
-                    <p className="text-lg font-semibold">{totalPrice}€ TTC</p>
+                    <p className="font-medium" style={{ fontSize: '11px' }}>{stage && formatDate(stage.date_start, stage.date_end)}</p>
+                    <p className="font-semibold" style={{ fontSize: '15px' }}>{totalPrice}€ TTC</p>
                   </div>
                   <button onClick={() => {
                     const card = document.getElementById('mobile-stage-card')
                     card?.scrollIntoView({ behavior: 'smooth' })
-                  }} className="text-xs text-blue-600">Détails du stage</button>
+                  }} className="text-blue-600" style={{ fontSize: '10px' }}>Détails du stage</button>
                 </div>
                 {!arePaymentFieldsFilled && (
                   <button
@@ -802,7 +811,8 @@ export default function InscriptionPage() {
                       const paymentSection = document.getElementById('mobile-payment-section')
                       paymentSection?.scrollIntoView({ behavior: 'smooth' })
                     }}
-                    className="w-full bg-green-600 text-white py-3 rounded-full font-medium"
+                    className="w-full bg-green-600 text-white py-2 rounded-full font-medium"
+                    style={{ fontSize: '13px' }}
                   >
                     Aller au paiement
                   </button>
@@ -812,23 +822,24 @@ export default function InscriptionPage() {
 
             {/* CAS 2b1: Payment fields filled, Payer button not visible */}
             {showStickyType2b1 && (
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-4 shadow-lg z-50">
-                <div className="flex items-center justify-between mb-2">
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-2.5 shadow-lg z-50">
+                <div className="flex items-center justify-between mb-1.5">
                   <div className="flex-1">
-                    <p className="text-sm font-medium">{stage && formatDate(stage.date_start, stage.date_end)}</p>
-                    <p className="text-lg font-semibold">{totalPrice}€ TTC</p>
+                    <p className="font-medium" style={{ fontSize: '11px' }}>{stage && formatDate(stage.date_start, stage.date_end)}</p>
+                    <p className="font-semibold" style={{ fontSize: '15px' }}>{totalPrice}€ TTC</p>
                   </div>
                   <button onClick={() => {
                     const card = document.getElementById('mobile-stage-card')
                     card?.scrollIntoView({ behavior: 'smooth' })
-                  }} className="text-xs text-blue-600">Détails du stage</button>
+                  }} className="text-blue-600" style={{ fontSize: '10px' }}>Détails du stage</button>
                 </div>
                 <button
                   onClick={handleSubmit}
                   disabled={isFormExpanded}
-                  className="w-full bg-green-600 text-white py-3 rounded-full font-medium flex items-center justify-center gap-2 disabled:bg-gray-400"
+                  className="w-full bg-green-600 text-white py-2 rounded-full font-medium flex items-center justify-center gap-1.5 disabled:bg-gray-400"
+                  style={{ fontSize: '13px' }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 25" fill="none">
                     <path d="M7.29167 11.4584V7.29171C7.29167 5.91037 7.8404 4.58561 8.81715 3.60886C9.7939 2.63211 11.1187 2.08337 12.5 2.08337C13.8813 2.08337 15.2061 2.63211 16.1828 3.60886C17.1596 4.58561 17.7083 5.91037 17.7083 7.29171V11.4584M5.20833 11.4584H19.7917C20.9423 11.4584 21.875 12.3911 21.875 13.5417V20.8334C21.875 21.984 20.9423 22.9167 19.7917 22.9167H5.20833C4.05774 22.9167 3.125 21.984 3.125 20.8334V13.5417C3.125 12.3911 4.05774 11.4584 5.20833 11.4584Z" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   Payer {totalPrice}€ TTC
@@ -847,22 +858,22 @@ export default function InscriptionPage() {
               style={{ height: '90vh', display: 'flex', flexDirection: 'column' }}
             >
               {/* Header */}
-              <div className="px-4 py-4 border-b">
-                <h3 className="text-center text-lg font-medium">Les stages à {formatCityName(city)}</h3>
-                <p className="text-center text-sm text-gray-600 mt-1">Choisissez une autre date pour votre stage</p>
+              <div className="px-3 py-3 border-b">
+                <h3 className="text-center font-medium" style={{ fontSize: '15px' }}>Les stages à {formatCityName(city)}</h3>
+                <p className="text-center text-gray-600 mt-0.5" style={{ fontSize: '11px' }}>Choisissez une autre date pour votre stage</p>
 
                 {/* Current stage badge */}
                 {stage && (
-                  <div className="bg-gray-100 rounded-lg p-2 mt-3 text-center text-sm">
+                  <div className="bg-gray-100 rounded-lg p-1.5 mt-2 text-center" style={{ fontSize: '11px' }}>
                     Stage actuel : {formatDate(stage.date_start, stage.date_end)} - {stage.prix}€
                   </div>
                 )}
               </div>
 
               {/* Scrollable stage list */}
-              <div className="flex-1 overflow-y-auto px-4 py-4">
+              <div className="flex-1 overflow-y-auto px-3 py-3">
                 {loadingStages ? (
-                  <p className="text-center text-gray-600">Chargement...</p>
+                  <p className="text-center text-gray-600" style={{ fontSize: '12px' }}>Chargement...</p>
                 ) : (
                   availableStages.map((stageItem) => {
                     const isCurrentStage = stage && stageItem.id === stage.id
@@ -870,27 +881,27 @@ export default function InscriptionPage() {
                       <div
                         key={stageItem.id}
                         onClick={() => !isCurrentStage && handleStageSelect(stageItem)}
-                        className={`border rounded-lg p-3 mb-3 ${isCurrentStage ? 'border-red-400 bg-red-50' : 'border-gray-300'} cursor-pointer`}
+                        className={`border rounded-lg p-2 mb-2 ${isCurrentStage ? 'border-red-400 bg-red-50' : 'border-gray-300'} cursor-pointer`}
                       >
-                        <div className="flex justify-between items-start mb-2">
+                        <div className="flex justify-between items-start mb-1.5">
                           <div>
-                            <p className="font-medium">{formatDate(stageItem.date_start, stageItem.date_end)}</p>
-                            <p className="text-xs text-gray-600">8h15-12h30 / 13h30-16h30</p>
+                            <p className="font-medium" style={{ fontSize: '12px' }}>{formatDate(stageItem.date_start, stageItem.date_end)}</p>
+                            <p className="text-gray-600" style={{ fontSize: '10px' }}>8h15-12h30 / 13h30-16h30</p>
                           </div>
                           <div className="text-right">
-                            {isCurrentStage && <p className="text-xs text-blue-600 mb-1">Stage sélectionné</p>}
-                            <p className="text-xl font-semibold">{stageItem.prix}€</p>
+                            {isCurrentStage && <p className="text-blue-600 mb-0.5" style={{ fontSize: '10px' }}>Stage sélectionné</p>}
+                            <p className="font-semibold" style={{ fontSize: '16px' }}>{stageItem.prix}€</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 text-sm text-gray-700">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none">
+                        <div className="flex items-center gap-1.5 text-gray-700">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
                             <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
-                          <p>{stageItem.site.ville}</p>
+                          <p style={{ fontSize: '11px' }}>{stageItem.site.ville}</p>
                         </div>
                         {!isCurrentStage && (
-                          <button className="w-full bg-green-600 text-white py-2 rounded-lg mt-2 text-sm">
+                          <button className="w-full bg-green-600 text-white py-1.5 rounded-lg mt-1.5" style={{ fontSize: '12px' }}>
                             Choisir cette date
                           </button>
                         )}
@@ -901,10 +912,11 @@ export default function InscriptionPage() {
               </div>
 
               {/* Close button */}
-              <div className="px-4 py-4 border-t">
+              <div className="px-3 py-3 border-t">
                 <button
                   onClick={() => setIsDatePopupOpen(false)}
-                  className="w-full bg-gray-300 py-3 rounded-lg"
+                  className="w-full bg-gray-300 py-2 rounded-lg"
+                  style={{ fontSize: '13px' }}
                 >
                   Fermer
                 </button>
