@@ -305,8 +305,8 @@ export default function InscriptionPage() {
       <div className="md:hidden">
         {/* Mobile Header */}
         <div className="flex justify-between items-center px-3 py-2 bg-white border-b border-gray-200">
-          <Image src="/logo-prostages.png" alt="ProStagesPermis" width={100} height={24} className="h-6" />
-          <div className="text-xs text-blue-600">Aide et contact</div>
+          <Image src="/logo-prostages.png" alt="ProStagesPermis" width={120} height={30} priority className="h-6" />
+          <div className="text-xs text-black">Aide et contact</div>
         </div>
 
         {/* Mobile Title */}
@@ -360,8 +360,8 @@ export default function InscriptionPage() {
         </div>
 
         {/* Stage Card */}
-        <div id="mobile-stage-card" className="mx-3 my-3 p-3 bg-gray-100 rounded-lg">
-          <div className="bg-white rounded-lg p-2 mb-2">
+        <div id="mobile-stage-card" className="mx-auto my-3" style={{ width: '363px', padding: '10px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', borderRadius: '20px', border: '1px solid #EAEAEA', background: '#FFF', boxShadow: '0 4px 12px 2px rgba(0, 0, 0, 0.20)' }}>
+          <div className="mb-2" style={{ display: 'flex', width: '337px', height: '38px', padding: '8px 106px', justifyContent: 'center', alignItems: 'center', gap: '10px', borderRadius: '8px', background: '#EFEFEF' }}>
             <p className="text-center font-normal" style={{ fontSize: '13px' }}>Stage sélectionné</p>
           </div>
 
@@ -400,7 +400,7 @@ export default function InscriptionPage() {
           <p className="text-center font-normal mb-2" style={{ fontSize: '26px' }}>{stage?.prix}€ TTC</p>
 
           {/* Benefits with yellow checkmarks */}
-          <div className="border border-gray-300 rounded-lg p-2.5 space-y-1.5">
+          <div className="space-y-1.5" style={{ display: 'flex', width: '308px', height: '226px', padding: '0 16px', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: '-5px', borderRadius: '8px', border: '1px solid #9B9A9A' }}>
             {[
               'Stage officiel agréé Préfecture',
               '+4 points en 48h',
