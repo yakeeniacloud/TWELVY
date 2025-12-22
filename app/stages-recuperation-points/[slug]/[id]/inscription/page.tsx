@@ -60,6 +60,14 @@ export default function InscriptionPage() {
   const [availableStages, setAvailableStages] = useState<Stage[]>([])
   const [loadingStages, setLoadingStages] = useState(false)
 
+  // Mobile-specific states
+  const [formValidated, setFormValidated] = useState(false)
+  const [paymentBlockVisible, setPaymentBlockVisible] = useState(false)
+  const [isFormExpanded, setIsFormExpanded] = useState(true)
+  const [isPaymentCardVisible, setIsPaymentCardVisible] = useState(false)
+  const [isPayerButtonVisible, setIsPayerButtonVisible] = useState(false)
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+
   useEffect(() => {
     async function fetchStage() {
       try {
@@ -84,6 +92,48 @@ export default function InscriptionPage() {
       fetchStage()
     }
   }, [city, id])
+
+  // Keyboard detection for mobile
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const handleResize = () => {
+      if (window.visualViewport) {
+        const isOpen = window.visualViewport.height < window.innerHeight * 0.75
+        setIsKeyboardOpen(isOpen)
+      }
+    }
+
+    window.visualViewport?.addEventListener('resize', handleResize)
+    return () => window.visualViewport?.removeEventListener('resize', handleResize)
+  }, [])
+
+  // Scroll detection for sticky behaviors
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const handleScroll = () => {
+      // Check if stage card is visible
+      const stageCard = document.getElementById('mobile-stage-card')
+      const paymentSection = document.getElementById('mobile-payment-section')
+      const payerButton = document.getElementById('mobile-payer-button')
+
+      if (stageCard) {
+        const rect = stageCard.getBoundingClientRect()
+        setIsPaymentCardVisible(rect.top < window.innerHeight && rect.bottom > 0)
+      }
+
+      if (payerButton) {
+        const rect = payerButton.getBoundingClientRect()
+        setIsPayerButtonVisible(rect.top < window.innerHeight && rect.bottom > 0)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Initial check
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [paymentBlockVisible])
 
   const formatDate = (dateStart: string, dateEnd: string) => {
     const start = new Date(dateStart)
@@ -187,6 +237,51 @@ export default function InscriptionPage() {
     }
   }
 
+  // Mobile functions
+  const handleValidateForm = () => {
+    // Check if all required fields are filled
+    if (!civilite || !nom || !prenom || !email || !telephone || !cgvAccepted) {
+      alert('Veuillez remplir tous les champs obligatoires')
+      return
+    }
+
+    // Validate form and reveal payment block
+    setFormValidated(true)
+    setPaymentBlockVisible(true)
+    setIsFormExpanded(false)
+
+    // Scroll to payment section
+    setTimeout(() => {
+      const paymentSection = document.getElementById('mobile-payment-section')
+      if (paymentSection) {
+        paymentSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }, 100)
+  }
+
+  const handleModifierClick = () => {
+    setIsFormExpanded(true)
+  }
+
+  const handleAnnulerClick = () => {
+    setIsFormExpanded(false)
+  }
+
+  const handleReturnToPayment = () => {
+    setIsFormExpanded(false)
+
+    // Scroll to payment section
+    setTimeout(() => {
+      const paymentSection = document.getElementById('mobile-payment-section')
+      if (paymentSection) {
+        paymentSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }, 100)
+  }
+
+  const isFormComplete = civilite && nom && prenom && email && telephone && cgvAccepted
+  const arePaymentFieldsFilled = nomCarte && numeroCarte && dateExpirationMois && dateExpirationAnnee && codeCVV
+
   if (loading) {
     return <div className="min-h-screen bg-white flex items-center justify-center">Chargement...</div>
   }
@@ -195,8 +290,637 @@ export default function InscriptionPage() {
     return <div className="min-h-screen bg-white flex items-center justify-center">Stage non trouvé</div>
   }
 
+  // Calculate sticky states
+  const totalPrice = garantieSerenite ? (stage?.prix || 0) + 57 : (stage?.prix || 0)
+
+  // Determine which sticky to show (CAS logic)
+  const showStickyType1b = !formValidated && !isPaymentCardVisible && !isKeyboardOpen
+  const showStickyType2a1 = formValidated && paymentBlockVisible && !isPayerButtonVisible && !arePaymentFieldsFilled && !isKeyboardOpen
+  const showStickyType2a3 = formValidated && paymentBlockVisible && !isPayerButtonVisible && !arePaymentFieldsFilled && !isKeyboardOpen
+  const showStickyType2b1 = formValidated && paymentBlockVisible && !isPayerButtonVisible && arePaymentFieldsFilled && !isKeyboardOpen
+
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: 'var(--font-poppins)' }}>
+      {/* MOBILE VERSION - Only visible on mobile */}
+      <div className="md:hidden">
+        {/* Mobile Header */}
+        <div className="flex justify-between items-center px-4 py-3 bg-white border-b border-gray-200">
+          <Image src="/logo-prostages.png" alt="ProStagesPermis" width={120} height={30} />
+          <div className="text-sm text-blue-600">Aide et contact</div>
+        </div>
+
+        {/* Mobile Title */}
+        <div className="px-4 py-4 bg-white">
+          <h1 className="text-center text-lg font-normal leading-tight" style={{ fontFamily: 'Poppins' }}>
+            Stage Récupération de Points - av République, Marseille (13)
+          </h1>
+          <p className="text-center text-sm text-gray-600 mt-1" style={{ fontFamily: 'Poppins' }}>
+            + 4 points en 48h - Agréé Préfecture
+          </p>
+        </div>
+
+        {/* Mobile Progress Steps */}
+        <div className="flex justify-center items-center px-4 py-6 gap-4">
+          {/* Step 1 */}
+          <div className="flex flex-col items-center">
+            <div className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center mb-2">
+              <span className="text-lg font-normal">1</span>
+            </div>
+            <p className="text-xs text-center">Coordonnées</p>
+          </div>
+
+          {/* Line */}
+          <div className="flex-1 h-px bg-gray-300 mb-6" />
+
+          {/* Step 2 */}
+          <div className="flex flex-col items-center">
+            <div className="w-8 h-8 rounded-full border-2 border-gray-300 bg-gray-100 flex items-center justify-center mb-2">
+              <span className="text-lg text-gray-400">2</span>
+            </div>
+            <p className="text-xs text-center text-gray-400">Paiement</p>
+          </div>
+
+          {/* Line */}
+          <div className="flex-1 h-px bg-gray-300 mb-6" />
+
+          {/* Step 3 */}
+          <div className="flex flex-col items-center">
+            <div className="w-8 h-8 rounded-full border-2 border-gray-300 bg-gray-100 flex items-center justify-center mb-2">
+              <span className="text-lg text-gray-400">3</span>
+            </div>
+            <p className="text-xs text-center text-gray-400">Confirmation</p>
+          </div>
+        </div>
+
+        {/* Back Link */}
+        <div className="px-4 py-2">
+          <a href={`/stages-recuperation-points/${city.toLowerCase()}`} className="text-sm text-gray-700">
+            &lt; Retour aux stages à {formatCityName(city)}
+          </a>
+        </div>
+
+        {/* Stage Card */}
+        <div id="mobile-stage-card" className="mx-4 my-4 p-4 bg-gray-100 rounded-lg">
+          <div className="bg-white rounded-lg p-3 mb-3">
+            <p className="text-center text-sm font-normal mb-2">Stage sélectionné</p>
+          </div>
+
+          <p className="text-center font-medium mb-2">Stage du {stage && formatDate(stage.date_start, stage.date_end)}</p>
+
+          <div className="flex items-center gap-2 mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <g clipPath="url(#clip0_180_68)">
+                <path d="M13.3333 1.66669V5.00002M6.66667 1.66669V5.00002M2.5 8.33335H17.5M4.16667 3.33335H15.8333C16.7538 3.33335 17.5 4.07955 17.5 5.00002V16.6667C17.5 17.5872 16.7538 18.3334 15.8333 18.3334H4.16667C3.24619 18.3334 2.5 17.5872 2.5 16.6667V5.00002C2.5 4.07955 3.24619 3.33335 4.16667 3.33335Z" stroke="#595656" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_180_68">
+                  <rect width="20" height="20" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            <button onClick={handleChangeDateClick} className="text-sm text-blue-600">Changer de date</button>
+          </div>
+
+          <div className="flex gap-2 mb-2 text-sm text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <p>{stage && `av de Saint Menet, 13001 ${formatCityName(stage.site.ville)}`}</p>
+          </div>
+
+          <div className="flex gap-2 mb-2 text-sm text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 5V10L13.3333 11.6667M18.3333 10C18.3333 14.6024 14.6024 18.3333 10 18.3333C5.39763 18.3333 1.66667 14.6024 1.66667 10C1.66667 5.39763 5.39763 1.66667 10 1.66667C14.6024 1.66667 18.3333 5.39763 18.3333 10Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <p>08h15-12h30 et 13h30-16h30</p>
+          </div>
+
+          <div className="flex gap-2 mb-3 text-sm text-gray-600">
+            <Image src="/flag-france.png" alt="Drapeau français" width={20} height={13} />
+            <p className="text-xs">Agrément n° 25 R130060090064 par la Préfecture des Bouches-du-Rhône</p>
+          </div>
+
+          <p className="text-center text-green-700 text-sm mb-1">Place disponibles</p>
+          <p className="text-center text-3xl font-normal mb-3">{stage?.prix}€ TTC</p>
+
+          {/* Benefits with yellow checkmarks */}
+          <div className="space-y-2">
+            {[
+              'Stage officiel agréé Préfecture',
+              '+4 points en 48h',
+              'Report ou remboursement en cas d\'imprévu',
+              'Attestation de stage remise le 2ème jour',
+              'Paiement 100% sécurisé',
+              '98,7% de clients satisfaits'
+            ].map((benefit, index) => (
+              <div key={index} className="flex gap-2 items-start">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none" className="flex-shrink-0">
+                  <path d="M9.375 11.4583L12.5 14.5833L22.9167 4.16667M21.875 12.5V19.7917C21.875 20.3442 21.6555 20.8741 21.2648 21.2648C20.8741 21.6555 20.3442 21.875 19.7917 21.875H5.20833C4.6558 21.875 4.12589 21.6555 3.73519 21.2648C3.34449 20.8741 3.125 20.3442 3.125 19.7917V5.20833C3.125 4.6558 3.34449 4.12589 3.73519 3.73519C4.12589 3.34449 4.6558 3.125 5.20833 3.125H16.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <p className="text-sm text-gray-800">{benefit}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Form Section */}
+        <div className="px-4 py-4">
+          {!formValidated ? (
+            <>
+              <h2 className="text-lg font-medium mb-1">Étape 1/2 : coordonnées personnelles</h2>
+              <p className="text-sm italic text-gray-600 mb-4">• Tous les champs sont obligatoires</p>
+
+              {/* Form fields */}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm mb-1">Civilité *</label>
+                  <select value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-3 py-2">
+                    <option value="">Sélectionner</option>
+                    <option value="Monsieur">Monsieur</option>
+                    <option value="Madame">Madame</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm mb-1">Nom *</label>
+                  <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Nom" className="w-full border border-black rounded-lg px-3 py-2" />
+                </div>
+
+                <div>
+                  <label className="block text-sm mb-1">Prénom *</label>
+                  <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} placeholder="Prénom" className="w-full border border-black rounded-lg px-3 py-2" />
+                </div>
+
+                <div>
+                  <label className="block text-sm mb-1">Email *</label>
+                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full border border-black rounded-lg px-3 py-2" />
+                </div>
+
+                <div>
+                  <label className="block text-sm mb-1">Téléphone mobile *</label>
+                  <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="Téléphone" className="w-full border border-black rounded-lg px-3 py-2" />
+                  <p className="text-xs italic text-gray-600 mt-1">Important : indiquez un numéro de mobile valide</p>
+                </div>
+
+                {/* Garantie Sérénité */}
+                <div className="bg-gray-100 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none">
+                      <g clipPath="url(#clip0_122_55)">
+                        <path d="M12.5 22.9166C12.5 22.9166 20.8334 18.75 20.8334 12.5V5.20831L12.5 2.08331L4.16669 5.20831V12.5C4.16669 18.75 12.5 22.9166 12.5 22.9166Z" fill="#EFEFEF" stroke="#696868" strokeOpacity="0.96" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </g>
+                      <rect x="0.5" y="0.5" width="24" height="24" stroke="#EFEFEF"/>
+                      <defs>
+                        <clipPath id="clip0_122_55">
+                          <rect width="25" height="25" fill="white"/>
+                        </clipPath>
+                      </defs>
+                    </svg>
+                    <span className="text-sm font-medium underline">Garantie Sérénité</span>
+                  </div>
+                  <label className="flex items-start gap-2 cursor-pointer mb-2">
+                    <input type="checkbox" checked={garantieSerenite} onChange={(e) => setGarantieSerenite(e.target.checked)} className="mt-1" />
+                    <span className="text-sm">Je souscris à la Garantie Sérénité: +57€ TTC</span>
+                  </label>
+                  <div className="text-sm font-medium cursor-pointer">Voir le détail de la garantie</div>
+                </div>
+
+                {/* CGV */}
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input type="checkbox" checked={cgvAccepted} onChange={(e) => setCgvAccepted(e.target.checked)} className="mt-1" />
+                  <span className="text-sm">J'accepte les <a href="#" className="text-blue-600 underline">conditions générales de vente</a></span>
+                </label>
+
+                {/* Submit Button */}
+                <button
+                  onClick={handleValidateForm}
+                  disabled={!isFormComplete}
+                  className="w-full bg-green-600 text-white py-3 rounded-full font-medium disabled:opacity-50"
+                >
+                  Valider le formulaire et passer au paiement
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Form Summary */}
+              {!isFormExpanded ? (
+                <div className="border rounded-lg p-4 mb-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="#41A334" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <h3 className="font-medium">Étape 1/2 : coordonnées personnelles renseignées</h3>
+                    </div>
+                  </div>
+                  <div className="text-sm text-gray-700 space-y-1">
+                    <p>{prenom} {nom}</p>
+                    <p>Mail: {email}</p>
+                    <p>Tel: {telephone}</p>
+                  </div>
+                  <button onClick={handleModifierClick} className="mt-3 px-6 py-2 bg-gray-300 rounded-full text-sm">
+                    Modifier
+                  </button>
+                </div>
+              ) : (
+                <>
+                  {/* Expanded Form */}
+                  <h2 className="text-lg font-medium mb-4">Étape 1/2 : coordonnées personnelles</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm mb-1">Civilité *</label>
+                      <select value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-3 py-2">
+                        <option value="Monsieur">Monsieur</option>
+                        <option value="Madame">Madame</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-sm mb-1">Nom *</label>
+                      <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} className="w-full border border-black rounded-lg px-3 py-2" />
+                    </div>
+                    <div>
+                      <label className="block text-sm mb-1">Prénom *</label>
+                      <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} className="w-full border border-black rounded-lg px-3 py-2" />
+                    </div>
+                    <div>
+                      <label className="block text-sm mb-1">Email *</label>
+                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border border-black rounded-lg px-3 py-2" />
+                    </div>
+                    <div>
+                      <label className="block text-sm mb-1">Téléphone mobile *</label>
+                      <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} className="w-full border border-black rounded-lg px-3 py-2" />
+                    </div>
+
+                    {/* Buttons */}
+                    <div className="flex gap-3">
+                      <button onClick={handleAnnulerClick} className="flex-1 bg-gray-300 py-3 rounded-full">Annuler</button>
+                      <button onClick={handleReturnToPayment} className="flex-1 bg-green-600 text-white py-3 rounded-full">Valider le formulaire et revenir au paiement</button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </>
+          )}
+        </div>
+
+        {/* Payment Section */}
+        {paymentBlockVisible && (
+          <div id="mobile-payment-section" className="px-4 py-4 bg-gray-50">
+            <h2 className="text-lg font-medium mb-4">Étape 2/2 : paiement sécurisé</h2>
+
+            <p className="text-center font-medium mb-2">Paiement sécurisé par Crédit Agricole</p>
+            <p className="text-xs text-center italic text-gray-600 mb-3">
+              Vos données bancaires sont chiffrées par la solution Up2Pay-Crédit Agricole (cryptage SSL) et ne sont jamais stockées par ProStagesPermis
+            </p>
+
+            <div className="flex justify-center mb-4">
+              <img src="/cards.png" alt="Cards" className="h-8" />
+            </div>
+
+            {/* Payment Fields */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm mb-1">Nom sur la carte</label>
+                <input
+                  type="text"
+                  value={nomCarte}
+                  onChange={(e) => setNomCarte(e.target.value)}
+                  placeholder="Nom"
+                  className="w-full border border-black rounded-lg px-3 py-2"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm mb-1">Numéro de carte</label>
+                <input
+                  type="text"
+                  value={numeroCarte}
+                  onChange={(e) => setNumeroCarte(e.target.value)}
+                  placeholder="Numéro de carte"
+                  maxLength={16}
+                  className="w-full border border-black rounded-lg px-3 py-2"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm mb-1">Date d&apos;expiration</label>
+                <div className="flex gap-3">
+                  <input
+                    type="text"
+                    value={dateExpirationMois}
+                    onChange={(e) => setDateExpirationMois(e.target.value)}
+                    placeholder="Mois"
+                    maxLength={2}
+                    className="w-20 border border-black rounded-lg px-3 py-2 text-center"
+                  />
+                  <input
+                    type="text"
+                    value={dateExpirationAnnee}
+                    onChange={(e) => setDateExpirationAnnee(e.target.value)}
+                    placeholder="Année"
+                    maxLength={2}
+                    className="w-20 border border-black rounded-lg px-3 py-2 text-center"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm mb-1">Code (cvv)</label>
+                <input
+                  type="text"
+                  value={codeCVV}
+                  onChange={(e) => setCodeCVV(e.target.value)}
+                  placeholder="Code"
+                  maxLength={3}
+                  className="w-32 border border-black rounded-lg px-3 py-2"
+                />
+              </div>
+
+              {/* Price Summary */}
+              <div className="bg-gray-200 rounded-lg p-4 text-center">
+                <p className="font-medium mb-2">Stage du {stage && formatDate(stage.date_start, stage.date_end)} à {stage && formatCityName(stage.site.ville)}</p>
+                <p className="text-sm">Prix du stage : {stage?.prix}€ TTC</p>
+                <p className="text-sm">Garantie Sérénité : {garantieSerenite ? '+57€ TTC' : 'N/A'}</p>
+                <p className="font-medium mt-2">Total à payer : {totalPrice}€ TTC</p>
+              </div>
+
+              {/* Payer Button */}
+              <button
+                id="mobile-payer-button"
+                onClick={handleSubmit}
+                disabled={isFormExpanded}
+                className="w-full bg-green-600 text-white py-3 rounded-full font-medium flex items-center justify-center gap-2 disabled:bg-gray-400"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none">
+                  <path d="M7.29167 11.4584V7.29171C7.29167 5.91037 7.8404 4.58561 8.81715 3.60886C9.7939 2.63211 11.1187 2.08337 12.5 2.08337C13.8813 2.08337 15.2061 2.63211 16.1828 3.60886C17.1596 4.58561 17.7083 5.91037 17.7083 7.29171V11.4584M5.20833 11.4584H19.7917C20.9423 11.4584 21.875 12.3911 21.875 13.5417V20.8334C21.875 21.984 20.9423 22.9167 19.7917 22.9167H5.20833C4.05774 22.9167 3.125 21.984 3.125 20.8334V13.5417C3.125 12.3911 4.05774 11.4584 5.20833 11.4584Z" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Payer {totalPrice}€ TTC
+              </button>
+
+              <p className="text-xs text-center italic mt-3">
+                Après avoir cliqué sur &quot;Payer&quot;, votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédiatement par email votre convocation au stage.
+              </p>
+            </div>
+
+            {/* Info pratiques section */}
+            <div className="mt-6 border-t pt-6">
+              <h3 className="font-medium text-lg mb-2">Informations pratiques sur votre stage</h3>
+              <p className="text-sm text-gray-700 mb-3">
+                Pour en savoir plus sur ce que comprends le prix de votre stage (programme, déroulement, agrément.
+              </p>
+
+              {/* Tabs */}
+              <div className="border border-gray-300 rounded-lg bg-gray-200 flex p-1 mb-2">
+                <button
+                  onClick={() => setActiveTab('prix')}
+                  className={`flex-1 py-2 px-2 rounded-lg text-xs font-medium ${activeTab === 'prix' ? 'bg-white' : 'bg-transparent'}`}
+                >
+                  Détails du stage
+                </button>
+                <button
+                  onClick={() => setActiveTab('agrement')}
+                  className={`flex-1 py-2 px-2 rounded-lg text-xs font-medium ${activeTab === 'agrement' ? 'bg-white' : 'bg-transparent'}`}
+                >
+                  Agrément
+                </button>
+                <button
+                  onClick={() => setActiveTab('programme')}
+                  className={`flex-1 py-2 px-2 rounded-lg text-xs font-medium ${activeTab === 'programme' ? 'bg-white' : 'bg-transparent'}`}
+                >
+                  Programme
+                </button>
+              </div>
+
+              {/* Tab Content */}
+              <div className="border border-gray-300 rounded-lg p-4 bg-white">
+                {activeTab === 'prix' && (
+                  <ul className="text-sm space-y-2">
+                    <li>• 14 heures de formation</li>
+                    <li>• L&apos;attestation de stage remise le deuxième jour</li>
+                    <li>• La récupération automatique de 4 points</li>
+                    <li>• Le traitement de votre dossier administratif en préfecture</li>
+                    <li>• En cas d&apos;empêchement, le transfert sur un autre stage de notre réseau</li>
+                  </ul>
+                )}
+                {activeTab === 'agrement' && (
+                  <p className="text-sm">Informations sur l&apos;agrément préfectoral</p>
+                )}
+                {activeTab === 'programme' && (
+                  <p className="text-sm">Programme détaillé du stage de récupération de points</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Questions fréquentes */}
+        <div className="px-4 py-6 bg-gray-100">
+          <h3 className="text-center text-lg font-normal mb-2">
+            <span className="font-light">Questions </span>
+            <span className="font-medium">Fréquentes</span>
+          </h3>
+          <p className="text-center text-sm mb-4">Vous vous posez encore des questions ?</p>
+
+          {/* FAQ Items */}
+          {[0, 1, 2].map((index) => (
+            <div key={index} className="mb-3">
+              <div
+                onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                className="flex justify-between items-center cursor-pointer py-2"
+              >
+                <p className="text-sm flex-1">A quel moment mes 4 points sont il crédités sur mon permis après un stage</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 25 25"
+                  fill="none"
+                  style={{ transform: openFaqIndex === index ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
+                >
+                  <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+              {openFaqIndex === index && (
+                <p className="text-sm text-gray-600 py-2">Réponse à la question - Texte placeholder</p>
+              )}
+              {index < 2 && <div className="h-px bg-gray-300 mt-2" />}
+            </div>
+          ))}
+
+          <button className="text-sm font-medium underline mt-4 block mx-auto">
+            Afficher plus de questions
+          </button>
+        </div>
+
+        {/* Sticky Bar - CAS Logic */}
+        {!isKeyboardOpen && (
+          <>
+            {/* CAS 1b: Form not validated, stage card not visible */}
+            {showStickyType1b && (
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-4 shadow-lg z-50">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">{stage && formatDate(stage.date_start, stage.date_end)}</p>
+                    <p className="text-lg font-semibold">{totalPrice}€ TTC</p>
+                  </div>
+                  <div className="flex flex-col gap-1 text-xs">
+                    <button onClick={handleChangeDateClick} className="text-blue-600">Changer de date</button>
+                    <button onClick={() => {
+                      const card = document.getElementById('mobile-stage-card')
+                      card?.scrollIntoView({ behavior: 'smooth' })
+                    }} className="text-blue-600">Détails du stage</button>
+                  </div>
+                </div>
+                <button
+                  onClick={() => {
+                    if (isFormComplete) {
+                      handleValidateForm()
+                    } else {
+                      alert('Veuillez remplir tous les champs obligatoires')
+                    }
+                  }}
+                  className="w-full bg-green-600 text-white py-3 rounded-full font-medium"
+                >
+                  S&apos;inscrire
+                </button>
+              </div>
+            )}
+
+            {/* CAS 2a1 / 2a3: Payment block visible, Payer button not visible, payment fields not filled */}
+            {(showStickyType2a1 || showStickyType2a3) && (
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-4 shadow-lg z-50">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">{stage && formatDate(stage.date_start, stage.date_end)}</p>
+                    <p className="text-lg font-semibold">{totalPrice}€ TTC</p>
+                  </div>
+                  <button onClick={() => {
+                    const card = document.getElementById('mobile-stage-card')
+                    card?.scrollIntoView({ behavior: 'smooth' })
+                  }} className="text-xs text-blue-600">Détails du stage</button>
+                </div>
+                {!arePaymentFieldsFilled && (
+                  <button
+                    onClick={() => {
+                      const paymentSection = document.getElementById('mobile-payment-section')
+                      paymentSection?.scrollIntoView({ behavior: 'smooth' })
+                    }}
+                    className="w-full bg-green-600 text-white py-3 rounded-full font-medium"
+                  >
+                    Aller au paiement
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* CAS 2b1: Payment fields filled, Payer button not visible */}
+            {showStickyType2b1 && (
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-4 shadow-lg z-50">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">{stage && formatDate(stage.date_start, stage.date_end)}</p>
+                    <p className="text-lg font-semibold">{totalPrice}€ TTC</p>
+                  </div>
+                  <button onClick={() => {
+                    const card = document.getElementById('mobile-stage-card')
+                    card?.scrollIntoView({ behavior: 'smooth' })
+                  }} className="text-xs text-blue-600">Détails du stage</button>
+                </div>
+                <button
+                  onClick={handleSubmit}
+                  disabled={isFormExpanded}
+                  className="w-full bg-green-600 text-white py-3 rounded-full font-medium flex items-center justify-center gap-2 disabled:bg-gray-400"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none">
+                    <path d="M7.29167 11.4584V7.29171C7.29167 5.91037 7.8404 4.58561 8.81715 3.60886C9.7939 2.63211 11.1187 2.08337 12.5 2.08337C13.8813 2.08337 15.2061 2.63211 16.1828 3.60886C17.1596 4.58561 17.7083 5.91037 17.7083 7.29171V11.4584M5.20833 11.4584H19.7917C20.9423 11.4584 21.875 12.3911 21.875 13.5417V20.8334C21.875 21.984 20.9423 22.9167 19.7917 22.9167H5.20833C4.05774 22.9167 3.125 21.984 3.125 20.8334V13.5417C3.125 12.3911 4.05774 11.4584 5.20833 11.4584Z" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Payer {totalPrice}€ TTC
+                </button>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Mobile Date Change Modal - Bottom Sheet */}
+        {isDatePopupOpen && (
+          <div className="fixed inset-0 z-50 flex items-end" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} onClick={() => setIsDatePopupOpen(false)}>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="w-full bg-white rounded-t-3xl"
+              style={{ height: '90vh', display: 'flex', flexDirection: 'column' }}
+            >
+              {/* Header */}
+              <div className="px-4 py-4 border-b">
+                <h3 className="text-center text-lg font-medium">Les stages à {formatCityName(city)}</h3>
+                <p className="text-center text-sm text-gray-600 mt-1">Choisissez une autre date pour votre stage</p>
+
+                {/* Current stage badge */}
+                {stage && (
+                  <div className="bg-gray-100 rounded-lg p-2 mt-3 text-center text-sm">
+                    Stage actuel : {formatDate(stage.date_start, stage.date_end)} - {stage.prix}€
+                  </div>
+                )}
+              </div>
+
+              {/* Scrollable stage list */}
+              <div className="flex-1 overflow-y-auto px-4 py-4">
+                {loadingStages ? (
+                  <p className="text-center text-gray-600">Chargement...</p>
+                ) : (
+                  availableStages.map((stageItem) => {
+                    const isCurrentStage = stage && stageItem.id === stage.id
+                    return (
+                      <div
+                        key={stageItem.id}
+                        onClick={() => !isCurrentStage && handleStageSelect(stageItem)}
+                        className={`border rounded-lg p-3 mb-3 ${isCurrentStage ? 'border-red-400 bg-red-50' : 'border-gray-300'} cursor-pointer`}
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <p className="font-medium">{formatDate(stageItem.date_start, stageItem.date_end)}</p>
+                            <p className="text-xs text-gray-600">8h15-12h30 / 13h30-16h30</p>
+                          </div>
+                          <div className="text-right">
+                            {isCurrentStage && <p className="text-xs text-blue-600 mb-1">Stage sélectionné</p>}
+                            <p className="text-xl font-semibold">{stageItem.prix}€</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-gray-700">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none">
+                            <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <p>{stageItem.site.ville}</p>
+                        </div>
+                        {!isCurrentStage && (
+                          <button className="w-full bg-green-600 text-white py-2 rounded-lg mt-2 text-sm">
+                            Choisir cette date
+                          </button>
+                        )}
+                      </div>
+                    )
+                  })
+                )}
+              </div>
+
+              {/* Close button */}
+              <div className="px-4 py-4 border-t">
+                <button
+                  onClick={() => setIsDatePopupOpen(false)}
+                  className="w-full bg-gray-300 py-3 rounded-lg"
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* DESKTOP VERSION - Hidden on mobile */}
+      <div className="hidden md:block">
       {/* Header with stage info */}
       <div className="py-6" style={{ background: '#fff' }}>
         <div className="max-w-[1200px] mx-auto px-6">
@@ -2212,6 +2936,8 @@ export default function InscriptionPage() {
           </div>
         </div>
       )}
+      </div>
+      {/* End Desktop Version */}
     </div>
   )
 }
