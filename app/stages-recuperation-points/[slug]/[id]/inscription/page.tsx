@@ -367,7 +367,7 @@ export default function InscriptionPage() {
 
           <p className="text-center font-medium mb-2" style={{ fontSize: '14px' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)}</p>
 
-          <div className="flex items-center gap-1.5 mb-1.5">
+          <div className="flex items-center gap-1.5 mb-1.5 w-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
               <g clipPath="url(#clip0_180_68)">
                 <path d="M13.3333 1.66669V5.00002M6.66667 1.66669V5.00002M2.5 8.33335H17.5M4.16667 3.33335H15.8333C16.7538 3.33335 17.5 4.07955 17.5 5.00002V16.6667C17.5 17.5872 16.7538 18.3334 15.8333 18.3334H4.16667C3.24619 18.3334 2.5 17.5872 2.5 16.6667V5.00002C2.5 4.07955 3.24619 3.33335 4.16667 3.33335Z" stroke="#595656" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -376,7 +376,7 @@ export default function InscriptionPage() {
             <button onClick={handleChangeDateClick} className="text-blue-600" style={{ fontSize: '12px' }}>Changer de date</button>
           </div>
 
-          <div className="flex gap-1.5 mb-1.5 text-gray-600">
+          <div className="flex gap-1.5 mb-1.5 text-gray-600 w-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
               <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -384,16 +384,39 @@ export default function InscriptionPage() {
             <p style={{ fontSize: '11px' }}>{stage && `av de Saint Menet, 13001 ${formatCityName(stage.site.ville)}`}</p>
           </div>
 
-          <div className="flex gap-1.5 mb-1.5 text-gray-600">
+          <div className="flex gap-1.5 mb-1.5 text-gray-600 w-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
               <path d="M10 5V10L13.3333 11.6667M18.3333 10C18.3333 14.6024 14.6024 18.3333 10 18.3333C5.39763 18.3333 1.66667 14.6024 1.66667 10C1.66667 5.39763 5.39763 1.66667 10 1.66667C14.6024 1.66667 18.3333 5.39763 18.3333 10Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <p style={{ fontSize: '11px' }}>08h15-12h30 et 13h30-16h30</p>
           </div>
 
-          <div className="flex gap-1.5 mb-2 text-gray-600">
-            <Image src="/flag-france.png" alt="Drapeau français" width={16} height={11} className="flex-shrink-0" />
-            <p style={{ fontSize: '10px' }}>Agrément n° 25 R130060090064 par la Préfecture des Bouches-du-Rhône</p>
+          <div className="flex gap-1.5 mb-2 text-gray-600 w-full">
+            <Image
+              src="/flag-france.png"
+              alt="Drapeau français"
+              width={21}
+              height={14}
+              className="flex-shrink-0 rounded-lg"
+              style={{
+                width: '21px',
+                height: '14px',
+                aspectRatio: '3/2',
+                borderRadius: '10px',
+                objectFit: 'cover'
+              }}
+            />
+            <p style={{
+              fontSize: '14px',
+              width: '265px',
+              height: '42px',
+              color: 'rgba(89, 86, 86, 0.86)',
+              fontFamily: 'Poppins',
+              fontWeight: '400',
+              lineHeight: '21px'
+            }}>
+              Agrément n° 25 R130060090064 par la Préfecture des Bouches-du-Rhône
+            </p>
           </div>
 
           <p className="text-center text-green-700 mb-0.5" style={{ fontSize: '11px' }}>Place disponibles</p>
