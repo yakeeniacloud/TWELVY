@@ -739,25 +739,19 @@ export default function InscriptionPage() {
                     display: 'flex',
                     width: '232px',
                     height: '51px',
-                    padding: '10px 43px',
+                    padding: '10px 15px',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    gap: '5px',
+                    gap: '8px',
                     flexShrink: 0,
                     borderRadius: '30px',
                     background: '#41A334'
                   }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="flex-shrink-0">
                     <path d="M7.29167 11.4584V7.29171C7.29167 5.91037 7.8404 4.58561 8.81715 3.60886C9.7939 2.63211 11.1187 2.08337 12.5 2.08337C13.8813 2.08337 15.2061 2.63211 16.1828 3.60886C17.1596 4.58561 17.7083 5.91037 17.7083 7.29171V11.4584M5.20833 11.4584H19.7917C20.9423 11.4584 21.875 12.3911 21.875 13.5417V20.8334C21.875 21.984 20.9423 22.9167 19.7917 22.9167H5.20833C4.05774 22.9167 3.125 21.984 3.125 20.8334V13.5417C3.125 12.3911 4.05774 11.4584 5.20833 11.4584Z" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   <span style={{
-                    display: 'flex',
-                    width: '146px',
-                    height: '21px',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    flexShrink: 0,
                     color: '#FFF',
                     textAlign: 'center',
                     fontFamily: 'Poppins',
@@ -765,7 +759,8 @@ export default function InscriptionPage() {
                     fontStyle: 'normal',
                     fontWeight: '400',
                     lineHeight: 'normal',
-                    letterSpacing: '1.12px'
+                    letterSpacing: '1.12px',
+                    whiteSpace: 'nowrap'
                   }}>
                     Payer {totalPrice}€ TTC
                   </span>
