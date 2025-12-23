@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import { removeStreetNumber } from '@/lib/formatAddress'
@@ -64,9 +64,15 @@ export default function InscriptionPage() {
   const [formValidated, setFormValidated] = useState(false)
   const [paymentBlockVisible, setPaymentBlockVisible] = useState(false)
   const [isFormExpanded, setIsFormExpanded] = useState(true)
-  const [isPaymentCardVisible, setIsPaymentCardVisible] = useState(false)
+  const [isStageCardVisible, setIsStageCardVisible] = useState(true)
+  const [isPaymentSectionVisible, setIsPaymentSectionVisible] = useState(false)
   const [isPayerButtonVisible, setIsPayerButtonVisible] = useState(false)
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+
+  // Refs for visibility detection
+  const stageCardRef = useRef<HTMLDivElement>(null)
+  const paymentSectionRef = useRef<HTMLDivElement>(null)
+  const payerButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     async function fetchStage() {
@@ -120,7 +126,12 @@ export default function InscriptionPage() {
 
       if (stageCard) {
         const rect = stageCard.getBoundingClientRect()
-        setIsPaymentCardVisible(rect.top < window.innerHeight && rect.bottom > 0)
+        setIsStageCardVisible(rect.top < window.innerHeight && rect.bottom > 0)
+      }
+
+      if (paymentSection) {
+        const rect = paymentSection.getBoundingClientRect()
+        setIsPaymentSectionVisible(rect.top < window.innerHeight && rect.bottom > 0)
       }
 
       if (payerButton) {
@@ -292,10 +303,17 @@ export default function InscriptionPage() {
   const totalPrice = garantieSerenite ? (stage?.prix || 0) + 57 : (stage?.prix || 0)
 
   // Determine which sticky to show (CAS logic)
-  const showStickyType1b = !formValidated && !isPaymentCardVisible && !isKeyboardOpen
-  const showStickyType2a1 = formValidated && paymentBlockVisible && !isPayerButtonVisible && !arePaymentFieldsFilled && !isKeyboardOpen
-  const showStickyType2a3 = formValidated && paymentBlockVisible && !isPayerButtonVisible && !arePaymentFieldsFilled && !isKeyboardOpen
-  const showStickyType2b1 = formValidated && paymentBlockVisible && !isPayerButtonVisible && arePaymentFieldsFilled && !isKeyboardOpen
+  // STICKY 1: CAS 1b - Form not validated AND stage card not visible
+  const showStickyType1b = !formValidated && !isStageCardVisible && !isKeyboardOpen
+
+  // STICKY 2: CAS 2a1 - Form validated, payment fields NOT filled, Payer button not visible, IS on payment section
+  const showStickyType2a1 = formValidated && paymentBlockVisible && !arePaymentFieldsFilled && !isPayerButtonVisible && isPaymentSectionVisible && !isKeyboardOpen
+
+  // STICKY 3: CAS 2a3 - Form validated, payment fields NOT filled, Payer button not visible, NOT on payment section
+  const showStickyType2a3 = formValidated && paymentBlockVisible && !arePaymentFieldsFilled && !isPayerButtonVisible && !isPaymentSectionVisible && !isKeyboardOpen
+
+  // STICKY 4: CAS 2b1 - Form validated, payment fields FILLED, Payer button not visible
+  const showStickyType2b1 = formValidated && paymentBlockVisible && arePaymentFieldsFilled && !isPayerButtonVisible && !isKeyboardOpen
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: 'var(--font-poppins)' }}>
@@ -890,88 +908,94 @@ export default function InscriptionPage() {
         {/* Sticky Bar - CAS Logic */}
         {!isKeyboardOpen && (
           <>
-            {/* CAS 1b: Form not validated, stage card not visible */}
+            {/* STICKY 1: CAS 1b - Form not validated, stage card not visible */}
             {showStickyType1b && (
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-2.5 shadow-lg z-50">
-                <div className="flex items-center justify-between mb-1.5">
-                  <div className="flex-1">
-                    <p className="font-medium" style={{ fontSize: '11px' }}>{stage && formatDate(stage.date_start, stage.date_end)}</p>
-                    <p className="font-semibold" style={{ fontSize: '15px' }}>{totalPrice}€ TTC</p>
-                  </div>
-                  <div className="flex flex-col gap-0.5" style={{ fontSize: '10px' }}>
-                    <button onClick={handleChangeDateClick} className="text-blue-600">Changer de date</button>
-                    <button onClick={() => {
-                      const card = document.getElementById('mobile-stage-card')
-                      card?.scrollIntoView({ behavior: 'smooth' })
-                    }} className="text-blue-600">Détails du stage</button>
-                  </div>
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '16px' }}>
+                <h3 className="font-normal mb-3" style={{ fontSize: '16px', lineHeight: '24px' }}>
+                  Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
+                </h3>
+                <div className="flex justify-between items-center mb-3">
+                  <button onClick={handleChangeDateClick} className="text-blue-600" style={{ fontSize: '14px' }}>Changer de date</button>
+                  <button onClick={() => {
+                    const card = document.getElementById('mobile-stage-card')
+                    card?.scrollIntoView({ behavior: 'smooth' })
+                  }} className="text-blue-600" style={{ fontSize: '14px' }}>Détails du stage</button>
                 </div>
                 <button
                   onClick={() => {
                     if (isFormComplete) {
                       handleValidateForm()
                     } else {
-                      alert('Veuillez remplir tous les champs obligatoires')
+                      const formSection = document.querySelector('[id*="formulaire"]') || document.querySelector('form')
+                      formSection?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                     }
                   }}
-                  className="w-full bg-green-600 text-white py-2 rounded-full font-medium"
-                  style={{ fontSize: '13px' }}
+                  className="w-full text-white py-3 rounded-full font-normal"
+                  style={{ fontSize: '16px', backgroundColor: '#41A334' }}
                 >
                   S&apos;inscrire
                 </button>
               </div>
             )}
 
-            {/* CAS 2a1 / 2a3: Payment block visible, Payer button not visible, payment fields not filled */}
-            {(showStickyType2a1 || showStickyType2a3) && (
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-2.5 shadow-lg z-50">
-                <div className="flex items-center justify-between mb-1.5">
-                  <div className="flex-1">
-                    <p className="font-medium" style={{ fontSize: '11px' }}>{stage && formatDate(stage.date_start, stage.date_end)}</p>
-                    <p className="font-semibold" style={{ fontSize: '15px' }}>{totalPrice}€ TTC</p>
-                  </div>
+            {/* STICKY 2: CAS 2a1 - Form validated, on payment section, button not visible */}
+            {showStickyType2a1 && (
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '16px' }}>
+                <h3 className="font-normal mb-3" style={{ fontSize: '16px', lineHeight: '24px' }}>
+                  Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
+                </h3>
+                <div className="text-center">
                   <button onClick={() => {
                     const card = document.getElementById('mobile-stage-card')
                     card?.scrollIntoView({ behavior: 'smooth' })
-                  }} className="text-blue-600" style={{ fontSize: '10px' }}>Détails du stage</button>
+                  }} className="text-blue-600" style={{ fontSize: '14px' }}>Détails du stage</button>
                 </div>
-                {!arePaymentFieldsFilled && (
-                  <button
-                    onClick={() => {
-                      const paymentSection = document.getElementById('mobile-payment-section')
-                      paymentSection?.scrollIntoView({ behavior: 'smooth' })
-                    }}
-                    className="w-full bg-green-600 text-white py-2 rounded-full font-medium"
-                    style={{ fontSize: '13px' }}
-                  >
-                    Aller au paiement
-                  </button>
-                )}
               </div>
             )}
 
-            {/* CAS 2b1: Payment fields filled, Payer button not visible */}
-            {showStickyType2b1 && (
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 p-2.5 shadow-lg z-50">
-                <div className="flex items-center justify-between mb-1.5">
-                  <div className="flex-1">
-                    <p className="font-medium" style={{ fontSize: '11px' }}>{stage && formatDate(stage.date_start, stage.date_end)}</p>
-                    <p className="font-semibold" style={{ fontSize: '15px' }}>{totalPrice}€ TTC</p>
-                  </div>
+            {/* STICKY 3: CAS 2a3 - Form validated, NOT on payment section, button not visible */}
+            {showStickyType2a3 && (
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '16px' }}>
+                <h3 className="font-normal mb-3" style={{ fontSize: '16px', lineHeight: '24px' }}>
+                  Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
+                </h3>
+                <div className="text-center mb-3">
                   <button onClick={() => {
                     const card = document.getElementById('mobile-stage-card')
                     card?.scrollIntoView({ behavior: 'smooth' })
-                  }} className="text-blue-600" style={{ fontSize: '10px' }}>Détails du stage</button>
+                  }} className="text-blue-600" style={{ fontSize: '14px' }}>Détails du stage</button>
+                </div>
+                <button
+                  onClick={() => {
+                    const paymentSection = document.getElementById('mobile-payment-section')
+                    paymentSection?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  }}
+                  className="w-full text-white py-3 rounded-full font-normal"
+                  style={{ fontSize: '16px', backgroundColor: '#41A334' }}
+                >
+                  Aller au paiement
+                </button>
+              </div>
+            )}
+
+            {/* STICKY 4: CAS 2b1 - Payment fields filled, Payer button not visible */}
+            {showStickyType2b1 && (
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '16px' }}>
+                <h3 className="font-normal mb-3" style={{ fontSize: '16px', lineHeight: '24px' }}>
+                  Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
+                </h3>
+                <div className="text-center mb-3">
+                  <button onClick={() => {
+                    const card = document.getElementById('mobile-stage-card')
+                    card?.scrollIntoView({ behavior: 'smooth' })
+                  }} className="text-blue-600" style={{ fontSize: '14px' }}>Détails du stage</button>
                 </div>
                 <button
                   onClick={handleSubmit}
                   disabled={isFormExpanded}
-                  className="w-full bg-green-600 text-white py-2 rounded-full font-medium flex items-center justify-center gap-1.5 disabled:bg-gray-400"
-                  style={{ fontSize: '13px' }}
+                  className="w-full text-white py-3 rounded-full font-normal disabled:bg-gray-400"
+                  style={{ fontSize: '16px', backgroundColor: '#41A334' }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 25" fill="none">
-                    <path d="M7.29167 11.4584V7.29171C7.29167 5.91037 7.8404 4.58561 8.81715 3.60886C9.7939 2.63211 11.1187 2.08337 12.5 2.08337C13.8813 2.08337 15.2061 2.63211 16.1828 3.60886C17.1596 4.58561 17.7083 5.91037 17.7083 7.29171V11.4584M5.20833 11.4584H19.7917C20.9423 11.4584 21.875 12.3911 21.875 13.5417V20.8334C21.875 21.984 20.9423 22.9167 19.7917 22.9167H5.20833C4.05774 22.9167 3.125 21.984 3.125 20.8334V13.5417C3.125 12.3911 4.05774 11.4584 5.20833 11.4584Z" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
                   Payer {totalPrice}€ TTC
                 </button>
               </div>
