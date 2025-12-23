@@ -568,7 +568,7 @@ export default function InscriptionPage() {
             <>
               {/* Form Summary */}
               {!isFormExpanded ? (
-                <div className="border rounded-lg p-2.5 mb-3">
+                <div className="p-2.5 mb-3">
                   <div className="flex items-center justify-between gap-1.5 mb-1.5">
                     <h3 className="font-medium" style={{ fontSize: '13px' }}>Étape 1/2 : coordonnées personnelles renseignées</h3>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
@@ -748,7 +748,7 @@ export default function InscriptionPage() {
                     background: '#41A334'
                   }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 25" fill="none">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
                     <path d="M7.29167 11.4584V7.29171C7.29167 5.91037 7.8404 4.58561 8.81715 3.60886C9.7939 2.63211 11.1187 2.08337 12.5 2.08337C13.8813 2.08337 15.2061 2.63211 16.1828 3.60886C17.1596 4.58561 17.7083 5.91037 17.7083 7.29171V11.4584M5.20833 11.4584H19.7917C20.9423 11.4584 21.875 12.3911 21.875 13.5417V20.8334C21.875 21.984 20.9423 22.9167 19.7917 22.9167H5.20833C4.05774 22.9167 3.125 21.984 3.125 20.8334V13.5417C3.125 12.3911 4.05774 11.4584 5.20833 11.4584Z" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   <span style={{
@@ -772,14 +772,24 @@ export default function InscriptionPage() {
                 </button>
               </div>
 
-              <p className="text-center italic mt-2" style={{ fontSize: '10px' }}>
+              <p className="text-center italic mt-2 mb-6" style={{ fontSize: '10px' }}>
                 Après avoir cliqué sur &quot;Payer&quot;, votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédiatement par email votre convocation au stage.
               </p>
             </div>
 
             {/* Info pratiques section */}
-            <div className="mt-4 border-t pt-4">
-              <h3 className="font-medium mb-1.5" style={{ fontSize: '13px' }}>Informations pratiques sur votre stage</h3>
+            <div className="mt-6 border-t pt-6">
+              <h3 className="font-medium mb-1.5" style={{
+                height: '55px',
+                fontSize: '20px',
+                fontWeight: '500',
+                lineHeight: '25px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flexShrink: 0,
+                alignSelf: 'stretch'
+              }}>Informations pratiques sur votre stage</h3>
               <p className="text-gray-700 mb-2" style={{ fontSize: '11px' }}>
                 Pour en savoir plus sur ce que comprends le prix de votre stage (programme, déroulement, agrément.
               </p>
@@ -833,9 +843,8 @@ export default function InscriptionPage() {
 
         {/* Questions fréquentes */}
         <div className="px-3 py-4 bg-gray-100">
-          <h3 className="text-center mb-1.5" style={{
+          <h3 className="mb-1.5" style={{
             color: 'rgba(6, 6, 6, 0.86)',
-            textAlign: 'center',
             WebkitTextStrokeWidth: '1px',
             WebkitTextStrokeColor: '#000',
             fontFamily: 'Poppins',
@@ -846,7 +855,7 @@ export default function InscriptionPage() {
           }}>
             Questions fréquentes
           </h3>
-          <p className="text-center mb-3" style={{ fontSize: '11px' }}>Vous vous posez encore des questions ?</p>
+          <p className="mb-3" style={{ fontSize: '11px' }}>Vous vous posez encore des questions ?</p>
 
           {/* FAQ Items */}
           {[0, 1, 2].map((index) => (
