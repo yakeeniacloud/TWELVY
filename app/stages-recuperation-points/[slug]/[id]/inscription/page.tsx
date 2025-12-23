@@ -910,94 +910,202 @@ export default function InscriptionPage() {
           <>
             {/* STICKY 1: CAS 1b - Form not validated, stage card not visible */}
             {showStickyType1b && (
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '16px' }}>
-                <h3 className="font-normal mb-3" style={{ fontSize: '16px', lineHeight: '24px' }}>
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '12px 16px' }}>
+                <h3 className="text-center mb-2" style={{
+                  width: '100%',
+                  maxWidth: '391px',
+                  margin: '0 auto 8px',
+                  color: '#000',
+                  fontFamily: 'Poppins',
+                  fontSize: '18px',
+                  fontStyle: 'normal',
+                  fontWeight: '500',
+                  lineHeight: '28px'
+                }}>
                   Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
                 </h3>
-                <div className="flex justify-between items-center mb-3">
-                  <button onClick={handleChangeDateClick} className="text-blue-600" style={{ fontSize: '14px' }}>Changer de date</button>
+                <div className="flex justify-between items-center mb-2">
+                  <button onClick={handleChangeDateClick} style={{
+                    color: '#345FB0',
+                    fontFamily: 'Poppins',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: '23px'
+                  }}>Changer de date</button>
                   <button onClick={() => {
                     const card = document.getElementById('mobile-stage-card')
                     card?.scrollIntoView({ behavior: 'smooth' })
-                  }} className="text-blue-600" style={{ fontSize: '14px' }}>Détails du stage</button>
+                  }} style={{
+                    color: '#345FB0',
+                    fontFamily: 'Poppins',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: '23px'
+                  }}>Détails du stage</button>
                 </div>
-                <button
-                  onClick={() => {
-                    if (isFormComplete) {
-                      handleValidateForm()
-                    } else {
-                      const formSection = document.querySelector('[id*="formulaire"]') || document.querySelector('form')
-                      formSection?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                    }
-                  }}
-                  className="w-full text-white py-3 rounded-full font-normal"
-                  style={{ fontSize: '16px', backgroundColor: '#41A334' }}
-                >
-                  S&apos;inscrire
-                </button>
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => {
+                      if (isFormComplete) {
+                        handleValidateForm()
+                      } else {
+                        const formSection = document.querySelector('[id*="formulaire"]') || document.querySelector('form')
+                        formSection?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      }
+                    }}
+                    className="text-white"
+                    style={{
+                      display: 'flex',
+                      width: '255px',
+                      padding: '7px 15px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: '20px',
+                      borderRadius: '12px',
+                      background: '#41A334'
+                    }}
+                  >
+                    S&apos;inscrire
+                  </button>
+                </div>
               </div>
             )}
 
             {/* STICKY 2: CAS 2a1 - Form validated, on payment section, button not visible */}
             {showStickyType2a1 && (
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '16px' }}>
-                <h3 className="font-normal mb-3" style={{ fontSize: '16px', lineHeight: '24px' }}>
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '12px 16px' }}>
+                <h3 className="text-center mb-2" style={{
+                  width: '100%',
+                  maxWidth: '391px',
+                  margin: '0 auto 8px',
+                  color: '#000',
+                  fontFamily: 'Poppins',
+                  fontSize: '18px',
+                  fontStyle: 'normal',
+                  fontWeight: '500',
+                  lineHeight: '28px'
+                }}>
                   Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
                 </h3>
                 <div className="text-center">
                   <button onClick={() => {
                     const card = document.getElementById('mobile-stage-card')
                     card?.scrollIntoView({ behavior: 'smooth' })
-                  }} className="text-blue-600" style={{ fontSize: '14px' }}>Détails du stage</button>
+                  }} style={{
+                    color: '#345FB0',
+                    fontFamily: 'Poppins',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: '23px'
+                  }}>Détails du stage</button>
                 </div>
               </div>
             )}
 
             {/* STICKY 3: CAS 2a3 - Form validated, NOT on payment section, button not visible */}
             {showStickyType2a3 && (
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '16px' }}>
-                <h3 className="font-normal mb-3" style={{ fontSize: '16px', lineHeight: '24px' }}>
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '12px 16px' }}>
+                <h3 className="text-center mb-2" style={{
+                  width: '100%',
+                  maxWidth: '391px',
+                  margin: '0 auto 8px',
+                  color: '#000',
+                  fontFamily: 'Poppins',
+                  fontSize: '18px',
+                  fontStyle: 'normal',
+                  fontWeight: '500',
+                  lineHeight: '28px'
+                }}>
                   Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
                 </h3>
-                <div className="text-center mb-3">
+                <div className="text-center mb-2">
                   <button onClick={() => {
                     const card = document.getElementById('mobile-stage-card')
                     card?.scrollIntoView({ behavior: 'smooth' })
-                  }} className="text-blue-600" style={{ fontSize: '14px' }}>Détails du stage</button>
+                  }} style={{
+                    color: '#345FB0',
+                    fontFamily: 'Poppins',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: '23px'
+                  }}>Détails du stage</button>
                 </div>
-                <button
-                  onClick={() => {
-                    const paymentSection = document.getElementById('mobile-payment-section')
-                    paymentSection?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                  }}
-                  className="w-full text-white py-3 rounded-full font-normal"
-                  style={{ fontSize: '16px', backgroundColor: '#41A334' }}
-                >
-                  Aller au paiement
-                </button>
+                <div className="flex justify-center">
+                  <button
+                    onClick={() => {
+                      const paymentSection = document.getElementById('mobile-payment-section')
+                      paymentSection?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }}
+                    className="text-white"
+                    style={{
+                      display: 'flex',
+                      width: '255px',
+                      padding: '7px 15px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: '20px',
+                      borderRadius: '12px',
+                      background: '#41A334'
+                    }}
+                  >
+                    Aller au paiement
+                  </button>
+                </div>
               </div>
             )}
 
             {/* STICKY 4: CAS 2b1 - Payment fields filled, Payer button not visible */}
             {showStickyType2b1 && (
-              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '16px' }}>
-                <h3 className="font-normal mb-3" style={{ fontSize: '16px', lineHeight: '24px' }}>
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '12px 16px' }}>
+                <h3 className="text-center mb-2" style={{
+                  width: '100%',
+                  maxWidth: '391px',
+                  margin: '0 auto 8px',
+                  color: '#000',
+                  fontFamily: 'Poppins',
+                  fontSize: '18px',
+                  fontStyle: 'normal',
+                  fontWeight: '500',
+                  lineHeight: '28px'
+                }}>
                   Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
                 </h3>
-                <div className="text-center mb-3">
+                <div className="text-center mb-2">
                   <button onClick={() => {
                     const card = document.getElementById('mobile-stage-card')
                     card?.scrollIntoView({ behavior: 'smooth' })
-                  }} className="text-blue-600" style={{ fontSize: '14px' }}>Détails du stage</button>
+                  }} style={{
+                    color: '#345FB0',
+                    fontFamily: 'Poppins',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: '23px'
+                  }}>Détails du stage</button>
                 </div>
-                <button
-                  onClick={handleSubmit}
-                  disabled={isFormExpanded}
-                  className="w-full text-white py-3 rounded-full font-normal disabled:bg-gray-400"
-                  style={{ fontSize: '16px', backgroundColor: '#41A334' }}
-                >
-                  Payer {totalPrice}€ TTC
-                </button>
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleSubmit}
+                    disabled={isFormExpanded}
+                    className="text-white disabled:bg-gray-400"
+                    style={{
+                      display: 'flex',
+                      width: '255px',
+                      padding: '7px 15px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: '20px',
+                      borderRadius: '12px',
+                      background: isFormExpanded ? '#9CA3AF' : '#41A334'
+                    }}
+                  >
+                    Payer {totalPrice}€ TTC
+                  </button>
+                </div>
               </div>
             )}
           </>
