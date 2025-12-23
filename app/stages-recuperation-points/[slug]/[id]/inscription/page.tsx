@@ -239,16 +239,14 @@ export default function InscriptionPage() {
 
   // Mobile functions
   const handleValidateForm = () => {
-    // Check if all required fields are filled
-    if (!civilite || !nom || !prenom || !email || !telephone || !cgvAccepted) {
-      alert('Veuillez remplir tous les champs obligatoires')
-      return
-    }
-
-    // Validate form and reveal payment block
-    setFormValidated(true)
+    // Always reveal payment block so client can see the process
     setPaymentBlockVisible(true)
-    setIsFormExpanded(false)
+
+    // Only validate form if all required fields are filled
+    if (civilite && nom && prenom && email && telephone && cgvAccepted) {
+      setFormValidated(true)
+      setIsFormExpanded(false)
+    }
 
     // Scroll to payment section
     setTimeout(() => {
@@ -305,7 +303,7 @@ export default function InscriptionPage() {
       <div className="md:hidden">
         {/* Mobile Header */}
         <div className="flex justify-between items-center px-3 py-2 bg-white border-b border-gray-200">
-          <Image src="/logo-prostages.png" alt="ProStagesPermis" width={120} height={30} priority className="h-6" />
+          <Image src="/prostagespermis-logo.png" alt="ProStagesPermis" width={120} height={30} priority className="h-6" />
           <div className="text-xs text-black">Aide et contact</div>
         </div>
 
@@ -354,7 +352,7 @@ export default function InscriptionPage() {
 
         {/* Back Link */}
         <div className="px-3 py-1">
-          <a href={`/stages-recuperation-points/${city.toLowerCase()}`} className="text-gray-700" style={{ fontSize: '11px' }}>
+          <a href={`/stages-recuperation-points/${city.toLowerCase()}`} className="text-black" style={{ fontSize: '11px' }}>
             &lt; Retour aux stages à {formatCityName(city)}
           </a>
         </div>
@@ -423,7 +421,7 @@ export default function InscriptionPage() {
           <p className="text-center font-normal mb-2" style={{ fontSize: '26px' }}>{stage?.prix}€ TTC</p>
 
           {/* Benefits with yellow checkmarks */}
-          <div className="space-y-1.5" style={{ display: 'flex', width: '308px', height: '226px', padding: '0 16px', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: '-5px', borderRadius: '8px', border: '1px solid #9B9A9A' }}>
+          <div className="space-y-1.5" style={{ display: 'flex', width: '308px', padding: '12px 16px', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: '-5px', borderRadius: '8px', border: '1px solid #9B9A9A' }}>
             {[
               'Stage officiel agréé Préfecture',
               '+4 points en 48h',
@@ -476,9 +474,21 @@ export default function InscriptionPage() {
                 </div>
 
                 <div>
-                  <label className="block mb-1" style={{ fontSize: '12px' }}>Téléphone mobile *</label>
+                  <div className="flex items-center gap-1 mb-1">
+                    <label style={{ fontSize: '12px' }}>Téléphone mobile *</label>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ width: '16px', height: '16px', flexShrink: 0 }}>
+                      <g clipPath="url(#clip0_75_35)">
+                        <path d="M7.99999 10.6667V8.00004M7.99999 5.33337H8.00666M14.6667 8.00004C14.6667 11.6819 11.6819 14.6667 7.99999 14.6667C4.3181 14.6667 1.33333 11.6819 1.33333 8.00004C1.33333 4.31814 4.3181 1.33337 7.99999 1.33337C11.6819 1.33337 14.6667 4.31814 14.6667 8.00004Z" stroke="#1E1E1E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_75_35">
+                          <rect width="16" height="16" fill="white"/>
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </div>
                   <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="Téléphone" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
-                  <p className="italic text-gray-600 mt-1" style={{ fontSize: '10px' }}>Important : indiquez un numéro de mobile valide</p>
+                  <p className="italic mt-1" style={{ display: 'flex', width: '344px', height: '51px', flexDirection: 'column', justifyContent: 'center', flexShrink: 0, color: '#2E2E2E', fontFamily: 'Poppins', fontSize: '13px', fontStyle: 'italic', fontWeight: '400', lineHeight: '17px' }}>Important : indiquez un numéro de mobile valide. Il servira au SMS de confirmation et aux informations essentielles liées à votre stage.</p>
                 </div>
 
                 {/* Garantie Sérénité */}
@@ -498,9 +508,14 @@ export default function InscriptionPage() {
                   </div>
                   <label className="flex items-start gap-1.5 cursor-pointer mb-1.5">
                     <input type="checkbox" checked={garantieSerenite} onChange={(e) => setGarantieSerenite(e.target.checked)} className="mt-0.5" />
-                    <span style={{ fontSize: '11px' }}>Je souscris à la Garantie Sérénité: +57€ TTC</span>
+                    <span style={{ fontSize: '11px' }}>Je souscris à la Garantie Sérénité: +57€ TTC (supplement facturé en plus du stage)</span>
                   </label>
-                  <div className="font-medium cursor-pointer" style={{ fontSize: '11px' }}>Voir le détail de la garantie</div>
+                  <div className="flex items-center justify-center gap-2 cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="22" viewBox="0 0 25 22" fill="none" style={{ width: '25px', height: '25px' }}>
+                      <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <div className="font-medium" style={{ fontSize: '11px' }}>Voir le détail de la garantie</div>
+                  </div>
                 </div>
 
                 {/* CGV */}
@@ -510,14 +525,43 @@ export default function InscriptionPage() {
                 </label>
 
                 {/* Submit Button */}
-                <button
-                  onClick={handleValidateForm}
-                  disabled={!isFormComplete}
-                  className="w-full bg-green-600 text-white py-2 rounded-full font-medium disabled:opacity-50"
-                  style={{ fontSize: '13px' }}
-                >
-                  Valider le formulaire et passer au paiement
-                </button>
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleValidateForm}
+                    className="text-white disabled:opacity-50"
+                    style={{
+                      display: 'flex',
+                      width: '280px',
+                      height: '62px',
+                      padding: '10px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: '10px',
+                      flexShrink: 0,
+                      borderRadius: '30px',
+                      background: '#41A334'
+                    }}
+                  >
+                    <span style={{
+                      display: 'flex',
+                      width: '214px',
+                      height: '41px',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      color: '#FFF',
+                      textAlign: 'center',
+                      fontFamily: 'Poppins',
+                      fontSize: '16px',
+                      fontStyle: 'normal',
+                      fontWeight: '400',
+                      lineHeight: 'normal',
+                      letterSpacing: '1.12px'
+                    }}>
+                      Valider et passer au paiement
+                    </span>
+                  </button>
+                </div>
               </div>
             </>
           ) : (
