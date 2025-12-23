@@ -569,20 +569,37 @@ export default function InscriptionPage() {
               {/* Form Summary */}
               {!isFormExpanded ? (
                 <div className="border rounded-lg p-2.5 mb-3">
-                  <div className="flex items-center gap-1.5 mb-1.5">
+                  <div className="flex items-center justify-between gap-1.5 mb-1.5">
+                    <h3 className="font-medium" style={{ fontSize: '13px' }}>Étape 1/2 : coordonnées personnelles renseignées</h3>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
                       <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="#41A334" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    <h3 className="font-medium" style={{ fontSize: '13px' }}>Étape 1/2 : coordonnées personnelles renseignées</h3>
                   </div>
                   <div className="text-gray-700 space-y-0.5" style={{ fontSize: '11px' }}>
                     <p>{prenom} {nom}</p>
                     <p>Mail: {email}</p>
                     <p>Tel: {telephone}</p>
                   </div>
-                  <button onClick={handleModifierClick} className="mt-2 px-4 py-1.5 bg-gray-300 rounded-full" style={{ fontSize: '12px' }}>
-                    Modifier
-                  </button>
+                  <div className="flex justify-center mt-2">
+                    <button
+                      onClick={handleModifierClick}
+                      style={{
+                        display: 'flex',
+                        width: '196px',
+                        height: '34px',
+                        padding: '10px',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: '10px',
+                        flexShrink: 0,
+                        borderRadius: '12px',
+                        background: '#E1E1E1',
+                        fontSize: '12px'
+                      }}
+                    >
+                      Modifier
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <>
@@ -627,7 +644,7 @@ export default function InscriptionPage() {
 
         {/* Payment Section */}
         {paymentBlockVisible && (
-          <div id="mobile-payment-section" className="px-3 py-3 bg-gray-50">
+          <div id="mobile-payment-section" className="px-3 py-3">
             <h2 className="font-medium mb-3" style={{ fontSize: '14px' }}>Étape 2/2 : paiement sécurisé</h2>
 
             <p className="text-center font-medium mb-1" style={{ fontSize: '13px' }}>Paiement sécurisé par Crédit Agricole</p>
@@ -712,18 +729,48 @@ export default function InscriptionPage() {
               </div>
 
               {/* Payer Button */}
-              <button
-                id="mobile-payer-button"
-                onClick={handleSubmit}
-                disabled={isFormExpanded}
-                className="w-full bg-green-600 text-white py-2 rounded-full font-medium flex items-center justify-center gap-1.5 disabled:bg-gray-400"
-                style={{ fontSize: '13px' }}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 25" fill="none">
-                  <path d="M7.29167 11.4584V7.29171C7.29167 5.91037 7.8404 4.58561 8.81715 3.60886C9.7939 2.63211 11.1187 2.08337 12.5 2.08337C13.8813 2.08337 15.2061 2.63211 16.1828 3.60886C17.1596 4.58561 17.7083 5.91037 17.7083 7.29171V11.4584M5.20833 11.4584H19.7917C20.9423 11.4584 21.875 12.3911 21.875 13.5417V20.8334C21.875 21.984 20.9423 22.9167 19.7917 22.9167H5.20833C4.05774 22.9167 3.125 21.984 3.125 20.8334V13.5417C3.125 12.3911 4.05774 11.4584 5.20833 11.4584Z" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                Payer {totalPrice}€ TTC
-              </button>
+              <div className="flex justify-center">
+                <button
+                  id="mobile-payer-button"
+                  onClick={handleSubmit}
+                  disabled={isFormExpanded}
+                  className="flex items-center disabled:bg-gray-400"
+                  style={{
+                    display: 'flex',
+                    width: '232px',
+                    height: '51px',
+                    padding: '10px 43px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '5px',
+                    flexShrink: 0,
+                    borderRadius: '30px',
+                    background: '#41A334'
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 25" fill="none">
+                    <path d="M7.29167 11.4584V7.29171C7.29167 5.91037 7.8404 4.58561 8.81715 3.60886C9.7939 2.63211 11.1187 2.08337 12.5 2.08337C13.8813 2.08337 15.2061 2.63211 16.1828 3.60886C17.1596 4.58561 17.7083 5.91037 17.7083 7.29171V11.4584M5.20833 11.4584H19.7917C20.9423 11.4584 21.875 12.3911 21.875 13.5417V20.8334C21.875 21.984 20.9423 22.9167 19.7917 22.9167H5.20833C4.05774 22.9167 3.125 21.984 3.125 20.8334V13.5417C3.125 12.3911 4.05774 11.4584 5.20833 11.4584Z" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span style={{
+                    display: 'flex',
+                    width: '146px',
+                    height: '21px',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    color: '#FFF',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: 'normal',
+                    letterSpacing: '1.12px'
+                  }}>
+                    Payer {totalPrice}€ TTC
+                  </span>
+                </button>
+              </div>
 
               <p className="text-center italic mt-2" style={{ fontSize: '10px' }}>
                 Après avoir cliqué sur &quot;Payer&quot;, votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédiatement par email votre convocation au stage.
@@ -786,9 +833,18 @@ export default function InscriptionPage() {
 
         {/* Questions fréquentes */}
         <div className="px-3 py-4 bg-gray-100">
-          <h3 className="text-center font-normal mb-1.5" style={{ fontSize: '14px' }}>
-            <span className="font-light">Questions </span>
-            <span className="font-medium">Fréquentes</span>
+          <h3 className="text-center mb-1.5" style={{
+            color: 'rgba(6, 6, 6, 0.86)',
+            textAlign: 'center',
+            WebkitTextStrokeWidth: '1px',
+            WebkitTextStrokeColor: '#000',
+            fontFamily: 'Poppins',
+            fontSize: '20px',
+            fontStyle: 'normal',
+            fontWeight: '250',
+            lineHeight: '35px'
+          }}>
+            Questions fréquentes
           </h3>
           <p className="text-center mb-3" style={{ fontSize: '11px' }}>Vous vous posez encore des questions ?</p>
 
@@ -823,6 +879,9 @@ export default function InscriptionPage() {
             Afficher plus de questions
           </button>
         </div>
+
+        {/* Bottom Spacing */}
+        <div style={{ height: '100px' }} />
 
         {/* Sticky Bar - CAS Logic */}
         {!isKeyboardOpen && (
