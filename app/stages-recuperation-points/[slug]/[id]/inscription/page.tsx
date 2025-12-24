@@ -68,6 +68,7 @@ export default function InscriptionPage() {
   const [isPaymentSectionVisible, setIsPaymentSectionVisible] = useState(false)
   const [isPayerButtonVisible, setIsPayerButtonVisible] = useState(false)
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+  const [isPayerButtonDisabled, setIsPayerButtonDisabled] = useState(false)
 
   // Refs for visibility detection
   const stageCardRef = useRef<HTMLDivElement>(null)
@@ -270,14 +271,17 @@ export default function InscriptionPage() {
 
   const handleModifierClick = () => {
     setIsFormExpanded(true)
+    setIsPayerButtonDisabled(true)
   }
 
   const handleAnnulerClick = () => {
     setIsFormExpanded(false)
+    setIsPayerButtonDisabled(false)
   }
 
   const handleReturnToPayment = () => {
     setIsFormExpanded(false)
+    setIsPayerButtonDisabled(false)
 
     // Scroll to payment section
     setTimeout(() => {
@@ -751,7 +755,7 @@ export default function InscriptionPage() {
                 <button
                   id="mobile-payer-button"
                   onClick={handleSubmit}
-                  disabled={isFormExpanded}
+                  disabled={isFormExpanded || isPayerButtonDisabled}
                   className="flex items-center disabled:bg-gray-400"
                   style={{
                     display: 'flex',
@@ -763,7 +767,7 @@ export default function InscriptionPage() {
                     gap: '8px',
                     flexShrink: 0,
                     borderRadius: '30px',
-                    background: '#41A334'
+                    background: (isFormExpanded || isPayerButtonDisabled) ? '#9CA3AF' : '#41A334'
                   }}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="flex-shrink-0">
