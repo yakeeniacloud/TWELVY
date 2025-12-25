@@ -1313,27 +1313,37 @@ export default function InscriptionPage() {
                         }}
                       >
                         {/* Left: Date and Time */}
-                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px', marginLeft: '8px', width: '140px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0', position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }}>
                           {/* Date */}
                           <p style={{
-                            color: 'rgba(0,0,0,0.89)',
+                            display: 'flex',
+                            height: '23px',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            alignSelf: 'stretch',
+                            color: 'rgba(0, 0, 0, 0.89)',
                             fontFamily: 'Poppins',
-                            fontSize: '12px',
-                            fontWeight: '500',
-                            lineHeight: '14px',
-                            whiteSpace: 'nowrap',
+                            fontSize: '15px',
+                            fontStyle: 'normal',
+                            fontWeight: '600',
+                            lineHeight: '35px',
                             margin: 0
                           }}>
                             {formatDate(stageItem.date_start, stageItem.date_end)}
                           </p>
                           {/* Time */}
                           <p style={{
+                            display: 'flex',
+                            width: '208px',
+                            height: '23px',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
                             color: 'rgba(66, 66, 66, 0.86)',
                             fontFamily: 'Poppins',
-                            fontSize: '10px',
+                            fontSize: '13px',
+                            fontStyle: 'normal',
                             fontWeight: '400',
-                            lineHeight: '14px',
-                            whiteSpace: 'nowrap',
+                            lineHeight: '35px',
                             margin: 0
                           }}>
                             8h15-12h30 / 13h30-16h30
@@ -1341,40 +1351,53 @@ export default function InscriptionPage() {
                         </div>
 
                         {/* Center: Location Pin + City + Address */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', position: 'absolute', left: '150px', top: '50%', transform: 'translateY(-50%)' }}>
-                          <div style={{
-                            display: 'flex',
-                            width: '28px',
-                            height: '28px',
-                            padding: '6px',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: '50%',
-                            background: '#E5E5E5',
-                            flexShrink: 0
-                          }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" style={{ width: '16px', height: '16px', flexShrink: 0 }}>
-                              <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                          </div>
-                          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'absolute', left: '12px', bottom: '12px' }}>
+                          {/* Map Pin Icon */}
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ width: '20px', height: '20px', flexShrink: 0 }}>
+                            <g clipPath="url(#clip0_3_103)">
+                              <path d="M17.5 8.33333C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33333C2.5 6.3442 3.29018 4.43655 4.6967 3.03003C6.10322 1.6235 8.01088 0.833328 10 0.833328C11.9891 0.833328 13.8968 1.6235 15.3033 3.03003C16.7098 4.43655 17.5 6.3442 17.5 8.33333Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M10 10.8333C11.3807 10.8333 12.5 9.71404 12.5 8.33333C12.5 6.95262 11.3807 5.83333 10 5.83333C8.61929 5.83333 7.5 6.95262 7.5 8.33333C7.5 9.71404 8.61929 10.8333 10 10.8333Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </g>
+                            <defs>
+                              <clipPath id="clip0_3_103">
+                                <rect width="20" height="20" fill="white"/>
+                              </clipPath>
+                            </defs>
+                          </svg>
+
+                          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0' }}>
+                            {/* City name */}
                             <p style={{
-                              color: 'rgba(0,0,0,0.98)',
+                              display: 'flex',
+                              width: '80px',
+                              height: '13px',
+                              flexDirection: 'column',
+                              justifyContent: 'center',
+                              flexShrink: 0,
+                              color: 'rgba(0, 0, 0, 0.98)',
                               fontFamily: 'Poppins',
-                              fontSize: '11px',
+                              fontSize: '15px',
+                              fontStyle: 'normal',
                               fontWeight: '400',
-                              lineHeight: '12px',
+                              lineHeight: '35px',
                               margin: 0
                             }}>
                               {stageItem.site.ville}
                             </p>
+                            {/* Address */}
                             <p style={{
-                              color: 'rgba(6,6,6,0.56)',
+                              display: 'flex',
+                              width: '165px',
+                              height: '20px',
+                              flexDirection: 'column',
+                              justifyContent: 'center',
+                              flexShrink: 0,
+                              color: 'rgba(6, 6, 6, 0.56)',
                               fontFamily: 'Poppins',
-                              fontSize: '9px',
+                              fontSize: '12px',
+                              fontStyle: 'normal',
                               fontWeight: '400',
-                              lineHeight: '10px',
+                              lineHeight: '35px',
                               margin: 0
                             }}>
                               {removeStreetNumber(stageItem.site.adresse)}
@@ -1385,22 +1408,22 @@ export default function InscriptionPage() {
                         {/* Right side container */}
                         <div style={{
                           position: 'absolute',
-                          right: '10px',
-                          top: isCurrentStage ? '4px' : '8px',
+                          right: '12px',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: 'center',
-                          gap: isCurrentStage ? '2px' : '4px'
+                          gap: '4px'
                         }}>
                           {/* "Stage sélectionné" badge for current stage */}
                           {isCurrentStage && (
                             <div style={{
                               color: '#336FF0',
                               fontFamily: 'Poppins',
-                              fontSize: '9px',
+                              fontSize: '11px',
                               fontWeight: '400',
-                              textAlign: 'center',
-                              marginBottom: '0px'
+                              textAlign: 'center'
                             }}>
                               Stage sélectionné
                             </div>
@@ -1408,12 +1431,13 @@ export default function InscriptionPage() {
 
                           {/* Price */}
                           <div style={{
-                            color: 'rgba(6,6,6,0.86)',
+                            color: 'rgba(6, 6, 6, 0.86)',
+                            textAlign: 'center',
                             fontFamily: 'Poppins',
-                            fontSize: '16px',
-                            fontWeight: '400',
-                            lineHeight: '1',
-                            textAlign: 'center'
+                            fontSize: '20px',
+                            fontStyle: 'normal',
+                            fontWeight: '500',
+                            lineHeight: '35px'
                           }}>
                             {stageItem.prix}€
                           </div>
@@ -1424,23 +1448,30 @@ export default function InscriptionPage() {
                               onClick={() => handleStageSelect(stageItem)}
                               style={{
                                 display: 'flex',
-                                width: '100px',
-                                height: '26px',
-                                padding: '5px',
+                                width: '109px',
+                                padding: '7px 0',
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 borderRadius: '12px',
                                 background: '#41A334',
                                 border: 'none',
-                                color: 'white',
-                                fontFamily: 'Poppins',
-                                fontSize: '10px',
-                                fontWeight: '400',
-                                cursor: 'pointer',
-                                marginTop: '3px'
+                                cursor: 'pointer'
                               }}
                             >
-                              Choisir cette date
+                              <span style={{
+                                width: '110px',
+                                flexShrink: 0,
+                                color: '#FFF',
+                                textAlign: 'center',
+                                fontFamily: 'Poppins',
+                                fontSize: '15px',
+                                fontStyle: 'normal',
+                                fontWeight: '400',
+                                lineHeight: '18px',
+                                letterSpacing: '0.3px'
+                              }}>
+                                Choisir cette date
+                              </span>
                             </button>
                           )}
                         </div>
