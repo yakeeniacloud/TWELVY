@@ -1154,8 +1154,29 @@ export default function InscriptionPage() {
             <div
               onClick={(e) => e.stopPropagation()}
               className="w-full bg-white rounded-t-3xl"
-              style={{ maxHeight: '90vh', display: 'flex', flexDirection: 'column', padding: '24px 16px' }}
+              style={{ maxHeight: '90vh', display: 'flex', flexDirection: 'column', padding: '24px 16px', position: 'relative' }}
             >
+              {/* Close X button */}
+              <button
+                onClick={() => setIsDatePopupOpen(false)}
+                style={{
+                  position: 'absolute',
+                  top: '15px',
+                  right: '15px',
+                  width: '40px',
+                  height: '40px',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0,
+                  zIndex: 10
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
+                  <path d="M28 16L16 28M16 16L28 28M42 22C42 33.0457 33.0457 42 22 42C10.9543 42 2 33.0457 2 22C2 10.9543 10.9543 2 22 2C33.0457 2 42 10.9543 42 22Z" stroke="#A1A1A1" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+
               {/* Handle bar */}
               <div className="flex justify-center mb-4">
                 <div style={{ width: '100px', height: '4px', backgroundColor: '#B0B0B0', borderRadius: '2px' }} />
@@ -1165,12 +1186,18 @@ export default function InscriptionPage() {
               <div style={{ flexShrink: 0, marginBottom: '16px' }}>
                 {/* Title */}
                 <h2 style={{
+                  display: 'flex',
+                  width: '243px',
+                  height: '39px',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
                   color: '#333',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
                   fontSize: '18px',
+                  fontStyle: 'normal',
                   fontWeight: '500',
-                  lineHeight: '28px',
+                  lineHeight: '35px',
                   margin: '0 auto 8px auto'
                 }}>
                   Les stages à {formatCityName(city)}
@@ -1178,13 +1205,18 @@ export default function InscriptionPage() {
 
                 {/* Subtitle */}
                 <p style={{
+                  display: 'flex',
+                  width: '368px',
+                  height: '56px',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
                   color: '#4E4E4E',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
-                  fontSize: '12px',
+                  fontSize: '15px',
                   fontStyle: 'italic',
                   fontWeight: '400',
-                  lineHeight: '18px',
+                  lineHeight: '22px',
                   margin: '0 auto 16px auto'
                 }}>
                   Choisissez une autre date pour votre stage. Les informations déjà saisies sont conservées
@@ -1194,21 +1226,30 @@ export default function InscriptionPage() {
                 {stage && (
                   <div style={{
                     display: 'flex',
-                    padding: '8px 16px',
+                    width: '323px',
+                    height: '63px',
+                    padding: '0 5px',
                     justifyContent: 'center',
                     alignItems: 'center',
+                    flexShrink: 0,
                     borderRadius: '10px',
                     background: '#F5F5F5',
-                    margin: '0 auto 16px auto',
-                    maxWidth: '100%'
+                    margin: '0 auto 16px auto'
                   }}>
                     <p style={{
+                      display: 'flex',
+                      width: '335px',
+                      height: '49px',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      flexShrink: 0,
                       color: '#000',
                       textAlign: 'center',
                       fontFamily: 'Poppins',
-                      fontSize: '13px',
-                      fontWeight: '400',
-                      lineHeight: '20px',
+                      fontSize: '17px',
+                      fontStyle: 'normal',
+                      fontWeight: '500',
+                      lineHeight: '28px',
                       margin: 0
                     }}>
                       Stage actuel : {formatDate(stage.date_start, stage.date_end)} - {stage.prix}€
@@ -1218,13 +1259,25 @@ export default function InscriptionPage() {
 
                 {/* Liste des stages label */}
                 <p style={{
+                  display: 'flex',
+                  width: '136px',
+                  height: '22px',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
                   color: '#4E4E4E',
+                  textAlign: 'center',
                   fontFamily: 'Poppins',
-                  fontSize: '13px',
+                  fontSize: '15px',
+                  fontStyle: 'normal',
                   fontWeight: '400',
-                  lineHeight: '20px',
-                  textDecoration: 'underline',
-                  margin: '24px 0 8px 0'
+                  lineHeight: '22px',
+                  textDecorationLine: 'underline',
+                  textDecorationStyle: 'solid',
+                  textDecorationSkipInk: 'auto',
+                  textDecorationThickness: 'auto',
+                  textUnderlineOffset: 'auto',
+                  textUnderlinePosition: 'from-font',
+                  margin: '24px auto 8px auto'
                 }}>
                   Liste des stages :
                 </p>
@@ -1242,15 +1295,21 @@ export default function InscriptionPage() {
                         key={stageItem.id}
                         style={{
                           display: 'flex',
-                          width: '100%',
-                          marginBottom: '12px',
+                          width: '369px',
+                          height: '106px',
+                          padding: '6px 0',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          gap: '5px',
+                          flexShrink: 0,
                           borderRadius: '10px',
                           border: isCurrentStage ? '1px solid #BC4747' : '1px solid #BBB',
-                          backgroundColor: isCurrentStage ? '#F2DDDD' : 'white',
-                          boxShadow: '0 4px 10px 0 rgba(0,0,0,0.15)',
-                          height: '75px',
-                          padding: '8px',
-                          position: 'relative'
+                          background: isCurrentStage ? '#F2DDDD' : '#FFF',
+                          boxShadow: '0 4px 10px 0 rgba(0, 0, 0, 0.15)',
+                          position: 'relative',
+                          marginBottom: '12px',
+                          marginLeft: 'auto',
+                          marginRight: 'auto'
                         }}
                       >
                         {/* Left: Date and Time */}
