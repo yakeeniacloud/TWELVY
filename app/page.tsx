@@ -69,6 +69,8 @@ export default function Home() {
 
   return (
     <div className="bg-white min-h-screen">
+      {/* DESKTOP VERSION - Hidden on mobile */}
+      <div className="hidden md:block">
       {/* Hero Section */}
       <section className="pt-12 pb-8">
         <div className="max-w-4xl mx-auto px-4 text-center">
@@ -1319,6 +1321,655 @@ export default function Home() {
 
       {/* 100px spacing */}
       <div style={{ height: '100px' }}></div>
+      </div>
+      {/* END DESKTOP VERSION */}
+
+      {/* MOBILE VERSION - Only visible on mobile */}
+      <div className="md:hidden">
+        {/* Mobile Hero Section */}
+        <section className="px-4 pt-6 pb-8">
+          {/* Logo and Hamburger */}
+          <div className="flex items-center justify-between mb-6">
+            <img src="/prostages-logo.png" alt="ProStagesPermis" className="h-8" />
+            <button className="p-2">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          {/* Title */}
+          <h1 style={{
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '20px',
+            fontWeight: 400,
+            lineHeight: '28px',
+            textAlign: 'center',
+            marginBottom: '12px'
+          }}>
+            Tous les Stages de Récupération de Points au Meilleur Prix
+          </h1>
+
+          {/* Subtitle */}
+          <p style={{
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '14px',
+            fontWeight: 400,
+            lineHeight: '20px',
+            textAlign: 'center',
+            color: 'rgba(0, 0, 0, 0.8)',
+            marginBottom: '20px'
+          }}>
+            Trouvez rapidement un stage et récupérez 4 points
+          </p>
+
+          {/* Search Bar */}
+          <div ref={searchRef} className="relative mb-8">
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '12px 16px',
+              borderRadius: '25px',
+              border: '1px solid #E0E0E0',
+              background: '#FFF'
+            }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M15.75 15.75L12.4875 12.4875M14.25 8.25C14.25 11.5637 11.5637 14.25 8.25 14.25C4.93629 14.25 2.25 11.5637 2.25 8.25C2.25 4.93629 4.93629 2.25 8.25 2.25C11.5637 2.25 14.25 4.93629 14.25 8.25Z" stroke="#727171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleInputChange(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                placeholder="Ville ou code postal"
+                style={{
+                  flex: 1,
+                  border: 'none',
+                  outline: 'none',
+                  background: 'transparent',
+                  fontSize: '14px',
+                  fontFamily: 'var(--font-poppins)',
+                  color: searchQuery ? '#000' : '#949393'
+                }}
+              />
+            </div>
+            {showSuggestions && suggestions.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                {suggestions.map((city, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleCitySelect(city)}
+                    className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm"
+                    style={{ fontFamily: 'var(--font-poppins)' }}
+                  >
+                    {city}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 4 Benefits */}
+          <div className="space-y-3 mb-8">
+            {/* Benefit 1 */}
+            <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none">
+                <path d="M20 36.6667C20 36.6667 33.3333 30 33.3333 20V8.33337L20 3.33337L6.66666 8.33337V20C6.66666 30 20 36.6667 20 36.6667Z" stroke="#C4A226" strokeOpacity="0.96" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 400 }}>
+                Stages Agréés Préfecture
+              </span>
+            </div>
+
+            {/* Benefit 2 */}
+            <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none">
+                <path d="M20 10V20L26.6666 23.3334M36.6666 20C36.6666 29.2048 29.2047 36.6667 20 36.6667C10.7952 36.6667 3.33331 29.2048 3.33331 20C3.33331 10.7953 10.7952 3.33337 20 3.33337C29.2047 3.33337 36.6666 10.7953 36.6666 20Z" stroke="#C4A226" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 400 }}>
+                + 4 points en 48h
+              </span>
+            </div>
+
+            {/* Benefit 3 */}
+            <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none">
+                <g clipPath="url(#clip0_prix_mobile)">
+                  <path d="M38.3334 30L22.5 14.1667L14.1667 22.5L1.66669 10M38.3334 30H28.3334M38.3334 30V20" stroke="#C4A226" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_prix_mobile">
+                    <rect width="40" height="40" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 400 }}>
+                Prix le plus bas garanti
+              </span>
+            </div>
+
+            {/* Benefit 4 */}
+            <div className="flex items-center gap-3 pb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none">
+                <g clipPath="url(#clip0_report_mobile)">
+                  <path d="M1.66663 6.66662V16.6666M1.66663 16.6666H11.6666M1.66663 16.6666L9.39996 9.39996C11.7015 7.10232 14.6874 5.61491 17.9078 5.16182C21.1281 4.70873 24.4085 5.31451 27.2547 6.8879C30.1008 8.46128 32.3586 10.917 33.6877 13.8851C35.0168 16.8532 35.3453 20.1729 34.6237 23.3439C33.902 26.5149 32.1694 29.3655 29.6868 31.4662C27.2043 33.5669 24.1062 34.8039 20.8595 34.9907C17.6128 35.1776 14.3933 34.3042 11.6861 32.5022C8.97885 30.7003 6.93062 28.0673 5.84996 25" stroke="#C4A226" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+                </g>
+                <defs>
+                  <clipPath id="clip0_report_mobile">
+                    <rect width="40" height="40" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 400 }}>
+                Report ou remboursement
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* Prochains stages Section */}
+        <section className="px-4 pb-8">
+          <h2 className="text-center mb-4">
+            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 400 }}>
+              Prochains stages{' '}
+            </span>
+            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 400, color: '#BC4747' }}>
+              proches de chez vous
+            </span>
+          </h2>
+
+          {/* Horizontal Scrollable Cards */}
+          <div className="flex gap-4 overflow-x-auto pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            {/* Card 1 */}
+            <div className="flex-shrink-0 w-[160px]">
+              <div style={{
+                width: '160px',
+                height: '160px',
+                borderRadius: '12px',
+                background: 'url(/widget.png) lightgray 50% / cover no-repeat',
+                marginBottom: '8px'
+              }}></div>
+              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', textAlign: 'center', marginBottom: '4px' }}>
+                5-6 déc
+              </p>
+              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#6A6969', textAlign: 'center', marginBottom: '4px' }}>
+                Marseille
+              </p>
+              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#BC4747', textAlign: 'center', marginBottom: '8px' }}>
+                210 €
+              </p>
+              <button style={{
+                width: '100%',
+                padding: '8px',
+                borderRadius: '12px',
+                background: '#41A334',
+                border: 'none',
+                color: '#FFF',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '11px'
+              }}>
+                Voir ce stage
+              </button>
+            </div>
+
+            {/* Card 2 */}
+            <div className="flex-shrink-0 w-[160px]">
+              <div style={{
+                width: '160px',
+                height: '160px',
+                borderRadius: '12px',
+                background: 'url(/widget.png) lightgray 50% / cover no-repeat',
+                marginBottom: '8px'
+              }}></div>
+              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', textAlign: 'center', marginBottom: '4px' }}>
+                6-6 déc
+              </p>
+              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#6A6969', textAlign: 'center', marginBottom: '4px' }}>
+                Marseille
+              </p>
+              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#BC4747', textAlign: 'center', marginBottom: '8px' }}>
+                210 €
+              </p>
+              <button style={{
+                width: '100%',
+                padding: '8px',
+                borderRadius: '12px',
+                background: '#41A334',
+                border: 'none',
+                color: '#FFF',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '11px'
+              }}>
+                Voir ce stage
+              </button>
+            </div>
+
+            {/* Card 3 */}
+            <div className="flex-shrink-0 w-[160px]">
+              <div style={{
+                width: '160px',
+                height: '160px',
+                borderRadius: '12px',
+                background: 'url(/widget.png) lightgray 50% / cover no-repeat',
+                marginBottom: '8px'
+              }}></div>
+              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', textAlign: 'center', marginBottom: '4px' }}>
+                8-9 déc
+              </p>
+              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#6A6969', textAlign: 'center', marginBottom: '4px' }}>
+                Nice
+              </p>
+              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#BC4747', textAlign: 'center', marginBottom: '8px' }}>
+                189 €
+              </p>
+              <button style={{
+                width: '100%',
+                padding: '8px',
+                borderRadius: '12px',
+                background: '#41A334',
+                border: 'none',
+                color: '#FFF',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '11px'
+              }}>
+                Voir ce stage
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Pourquoi réserver Section */}
+        <section className="px-4 pb-8">
+          <div style={{
+            borderRadius: '20px',
+            background: '#F5F5F5',
+            padding: '24px',
+            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)'
+          }}>
+            <h2 style={{
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '18px',
+              fontWeight: 400,
+              textAlign: 'center',
+              marginBottom: '8px'
+            }}>
+              Pourquoi réserver votre stage chez
+            </h2>
+            <h3 style={{
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '18px',
+              fontWeight: 500,
+              color: '#BC4747',
+              textAlign: 'center',
+              marginBottom: '20px',
+              borderBottom: '2px solid #BC4747',
+              paddingBottom: '8px',
+              display: 'inline-block',
+              width: '100%'
+            }}>
+              ProStagesPermis
+            </h3>
+
+            <div className="space-y-3">
+              {[
+                'Stage officiel agréé préfecture',
+                '+4 points en 48h',
+                'Report ou remboursement en quelques clics sur votre espace client',
+                'Meilleur prix garanti',
+                'Inscription en quelques clics',
+                'Convocation envoyé immédiatement par email après l\'inscription'
+              ].map((text, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0 mt-1">
+                    <rect width="20" height="20" rx="2" fill="#C4A226"/>
+                    <path d="M6 10L9 13L14 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '13px', lineHeight: '18px' }}>
+                    {text}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Europe 1 Section */}
+        <section className="px-4 pb-8">
+          <div className="flex items-center justify-between" style={{ borderBottom: '1px solid #E0E0E0', paddingBottom: '16px' }}>
+            <div className="flex-1">
+              <h3 style={{
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '16px',
+                fontWeight: 500,
+                marginBottom: '8px'
+              }}>
+                Recommandé par Europe 1
+              </h3>
+              <p style={{
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '13px',
+                color: 'rgba(0, 0, 0, 0.7)',
+                lineHeight: '18px',
+                fontStyle: 'italic'
+              }}>
+                ProStagesPermis cité comme site de confiance par Europe 1
+              </p>
+            </div>
+            <div style={{ width: '1px', height: '80px', background: '#000', margin: '0 16px' }}></div>
+            <div className="flex flex-col items-center gap-2">
+              <img src="/europe1-logo.png" alt="Europe 1" className="w-20" />
+              <a href="https://www.youtube.com/watch?v=z1AsmdcGTaw" target="_blank" rel="noopener noreferrer" style={{
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '12px',
+                color: '#BC4747',
+                textDecoration: 'underline'
+              }}>
+                Écouter l'extrait
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Dans quelle situation Section */}
+        <section className="px-4 pb-8">
+          <h2 className="text-center mb-6">
+            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 400 }}>
+              Dans quelle situation{' '}
+            </span>
+            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 400, color: '#BC4747' }}>
+              êtes-vous
+            </span>
+          </h2>
+
+          <div className="space-y-4">
+            {[
+              { title: 'Je viens de commettre une infraction', img: '/widget2.png' },
+              { title: 'Je dois vérifier mes points', img: '/widget2.png' },
+              { title: 'J\'ai reçu une lettre (48n, 48m)', img: '/widget2.png' },
+              { title: 'Je suis en permis probatoire', img: '/widget2.png' }
+            ].map((item, i) => (
+              <div key={i} className="pb-4 border-b border-gray-300">
+                <div className="flex items-center gap-3">
+                  <div style={{
+                    width: '80px',
+                    height: '60px',
+                    borderRadius: '8px',
+                    background: `url(${item.img}) lightgray 50% / cover no-repeat`,
+                    flexShrink: 0
+                  }}></div>
+                  <div>
+                    <p style={{
+                      fontFamily: 'var(--font-poppins)',
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      lineHeight: '20px',
+                      marginBottom: '4px'
+                    }}>
+                      {item.title}
+                    </p>
+                    <a href="#" style={{
+                      fontFamily: 'var(--font-poppins)',
+                      fontSize: '12px',
+                      color: '#BC4747'
+                    }}>
+                      Lire la suite
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Trouver un stage Button */}
+        <section className="px-4 pb-8 flex justify-center">
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            style={{
+              width: '100%',
+              maxWidth: '300px',
+              padding: '16px',
+              borderRadius: '30px',
+              background: '#41A334',
+              border: 'none',
+              color: '#FFF',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '15px',
+              fontWeight: 400,
+              letterSpacing: '0.5px'
+            }}
+          >
+            Trouver un stage près de chez moi
+          </button>
+        </section>
+
+        {/* Avis Clients Google Reviews Section */}
+        <section className="px-4 pb-8">
+          <div className="text-center mb-6">
+            <h2 style={{
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '18px',
+              fontWeight: 400,
+              marginBottom: '4px'
+            }}>
+              Avis <span style={{ color: '#BC4747' }}>Clients</span>
+            </h2>
+            <div style={{
+              width: '120px',
+              height: '2px',
+              background: '#BC4747',
+              margin: '8px auto 16px'
+            }}></div>
+
+            <div className="mb-4">
+              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '20px', fontWeight: 600 }}>Excellent</p>
+              <div className="flex justify-center gap-1 my-2">
+                {[1,2,3,4].map(i => (
+                  <svg key={i} width="24" height="24" viewBox="0 0 24 24" fill="#FFD700">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                  </svg>
+                ))}
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#FFD700"/>
+                  <path d="M12 2V17.77L18.18 21.02L17 14.14L22 9.27L15.09 8.26L12 2Z" fill="#E0E0E0"/>
+                </svg>
+              </div>
+              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#666' }}>
+                4.7/5
+              </p>
+              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '12px', color: '#666' }}>
+                Basé sur <strong>499 avis</strong>
+              </p>
+              <img src="/google-logo.png" alt="Google" className="mx-auto mt-2 h-6" style={{ filter: 'grayscale(0)' }} />
+            </div>
+
+            {/* Review Cards */}
+            <div className="space-y-4 mb-6">
+              {/* Review 1 */}
+              <div style={{
+                background: '#F9F9F9',
+                borderRadius: '12px',
+                padding: '16px',
+                textAlign: 'left'
+              }}>
+                <div className="flex items-center gap-3 mb-2">
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    background: '#4285F4',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#FFF',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '18px',
+                    fontWeight: 600
+                  }}>K</div>
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 500 }}>
+                      Katia rbenrguig
+                    </p>
+                    <div className="flex gap-1">
+                      {[1,2,3,4,5].map(i => (
+                        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#FFD700">
+                          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                        </svg>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p style={{
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '12px',
+                  lineHeight: '18px',
+                  color: '#333'
+                }}>
+                  Bonjour, je vous recommande vivement ProStagesPermis, ont peux y trouver des stages rapidement, pas très loin de chez nous et pas très cher comparé à d'autre.
+                </p>
+              </div>
+
+              {/* Review 2 */}
+              <div style={{
+                background: '#F9F9F9',
+                borderRadius: '12px',
+                padding: '16px',
+                textAlign: 'left'
+              }}>
+                <div className="flex items-center gap-3 mb-2">
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    background: '#0F9D58',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#FFF',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '18px',
+                    fontWeight: 600
+                  }}>J</div>
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 500 }}>
+                      Joe Labaisse
+                    </p>
+                    <div className="flex gap-1">
+                      {[1,2,3,4,5].map(i => (
+                        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#FFD700">
+                          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                        </svg>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p style={{
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '12px',
+                  lineHeight: '18px',
+                  color: '#333'
+                }}>
+                  Merci à vous pour votre compré je recommande pro stage permi
+                  <br/><br/>
+                  Alex
+                </p>
+              </div>
+            </div>
+
+            <a href="#" style={{
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '14px',
+              color: '#BC4747',
+              textDecoration: 'underline',
+              fontWeight: 500
+            }}>
+              Lire les autres avis
+            </a>
+          </div>
+        </section>
+
+        {/* Questions Fréquentes Section */}
+        <section style={{ background: '#F6F6F6', padding: '32px 16px' }}>
+          <h2 className="text-center mb-2">
+            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 400 }}>
+              Questions{' '}
+            </span>
+            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 400, color: '#BC4747' }}>
+              Fréquentes
+            </span>
+          </h2>
+          <p style={{
+            fontFamily: 'var(--font-poppins)',
+            fontSize: '13px',
+            textAlign: 'center',
+            color: '#000',
+            marginBottom: '24px'
+          }}>
+            Réponses aux questions que se posent le plus souvent les conducteurs
+          </p>
+
+          <div className="space-y-4 mb-6">
+            {[0, 1, 2].map(i => (
+              <div key={i}>
+                <div
+                  onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
+                  className="flex justify-between items-center cursor-pointer"
+                >
+                  <p style={{
+                    flex: 1,
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '13px',
+                    lineHeight: '20px'
+                  }}>
+                    A quel moment mes 4 points sont il crédités sur mon permis après un stage
+                  </p>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 25 25"
+                    fill="none"
+                    style={{
+                      flexShrink: 0,
+                      marginLeft: '12px',
+                      transform: openFaqIndex === i ? 'rotate(180deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.2s'
+                    }}
+                  >
+                    <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                {openFaqIndex === i && (
+                  <p style={{
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '12px',
+                    color: '#666',
+                    lineHeight: '18px',
+                    marginTop: '12px'
+                  }}>
+                    Réponse à la question - Texte placeholder pour la réponse détaillée.
+                  </p>
+                )}
+                {i < 2 && <div style={{ height: '1px', background: '#D0D0D0', margin: '16px 0' }} />}
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <a href="#" style={{
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '13px',
+              fontWeight: 500,
+              textDecoration: 'underline'
+            }}>
+              Afficher plus de questions
+            </a>
+          </div>
+        </section>
+      </div>
+      {/* END MOBILE VERSION */}
 
       {/* Footer */}
       <footer className="bg-[#343435] py-6">
