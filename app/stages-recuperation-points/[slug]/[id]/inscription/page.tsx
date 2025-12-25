@@ -60,6 +60,9 @@ export default function InscriptionPage() {
   const [availableStages, setAvailableStages] = useState<Stage[]>([])
   const [loadingStages, setLoadingStages] = useState(false)
 
+  // Details popup state
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
+
   // Mobile-specific states
   const [formValidated, setFormValidated] = useState(false)
   const [paymentBlockVisible, setPaymentBlockVisible] = useState(false)
@@ -211,6 +214,10 @@ export default function InscriptionPage() {
     // Update the URL without reloading the page
     const newUrl = `/stages-recuperation-points/${fullSlug}/${selectedStage.id}/inscription`
     window.history.pushState({}, '', newUrl)
+  }
+
+  const handleDetailsClick = () => {
+    setIsDetailsModalOpen(true)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -937,10 +944,7 @@ export default function InscriptionPage() {
                     fontWeight: '400',
                     lineHeight: '23px'
                   }}>Changer de date</button>
-                  <button onClick={() => {
-                    const card = document.getElementById('mobile-stage-card')
-                    card?.scrollIntoView({ behavior: 'smooth' })
-                  }} style={{
+                  <button onClick={handleDetailsClick} style={{
                     color: '#345FB0',
                     fontFamily: 'Poppins',
                     fontSize: '14px',
@@ -994,10 +998,7 @@ export default function InscriptionPage() {
                   Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
                 </h3>
                 <div className="text-center">
-                  <button onClick={() => {
-                    const card = document.getElementById('mobile-stage-card')
-                    card?.scrollIntoView({ behavior: 'smooth' })
-                  }} style={{
+                  <button onClick={handleDetailsClick} style={{
                     color: '#345FB0',
                     fontFamily: 'Poppins',
                     fontSize: '14px',
@@ -1026,10 +1027,7 @@ export default function InscriptionPage() {
                   Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
                 </h3>
                 <div className="text-center mb-2">
-                  <button onClick={() => {
-                    const card = document.getElementById('mobile-stage-card')
-                    card?.scrollIntoView({ behavior: 'smooth' })
-                  }} style={{
+                  <button onClick={handleDetailsClick} style={{
                     color: '#345FB0',
                     fontFamily: 'Poppins',
                     fontSize: '14px',
@@ -1079,10 +1077,7 @@ export default function InscriptionPage() {
                   Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
                 </h3>
                 <div className="text-center mb-2">
-                  <button onClick={() => {
-                    const card = document.getElementById('mobile-stage-card')
-                    card?.scrollIntoView({ behavior: 'smooth' })
-                  }} style={{
+                  <button onClick={handleDetailsClick} style={{
                     color: '#345FB0',
                     fontFamily: 'Poppins',
                     fontSize: '14px',
@@ -1183,6 +1178,197 @@ export default function InscriptionPage() {
                   onClick={() => setIsDatePopupOpen(false)}
                   className="w-full bg-gray-300 py-2 rounded-lg"
                   style={{ fontSize: '13px' }}
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Details Modal - Bottom Sheet */}
+        {isDetailsModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-end md:hidden" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} onClick={() => setIsDetailsModalOpen(false)}>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="w-full bg-white rounded-t-3xl"
+              style={{ maxHeight: '85vh', display: 'flex', flexDirection: 'column', padding: '24px 16px' }}
+            >
+              {/* Handle bar */}
+              <div className="flex justify-center mb-4">
+                <div style={{ width: '100px', height: '4px', backgroundColor: '#B0B0B0', borderRadius: '2px' }} />
+              </div>
+
+              {/* Scrollable content */}
+              <div className="flex-1 overflow-y-auto">
+                {/* Date header with grey background */}
+                <div className="text-center mb-4" style={{
+                  padding: '12px 16px',
+                  backgroundColor: '#F5F5F5',
+                  borderRadius: '12px'
+                }}>
+                  <h3 style={{
+                    fontFamily: 'Poppins',
+                    fontSize: '18px',
+                    fontWeight: '500',
+                    lineHeight: '28px',
+                    color: '#000'
+                  }}>
+                    Stage {stage && formatDate(stage.date_start, stage.date_end)}
+                  </h3>
+                </div>
+
+                {/* Price */}
+                <div className="text-center mb-2">
+                  <p style={{
+                    fontFamily: 'Poppins',
+                    fontSize: '32px',
+                    fontWeight: '400',
+                    lineHeight: '40px',
+                    color: '#000'
+                  }}>
+                    {stage?.prix}€ TTC
+                  </p>
+                </div>
+
+                {/* Places disponibles */}
+                <div className="text-center mb-4">
+                  <p style={{
+                    fontFamily: 'Poppins',
+                    fontSize: '16px',
+                    fontWeight: '400',
+                    lineHeight: '24px',
+                    color: '#41A334'
+                  }}>
+                    Places disponibles
+                  </p>
+                </div>
+
+                {/* Separator line */}
+                <div style={{ height: '1px', backgroundColor: '#E0E0E0', margin: '16px 0' }} />
+
+                {/* Changer de date */}
+                <div className="flex items-center gap-3 mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="4" width="18" height="18" rx="2" stroke="#4A4A4A" strokeWidth="2" fill="none"/>
+                    <line x1="16" y1="2" x2="16" y2="6" stroke="#4A4A4A" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="8" y1="2" x2="8" y2="6" stroke="#4A4A4A" strokeWidth="2" strokeLinecap="round"/>
+                    <line x1="3" y1="10" x2="21" y2="10" stroke="#4A4A4A" strokeWidth="2"/>
+                  </svg>
+                  <button onClick={handleChangeDateClick} style={{
+                    fontFamily: 'Poppins',
+                    fontSize: '14px',
+                    fontWeight: '400',
+                    lineHeight: '22px',
+                    color: '#345FB0'
+                  }}>
+                    Changer de date
+                  </button>
+                </div>
+
+                {/* Location */}
+                <div className="flex items-start gap-3 mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className="flex-shrink-0 mt-1">
+                    <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="#4A4A4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" stroke="#4A4A4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <p style={{
+                    fontFamily: 'Poppins',
+                    fontSize: '14px',
+                    fontWeight: '400',
+                    lineHeight: '22px',
+                    color: '#4A4A4A'
+                  }}>
+                    {stage && removeStreetNumber(stage.site.adresse)}, {stage?.site.code_postal} {formatCityName(stage?.site.ville || '')}
+                  </p>
+                </div>
+
+                {/* Schedule */}
+                <div className="flex items-center gap-3 mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" stroke="#4A4A4A" strokeWidth="2" fill="none"/>
+                    <path d="M12 6V12L16 14" stroke="#4A4A4A" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                  <p style={{
+                    fontFamily: 'Poppins',
+                    fontSize: '14px',
+                    fontWeight: '400',
+                    lineHeight: '22px',
+                    color: '#4A4A4A'
+                  }}>
+                    08h15-12h30 et 13h30-16h30
+                  </p>
+                </div>
+
+                {/* Agrément */}
+                <div className="flex items-start gap-3 mb-6">
+                  <div className="flex-shrink-0 mt-1" style={{ width: '24px', height: '16px' }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="24" height="16">
+                      <rect width="1" height="2" fill="#002395"/>
+                      <rect x="1" width="1" height="2" fill="#FFFFFF"/>
+                      <rect x="2" width="1" height="2" fill="#ED2939"/>
+                    </svg>
+                  </div>
+                  <p style={{
+                    fontFamily: 'Poppins',
+                    fontSize: '14px',
+                    fontWeight: '400',
+                    lineHeight: '22px',
+                    color: '#4A4A4A'
+                  }}>
+                    Agrément n° 25 R1300600090064<br/>
+                    par la Préfecture des Bouches-du-Rhône
+                  </p>
+                </div>
+
+                {/* Benefits box */}
+                <div style={{
+                  border: '1px solid #D0D0D0',
+                  borderRadius: '12px',
+                  padding: '16px',
+                  marginBottom: '24px'
+                }}>
+                  {[
+                    'Stage officiel agréé Prfecture',
+                    '+4 points en 48h',
+                    'Report ou remboursement en cas d\'imprévu',
+                    'Attestation de stage remise le 2ème jour',
+                    'Paiement 100% sécurisé',
+                    '98,7% de clients satisfaits'
+                  ].map((benefit, index) => (
+                    <div key={index} className="flex items-start gap-3 mb-3 last:mb-0">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0 mt-0.5">
+                        <rect width="20" height="20" rx="4" fill="#F5C842" stroke="#C69A1A" strokeWidth="1"/>
+                        <path d="M6 10L9 13L14 7" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <p style={{
+                        fontFamily: 'Poppins',
+                        fontSize: '14px',
+                        fontWeight: '400',
+                        lineHeight: '22px',
+                        color: '#000'
+                      }}>
+                        {benefit}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Fermer button */}
+              <div className="pt-4">
+                <button
+                  onClick={() => setIsDetailsModalOpen(false)}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    backgroundColor: '#E0E0E0',
+                    borderRadius: '12px',
+                    fontFamily: 'Poppins',
+                    fontSize: '16px',
+                    fontWeight: '400',
+                    color: '#4A4A4A'
+                  }}
                 >
                   Fermer
                 </button>
