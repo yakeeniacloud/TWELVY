@@ -221,41 +221,40 @@ export default function InscriptionPage() {
   }
 
   // Changer de date click in Details modal - close Details and open Date modal
-  const handleChangeDateFromDetails = async (e: React.MouseEvent) => {
+  const handleChangeDateFromDetails = (e: React.MouseEvent) => {
     e.preventDefault()
-    setIsDetailsModalOpen(false) // Close Details modal first
+    e.stopPropagation() // Prevent event bubbling
 
-    // Wait for modal to close, then open date change modal
-    setTimeout(() => {
-      setIsDatePopupOpen(true)
+    // Close Details modal and open Date modal immediately
+    setIsDetailsModalOpen(false)
+    setIsDatePopupOpen(true)
 
-      // Fetch available stages for the same city
-      if (!city) return
+    // Fetch available stages for the same city
+    if (!city) return
 
-      setLoadingStages(true)
-      fetch(`/api/stages/${city}`)
-        .then(response => {
-          if (!response.ok) throw new Error('Failed to fetch stages')
-          return response.json()
-        })
-        .then(data => {
-          let stages = data.stages || []
+    setLoadingStages(true)
+    fetch(`/api/stages/${city}`)
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to fetch stages')
+        return response.json()
+      })
+      .then(data => {
+        let stages = data.stages || []
 
-          // Filter future stages and sort by date
-          const today = new Date()
-          const todayStr = today.toISOString().split('T')[0]
-          stages = stages.filter((s: Stage) => s.date_start >= todayStr)
-          stages.sort((a: Stage, b: Stage) => a.date_start.localeCompare(b.date_start))
+        // Filter future stages and sort by date
+        const today = new Date()
+        const todayStr = today.toISOString().split('T')[0]
+        stages = stages.filter((s: Stage) => s.date_start >= todayStr)
+        stages.sort((a: Stage, b: Stage) => a.date_start.localeCompare(b.date_start))
 
-          setAvailableStages(stages)
-        })
-        .catch(error => {
-          console.error('Error fetching stages:', error)
-        })
-        .finally(() => {
-          setLoadingStages(false)
-        })
-    }, 300) // Wait 300ms for close animation
+        setAvailableStages(stages)
+      })
+      .catch(error => {
+        console.error('Error fetching stages:', error)
+      })
+      .finally(() => {
+        setLoadingStages(false)
+      })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
