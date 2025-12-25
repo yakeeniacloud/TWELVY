@@ -1382,7 +1382,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Fermer button */}
-              <div className="pt-4">
+              <div className="pt-4 flex justify-center">
                 <button
                   onClick={() => setIsDetailsModalOpen(false)}
                   style={{
@@ -1395,7 +1395,6 @@ export default function InscriptionPage() {
                     flexShrink: 0,
                     borderRadius: '12px',
                     background: '#E0E0E0',
-                    width: '100%',
                     color: '#000',
                     fontFamily: 'Poppins',
                     fontSize: '15px',
