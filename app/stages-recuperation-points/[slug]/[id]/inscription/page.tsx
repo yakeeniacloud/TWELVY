@@ -1312,8 +1312,8 @@ export default function InscriptionPage() {
                           marginRight: 'auto'
                         }}
                       >
-                        {/* Left: Date and Time */}
-                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0', position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }}>
+                        {/* Left: Date, Time, Pin + Location */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0', position: 'absolute', left: '12px', top: '12px' }}>
                           {/* Date */}
                           <p style={{
                             display: 'flex',
@@ -1348,10 +1348,12 @@ export default function InscriptionPage() {
                           }}>
                             8h15-12h30 / 13h30-16h30
                           </p>
-                        </div>
 
-                        {/* Center: Location Pin + City + Address */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'absolute', left: '12px', bottom: '12px' }}>
+                          {/* Small spacing */}
+                          <div style={{ height: '4px' }} />
+
+                          {/* Pin + City + Address */}
+                          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
                           {/* Map Pin Icon */}
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ width: '20px', height: '20px', flexShrink: 0 }}>
                             <g clipPath="url(#clip0_3_103)">
@@ -1402,6 +1404,7 @@ export default function InscriptionPage() {
                             }}>
                               {removeStreetNumber(stageItem.site.adresse)}
                             </p>
+                          </div>
                           </div>
                         </div>
 
