@@ -220,6 +220,32 @@ export default function InscriptionPage() {
     setIsDetailsModalOpen(true)
   }
 
+  // Swipe down to dismiss Details modal
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientY)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientY)
+  }
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd < -50) {
+      // Swiped down (threshold: 50px)
+      setIsDetailsModalOpen(false)
+    }
+  }
+
+  // Update Changer de date click in Details modal to close Details and open Date modal
+  const handleChangeDateFromDetails = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    setIsDetailsModalOpen(false) // Close Details modal first
+    handleChangeDateClick(e) // Then open Date change modal
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -1192,6 +1218,9 @@ export default function InscriptionPage() {
           <div className="fixed inset-0 z-50 flex items-end md:hidden" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} onClick={() => setIsDetailsModalOpen(false)}>
             <div
               onClick={(e) => e.stopPropagation()}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
               className="w-full bg-white rounded-t-3xl"
               style={{ maxHeight: '85vh', display: 'flex', flexDirection: 'column', padding: '24px 16px' }}
             >
@@ -1264,7 +1293,7 @@ export default function InscriptionPage() {
                       </clipPath>
                     </defs>
                   </svg>
-                  <button onClick={handleChangeDateClick} style={{
+                  <button onClick={handleChangeDateFromDetails} style={{
                     fontFamily: 'Poppins',
                     fontSize: '14px',
                     fontWeight: '400',
