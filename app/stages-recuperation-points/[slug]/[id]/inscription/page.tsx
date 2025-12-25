@@ -439,6 +439,7 @@ export default function InscriptionPage() {
               height: '42px',
               color: 'rgba(89, 86, 86, 0.86)',
               fontFamily: 'Poppins',
+              fontStyle: 'normal',
               fontWeight: '400',
               lineHeight: '21px'
             }}>
@@ -1221,11 +1222,13 @@ export default function InscriptionPage() {
                 {/* Price */}
                 <div className="text-center mb-2">
                   <p style={{
+                    color: 'rgba(0, 0, 0, 0.86)',
+                    textAlign: 'center',
                     fontFamily: 'Poppins',
-                    fontSize: '32px',
+                    fontSize: '26px',
+                    fontStyle: 'normal',
                     fontWeight: '400',
-                    lineHeight: '40px',
-                    color: '#000'
+                    lineHeight: '35px'
                   }}>
                     {stage?.prix}€ TTC
                   </p>
@@ -1234,11 +1237,13 @@ export default function InscriptionPage() {
                 {/* Places disponibles */}
                 <div className="text-center mb-4">
                   <p style={{
+                    color: 'rgba(38, 126, 28, 0.95)',
+                    textAlign: 'center',
                     fontFamily: 'Poppins',
-                    fontSize: '16px',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
                     fontWeight: '400',
-                    lineHeight: '24px',
-                    color: '#41A334'
+                    lineHeight: '25px'
                   }}>
                     Places disponibles
                   </p>
@@ -1249,11 +1254,15 @@ export default function InscriptionPage() {
 
                 {/* Changer de date */}
                 <div className="flex items-center gap-3 mb-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <rect x="3" y="4" width="18" height="18" rx="2" stroke="#4A4A4A" strokeWidth="2" fill="none"/>
-                    <line x1="16" y1="2" x2="16" y2="6" stroke="#4A4A4A" strokeWidth="2" strokeLinecap="round"/>
-                    <line x1="8" y1="2" x2="8" y2="6" stroke="#4A4A4A" strokeWidth="2" strokeLinecap="round"/>
-                    <line x1="3" y1="10" x2="21" y2="10" stroke="#4A4A4A" strokeWidth="2"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0 }}>
+                    <g clipPath="url(#clip0_1_23)">
+                      <path d="M13.3333 1.66667V5.00001M6.66667 1.66667V5.00001M2.5 8.33334H17.5M4.16667 3.33334H15.8333C16.7538 3.33334 17.5 4.07953 17.5 5.00001V16.6667C17.5 17.5871 16.7538 18.3333 15.8333 18.3333H4.16667C3.24619 18.3333 2.5 17.5871 2.5 16.6667V5.00001C2.5 4.07953 3.24619 3.33334 4.16667 3.33334Z" stroke="#595656" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_1_23">
+                        <rect width="20" height="20" fill="white"/>
+                      </clipPath>
+                    </defs>
                   </svg>
                   <button onClick={handleChangeDateClick} style={{
                     fontFamily: 'Poppins',
@@ -1268,9 +1277,9 @@ export default function InscriptionPage() {
 
                 {/* Location */}
                 <div className="flex items-start gap-3 mb-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className="flex-shrink-0 mt-1">
-                    <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="#4A4A4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" stroke="#4A4A4A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
+                    <path d="M21.875 10.4167C21.875 17.7083 12.5 23.9583 12.5 23.9583C12.5 23.9583 3.125 17.7083 3.125 10.4167C3.125 7.93027 4.11272 5.5457 5.87087 3.78755C7.62903 2.02939 10.0136 1.04167 12.5 1.04167C14.9864 1.04167 17.371 2.02939 19.1291 3.78755C20.8873 5.5457 21.875 7.93027 21.875 10.4167Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12.5 13.5417C14.2259 13.5417 15.625 12.1426 15.625 10.4167C15.625 8.69078 14.2259 7.29167 12.5 7.29167C10.7741 7.29167 9.375 8.69078 9.375 10.4167C9.375 12.1426 10.7741 13.5417 12.5 13.5417Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   <p style={{
                     fontFamily: 'Poppins',
@@ -1285,9 +1294,22 @@ export default function InscriptionPage() {
 
                 {/* Schedule */}
                 <div className="flex items-center gap-3 mb-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <circle cx="12" cy="12" r="10" stroke="#4A4A4A" strokeWidth="2" fill="none"/>
-                    <path d="M12 6V12L16 14" stroke="#4A4A4A" strokeWidth="2" strokeLinecap="round"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 28 27" fill="none" style={{ flexShrink: 0 }}>
+                    <g filter="url(#filter0_d_1_31)">
+                      <path d="M12.5 6.25001V12.5L16.6667 14.5833M22.9167 12.5C22.9167 18.253 18.253 22.9167 12.5 22.9167C6.74703 22.9167 2.08333 18.253 2.08333 12.5C2.08333 6.74704 6.74703 2.08334 12.5 2.08334C18.253 2.08334 22.9167 6.74704 22.9167 12.5Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </g>
+                    <defs>
+                      <filter id="filter0_d_1_31" x="-4" y="0" width="33" height="33" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                        <feOffset dy="4"/>
+                        <feGaussianBlur stdDeviation="2"/>
+                        <feComposite in2="hardAlpha" operator="out"/>
+                        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_31"/>
+                        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_31" result="shape"/>
+                      </filter>
+                    </defs>
                   </svg>
                   <p style={{
                     fontFamily: 'Poppins',
@@ -1302,13 +1324,16 @@ export default function InscriptionPage() {
 
                 {/* Agrément */}
                 <div className="flex items-start gap-3 mb-6">
-                  <div className="flex-shrink-0 mt-1" style={{ width: '24px', height: '16px' }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 2" width="24" height="16">
-                      <rect width="1" height="2" fill="#002395"/>
-                      <rect x="1" width="1" height="2" fill="#FFFFFF"/>
-                      <rect x="2" width="1" height="2" fill="#ED2939"/>
-                    </svg>
-                  </div>
+                  <img
+                    src="/flag.png"
+                    alt="Drapeau français"
+                    style={{
+                      height: '16.636px',
+                      alignSelf: 'stretch',
+                      aspectRatio: '25.00/16.64',
+                      flexShrink: 0
+                    }}
+                  />
                   <p style={{
                     fontFamily: 'Poppins',
                     fontSize: '14px',
@@ -1337,9 +1362,8 @@ export default function InscriptionPage() {
                     '98,7% de clients satisfaits'
                   ].map((benefit, index) => (
                     <div key={index} className="flex items-start gap-3 mb-3 last:mb-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0 mt-0.5">
-                        <rect width="20" height="20" rx="4" fill="#F5C842" stroke="#C69A1A" strokeWidth="1"/>
-                        <path d="M6 10L9 13L14 7" stroke="#000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
+                        <path d="M9.375 11.4583L12.5 14.5833L22.9167 4.16667M21.875 12.5V19.7917C21.875 20.3442 21.6555 20.8741 21.2648 21.2648C20.8741 21.6555 20.3442 21.875 19.7917 21.875H5.20833C4.6558 21.875 4.12589 21.6555 3.73519 21.2648C3.34449 20.8741 3.125 20.3442 3.125 19.7917V5.20833C3.125 4.6558 3.34449 4.12589 3.73519 3.73519C4.12589 3.34449 4.6558 3.125 5.20833 3.125H16.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                       <p style={{
                         fontFamily: 'Poppins',
@@ -1360,14 +1384,23 @@ export default function InscriptionPage() {
                 <button
                   onClick={() => setIsDetailsModalOpen(false)}
                   style={{
-                    width: '100%',
-                    padding: '12px',
-                    backgroundColor: '#E0E0E0',
+                    display: 'flex',
+                    height: '44px',
+                    padding: '7px 15px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '20px',
+                    flexShrink: 0,
                     borderRadius: '12px',
+                    background: '#E0E0E0',
+                    width: '100%',
+                    color: '#000',
                     fontFamily: 'Poppins',
-                    fontSize: '16px',
-                    fontWeight: '400',
-                    color: '#4A4A4A'
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: '300',
+                    lineHeight: 'normal',
+                    letterSpacing: '1.05px'
                   }}
                 >
                   Fermer
