@@ -437,11 +437,11 @@ export default function InscriptionPage() {
               fontSize: '14px',
               width: '265px',
               height: '42px',
-              color: 'rgba(89, 86, 86, 0.86)',
+              color: '#4A4A4A',
               fontFamily: 'Poppins',
               fontStyle: 'normal',
               fontWeight: '400',
-              lineHeight: '21px'
+              lineHeight: '22px'
             }}>
               Agrément n° 25 R130060090064 par la Préfecture des Bouches-du-Rhône
             </p>
@@ -1253,7 +1253,7 @@ export default function InscriptionPage() {
                 <div style={{ height: '1px', backgroundColor: '#E0E0E0', margin: '16px 0' }} />
 
                 {/* Changer de date */}
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-3 mb-4" style={{ marginLeft: '40px' }}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ flexShrink: 0 }}>
                     <g clipPath="url(#clip0_1_23)">
                       <path d="M13.3333 1.66667V5.00001M6.66667 1.66667V5.00001M2.5 8.33334H17.5M4.16667 3.33334H15.8333C16.7538 3.33334 17.5 4.07953 17.5 5.00001V16.6667C17.5 17.5871 16.7538 18.3333 15.8333 18.3333H4.16667C3.24619 18.3333 2.5 17.5871 2.5 16.6667V5.00001C2.5 4.07953 3.24619 3.33334 4.16667 3.33334Z" stroke="#595656" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -1276,7 +1276,7 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* Location */}
-                <div className="flex items-start gap-3 mb-4">
+                <div className="flex items-start gap-3 mb-4" style={{ marginLeft: '40px' }}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
                     <path d="M21.875 10.4167C21.875 17.7083 12.5 23.9583 12.5 23.9583C12.5 23.9583 3.125 17.7083 3.125 10.4167C3.125 7.93027 4.11272 5.5457 5.87087 3.78755C7.62903 2.02939 10.0136 1.04167 12.5 1.04167C14.9864 1.04167 17.371 2.02939 19.1291 3.78755C20.8873 5.5457 21.875 7.93027 21.875 10.4167Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M12.5 13.5417C14.2259 13.5417 15.625 12.1426 15.625 10.4167C15.625 8.69078 14.2259 7.29167 12.5 7.29167C10.7741 7.29167 9.375 8.69078 9.375 10.4167C9.375 12.1426 10.7741 13.5417 12.5 13.5417Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -1293,7 +1293,7 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* Schedule */}
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-3 mb-4" style={{ marginLeft: '40px' }}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 28 27" fill="none" style={{ flexShrink: 0 }}>
                     <g filter="url(#filter0_d_1_31)">
                       <path d="M12.5 6.25001V12.5L16.6667 14.5833M22.9167 12.5C22.9167 18.253 18.253 22.9167 12.5 22.9167C6.74703 22.9167 2.08333 18.253 2.08333 12.5C2.08333 6.74704 6.74703 2.08334 12.5 2.08334C18.253 2.08334 22.9167 6.74704 22.9167 12.5Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -1323,7 +1323,7 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* Agrément */}
-                <div className="flex items-start gap-3 mb-6">
+                <div className="flex items-start gap-3 mb-6" style={{ marginLeft: '40px' }}>
                   <img
                     src="/flag.png"
                     alt="Drapeau français"
@@ -1331,7 +1331,9 @@ export default function InscriptionPage() {
                       height: '16.636px',
                       alignSelf: 'stretch',
                       aspectRatio: '25.00/16.64',
-                      flexShrink: 0
+                      flexShrink: 0,
+                      borderRadius: '10px',
+                      objectFit: 'cover'
                     }}
                   />
                   <p style={{
