@@ -1150,72 +1150,271 @@ export default function InscriptionPage() {
 
         {/* Mobile Date Change Modal - Bottom Sheet */}
         {isDatePopupOpen && (
-          <div className="fixed inset-0 z-50 flex items-end" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} onClick={() => setIsDatePopupOpen(false)}>
+          <div className="fixed inset-0 z-50 flex items-end md:hidden" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} onClick={() => setIsDatePopupOpen(false)}>
             <div
               onClick={(e) => e.stopPropagation()}
               className="w-full bg-white rounded-t-3xl"
-              style={{ height: '90vh', display: 'flex', flexDirection: 'column' }}
+              style={{ maxHeight: '90vh', display: 'flex', flexDirection: 'column', padding: '24px 16px' }}
             >
-              {/* Header */}
-              <div className="px-3 py-3 border-b">
-                <h3 className="text-center font-medium" style={{ fontSize: '15px' }}>Les stages à {formatCityName(city)}</h3>
-                <p className="text-center text-gray-600 mt-0.5" style={{ fontSize: '11px' }}>Choisissez une autre date pour votre stage</p>
+              {/* Handle bar */}
+              <div className="flex justify-center mb-4">
+                <div style={{ width: '100px', height: '4px', backgroundColor: '#B0B0B0', borderRadius: '2px' }} />
+              </div>
 
-                {/* Current stage badge */}
+              {/* Header Content */}
+              <div style={{ flexShrink: 0, marginBottom: '16px' }}>
+                {/* Title */}
+                <h2 style={{
+                  color: '#333',
+                  textAlign: 'center',
+                  fontFamily: 'Poppins',
+                  fontSize: '18px',
+                  fontWeight: '500',
+                  lineHeight: '28px',
+                  margin: '0 auto 8px auto'
+                }}>
+                  Les stages à {formatCityName(city)}
+                </h2>
+
+                {/* Subtitle */}
+                <p style={{
+                  color: '#4E4E4E',
+                  textAlign: 'center',
+                  fontFamily: 'Poppins',
+                  fontSize: '12px',
+                  fontStyle: 'italic',
+                  fontWeight: '400',
+                  lineHeight: '18px',
+                  margin: '0 auto 16px auto'
+                }}>
+                  Choisissez une autre date pour votre stage. Les informations déjà saisies sont conservées
+                </p>
+
+                {/* Current Stage Badge */}
                 {stage && (
-                  <div className="bg-gray-100 rounded-lg p-1.5 mt-2 text-center" style={{ fontSize: '11px' }}>
-                    Stage actuel : {formatDate(stage.date_start, stage.date_end)} - {stage.prix}€
+                  <div style={{
+                    display: 'flex',
+                    padding: '8px 16px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: '10px',
+                    background: '#F5F5F5',
+                    margin: '0 auto 16px auto',
+                    maxWidth: '100%'
+                  }}>
+                    <p style={{
+                      color: '#000',
+                      textAlign: 'center',
+                      fontFamily: 'Poppins',
+                      fontSize: '13px',
+                      fontWeight: '400',
+                      lineHeight: '20px',
+                      margin: 0
+                    }}>
+                      Stage actuel : {formatDate(stage.date_start, stage.date_end)} - {stage.prix}€
+                    </p>
                   </div>
                 )}
+
+                {/* Liste des stages label */}
+                <p style={{
+                  color: '#4E4E4E',
+                  fontFamily: 'Poppins',
+                  fontSize: '13px',
+                  fontWeight: '400',
+                  lineHeight: '20px',
+                  textDecoration: 'underline',
+                  margin: '24px 0 8px 0'
+                }}>
+                  Liste des stages :
+                </p>
               </div>
 
               {/* Scrollable stage list */}
-              <div className="flex-1 overflow-y-auto px-3 py-3">
+              <div className="flex-1 overflow-y-auto" style={{ marginBottom: '16px' }}>
                 {loadingStages ? (
-                  <p className="text-center text-gray-600" style={{ fontSize: '12px' }}>Chargement...</p>
+                  <p style={{ textAlign: 'center', color: '#666', fontFamily: 'Poppins', fontSize: '13px' }}>Chargement...</p>
                 ) : (
                   availableStages.map((stageItem) => {
                     const isCurrentStage = stage && stageItem.id === stage.id
                     return (
-                      <div
+                      <article
                         key={stageItem.id}
-                        onClick={() => !isCurrentStage && handleStageSelect(stageItem)}
-                        className={`border rounded-lg p-2 mb-2 ${isCurrentStage ? 'border-red-400 bg-red-50' : 'border-gray-300'} cursor-pointer`}
+                        style={{
+                          display: 'flex',
+                          width: '100%',
+                          marginBottom: '12px',
+                          borderRadius: '10px',
+                          border: isCurrentStage ? '1px solid #BC4747' : '1px solid #BBB',
+                          backgroundColor: isCurrentStage ? '#F2DDDD' : 'white',
+                          boxShadow: '0 4px 10px 0 rgba(0,0,0,0.15)',
+                          height: '75px',
+                          padding: '8px',
+                          position: 'relative'
+                        }}
                       >
-                        <div className="flex justify-between items-start mb-1.5">
-                          <div>
-                            <p className="font-medium" style={{ fontSize: '12px' }}>{formatDate(stageItem.date_start, stageItem.date_end)}</p>
-                            <p className="text-gray-600" style={{ fontSize: '10px' }}>8h15-12h30 / 13h30-16h30</p>
+                        {/* Left: Date and Time */}
+                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px', marginLeft: '8px', width: '140px' }}>
+                          {/* Date */}
+                          <p style={{
+                            color: 'rgba(0,0,0,0.89)',
+                            fontFamily: 'Poppins',
+                            fontSize: '12px',
+                            fontWeight: '500',
+                            lineHeight: '14px',
+                            whiteSpace: 'nowrap',
+                            margin: 0
+                          }}>
+                            {formatDate(stageItem.date_start, stageItem.date_end)}
+                          </p>
+                          {/* Time */}
+                          <p style={{
+                            color: 'rgba(66, 66, 66, 0.86)',
+                            fontFamily: 'Poppins',
+                            fontSize: '10px',
+                            fontWeight: '400',
+                            lineHeight: '14px',
+                            whiteSpace: 'nowrap',
+                            margin: 0
+                          }}>
+                            8h15-12h30 / 13h30-16h30
+                          </p>
+                        </div>
+
+                        {/* Center: Location Pin + City + Address */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', position: 'absolute', left: '150px', top: '50%', transform: 'translateY(-50%)' }}>
+                          <div style={{
+                            display: 'flex',
+                            width: '28px',
+                            height: '28px',
+                            padding: '6px',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: '50%',
+                            background: '#E5E5E5',
+                            flexShrink: 0
+                          }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" style={{ width: '16px', height: '16px', flexShrink: 0 }}>
+                              <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
                           </div>
-                          <div className="text-right">
-                            {isCurrentStage && <p className="text-blue-600 mb-0.5" style={{ fontSize: '10px' }}>Stage sélectionné</p>}
-                            <p className="font-semibold" style={{ fontSize: '16px' }}>{stageItem.prix}€</p>
+                          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2px' }}>
+                            <p style={{
+                              color: 'rgba(0,0,0,0.98)',
+                              fontFamily: 'Poppins',
+                              fontSize: '11px',
+                              fontWeight: '400',
+                              lineHeight: '12px',
+                              margin: 0
+                            }}>
+                              {stageItem.site.ville}
+                            </p>
+                            <p style={{
+                              color: 'rgba(6,6,6,0.56)',
+                              fontFamily: 'Poppins',
+                              fontSize: '9px',
+                              fontWeight: '400',
+                              lineHeight: '10px',
+                              margin: 0
+                            }}>
+                              {removeStreetNumber(stageItem.site.adresse)}
+                            </p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1.5 text-gray-700">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
-                            <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                          <p style={{ fontSize: '11px' }}>{stageItem.site.ville}</p>
+
+                        {/* Right side container */}
+                        <div style={{
+                          position: 'absolute',
+                          right: '10px',
+                          top: isCurrentStage ? '4px' : '8px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          gap: isCurrentStage ? '2px' : '4px'
+                        }}>
+                          {/* "Stage sélectionné" badge for current stage */}
+                          {isCurrentStage && (
+                            <div style={{
+                              color: '#336FF0',
+                              fontFamily: 'Poppins',
+                              fontSize: '9px',
+                              fontWeight: '400',
+                              textAlign: 'center',
+                              marginBottom: '0px'
+                            }}>
+                              Stage sélectionné
+                            </div>
+                          )}
+
+                          {/* Price */}
+                          <div style={{
+                            color: 'rgba(6,6,6,0.86)',
+                            fontFamily: 'Poppins',
+                            fontSize: '16px',
+                            fontWeight: '400',
+                            lineHeight: '1',
+                            textAlign: 'center'
+                          }}>
+                            {stageItem.prix}€
+                          </div>
+
+                          {/* Green Button */}
+                          {!isCurrentStage && (
+                            <button
+                              onClick={() => handleStageSelect(stageItem)}
+                              style={{
+                                display: 'flex',
+                                width: '100px',
+                                height: '26px',
+                                padding: '5px',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: '12px',
+                                background: '#41A334',
+                                border: 'none',
+                                color: 'white',
+                                fontFamily: 'Poppins',
+                                fontSize: '10px',
+                                fontWeight: '400',
+                                cursor: 'pointer',
+                                marginTop: '3px'
+                              }}
+                            >
+                              Choisir cette date
+                            </button>
+                          )}
                         </div>
-                        {!isCurrentStage && (
-                          <button className="w-full bg-green-600 text-white py-1.5 rounded-lg mt-1.5" style={{ fontSize: '12px' }}>
-                            Choisir cette date
-                          </button>
-                        )}
-                      </div>
+                      </article>
                     )
                   })
                 )}
               </div>
 
-              {/* Close button */}
-              <div className="px-3 py-3 border-t">
+              {/* Fermer button */}
+              <div className="pt-4 flex justify-center">
                 <button
                   onClick={() => setIsDatePopupOpen(false)}
-                  className="w-full bg-gray-300 py-2 rounded-lg"
-                  style={{ fontSize: '13px' }}
+                  style={{
+                    display: 'flex',
+                    height: '44px',
+                    padding: '7px 15px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '20px',
+                    flexShrink: 0,
+                    borderRadius: '12px',
+                    background: '#E0E0E0',
+                    color: '#000',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: '300',
+                    lineHeight: 'normal',
+                    letterSpacing: '1.05px',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
                 >
                   Fermer
                 </button>
