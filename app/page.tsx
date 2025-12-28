@@ -1388,75 +1388,71 @@ export default function Home() {
         </header>
 
         {/* Sticky Search Bar */}
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 9999,
-          background: '#FFF',
-          borderBottom: '1px solid #E0E0E0',
-          padding: '8px 16px',
-          display: 'flex',
-          justifyContent: 'center',
-          transform: showStickySearch ? 'translateY(0)' : 'translateY(-100%)',
-          transition: 'transform 0.3s ease-in-out',
-          willChange: 'transform',
-          WebkitTransform: showStickySearch ? 'translateY(0)' : 'translateY(-100%)',
-          WebkitTransition: 'transform 0.3s ease-in-out',
-          backfaceVisibility: 'hidden',
-          WebkitBackfaceVisibility: 'hidden',
-          pointerEvents: showStickySearch ? 'auto' : 'none'
-        }}>
-          <div className="relative" style={{ width: '283px' }}>
-            <div style={{
-              display: 'flex',
-              width: '283px',
-              height: '36px',
-              padding: '1px 20px',
-              alignItems: 'center',
-              gap: '15px',
-              flexShrink: 0,
-              borderRadius: '20px',
-              border: '1px solid #989898',
-              background: 'linear-gradient(0deg, rgba(176, 175, 175, 0.20) 0%, rgba(176, 175, 175, 0.20) 100%), #FFF'
-            }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M15.75 15.75L12.4875 12.4875M14.25 8.25C14.25 11.5637 11.5637 14.25 8.25 14.25C4.93629 14.25 2.25 11.5637 2.25 8.25C2.25 4.93629 4.93629 2.25 8.25 2.25C11.5637 2.25 14.25 4.93629 14.25 8.25Z" stroke="#727171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => handleInputChange(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                placeholder="Ville ou code postal"
-                style={{
-                  flex: 1,
-                  border: 'none',
-                  outline: 'none',
-                  background: 'transparent',
-                  fontSize: '14px',
-                  fontFamily: 'var(--font-poppins)',
-                  color: searchQuery ? '#000' : '#949393'
-                }}
-              />
-            </div>
-            {showSuggestions && suggestions.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-                {suggestions.map((city, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleCitySelect(city)}
-                    className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm"
-                    style={{ fontFamily: 'var(--font-poppins)' }}
-                  >
-                    {city}
-                  </button>
-                ))}
+        {showStickySearch && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
+            background: '#FFF',
+            borderBottom: '1px solid #E0E0E0',
+            padding: '8px 16px',
+            display: 'flex',
+            justifyContent: 'center',
+            WebkitBackfaceVisibility: 'hidden',
+            backfaceVisibility: 'hidden'
+          }}>
+            <div className="relative" style={{ width: '283px' }}>
+              <div style={{
+                display: 'flex',
+                width: '283px',
+                height: '36px',
+                padding: '1px 20px',
+                alignItems: 'center',
+                gap: '15px',
+                flexShrink: 0,
+                borderRadius: '20px',
+                border: '1px solid #989898',
+                background: 'linear-gradient(0deg, rgba(176, 175, 175, 0.20) 0%, rgba(176, 175, 175, 0.20) 100%), #FFF'
+              }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M15.75 15.75L12.4875 12.4875M14.25 8.25C14.25 11.5637 11.5637 14.25 8.25 14.25C4.93629 14.25 2.25 11.5637 2.25 8.25C2.25 4.93629 4.93629 2.25 8.25 2.25C11.5637 2.25 14.25 4.93629 14.25 8.25Z" stroke="#727171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => handleInputChange(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  placeholder="Ville ou code postal"
+                  style={{
+                    flex: 1,
+                    border: 'none',
+                    outline: 'none',
+                    background: 'transparent',
+                    fontSize: '14px',
+                    fontFamily: 'var(--font-poppins)',
+                    color: searchQuery ? '#000' : '#949393'
+                  }}
+                />
               </div>
-            )}
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
+                  {suggestions.map((city, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleCitySelect(city)}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm"
+                      style={{ fontFamily: 'var(--font-poppins)' }}
+                    >
+                      {city}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
