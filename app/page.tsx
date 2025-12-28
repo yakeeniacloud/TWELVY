@@ -10,6 +10,7 @@ export default function Home() {
   const [suggestions, setSuggestions] = useState<string[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
 
   // Fetch all cities on mount
@@ -1326,19 +1327,87 @@ export default function Home() {
 
       {/* MOBILE VERSION - Only visible on mobile */}
       <div className="md:hidden">
-        {/* Mobile Hero Section */}
-        <section className="px-4 pt-6 pb-8">
-          {/* Logo and Hamburger */}
-          <div className="flex items-center justify-between mb-6">
-            <img src="/prostages-logo.png" alt="ProStagesPermis" className="h-8" />
-            <button className="p-2">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
+        {/* Mobile Header */}
+        <header style={{
+          background: '#FFF',
+          borderBottom: '1px solid #E0E0E0',
+          padding: '12px 16px'
+        }}>
+          <div className="flex items-center justify-between">
+            <img src="/prostages-logo.png" alt="ProStagesPermis" style={{ height: '32px' }} />
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              style={{
+                width: '40px',
+                height: '35px',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 0
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="35" viewBox="0 0 40 35" fill="none">
+                <path d="M35 14.5833H5M35 8.75H5M35 20.4167H5M35 26.25H5" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
           </div>
+        </header>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(0, 0, 0, 0.5)',
+              zIndex: 999
+            }}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <div
+              style={{
+                position: 'fixed',
+                top: 0,
+                right: 0,
+                bottom: 0,
+                width: '280px',
+                background: '#FFF',
+                boxShadow: '-2px 0 8px rgba(0, 0, 0, 0.15)',
+                overflowY: 'auto',
+                padding: '20px'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 500 }}>Menu</h3>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontSize: '24px'
+                  }}
+                >×</button>
+              </div>
+              <nav style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <a href="/qui-sommes-nous" style={{ fontFamily: 'var(--font-poppins)', fontSize: '15px', color: '#333', textDecoration: 'none', padding: '8px 0', borderBottom: '1px solid #E0E0E0' }}>Qui sommes-nous</a>
+                <a href="/aide-et-contact" style={{ fontFamily: 'var(--font-poppins)', fontSize: '15px', color: '#333', textDecoration: 'none', padding: '8px 0', borderBottom: '1px solid #E0E0E0' }}>Aide et contact</a>
+                <a href="/conditions-generales" style={{ fontFamily: 'var(--font-poppins)', fontSize: '15px', color: '#333', textDecoration: 'none', padding: '8px 0', borderBottom: '1px solid #E0E0E0' }}>Conditions générales de vente</a>
+                <a href="/mentions-legales" style={{ fontFamily: 'var(--font-poppins)', fontSize: '15px', color: '#333', textDecoration: 'none', padding: '8px 0', borderBottom: '1px solid #E0E0E0' }}>Mentions légales</a>
+                <a href="/espace-client" style={{ fontFamily: 'var(--font-poppins)', fontSize: '15px', color: '#333', textDecoration: 'none', padding: '8px 0' }}>Espace Client</a>
+              </nav>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Hero Section */}
+        <section className="px-4 pt-6 pb-8">
 
           {/* Title */}
           <h1 style={{
@@ -1366,14 +1435,17 @@ export default function Home() {
           </p>
 
           {/* Search Bar */}
-          <div ref={searchRef} className="relative mb-8">
+          <div ref={searchRef} className="relative mb-8 flex justify-center">
             <div style={{
               display: 'flex',
+              width: '324px',
+              height: '56px',
+              padding: '1px 20px',
               alignItems: 'center',
-              gap: '12px',
-              padding: '12px 16px',
-              borderRadius: '25px',
-              border: '1px solid #E0E0E0',
+              gap: '15px',
+              flexShrink: 0,
+              borderRadius: '20px',
+              border: '1px solid #686868',
               background: '#FFF'
             }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -1412,71 +1484,117 @@ export default function Home() {
             )}
           </div>
 
-          {/* 4 Benefits */}
-          <div className="space-y-3 mb-8">
-            {/* Benefit 1 */}
-            <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none">
-                <path d="M20 36.6667C20 36.6667 33.3333 30 33.3333 20V8.33337L20 3.33337L6.66666 8.33337V20C6.66666 30 20 36.6667 20 36.6667Z" stroke="#C4A226" strokeOpacity="0.96" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 400 }}>
-                Stages Agréés Préfecture
-              </span>
-            </div>
+          {/* 4 Benefits Box */}
+          <div className="flex justify-center mb-8">
+            <div style={{
+              display: 'flex',
+              width: '389px',
+              maxWidth: '100%',
+              height: '259px',
+              padding: '10px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexShrink: 0,
+              background: '#F0F0F0'
+            }}>
+              <div className="space-y-3 w-full px-4">
+                {/* Benefit 1 */}
+                <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none">
+                    <path d="M20 36.6667C20 36.6667 33.3333 30 33.3333 20V8.33337L20 3.33337L6.66666 8.33337V20C6.66666 30 20 36.6667 20 36.6667Z" stroke="#C4A226" strokeOpacity="0.96" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 400 }}>
+                    Stages Agréés Préfecture
+                  </span>
+                </div>
 
-            {/* Benefit 2 */}
-            <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none">
-                <path d="M20 10V20L26.6666 23.3334M36.6666 20C36.6666 29.2048 29.2047 36.6667 20 36.6667C10.7952 36.6667 3.33331 29.2048 3.33331 20C3.33331 10.7953 10.7952 3.33337 20 3.33337C29.2047 3.33337 36.6666 10.7953 36.6666 20Z" stroke="#C4A226" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 400 }}>
-                + 4 points en 48h
-              </span>
-            </div>
+                {/* Benefit 2 */}
+                <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none">
+                    <path d="M20 10V20L26.6666 23.3334M36.6666 20C36.6666 29.2048 29.2047 36.6667 20 36.6667C10.7952 36.6667 3.33331 29.2048 3.33331 20C3.33331 10.7953 10.7952 3.33337 20 3.33337C29.2047 3.33337 36.6666 10.7953 36.6666 20Z" stroke="#C4A226" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 400 }}>
+                    + 4 points en 48h
+                  </span>
+                </div>
 
-            {/* Benefit 3 */}
-            <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none">
-                <g clipPath="url(#clip0_prix_mobile)">
-                  <path d="M38.3334 30L22.5 14.1667L14.1667 22.5L1.66669 10M38.3334 30H28.3334M38.3334 30V20" stroke="#C4A226" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-                </g>
-                <defs>
-                  <clipPath id="clip0_prix_mobile">
-                    <rect width="40" height="40" fill="white"/>
-                  </clipPath>
-                </defs>
-              </svg>
-              <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 400 }}>
-                Prix le plus bas garanti
-              </span>
-            </div>
+                {/* Benefit 3 */}
+                <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none">
+                    <g clipPath="url(#clip0_prix_mobile)">
+                      <path d="M38.3334 30L22.5 14.1667L14.1667 22.5L1.66669 10M38.3334 30H28.3334M38.3334 30V20" stroke="#C4A226" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_prix_mobile">
+                        <rect width="40" height="40" fill="white"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 400 }}>
+                    Prix le plus bas garanti
+                  </span>
+                </div>
 
-            {/* Benefit 4 */}
-            <div className="flex items-center gap-3 pb-3">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none">
-                <g clipPath="url(#clip0_report_mobile)">
-                  <path d="M1.66663 6.66662V16.6666M1.66663 16.6666H11.6666M1.66663 16.6666L9.39996 9.39996C11.7015 7.10232 14.6874 5.61491 17.9078 5.16182C21.1281 4.70873 24.4085 5.31451 27.2547 6.8879C30.1008 8.46128 32.3586 10.917 33.6877 13.8851C35.0168 16.8532 35.3453 20.1729 34.6237 23.3439C33.902 26.5149 32.1694 29.3655 29.6868 31.4662C27.2043 33.5669 24.1062 34.8039 20.8595 34.9907C17.6128 35.1776 14.3933 34.3042 11.6861 32.5022C8.97885 30.7003 6.93062 28.0673 5.84996 25" stroke="#C4A226" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
-                </g>
-                <defs>
-                  <clipPath id="clip0_report_mobile">
-                    <rect width="40" height="40" fill="white"/>
-                  </clipPath>
-                </defs>
-              </svg>
-              <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 400 }}>
-                Report ou remboursement
-              </span>
+                {/* Benefit 4 */}
+                <div className="flex items-center gap-3 pb-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 40 40" fill="none">
+                    <g clipPath="url(#clip0_report_mobile)">
+                      <path d="M1.66663 6.66662V16.6666M1.66663 16.6666H11.6666M1.66663 16.6666L9.39996 9.39996C11.7015 7.10232 14.6874 5.61491 17.9078 5.16182C21.1281 4.70873 24.4085 5.31451 27.2547 6.8879C30.1008 8.46128 32.3586 10.917 33.6877 13.8851C35.0168 16.8532 35.3453 20.1729 34.6237 23.3439C33.902 26.5149 32.1694 29.3655 29.6868 31.4662C27.2043 33.5669 24.1062 34.8039 20.8595 34.9907C17.6128 35.1776 14.3933 34.3042 11.6861 32.5022C8.97885 30.7003 6.93062 28.0673 5.84996 25" stroke="#C4A226" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_report_mobile">
+                        <rect width="40" height="40" fill="white"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 400 }}>
+                    Report ou remboursement
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
         {/* Prochains stages Section */}
         <section className="px-4 pb-8">
-          <h2 className="text-center mb-4">
-            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 400 }}>
+          <h2 className="text-center mb-4 flex justify-center items-center gap-1">
+            <span style={{
+              display: 'flex',
+              width: '167px',
+              height: '28px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              flexShrink: 0,
+              color: 'rgba(6, 6, 6, 0.86)',
+              textAlign: 'center',
+              WebkitTextStrokeWidth: '1px',
+              WebkitTextStrokeColor: '#000',
+              fontFamily: 'Poppins',
+              fontSize: '20px',
+              fontStyle: 'normal',
+              fontWeight: 250,
+              lineHeight: '35px'
+            }}>
               Prochains stages{' '}
             </span>
-            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 400, color: '#BC4747' }}>
+            <span style={{
+              display: 'flex',
+              width: '220px',
+              height: '28px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              flexShrink: 0,
+              color: 'rgba(6, 6, 6, 0.86)',
+              WebkitTextStrokeWidth: '1px',
+              WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)',
+              fontFamily: 'Poppins',
+              fontSize: '20px',
+              fontStyle: 'normal',
+              fontWeight: 250,
+              lineHeight: '35px'
+            }}>
               proches de chez vous
             </span>
           </h2>
