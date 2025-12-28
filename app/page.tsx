@@ -59,13 +59,12 @@ export default function Home() {
       }
     }
 
-    // Run on mount and on scroll
+    // Run on mount and ONLY on scroll (not on resize)
+    // Resize events from Chrome address bar hiding should NOT affect visibility
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('resize', handleScroll, { passive: true })
     return () => {
       window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', handleScroll)
     }
   }, [])
 
@@ -1406,7 +1405,8 @@ export default function Home() {
           WebkitTransform: showStickySearch ? 'translateY(0)' : 'translateY(-100%)',
           WebkitTransition: 'transform 0.3s ease-in-out',
           backfaceVisibility: 'hidden',
-          WebkitBackfaceVisibility: 'hidden'
+          WebkitBackfaceVisibility: 'hidden',
+          pointerEvents: showStickySearch ? 'auto' : 'none'
         }}>
           <div style={{
             display: 'flex',
