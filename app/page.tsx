@@ -45,9 +45,13 @@ export default function Home() {
     function handleScroll() {
       if (heroSearchRef.current) {
         const rect = heroSearchRef.current.getBoundingClientRect()
-        setShowStickySearch(rect.bottom < 0)
+        // Show sticky when the original search bar is not visible on screen
+        // Check if top is above viewport or bottom is above viewport
+        setShowStickySearch(rect.top < 0 || rect.bottom < 0)
       }
     }
+    // Run on mount and on scroll
+    handleScroll()
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -1626,7 +1630,7 @@ export default function Home() {
 
         {/* Prochains stages Section */}
         <section className="px-4 pb-8">
-          <h2 className="text-center mb-4 flex justify-center items-center">
+          <h2 className="text-center mb-4 flex flex-col items-center">
             <span style={{
               color: 'rgba(6, 6, 6, 0.86)',
               textAlign: 'center',
@@ -1639,7 +1643,7 @@ export default function Home() {
               lineHeight: '35px',
               whiteSpace: 'nowrap'
             }}>
-              Prochains stages{' '}
+              Prochains stages
             </span>
             <span style={{
               color: 'rgba(6, 6, 6, 0.86)',
