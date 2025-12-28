@@ -11,7 +11,9 @@ export default function Home() {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [showStickySearch, setShowStickySearch] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
+  const heroSearchRef = useRef<HTMLDivElement>(null)
 
   // Fetch all cities on mount
   useEffect(() => {
@@ -36,6 +38,18 @@ export default function Home() {
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  // Sticky search bar on scroll (mobile only)
+  useEffect(() => {
+    function handleScroll() {
+      if (heroSearchRef.current) {
+        const rect = heroSearchRef.current.getBoundingClientRect()
+        setShowStickySearch(rect.bottom < 0)
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   // Filter cities based on input
@@ -66,6 +80,10 @@ export default function Home() {
       const slug = searchQuery.toUpperCase().replace(/ /g, '-')
       router.push(`/stages-recuperation-points/${slug}`)
     }
+  }
+
+  const scrollToSearch = () => {
+    heroSearchRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 
   return (
@@ -1353,6 +1371,55 @@ export default function Home() {
           </div>
         </header>
 
+        {/* Sticky Search Bar */}
+        {showStickySearch && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 998,
+            background: '#FFF',
+            borderBottom: '1px solid #E0E0E0',
+            padding: '8px 16px',
+            display: 'flex',
+            justifyContent: 'center'
+          }}>
+            <div style={{
+              display: 'flex',
+              width: '283px',
+              height: '36px',
+              padding: '1px 20px',
+              alignItems: 'center',
+              gap: '15px',
+              flexShrink: 0,
+              borderRadius: '20px',
+              border: '1px solid #989898',
+              background: 'linear-gradient(0deg, rgba(176, 175, 175, 0.20) 0%, rgba(176, 175, 175, 0.20) 100%), #FFF'
+            }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M15.75 15.75L12.4875 12.4875M14.25 8.25C14.25 11.5637 11.5637 14.25 8.25 14.25C4.93629 14.25 2.25 11.5637 2.25 8.25C2.25 4.93629 4.93629 2.25 8.25 2.25C11.5637 2.25 14.25 4.93629 14.25 8.25Z" stroke="#727171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleInputChange(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                placeholder="Ville ou code postal"
+                style={{
+                  flex: 1,
+                  border: 'none',
+                  outline: 'none',
+                  background: 'transparent',
+                  fontSize: '14px',
+                  fontFamily: 'var(--font-poppins)',
+                  color: searchQuery ? '#000' : '#949393'
+                }}
+              />
+            </div>
+          </div>
+        )}
+
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
           <div
@@ -1435,8 +1502,8 @@ export default function Home() {
           </p>
 
           {/* Search Bar */}
-          <div ref={searchRef} className="relative mb-8 flex justify-center">
-            <div style={{
+          <div ref={heroSearchRef} className="relative mb-8 flex justify-center">
+            <div ref={searchRef} style={{
               display: 'flex',
               width: '324px',
               height: '56px',
@@ -1559,14 +1626,8 @@ export default function Home() {
 
         {/* Prochains stages Section */}
         <section className="px-4 pb-8">
-          <h2 className="text-center mb-4 flex flex-col items-center">
+          <h2 className="text-center mb-4 flex justify-center items-center">
             <span style={{
-              display: 'flex',
-              width: '167px',
-              height: '28px',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              flexShrink: 0,
               color: 'rgba(6, 6, 6, 0.86)',
               textAlign: 'center',
               WebkitTextStrokeWidth: '1px',
@@ -1575,17 +1636,12 @@ export default function Home() {
               fontSize: '20px',
               fontStyle: 'normal',
               fontWeight: 250,
-              lineHeight: '35px'
+              lineHeight: '35px',
+              whiteSpace: 'nowrap'
             }}>
-              Prochains stages
+              Prochains stages{' '}
             </span>
             <span style={{
-              display: 'flex',
-              width: '220px',
-              height: '28px',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              flexShrink: 0,
               color: 'rgba(6, 6, 6, 0.86)',
               WebkitTextStrokeWidth: '1px',
               WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)',
@@ -1593,7 +1649,8 @@ export default function Home() {
               fontSize: '20px',
               fontStyle: 'normal',
               fontWeight: 250,
-              lineHeight: '35px'
+              lineHeight: '35px',
+              whiteSpace: 'nowrap'
             }}>
               proches de chez vous
             </span>
@@ -1660,7 +1717,7 @@ export default function Home() {
               }}>
                 210 €
               </p>
-              <button style={{
+              <button onClick={scrollToSearch} style={{
                 display: 'flex',
                 width: '103px',
                 height: '31px',
@@ -1685,7 +1742,7 @@ export default function Home() {
                   lineHeight: 'normal',
                   letterSpacing: '0.77px'
                 }}>
-                  voir ce stage
+                  Voir ce stage
                 </span>
               </button>
             </div>
@@ -1749,7 +1806,7 @@ export default function Home() {
               }}>
                 210 €
               </p>
-              <button style={{
+              <button onClick={scrollToSearch} style={{
                 display: 'flex',
                 width: '103px',
                 height: '31px',
@@ -1774,7 +1831,7 @@ export default function Home() {
                   lineHeight: 'normal',
                   letterSpacing: '0.77px'
                 }}>
-                  voir ce stage
+                  Voir ce stage
                 </span>
               </button>
             </div>
@@ -1838,7 +1895,7 @@ export default function Home() {
               }}>
                 189 €
               </p>
-              <button style={{
+              <button onClick={scrollToSearch} style={{
                 display: 'flex',
                 width: '103px',
                 height: '31px',
@@ -1863,7 +1920,7 @@ export default function Home() {
                   lineHeight: 'normal',
                   letterSpacing: '0.77px'
                 }}>
-                  voir ce stage
+                  Voir ce stage
                 </span>
               </button>
             </div>
@@ -1871,38 +1928,72 @@ export default function Home() {
         </section>
 
         {/* Pourquoi réserver Section */}
-        <section className="px-4 pb-8">
+        <section className="flex justify-center px-4 pb-8">
           <div style={{
-            borderRadius: '20px',
-            background: '#F5F5F5',
-            padding: '24px',
-            boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.1)'
+            display: 'flex',
+            width: '340px',
+            height: '391px',
+            padding: '2px 10px',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexShrink: 0,
+            borderRadius: '15px',
+            background: '#F6F6F6',
+            boxShadow: '0 4px 12px 2px rgba(0, 0, 0, 0.20)'
           }}>
-            <h2 style={{
-              fontFamily: 'var(--font-poppins)',
-              fontSize: '18px',
-              fontWeight: 400,
+            <div style={{
+              display: 'flex',
+              height: '59px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              flexShrink: 0,
+              alignSelf: 'stretch',
+              color: '#060606',
               textAlign: 'center',
-              marginBottom: '8px'
+              WebkitTextStrokeWidth: '1px',
+              WebkitTextStrokeColor: '#000',
+              fontFamily: 'Poppins',
+              fontSize: '20px',
+              fontStyle: 'normal',
+              fontWeight: 250,
+              lineHeight: '25px'
             }}>
               Pourquoi réserver votre stage chez
-            </h2>
-            <h3 style={{
-              fontFamily: 'var(--font-poppins)',
-              fontSize: '18px',
-              fontWeight: 500,
-              color: '#BC4747',
+            </div>
+            <div style={{
+              display: 'flex',
+              height: '33px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              flexShrink: 0,
+              alignSelf: 'stretch',
+              color: 'rgba(6, 6, 6, 0.86)',
               textAlign: 'center',
-              marginBottom: '20px',
-              borderBottom: '2px solid #BC4747',
-              paddingBottom: '8px',
-              display: 'inline-block',
-              width: '100%'
+              WebkitTextStrokeWidth: '1px',
+              WebkitTextStrokeColor: 'rgba(188, 71, 71, 0.73)',
+              fontFamily: 'Poppins',
+              fontSize: '20px',
+              fontStyle: 'normal',
+              fontWeight: 250,
+              lineHeight: '35px'
             }}>
-              ProStagesPermis
-            </h3>
+              ProstagePermis
+            </div>
 
-            <div className="space-y-3">
+            <div style={{
+              display: 'flex',
+              width: '228px',
+              padding: '7px 15px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '10px',
+              borderBottom: '2px solid #BC4747',
+              marginBottom: '16px'
+            }}></div>
+
+            <div className="space-y-3 w-full px-4">
               {[
                 'Stage officiel agréé préfecture',
                 '+4 points en 48h',
@@ -1912,9 +2003,8 @@ export default function Home() {
                 'Convocation envoyé immédiatement par email après l\'inscription'
               ].map((text, i) => (
                 <div key={i} className="flex items-start gap-3">
-                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0 mt-1">
-                    <rect width="20" height="20" rx="2" fill="#C4A226"/>
-                    <path d="M6 10L9 13L14 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ flexShrink: 0 }}>
+                    <path d="M8.25 10.0833L11 12.8333L20.1667 3.66667M19.25 11V17.4167C19.25 17.9029 19.0568 18.3692 18.713 18.713C18.3692 19.0568 17.9029 19.25 17.4167 19.25H4.58333C4.0971 19.25 3.63079 19.0568 3.28697 18.713C2.94315 18.3692 2.75 17.9029 2.75 17.4167V4.58333C2.75 4.0971 2.94315 3.63079 3.28697 3.28697C3.63079 2.94315 4.0971 2.75 4.58333 2.75H14.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '13px', lineHeight: '18px' }}>
                     {text}
