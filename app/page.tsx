@@ -14,6 +14,7 @@ export default function Home() {
   const [showStickySearch, setShowStickySearch] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
   const heroSearchRef = useRef<HTMLDivElement>(null)
+  const stickySearchRef = useRef<HTMLDivElement>(null)
 
   // Fetch all cities on mount
   useEffect(() => {
@@ -32,7 +33,10 @@ export default function Home() {
   // Click outside to close suggestions
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (heroSearchRef.current && !heroSearchRef.current.contains(event.target as Node)) {
+      const clickedInsideHero = heroSearchRef.current && heroSearchRef.current.contains(event.target as Node)
+      const clickedInsideSticky = stickySearchRef.current && stickySearchRef.current.contains(event.target as Node)
+
+      if (!clickedInsideHero && !clickedInsideSticky) {
         setShowSuggestions(false)
       }
     }
@@ -1403,7 +1407,7 @@ export default function Home() {
             WebkitBackfaceVisibility: 'hidden',
             backfaceVisibility: 'hidden'
           }}>
-            <div className="relative" style={{ width: '283px' }}>
+            <div ref={stickySearchRef} className="relative" style={{ width: '283px' }}>
               <div style={{
                 display: 'flex',
                 width: '283px',
