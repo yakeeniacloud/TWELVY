@@ -1387,21 +1387,22 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Sticky Search Bar - ALWAYS VISIBLE FOR DEBUGGING */}
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 9999,
-          background: showStickySearch ? '#FFF' : 'red',
-          borderBottom: '1px solid #E0E0E0',
-          padding: '8px 16px',
-          display: 'flex',
-          justifyContent: 'center',
-          WebkitBackfaceVisibility: 'hidden',
-          backfaceVisibility: 'hidden'
-        }}>
+        {/* Sticky Search Bar */}
+        {showStickySearch && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 9999,
+            background: '#FFF',
+            borderBottom: '1px solid #E0E0E0',
+            padding: '8px 16px',
+            display: 'flex',
+            justifyContent: 'center',
+            WebkitBackfaceVisibility: 'hidden',
+            backfaceVisibility: 'hidden'
+          }}>
             <div className="relative" style={{ width: '283px' }}>
               <div style={{
                 display: 'flex',
@@ -1451,6 +1452,7 @@ export default function Home() {
               )}
             </div>
           </div>
+        )}
 
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
