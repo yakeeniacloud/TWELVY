@@ -1989,11 +1989,45 @@ export default function Home() {
 
         {/* Dans quelle situation Section */}
         <section className="px-4 pb-8">
-          <h2 className="text-center mb-6">
-            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 400 }}>
-              Dans quelle situation{' '}
+          <h2 className="text-center mb-6 flex flex-col items-center">
+            <span style={{
+              display: 'flex',
+              height: '28px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              flexShrink: 0,
+              alignSelf: 'stretch',
+              color: 'rgba(6, 6, 6, 0.86)',
+              textAlign: 'center',
+              WebkitTextStrokeWidth: '1px',
+              WebkitTextStrokeColor: '#000',
+              fontFamily: 'Poppins',
+              fontSize: '20px',
+              fontStyle: 'normal',
+              fontWeight: 250,
+              lineHeight: '35px',
+              whiteSpace: 'nowrap'
+            }}>
+              Dans quelle situation
             </span>
-            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 400, color: '#BC4747' }}>
+            <span style={{
+              display: 'flex',
+              width: '220px',
+              height: '28px',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              flexShrink: 0,
+              color: 'rgba(6, 6, 6, 0.86)',
+              textAlign: 'center',
+              WebkitTextStrokeWidth: '1px',
+              WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)',
+              fontFamily: 'Poppins',
+              fontSize: '20px',
+              fontStyle: 'normal',
+              fontWeight: 250,
+              lineHeight: '35px',
+              whiteSpace: 'nowrap'
+            }}>
               êtes-vous
             </span>
           </h2>
@@ -2043,10 +2077,15 @@ export default function Home() {
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             style={{
-              width: '100%',
-              maxWidth: '300px',
-              padding: '16px',
-              borderRadius: '30px',
+              display: 'flex',
+              width: '295px',
+              height: '61px',
+              padding: '7px 15px',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '20px',
+              flexShrink: 0,
+              borderRadius: '40px',
               background: '#41A334',
               border: 'none',
               color: '#FFF',
@@ -2060,226 +2099,127 @@ export default function Home() {
           </button>
         </section>
 
-        {/* Avis Clients Google Reviews Section */}
+        {/* Google Reviews Placeholder */}
         <section className="px-4 pb-8">
-          <div className="text-center mb-6">
-            <h2 style={{
+          <div className="text-center">
+            <p style={{
               fontFamily: 'var(--font-poppins)',
-              fontSize: '18px',
+              fontSize: '16px',
               fontWeight: 400,
-              marginBottom: '4px'
+              color: '#666'
             }}>
-              Avis <span style={{ color: '#BC4747' }}>Clients</span>
-            </h2>
-            <div style={{
-              width: '120px',
-              height: '2px',
-              background: '#BC4747',
-              margin: '8px auto 16px'
-            }}></div>
-
-            <div className="mb-4">
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '20px', fontWeight: 600 }}>Excellent</p>
-              <div className="flex justify-center gap-1 my-2">
-                {[1,2,3,4].map(i => (
-                  <svg key={i} width="24" height="24" viewBox="0 0 24 24" fill="#FFD700">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-                  </svg>
-                ))}
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#FFD700"/>
-                  <path d="M12 2V17.77L18.18 21.02L17 14.14L22 9.27L15.09 8.26L12 2Z" fill="#E0E0E0"/>
-                </svg>
-              </div>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#666' }}>
-                4.7/5
-              </p>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '12px', color: '#666' }}>
-                Basé sur <strong>499 avis</strong>
-              </p>
-              <img src="/google-logo.png" alt="Google" className="mx-auto mt-2 h-6" style={{ filter: 'grayscale(0)' }} />
-            </div>
-
-            {/* Review Cards */}
-            <div className="space-y-4 mb-6">
-              {/* Review 1 */}
-              <div style={{
-                background: '#F9F9F9',
-                borderRadius: '12px',
-                padding: '16px',
-                textAlign: 'left'
-              }}>
-                <div className="flex items-center gap-3 mb-2">
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    background: '#4285F4',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#FFF',
-                    fontFamily: 'var(--font-poppins)',
-                    fontSize: '18px',
-                    fontWeight: 600
-                  }}>K</div>
-                  <div>
-                    <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 500 }}>
-                      Katia rbenrguig
-                    </p>
-                    <div className="flex gap-1">
-                      {[1,2,3,4,5].map(i => (
-                        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#FFD700">
-                          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-                        </svg>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <p style={{
-                  fontFamily: 'var(--font-poppins)',
-                  fontSize: '12px',
-                  lineHeight: '18px',
-                  color: '#333'
-                }}>
-                  Bonjour, je vous recommande vivement ProStagesPermis, ont peux y trouver des stages rapidement, pas très loin de chez nous et pas très cher comparé à d'autre.
-                </p>
-              </div>
-
-              {/* Review 2 */}
-              <div style={{
-                background: '#F9F9F9',
-                borderRadius: '12px',
-                padding: '16px',
-                textAlign: 'left'
-              }}>
-                <div className="flex items-center gap-3 mb-2">
-                  <div style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    background: '#0F9D58',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#FFF',
-                    fontFamily: 'var(--font-poppins)',
-                    fontSize: '18px',
-                    fontWeight: 600
-                  }}>J</div>
-                  <div>
-                    <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', fontWeight: 500 }}>
-                      Joe Labaisse
-                    </p>
-                    <div className="flex gap-1">
-                      {[1,2,3,4,5].map(i => (
-                        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#FFD700">
-                          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-                        </svg>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <p style={{
-                  fontFamily: 'var(--font-poppins)',
-                  fontSize: '12px',
-                  lineHeight: '18px',
-                  color: '#333'
-                }}>
-                  Merci à vous pour votre compré je recommande pro stage permi
-                  <br/><br/>
-                  Alex
-                </p>
-              </div>
-            </div>
-
-            <a href="#" style={{
-              fontFamily: 'var(--font-poppins)',
-              fontSize: '14px',
-              color: '#BC4747',
-              textDecoration: 'underline',
-              fontWeight: 500
-            }}>
-              Lire les autres avis
-            </a>
+              Google reviews (in production)
+            </p>
           </div>
         </section>
 
         {/* Questions Fréquentes Section */}
-        <section style={{ background: '#F6F6F6', padding: '32px 16px' }}>
-          <h2 className="text-center mb-2">
-            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 400 }}>
-              Questions{' '}
-            </span>
-            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '18px', fontWeight: 400, color: '#BC4747' }}>
-              Fréquentes
-            </span>
-          </h2>
-          <p style={{
-            fontFamily: 'var(--font-poppins)',
-            fontSize: '13px',
-            textAlign: 'center',
-            color: '#000',
-            marginBottom: '24px'
-          }}>
-            Réponses aux questions que se posent le plus souvent les conducteurs
-          </p>
-
-          <div className="space-y-4 mb-6">
-            {[0, 1, 2].map(i => (
-              <div key={i}>
-                <div
-                  onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                  className="flex justify-between items-center cursor-pointer"
-                >
-                  <p style={{
-                    flex: 1,
-                    fontFamily: 'var(--font-poppins)',
-                    fontSize: '13px',
-                    lineHeight: '20px'
-                  }}>
-                    A quel moment mes 4 points sont il crédités sur mon permis après un stage
-                  </p>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 25 25"
-                    fill="none"
-                    style={{
-                      flexShrink: 0,
-                      marginLeft: '12px',
-                      transform: openFaqIndex === i ? 'rotate(180deg)' : 'rotate(0deg)',
-                      transition: 'transform 0.2s'
-                    }}
-                  >
-                    <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                {openFaqIndex === i && (
-                  <p style={{
-                    fontFamily: 'var(--font-poppins)',
-                    fontSize: '12px',
-                    color: '#666',
-                    lineHeight: '18px',
-                    marginTop: '12px'
-                  }}>
-                    Réponse à la question - Texte placeholder pour la réponse détaillée.
-                  </p>
-                )}
-                {i < 2 && <div style={{ height: '1px', background: '#D0D0D0', margin: '16px 0' }} />}
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <a href="#" style={{
-              fontFamily: 'var(--font-poppins)',
-              fontSize: '13px',
-              fontWeight: 500,
-              textDecoration: 'underline'
+        <section className="my-8 px-4" style={{ paddingBottom: '50px' }}>
+          {/* Mobile: Grey box with title, subtitle, and questions */}
+          <div className="flex flex-col items-center">
+            {/* Grey box container - dynamic height */}
+            <div style={{
+              display: 'flex',
+              width: '382px',
+              flexDirection: 'column',
+              alignItems: 'center',
+              background: '#F6F6F6',
+              padding: '20px 0'
             }}>
-              Afficher plus de questions
-            </a>
+              {/* Title inside grey box */}
+              <h2 className="text-center mb-3 text-[18px] font-[250] leading-[30px]" style={{
+                fontFamily: 'var(--font-poppins)',
+                color: 'rgba(6, 6, 6, 0.86)',
+                WebkitTextStrokeWidth: '1px',
+                WebkitTextStrokeColor: '#000'
+              }}>
+                Questions <span style={{
+                  WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)'
+                }}>Fréquentes</span>
+              </h2>
+
+              {/* Subtitle inside grey box */}
+              <p className="mb-4" style={{
+                width: '339px',
+                color: '#000',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '15px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '20px',
+                textAlign: 'center'
+              }}>
+                Réponses aux questions que se posent le plus souvent les conducteurs
+              </p>
+
+              {/* FAQ questions */}
+              {[
+                { id: 1, question: "A quel moment mes 4 points sont il crédités sur mon permis après un stage" },
+                { id: 2, question: "A quel moment mes 4 points sont il crédités sur mon permis après un stage" },
+                { id: 3, question: "A quel moment mes 4 points sont il crédités sur mon permis après un stage" },
+                { id: 4, question: "A quel moment mes 4 points sont il crédités sur mon permis après un stage" },
+              ].map((faq, index) => (
+                <div key={faq.id} className="w-full">
+                  <button
+                    className="flex items-center justify-between p-3 w-full text-left"
+                    onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                  >
+                    <p className="text-gray-900 text-sm flex-1" style={{
+                      fontFamily: 'var(--font-poppins)',
+                      fontSize: '15px',
+                      fontWeight: 400
+                    }}>{faq.question}</p>
+                    <svg
+                      className={`w-5 h-5 text-gray-600 transition-transform flex-shrink-0 ${openFaqIndex === index ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {openFaqIndex === index && (
+                    <div className="px-3 pb-3 pt-2">
+                      <p className="text-gray-700 leading-relaxed text-sm">
+                        Ceci est un placeholder pour la réponse à la question. Le contenu sera ajouté ultérieurement.
+                        Cette section peut contenir des informations détaillées sur la récupération de points,
+                        les délais, les conditions et toutes les informations pertinentes pour répondre à la question posée.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Line separator (except after last question) */}
+                  {index < 3 && (
+                    <div className="flex justify-center">
+                      <div style={{
+                        width: '320px',
+                        height: '1px',
+                        background: '#D0D0D0'
+                      }}></div>
+                    </div>
+                  )}
+                </div>
+              ))}
+
+              {/* "Afficher plus de questions" button - INSIDE grey box at bottom */}
+              <div className="flex justify-center mt-6">
+                <button className="text-sm" style={{
+                  fontFamily: 'var(--font-poppins)',
+                  color: '#000',
+                  fontWeight: 500,
+                  letterSpacing: '1.05px',
+                  textDecoration: 'underline',
+                  textDecorationStyle: 'solid',
+                  textDecorationSkipInk: 'auto',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}>
+                  Afficher plus de questions
+                </button>
+              </div>
+            </div>
           </div>
         </section>
       </div>
