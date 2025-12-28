@@ -42,18 +42,31 @@ export default function Home() {
 
   // Sticky search bar on scroll (mobile only)
   useEffect(() => {
+    let ticking = false
+
     function handleScroll() {
-      if (heroSearchRef.current) {
-        const rect = heroSearchRef.current.getBoundingClientRect()
-        // Show sticky when the original search bar is not visible on screen
-        // Check if top is above viewport or bottom is above viewport
-        setShowStickySearch(rect.top < 0 || rect.bottom < 0)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (heroSearchRef.current) {
+            const rect = heroSearchRef.current.getBoundingClientRect()
+            // Show sticky when the original search bar is completely above the viewport
+            // Use a small threshold to account for rounding errors
+            setShowStickySearch(rect.bottom < -10)
+          }
+          ticking = false
+        })
+        ticking = true
       }
     }
+
     // Run on mount and on scroll
     handleScroll()
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
   }, [])
 
   // Filter cities based on input
@@ -1376,53 +1389,58 @@ export default function Home() {
         </header>
 
         {/* Sticky Search Bar */}
-        {showStickySearch && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 9999,
+          background: '#FFF',
+          borderBottom: '1px solid #E0E0E0',
+          padding: '8px 16px',
+          display: 'flex',
+          justifyContent: 'center',
+          transform: showStickySearch ? 'translateY(0)' : 'translateY(-100%)',
+          transition: 'transform 0.3s ease-in-out',
+          willChange: 'transform',
+          WebkitTransform: showStickySearch ? 'translateY(0)' : 'translateY(-100%)',
+          WebkitTransition: 'transform 0.3s ease-in-out',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden'
+        }}>
           <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            zIndex: 998,
-            background: '#FFF',
-            borderBottom: '1px solid #E0E0E0',
-            padding: '8px 16px',
             display: 'flex',
-            justifyContent: 'center'
+            width: '283px',
+            height: '36px',
+            padding: '1px 20px',
+            alignItems: 'center',
+            gap: '15px',
+            flexShrink: 0,
+            borderRadius: '20px',
+            border: '1px solid #989898',
+            background: 'linear-gradient(0deg, rgba(176, 175, 175, 0.20) 0%, rgba(176, 175, 175, 0.20) 100%), #FFF'
           }}>
-            <div style={{
-              display: 'flex',
-              width: '283px',
-              height: '36px',
-              padding: '1px 20px',
-              alignItems: 'center',
-              gap: '15px',
-              flexShrink: 0,
-              borderRadius: '20px',
-              border: '1px solid #989898',
-              background: 'linear-gradient(0deg, rgba(176, 175, 175, 0.20) 0%, rgba(176, 175, 175, 0.20) 100%), #FFF'
-            }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M15.75 15.75L12.4875 12.4875M14.25 8.25C14.25 11.5637 11.5637 14.25 8.25 14.25C4.93629 14.25 2.25 11.5637 2.25 8.25C2.25 4.93629 4.93629 2.25 8.25 2.25C11.5637 2.25 14.25 4.93629 14.25 8.25Z" stroke="#727171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => handleInputChange(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                placeholder="Ville ou code postal"
-                style={{
-                  flex: 1,
-                  border: 'none',
-                  outline: 'none',
-                  background: 'transparent',
-                  fontSize: '14px',
-                  fontFamily: 'var(--font-poppins)',
-                  color: searchQuery ? '#000' : '#949393'
-                }}
-              />
-            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M15.75 15.75L12.4875 12.4875M14.25 8.25C14.25 11.5637 11.5637 14.25 8.25 14.25C4.93629 14.25 2.25 11.5637 2.25 8.25C2.25 4.93629 4.93629 2.25 8.25 2.25C11.5637 2.25 14.25 4.93629 14.25 8.25Z" stroke="#727171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => handleInputChange(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              placeholder="Ville ou code postal"
+              style={{
+                flex: 1,
+                border: 'none',
+                outline: 'none',
+                background: 'transparent',
+                fontSize: '14px',
+                fontFamily: 'var(--font-poppins)',
+                color: searchQuery ? '#000' : '#949393'
+              }}
+            />
           </div>
-        )}
+        </div>
 
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
