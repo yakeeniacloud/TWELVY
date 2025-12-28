@@ -1953,21 +1953,36 @@ export default function Home() {
         {/* Europe 1 Section */}
         <section className="px-4 pb-8">
           <div className="flex items-center justify-between" style={{ borderBottom: '1px solid #E0E0E0', paddingBottom: '16px' }}>
-            <div className="flex-1">
+            <div>
               <h3 style={{
-                fontFamily: 'var(--font-poppins)',
-                fontSize: '16px',
+                display: 'flex',
+                width: '167px',
+                height: '43px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flexShrink: 0,
+                color: '#2C2C2C',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '17px',
+                fontStyle: 'normal',
                 fontWeight: 500,
-                marginBottom: '8px'
+                lineHeight: '20px',
+                letterSpacing: '1.19px'
               }}>
                 Recommandé par Europe 1
               </h3>
               <p style={{
-                fontFamily: 'var(--font-poppins)',
+                width: '168px',
+                height: '62px',
+                flexShrink: 0,
+                color: 'rgba(6, 6, 6, 0.80)',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
                 fontSize: '13px',
-                color: 'rgba(0, 0, 0, 0.7)',
-                lineHeight: '18px',
-                fontStyle: 'italic'
+                fontStyle: 'italic',
+                fontWeight: 400,
+                lineHeight: '17px'
               }}>
                 ProStagesPermis cité comme site de confiance par Europe 1
               </p>
