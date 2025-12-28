@@ -1334,7 +1334,7 @@ export default function Home() {
           padding: '12px 16px'
         }}>
           <div className="flex items-center justify-between">
-            <img src="/prostages-logo.png" alt="ProStagesPermis" style={{ height: '32px' }} />
+            <img src="/prostagespermis-logo.png" alt="ProStagesPermis" style={{ height: '32px' }} />
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               style={{
@@ -1559,7 +1559,7 @@ export default function Home() {
 
         {/* Prochains stages Section */}
         <section className="px-4 pb-8">
-          <h2 className="text-center mb-4 flex justify-center items-center gap-1">
+          <h2 className="text-center mb-4 flex flex-col items-center">
             <span style={{
               display: 'flex',
               width: '167px',
@@ -1577,7 +1577,7 @@ export default function Home() {
               fontWeight: 250,
               lineHeight: '35px'
             }}>
-              Prochains stages{' '}
+              Prochains stages
             </span>
             <span style={{
               display: 'flex',
@@ -1602,7 +1602,7 @@ export default function Home() {
           {/* Horizontal Scrollable Cards */}
           <div className="flex gap-4 overflow-x-auto pb-4" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             {/* Card 1 */}
-            <div className="flex-shrink-0 w-[160px]">
+            <div className="flex-shrink-0 w-[160px] flex flex-col items-center">
               <div style={{
                 width: '160px',
                 height: '160px',
@@ -1610,31 +1610,88 @@ export default function Home() {
                 background: 'url(/widget.png) lightgray 50% / cover no-repeat',
                 marginBottom: '8px'
               }}></div>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', textAlign: 'center', marginBottom: '4px' }}>
+              <p style={{
+                display: 'flex',
+                width: '83px',
+                height: '28px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flexShrink: 0,
+                color: '#000',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '18px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '17px',
+                marginBottom: '4px'
+              }}>
                 5-6 déc
               </p>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#6A6969', textAlign: 'center', marginBottom: '4px' }}>
+              <p style={{
+                display: 'flex',
+                width: '122px',
+                height: '13px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flexShrink: 0,
+                color: '#6A6969',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '16px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '35px',
+                marginBottom: '4px'
+              }}>
                 Marseille
               </p>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#BC4747', textAlign: 'center', marginBottom: '8px' }}>
+              <p style={{
+                width: '202px',
+                flexShrink: 0,
+                color: '#BC4747',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '17px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '35px',
+                marginBottom: '8px'
+              }}>
                 210 €
               </p>
               <button style={{
-                width: '100%',
-                padding: '8px',
+                display: 'flex',
+                width: '103px',
+                height: '31px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '10px',
+                flexShrink: 0,
                 borderRadius: '12px',
                 background: '#41A334',
                 border: 'none',
-                color: '#FFF',
-                fontFamily: 'var(--font-poppins)',
-                fontSize: '11px'
+                cursor: 'pointer'
               }}>
-                Voir ce stage
+                <span style={{
+                  width: '83px',
+                  height: '20px',
+                  flexShrink: 0,
+                  color: '#FFF',
+                  fontFamily: 'Poppins',
+                  fontSize: '11px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: 'normal',
+                  letterSpacing: '0.77px'
+                }}>
+                  voir ce stage
+                </span>
               </button>
             </div>
 
             {/* Card 2 */}
-            <div className="flex-shrink-0 w-[160px]">
+            <div className="flex-shrink-0 w-[160px] flex flex-col items-center">
               <div style={{
                 width: '160px',
                 height: '160px',
@@ -1642,31 +1699,88 @@ export default function Home() {
                 background: 'url(/widget.png) lightgray 50% / cover no-repeat',
                 marginBottom: '8px'
               }}></div>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', textAlign: 'center', marginBottom: '4px' }}>
+              <p style={{
+                display: 'flex',
+                width: '83px',
+                height: '28px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flexShrink: 0,
+                color: '#000',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '18px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '17px',
+                marginBottom: '4px'
+              }}>
                 6-6 déc
               </p>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#6A6969', textAlign: 'center', marginBottom: '4px' }}>
+              <p style={{
+                display: 'flex',
+                width: '122px',
+                height: '13px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flexShrink: 0,
+                color: '#6A6969',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '16px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '35px',
+                marginBottom: '4px'
+              }}>
                 Marseille
               </p>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#BC4747', textAlign: 'center', marginBottom: '8px' }}>
+              <p style={{
+                width: '202px',
+                flexShrink: 0,
+                color: '#BC4747',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '17px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '35px',
+                marginBottom: '8px'
+              }}>
                 210 €
               </p>
               <button style={{
-                width: '100%',
-                padding: '8px',
+                display: 'flex',
+                width: '103px',
+                height: '31px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '10px',
+                flexShrink: 0,
                 borderRadius: '12px',
                 background: '#41A334',
                 border: 'none',
-                color: '#FFF',
-                fontFamily: 'var(--font-poppins)',
-                fontSize: '11px'
+                cursor: 'pointer'
               }}>
-                Voir ce stage
+                <span style={{
+                  width: '83px',
+                  height: '20px',
+                  flexShrink: 0,
+                  color: '#FFF',
+                  fontFamily: 'Poppins',
+                  fontSize: '11px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: 'normal',
+                  letterSpacing: '0.77px'
+                }}>
+                  voir ce stage
+                </span>
               </button>
             </div>
 
             {/* Card 3 */}
-            <div className="flex-shrink-0 w-[160px]">
+            <div className="flex-shrink-0 w-[160px] flex flex-col items-center">
               <div style={{
                 width: '160px',
                 height: '160px',
@@ -1674,26 +1788,83 @@ export default function Home() {
                 background: 'url(/widget.png) lightgray 50% / cover no-repeat',
                 marginBottom: '8px'
               }}></div>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', textAlign: 'center', marginBottom: '4px' }}>
+              <p style={{
+                display: 'flex',
+                width: '83px',
+                height: '28px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flexShrink: 0,
+                color: '#000',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '18px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '17px',
+                marginBottom: '4px'
+              }}>
                 8-9 déc
               </p>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#6A6969', textAlign: 'center', marginBottom: '4px' }}>
+              <p style={{
+                display: 'flex',
+                width: '122px',
+                height: '13px',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                flexShrink: 0,
+                color: '#6A6969',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '16px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '35px',
+                marginBottom: '4px'
+              }}>
                 Nice
               </p>
-              <p style={{ fontFamily: 'var(--font-poppins)', fontSize: '14px', color: '#BC4747', textAlign: 'center', marginBottom: '8px' }}>
+              <p style={{
+                width: '202px',
+                flexShrink: 0,
+                color: '#BC4747',
+                textAlign: 'center',
+                fontFamily: 'Poppins',
+                fontSize: '17px',
+                fontStyle: 'normal',
+                fontWeight: 400,
+                lineHeight: '35px',
+                marginBottom: '8px'
+              }}>
                 189 €
               </p>
               <button style={{
-                width: '100%',
-                padding: '8px',
+                display: 'flex',
+                width: '103px',
+                height: '31px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: '10px',
+                flexShrink: 0,
                 borderRadius: '12px',
                 background: '#41A334',
                 border: 'none',
-                color: '#FFF',
-                fontFamily: 'var(--font-poppins)',
-                fontSize: '11px'
+                cursor: 'pointer'
               }}>
-                Voir ce stage
+                <span style={{
+                  width: '83px',
+                  height: '20px',
+                  flexShrink: 0,
+                  color: '#FFF',
+                  fontFamily: 'Poppins',
+                  fontSize: '11px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: 'normal',
+                  letterSpacing: '0.77px'
+                }}>
+                  voir ce stage
+                </span>
               </button>
             </div>
           </div>
