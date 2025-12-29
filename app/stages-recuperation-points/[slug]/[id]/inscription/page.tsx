@@ -1407,19 +1407,13 @@ export default function InscriptionPage() {
                           {/* "Stage sélectionné" badge for current stage */}
                           {isCurrentStage && (
                             <div style={{
-                              display: 'flex',
-                              width: '117px',
-                              height: '17px',
-                              flexDirection: 'column',
-                              justifyContent: 'center',
-                              flexShrink: 0,
                               color: '#336FF0',
                               textAlign: 'center',
                               fontFamily: 'Poppins',
                               fontSize: '13px',
                               fontStyle: 'normal',
                               fontWeight: 400,
-                              lineHeight: '35px'
+                              lineHeight: '17px'
                             }}>
                               Stage sélectionné
                             </div>
