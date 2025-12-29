@@ -1406,7 +1406,7 @@ export default function InscriptionPage() {
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: 'center',
-                          gap: '4px'
+                          gap: '8px'
                         }}>
                           {/* "Stage sélectionné" badge for current stage */}
                           {isCurrentStage && (
@@ -1415,7 +1415,8 @@ export default function InscriptionPage() {
                               fontFamily: 'Poppins',
                               fontSize: '11px',
                               fontWeight: '400',
-                              textAlign: 'center'
+                              textAlign: 'center',
+                              marginBottom: '4px'
                             }}>
                               Stage sélectionné
                             </div>
@@ -3228,16 +3229,24 @@ export default function InscriptionPage() {
                   border: '1px solid #C3E6CB',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  gap: '10px'
                 }}
               >
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="33" viewBox="0 0 30 33" fill="none" style={{ width: '30px', height: '33px', flexShrink: 0 }}>
+                  <path d="M25 8.25L11.25 23.375L5 16.5" stroke="#30B049" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
                 <p
                   style={{
-                    color: '#155724',
+                    width: '235px',
+                    flexShrink: 0,
+                    color: '#30B049',
+                    textAlign: 'center',
                     fontFamily: 'Poppins',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    lineHeight: '20px',
+                    fontSize: '18px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '28px',
                     margin: 0
                   }}
                 >
