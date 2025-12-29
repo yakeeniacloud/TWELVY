@@ -1401,7 +1401,7 @@ export default function InscriptionPage() {
                         <div style={{
                           position: 'absolute',
                           right: '12px',
-                          top: isCurrentStage ? '12px' : '50%',
+                          top: isCurrentStage ? '23px' : '50%',
                           transform: isCurrentStage ? 'none' : 'translateY(-50%)',
                           display: 'flex',
                           flexDirection: 'column',
