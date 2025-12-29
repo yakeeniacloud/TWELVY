@@ -314,7 +314,7 @@ export default function InscriptionPage() {
     // Check if all required fields are filled
     if (!civilite || !nom || !prenom || !email || !telephone || !cgvAccepted) {
       // Show alert for missing fields
-      const missingFields = []
+      const missingFields: string[] = []
       if (!civilite) missingFields.push('Civilité')
       if (!nom) missingFields.push('Nom')
       if (!prenom) missingFields.push('Prénom')
