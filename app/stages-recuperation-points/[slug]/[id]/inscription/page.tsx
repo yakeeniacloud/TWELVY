@@ -1397,7 +1397,8 @@ export default function InscriptionPage() {
                         <div style={{
                           position: 'absolute',
                           right: '12px',
-                          top: '12px',
+                          top: '50%',
+                          transform: 'translateY(-50%)',
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: 'center',
