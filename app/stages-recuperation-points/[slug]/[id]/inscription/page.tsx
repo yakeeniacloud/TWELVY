@@ -1306,13 +1306,9 @@ export default function InscriptionPage() {
                       <article
                         key={stageItem.id}
                         style={{
-                          display: 'flex',
                           width: '369px',
                           height: '106px',
                           padding: '6px 0',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          gap: '5px',
                           flexShrink: 0,
                           borderRadius: '10px',
                           border: isCurrentStage ? '1px solid #BC4747' : '1px solid #BBB',
