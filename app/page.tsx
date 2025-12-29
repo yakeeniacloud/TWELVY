@@ -129,49 +129,49 @@ export default function Home() {
 
           {/* Search Bar */}
           <div className="mt-8 flex justify-center">
-            <div
-              ref={searchRef}
-              className="relative"
-              style={{
-                display: 'flex',
-                width: '672px',
-                height: '61px',
-                padding: '1px 20px',
-                alignItems: 'center',
-                gap: '15px',
-                flexShrink: 0,
-                borderRadius: '20px',
-                border: '1px solid #000',
-                background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.20) 100%), #FFF'
-              }}
-            >
-              {/* Search Icon */}
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ flexShrink: 0 }}>
-                <path d="M15.75 15.75L12.4875 12.4875M14.25 8.25C14.25 11.5637 11.5637 14.25 8.25 14.25C4.93629 14.25 2.25 11.5637 2.25 8.25C2.25 4.93629 4.93629 2.25 8.25 2.25C11.5637 2.25 14.25 4.93629 14.25 8.25Z" stroke="#727171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-
-              {/* Input */}
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => handleInputChange(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                placeholder="Entrez votre ville ou code postal"
+            <div ref={searchRef} className="relative" style={{ width: '672px' }}>
+              <div
                 style={{
-                  flex: 1,
-                  border: 'none',
-                  outline: 'none',
-                  background: 'transparent',
-                  fontFamily: 'Inter, sans-serif',
-                  color: searchQuery ? '#000' : '#949393',
-                  fontSize: '17px',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  lineHeight: '100%'
+                  display: 'flex',
+                  width: '672px',
+                  height: '61px',
+                  padding: '1px 20px',
+                  alignItems: 'center',
+                  gap: '15px',
+                  flexShrink: 0,
+                  borderRadius: '20px',
+                  border: '1px solid #000',
+                  background: 'linear-gradient(0deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.20) 100%), #FFF'
                 }}
-              />
+              >
+                {/* Search Icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ flexShrink: 0 }}>
+                  <path d="M15.75 15.75L12.4875 12.4875M14.25 8.25C14.25 11.5637 11.5637 14.25 8.25 14.25C4.93629 14.25 2.25 11.5637 2.25 8.25C2.25 4.93629 4.93629 2.25 8.25 2.25C11.5637 2.25 14.25 4.93629 14.25 8.25Z" stroke="#727171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
 
-              {/* Suggestions Dropdown */}
+                {/* Input */}
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => handleInputChange(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  placeholder="Entrez votre ville ou code postal"
+                  style={{
+                    flex: 1,
+                    border: 'none',
+                    outline: 'none',
+                    background: 'transparent',
+                    fontFamily: 'Inter, sans-serif',
+                    color: searchQuery ? '#000' : '#949393',
+                    fontSize: '17px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '100%'
+                  }}
+                />
+              </div>
+
+              {/* Suggestions Dropdown - Outside the flex container */}
               {showSuggestions && suggestions.length > 0 && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
                   {suggestions.map((city, index) => (
