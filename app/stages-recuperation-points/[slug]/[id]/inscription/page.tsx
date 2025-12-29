@@ -313,25 +313,19 @@ export default function InscriptionPage() {
   const handleValidateForm = () => {
     // Check if all required fields are filled
     if (!civilite || !nom || !prenom || !email || !telephone || !cgvAccepted) {
-      // Find and scroll to first empty field
-      const fields = [
-        { value: civilite, selector: 'select[value=""]' },
-        { value: nom, selector: 'input[placeholder="Nom"]' },
-        { value: prenom, selector: 'input[placeholder="Prénom"]' },
-        { value: email, selector: 'input[placeholder="Email"]' },
-        { value: telephone, selector: 'input[placeholder="Téléphone"]' },
-        { value: cgvAccepted, selector: 'input[type="checkbox"]' }
-      ]
+      // Show alert for missing fields
+      const missingFields = []
+      if (!civilite) missingFields.push('Civilité')
+      if (!nom) missingFields.push('Nom')
+      if (!prenom) missingFields.push('Prénom')
+      if (!email) missingFields.push('Email')
+      if (!telephone) missingFields.push('Téléphone mobile')
+      if (!cgvAccepted) missingFields.push('Conditions générales de vente')
 
-      for (const field of fields) {
-        if (!field.value) {
-          const element = document.querySelector(field.selector)
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-            break
-          }
-        }
-      }
+      alert(`Veuillez remplir tous les champs obligatoires:\n\n${missingFields.join('\n')}`)
+
+      // Scroll to top to see form
+      window.scrollTo({ top: 0, behavior: 'smooth' })
 
       // Keep payment block CLOSED
       return
