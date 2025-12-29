@@ -34,10 +34,7 @@ export default function Home() {
       const clickedInsideDesktop = searchRef.current && searchRef.current.contains(event.target as Node)
       const clickedInsideMobile = heroSearchRef.current && heroSearchRef.current.contains(event.target as Node)
 
-      console.log('👆 Click detected - Desktop:', clickedInsideDesktop, 'Mobile:', clickedInsideMobile)
-
       if (!clickedInsideDesktop && !clickedInsideMobile) {
-        console.log('👆 Closing suggestions (clicked outside)')
         setShowSuggestions(false)
       }
     }
@@ -61,12 +58,10 @@ export default function Home() {
   }
 
   const handleCitySelect = (city: string) => {
-    console.log('🔍 handleCitySelect called with:', city)
     setSearchQuery(city)
     setShowSuggestions(false)
     // Navigate to city page
     const slug = city.toUpperCase().replace(/ /g, '-')
-    console.log('🔍 Navigating to:', `/stages-recuperation-points/${slug}`)
     router.push(`/stages-recuperation-points/${slug}`)
   }
 

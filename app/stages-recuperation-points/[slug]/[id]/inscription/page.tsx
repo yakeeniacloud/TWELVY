@@ -59,6 +59,7 @@ export default function InscriptionPage() {
   const [isDatePopupOpen, setIsDatePopupOpen] = useState(false)
   const [availableStages, setAvailableStages] = useState<Stage[]>([])
   const [loadingStages, setLoadingStages] = useState(false)
+  const [showDateChangedNotification, setShowDateChangedNotification] = useState(false)
 
   // Details popup state
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
@@ -72,6 +73,9 @@ export default function InscriptionPage() {
   const [isPayerButtonVisible, setIsPayerButtonVisible] = useState(false)
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
   const [isPayerButtonDisabled, setIsPayerButtonDisabled] = useState(false)
+
+  // Desktop stepper state
+  const [currentStep, setCurrentStep] = useState(1)
 
   // Refs for visibility detection
   const stageCardRef = useRef<HTMLDivElement>(null)
@@ -210,6 +214,14 @@ export default function InscriptionPage() {
     setStage(selectedStage)
     // Close the popup
     setIsDatePopupOpen(false)
+
+    // Show success notification
+    setShowDateChangedNotification(true)
+
+    // Hide notification after 5 seconds
+    setTimeout(() => {
+      setShowDateChangedNotification(false)
+    }, 5000)
 
     // Update the URL without reloading the page
     const newUrl = `/stages-recuperation-points/${fullSlug}/${selectedStage.id}/inscription`
@@ -1759,17 +1771,17 @@ export default function InscriptionPage() {
       {/* Progress Steps */}
       <div className="max-w-[1200px] mx-auto px-6 py-12">
         <div className="flex justify-center items-center" style={{ width: '500px', margin: '0 auto', gap: '0' }}>
-          {/* Step 1 - Active */}
+          {/* Step 1 */}
           <div className="flex flex-col items-center" style={{ position: 'relative' }}>
             <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
-                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#030303"/>
+                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill={currentStep >= 1 ? 'white' : '#F5F5F5'} stroke={currentStep >= 1 ? '#030303' : '#D9D9D9'}/>
               </svg>
               <span
                 style={{
                   position: 'relative',
                   zIndex: 1,
-                  color: '#000',
+                  color: currentStep >= 1 ? '#000' : '#828282',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
                   fontSize: '20px',
@@ -1783,7 +1795,7 @@ export default function InscriptionPage() {
             </div>
             <p
               style={{
-                color: '#000',
+                color: currentStep >= 1 ? '#000' : '#828282',
                 textAlign: 'center',
                 fontFamily: 'Poppins',
                 fontSize: '16px',
@@ -1808,17 +1820,17 @@ export default function InscriptionPage() {
             }}
           />
 
-          {/* Step 2 - Inactive */}
+          {/* Step 2 */}
           <div className="flex flex-col items-center" style={{ position: 'relative' }}>
             <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
-                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="#F5F5F5" stroke="#D9D9D9"/>
+                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill={currentStep >= 2 ? 'white' : '#F5F5F5'} stroke={currentStep >= 2 ? '#030303' : '#D9D9D9'}/>
               </svg>
               <span
                 style={{
                   position: 'relative',
                   zIndex: 1,
-                  color: '#828282',
+                  color: currentStep >= 2 ? '#000' : '#828282',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
                   fontSize: '20px',
@@ -1832,7 +1844,7 @@ export default function InscriptionPage() {
             </div>
             <p
               style={{
-                color: '#828282',
+                color: currentStep >= 2 ? '#000' : '#828282',
                 textAlign: 'center',
                 fontFamily: 'Poppins',
                 fontSize: '16px',
@@ -1857,17 +1869,17 @@ export default function InscriptionPage() {
             }}
           />
 
-          {/* Step 3 - Inactive */}
+          {/* Step 3 */}
           <div className="flex flex-col items-center" style={{ position: 'relative' }}>
             <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
-                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="#F5F5F5" stroke="#D9D9D9"/>
+                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill={currentStep >= 3 ? 'white' : '#F5F5F5'} stroke={currentStep >= 3 ? '#030303' : '#D9D9D9'}/>
               </svg>
               <span
                 style={{
                   position: 'relative',
                   zIndex: 1,
-                  color: '#828282',
+                  color: currentStep >= 3 ? '#000' : '#828282',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
                   fontSize: '20px',
@@ -1881,7 +1893,7 @@ export default function InscriptionPage() {
             </div>
             <p
               style={{
-                color: '#828282',
+                color: currentStep >= 3 ? '#000' : '#828282',
                 textAlign: 'center',
                 fontFamily: 'Poppins',
                 fontSize: '16px',
@@ -1901,6 +1913,27 @@ export default function InscriptionPage() {
         <div className="grid grid-cols-[1fr_380px] gap-8 items-start">
           {/* Left Column - Form */}
           <div style={{ marginLeft: '40px' }}>
+            {/* Back Link */}
+            <a
+              href={`/stages-recuperation-points/${city.toLowerCase()}`}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                color: '#000',
+                fontFamily: 'Poppins',
+                fontSize: '14px',
+                fontWeight: 400,
+                textDecoration: 'none',
+                marginBottom: '16px'
+              }}
+            >
+              <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 1L2 6L7 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Retour aux stages à {city.charAt(0) + city.slice(1).toLowerCase().replace(/-/g, ' ')}
+            </a>
+
             <div style={{ marginBottom: '28px' }}>
               <h2
                 style={{
@@ -1971,7 +2004,7 @@ export default function InscriptionPage() {
                       border: '1px solid #000'
                     }}
                   >
-                    <option value="">Monsieur</option>
+                    <option value="" disabled>Sélectionner</option>
                     <option value="Monsieur">Monsieur</option>
                     <option value="Madame">Madame</option>
                   </select>
@@ -2319,8 +2352,15 @@ export default function InscriptionPage() {
               {/* Submit Button */}
               <div style={{ marginLeft: '110px' }}>
                 <button
-                  type="submit"
+                  type="button"
                   disabled={!cgvAccepted}
+                  onClick={() => {
+                    if (cgvAccepted) {
+                      setCurrentStep(2)
+                      // Scroll to payment section
+                      document.getElementById('payment-section')?.scrollIntoView({ behavior: 'smooth' })
+                    }
+                  }}
                   className="text-white font-medium disabled:opacity-50"
                   style={{
                     display: 'flex',
@@ -2347,7 +2387,7 @@ export default function InscriptionPage() {
             </div>
 
             {/* Payment Section - Étape 2/2 */}
-            <div>
+            <div id="payment-section">
               <h2
                 style={{
                   display: 'flex',
@@ -3176,6 +3216,36 @@ export default function InscriptionPage() {
 
           {/* Right Column - Stage Info */}
           <div style={{ position: 'sticky', top: '24px', alignSelf: 'flex-start' }}>
+            {/* Success notification - Date changed */}
+            {showDateChangedNotification && (
+              <div
+                style={{
+                  width: '349px',
+                  padding: '12px 20px',
+                  marginBottom: '16px',
+                  borderRadius: '8px',
+                  background: '#D4EDDA',
+                  border: '1px solid #C3E6CB',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <p
+                  style={{
+                    color: '#155724',
+                    fontFamily: 'Poppins',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    lineHeight: '20px',
+                    margin: 0
+                  }}
+                >
+                  Date de stage mise à jour
+                </p>
+              </div>
+            )}
+
             <div className="bg-white rounded-lg border border-gray-200" style={{ width: '349px', padding: '20px' }}>
               {/* Stage sélectionné Header */}
               <div
@@ -3221,6 +3291,57 @@ export default function InscriptionPage() {
                 >
                   Stage du {formatDate(stage.date_start, stage.date_end)}
                 </p>
+
+                {/* Price and Places disponibles - Moved to top */}
+                <div className="mb-3 flex flex-col items-center">
+                  <div
+                    style={{
+                      display: 'flex',
+                      height: '30px',
+                      flexDirection: 'column',
+                      justifyContent: 'flex-start',
+                      flexShrink: 0,
+                      marginBottom: '2px'
+                    }}
+                  >
+                    <p
+                      style={{
+                        color: 'rgba(38, 126, 28, 0.95)',
+                        textAlign: 'center',
+                        fontFamily: 'Poppins',
+                        fontSize: '15px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '25px'
+                      }}
+                    >
+                      Places disponibles
+                    </p>
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      height: '37px',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}
+                  >
+                    <p
+                      style={{
+                        color: 'rgba(0, 0, 0, 0.86)',
+                        textAlign: 'center',
+                        fontFamily: 'Poppins',
+                        fontSize: '26px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '35px'
+                      }}
+                    >
+                      {stage.prix}€ TTC
+                    </p>
+                  </div>
+                </div>
 
                 {/* Changer de date */}
                 <div className="flex items-center gap-2 mb-3">
@@ -3306,68 +3427,6 @@ export default function InscriptionPage() {
                     }}
                   >
                     Agrément n° 25 R130060090064 par la Préfecture des Bouches-du-Rhône
-                  </p>
-                </div>
-              </div>
-
-              {/* Separator Line */}
-              <div className="flex justify-center mb-3">
-                <div
-                  style={{
-                    width: '264.125px',
-                    height: '1px',
-                    backgroundColor: '#B6B6B6'
-                  }}
-                />
-              </div>
-
-              {/* Price Box */}
-              <div className="mb-2 flex flex-col items-center">
-                <div
-                  style={{
-                    display: 'flex',
-                    height: '30px',
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                    flexShrink: 0,
-                    marginBottom: '2px'
-                  }}
-                >
-                  <p
-                    style={{
-                      color: 'rgba(38, 126, 28, 0.95)',
-                      textAlign: 'center',
-                      fontFamily: 'Poppins',
-                      fontSize: '15px',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      lineHeight: '25px'
-                    }}
-                  >
-                    Places disponibles
-                  </p>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    height: '37px',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    flexShrink: 0
-                  }}
-                >
-                  <p
-                    style={{
-                      color: 'rgba(0, 0, 0, 0.86)',
-                      textAlign: 'center',
-                      fontFamily: 'Poppins',
-                      fontSize: '26px',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      lineHeight: '35px'
-                    }}
-                  >
-                    {stage.prix}€ TTC
                   </p>
                 </div>
               </div>
@@ -3662,43 +3721,40 @@ export default function InscriptionPage() {
                           {stageItem.prix}€
                         </div>
 
-                        {/* Green Button */}
-                        <button
-                          onClick={() => handleStageSelect(stageItem)}
-                          disabled={isCurrentStage}
-                          style={{
-                            display: 'flex',
-                            width: '125px',
-                            height: '31px',
-                            padding: '7px',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            gap: '20px',
-                            borderRadius: '12px',
-                            background: isCurrentStage ? '#ccc' : '#41A334',
-                            border: 'none',
-                            color: 'white',
-                            fontFamily: 'Poppins',
-                            fontSize: '11px',
-                            fontWeight: 400,
-                            cursor: isCurrentStage ? 'not-allowed' : 'pointer',
-                            transition: 'background 0.2s',
-                            marginTop: '5px'
-                          }}
-                          onMouseEnter={(e) => {
-                            if (!isCurrentStage) {
+                        {/* Green Button - Only show for non-selected stages */}
+                        {!isCurrentStage && (
+                          <button
+                            onClick={() => handleStageSelect(stageItem)}
+                            style={{
+                              display: 'flex',
+                              width: '125px',
+                              height: '31px',
+                              padding: '7px',
+                              flexDirection: 'column',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              gap: '20px',
+                              borderRadius: '12px',
+                              background: '#41A334',
+                              border: 'none',
+                              color: 'white',
+                              fontFamily: 'Poppins',
+                              fontSize: '11px',
+                              fontWeight: 400,
+                              cursor: 'pointer',
+                              transition: 'background 0.2s',
+                              marginTop: '5px'
+                            }}
+                            onMouseEnter={(e) => {
                               e.currentTarget.style.background = '#389c2e'
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            if (!isCurrentStage) {
+                            }}
+                            onMouseLeave={(e) => {
                               e.currentTarget.style.background = '#41A334'
-                            }
-                          }}
-                        >
-                          Choisir cette date
-                        </button>
+                            }}
+                          >
+                            Choisir cette date
+                          </button>
+                        )}
                       </div>
                     </article>
                   )
