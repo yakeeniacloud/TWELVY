@@ -31,7 +31,10 @@ export default function Home() {
   // Click outside to close suggestions
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (heroSearchRef.current && !heroSearchRef.current.contains(event.target as Node)) {
+      const clickedInsideDesktop = searchRef.current && searchRef.current.contains(event.target as Node)
+      const clickedInsideMobile = heroSearchRef.current && heroSearchRef.current.contains(event.target as Node)
+
+      if (!clickedInsideDesktop && !clickedInsideMobile) {
         setShowSuggestions(false)
       }
     }
