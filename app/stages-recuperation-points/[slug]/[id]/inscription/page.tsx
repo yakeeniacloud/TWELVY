@@ -1401,12 +1401,12 @@ export default function InscriptionPage() {
                         <div style={{
                           position: 'absolute',
                           right: '12px',
-                          top: '50%',
-                          transform: 'translateY(-50%)',
+                          top: isCurrentStage ? '18px' : '50%',
+                          transform: isCurrentStage ? 'none' : 'translateY(-50%)',
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: 'center',
-                          gap: '8px'
+                          gap: '12px'
                         }}>
                           {/* "Stage sélectionné" badge for current stage */}
                           {isCurrentStage && (
@@ -1415,8 +1415,7 @@ export default function InscriptionPage() {
                               fontFamily: 'Poppins',
                               fontSize: '11px',
                               fontWeight: '400',
-                              textAlign: 'center',
-                              marginBottom: '4px'
+                              textAlign: 'center'
                             }}>
                               Stage sélectionné
                             </div>
@@ -3221,16 +3220,11 @@ export default function InscriptionPage() {
             {showDateChangedNotification && (
               <div
                 style={{
-                  width: '349px',
-                  padding: '12px 20px',
-                  marginBottom: '16px',
-                  borderRadius: '8px',
-                  background: '#D4EDDA',
-                  border: '1px solid #C3E6CB',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '10px'
+                  gap: '10px',
+                  marginBottom: '16px'
                 }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="33" viewBox="0 0 30 33" fill="none" style={{ width: '30px', height: '33px', flexShrink: 0 }}>
@@ -3243,10 +3237,10 @@ export default function InscriptionPage() {
                     color: '#30B049',
                     textAlign: 'center',
                     fontFamily: 'Poppins',
-                    fontSize: '18px',
+                    fontSize: '16px',
                     fontStyle: 'normal',
                     fontWeight: 400,
-                    lineHeight: '28px',
+                    lineHeight: '24px',
                     margin: 0
                   }}
                 >
