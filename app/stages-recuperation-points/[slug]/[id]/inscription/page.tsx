@@ -73,6 +73,7 @@ export default function InscriptionPage() {
   const [isPayerButtonVisible, setIsPayerButtonVisible] = useState(false)
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
   const [isPayerButtonDisabled, setIsPayerButtonDisabled] = useState(false)
+  const [showPhoneTooltip, setShowPhoneTooltip] = useState(false)
 
   // Desktop stepper state
   const [currentStep, setCurrentStep] = useState(1)
@@ -215,6 +216,9 @@ export default function InscriptionPage() {
     // Close the popup
     setIsDatePopupOpen(false)
 
+    // Auto-scroll to top of page
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+
     // Show success notification
     setShowDateChangedNotification(true)
 
@@ -307,14 +311,36 @@ export default function InscriptionPage() {
 
   // Mobile functions
   const handleValidateForm = () => {
-    // Always reveal payment block so client can see the process
-    setPaymentBlockVisible(true)
+    // Check if all required fields are filled
+    if (!civilite || !nom || !prenom || !email || !telephone || !cgvAccepted) {
+      // Find and scroll to first empty field
+      const fields = [
+        { value: civilite, selector: 'select[value=""]' },
+        { value: nom, selector: 'input[placeholder="Nom"]' },
+        { value: prenom, selector: 'input[placeholder="Prénom"]' },
+        { value: email, selector: 'input[placeholder="Email"]' },
+        { value: telephone, selector: 'input[placeholder="Téléphone"]' },
+        { value: cgvAccepted, selector: 'input[type="checkbox"]' }
+      ]
 
-    // Only validate form if all required fields are filled
-    if (civilite && nom && prenom && email && telephone && cgvAccepted) {
-      setFormValidated(true)
-      setIsFormExpanded(false)
+      for (const field of fields) {
+        if (!field.value) {
+          const element = document.querySelector(field.selector)
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            break
+          }
+        }
+      }
+
+      // Keep payment block CLOSED
+      return
     }
+
+    // All fields are valid - reveal payment block and mark form as validated
+    setPaymentBlockVisible(true)
+    setFormValidated(true)
+    setIsFormExpanded(false)
 
     // Scroll to payment section
     setTimeout(() => {
@@ -397,29 +423,29 @@ export default function InscriptionPage() {
 
         {/* Mobile Progress Steps */}
         <div className="flex justify-center items-center px-3 py-4 gap-2">
-          {/* Step 1 */}
+          {/* Step 1 - Coordonnées */}
           <div className="flex flex-col items-center">
-            <div className="w-7 h-7 rounded-full border-2 border-black bg-white flex items-center justify-center mb-1">
-              <span className="text-sm font-normal">1</span>
+            <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center mb-1 ${!formValidated ? 'border-black bg-white' : 'border-gray-300 bg-gray-100'}`}>
+              <span className={`text-sm ${!formValidated ? 'font-normal text-black' : 'text-gray-400'}`}>1</span>
             </div>
-            <p style={{ fontSize: '10px' }} className="text-center">Coordonnées</p>
+            <p style={{ fontSize: '10px' }} className={`text-center ${!formValidated ? 'text-black' : 'text-gray-400'}`}>Coordonnées</p>
           </div>
 
           {/* Line */}
           <div className="flex-1 h-px bg-gray-300 mb-4" style={{ maxWidth: '60px' }} />
 
-          {/* Step 2 */}
+          {/* Step 2 - Paiement */}
           <div className="flex flex-col items-center">
-            <div className="w-7 h-7 rounded-full border-2 border-gray-300 bg-gray-100 flex items-center justify-center mb-1">
-              <span className="text-sm text-gray-400">2</span>
+            <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center mb-1 ${formValidated ? 'border-black bg-white' : 'border-gray-300 bg-gray-100'}`}>
+              <span className={`text-sm ${formValidated ? 'font-normal text-black' : 'text-gray-400'}`}>2</span>
             </div>
-            <p style={{ fontSize: '10px' }} className="text-center text-gray-400">Paiement</p>
+            <p style={{ fontSize: '10px' }} className={`text-center ${formValidated ? 'text-black' : 'text-gray-400'}`}>Paiement</p>
           </div>
 
           {/* Line */}
           <div className="flex-1 h-px bg-gray-300 mb-4" style={{ maxWidth: '60px' }} />
 
-          {/* Step 3 */}
+          {/* Step 3 - Confirmation */}
           <div className="flex flex-col items-center">
             <div className="w-7 h-7 rounded-full border-2 border-gray-300 bg-gray-100 flex items-center justify-center mb-1">
               <span className="text-sm text-gray-400">3</span>
@@ -436,7 +462,7 @@ export default function InscriptionPage() {
         </div>
 
         {/* Stage Card */}
-        <div id="mobile-stage-card" className="mx-auto my-3" style={{ width: '363px', padding: '10px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', borderRadius: '20px', border: '1px solid #EAEAEA', background: '#FFF', boxShadow: '0 4px 12px 2px rgba(0, 0, 0, 0.20)' }}>
+        <div id="mobile-stage-card" className="mx-auto my-3" style={{ width: '363px', padding: '10px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', border: '1px solid #EAEAEA', background: '#FFF' }}>
           <div className="mb-2" style={{ display: 'flex', width: '337px', height: '38px', padding: '8px 106px', justifyContent: 'center', alignItems: 'center', gap: '10px', borderRadius: '8px', background: '#EFEFEF' }}>
             <p className="text-center font-normal" style={{ fontSize: '13px' }}>Stage sélectionné</p>
           </div>
@@ -519,6 +545,9 @@ export default function InscriptionPage() {
           </div>
         </div>
 
+        {/* Grey separator line below stage card */}
+        <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '12px', marginBottom: '12px' }} />
+
         {/* Form Section */}
         <div className="px-3 py-3">
           {!formValidated ? (
@@ -552,22 +581,58 @@ export default function InscriptionPage() {
                   <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
 
-                <div>
+                <div className="relative">
                   <div className="flex items-center gap-1 mb-1">
                     <label style={{ fontSize: '12px' }}>Téléphone mobile *</label>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ width: '16px', height: '16px', flexShrink: 0 }}>
-                      <g clipPath="url(#clip0_75_35)">
-                        <path d="M7.99999 10.6667V8.00004M7.99999 5.33337H8.00666M14.6667 8.00004C14.6667 11.6819 11.6819 14.6667 7.99999 14.6667C4.3181 14.6667 1.33333 11.6819 1.33333 8.00004C1.33333 4.31814 4.3181 1.33337 7.99999 1.33337C11.6819 1.33337 14.6667 4.31814 14.6667 8.00004Z" stroke="#1E1E1E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_75_35">
-                          <rect width="16" height="16" fill="white"/>
-                        </clipPath>
-                      </defs>
-                    </svg>
+                    <button
+                      type="button"
+                      onClick={() => setShowPhoneTooltip(true)}
+                      className="cursor-pointer"
+                      aria-label="Information téléphone mobile"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ width: '16px', height: '16px', flexShrink: 0 }}>
+                        <g clipPath="url(#clip0_75_35)">
+                          <path d="M7.99999 10.6667V8.00004M7.99999 5.33337H8.00666M14.6667 8.00004C14.6667 11.6819 11.6819 14.6667 7.99999 14.6667C4.3181 14.6667 1.33333 11.6819 1.33333 8.00004C1.33333 4.31814 4.3181 1.33337 7.99999 1.33337C11.6819 1.33337 14.6667 4.31814 14.6667 8.00004Z" stroke="#1E1E1E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_75_35">
+                            <rect width="16" height="16" fill="white"/>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </button>
                   </div>
+
+                  {/* Phone Tooltip */}
+                  {showPhoneTooltip && (
+                    <>
+                      {/* Backdrop for click outside detection */}
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setShowPhoneTooltip(false)}
+                      />
+                      {/* Tooltip */}
+                      <div className="absolute top-0 left-0 right-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-3" style={{ marginTop: '-10px' }}>
+                        <div className="flex justify-between items-start mb-2">
+                          <p className="italic pr-2" style={{ color: '#2E2E2E', fontFamily: 'Poppins', fontSize: '13px', fontStyle: 'italic', fontWeight: '400', lineHeight: '17px' }}>
+                            Important : indiquez un numéro de mobile valide. Il servira au SMS de confirmation et aux informations essentielles liées à votre stage.
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => setShowPhoneTooltip(false)}
+                            className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-gray-600 hover:text-black"
+                            aria-label="Fermer"
+                          >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                              <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
                   <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="Téléphone" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
-                  <p className="italic mt-1" style={{ display: 'flex', width: '344px', height: '51px', flexDirection: 'column', justifyContent: 'center', flexShrink: 0, color: '#2E2E2E', fontFamily: 'Poppins', fontSize: '13px', fontStyle: 'italic', fontWeight: '400', lineHeight: '17px' }}>Important : indiquez un numéro de mobile valide. Il servira au SMS de confirmation et aux informations essentielles liées à votre stage.</p>
                 </div>
 
                 {/* Garantie Sérénité */}
@@ -622,12 +687,6 @@ export default function InscriptionPage() {
                     }}
                   >
                     <span style={{
-                      display: 'flex',
-                      width: '214px',
-                      height: '41px',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      flexShrink: 0,
                       color: '#FFF',
                       textAlign: 'center',
                       fontFamily: 'Poppins',
@@ -635,7 +694,8 @@ export default function InscriptionPage() {
                       fontStyle: 'normal',
                       fontWeight: '400',
                       lineHeight: 'normal',
-                      letterSpacing: '1.12px'
+                      letterSpacing: '1.12px',
+                      whiteSpace: 'nowrap'
                     }}>
                       Valider et passer au paiement
                     </span>
@@ -679,11 +739,14 @@ export default function InscriptionPage() {
                       Modifier
                     </button>
                   </div>
+                  {/* Grey separator line below Modifier button */}
+                  <div className="mx-auto mt-3" style={{ width: '363px', height: '1px', background: '#D9D9D9' }} />
                 </div>
               ) : (
                 <>
                   {/* Expanded Form */}
-                  <h2 className="font-medium mb-3" style={{ fontSize: '14px' }}>Étape 1/2 : coordonnées personnelles</h2>
+                  <h2 className="font-medium mb-3" style={{ fontSize: '14px' }}>Étape 1/2 : coordonnées personnelles pour l'inscription</h2>
+                  <p className="italic mb-3" style={{ fontSize: '11px' }}>• Tous les champs sont obligatoires</p>
                   <div className="space-y-3">
                     <div>
                       <label className="block mb-1" style={{ fontSize: '12px' }}>Civilité *</label>
@@ -694,25 +757,51 @@ export default function InscriptionPage() {
                     </div>
                     <div>
                       <label className="block mb-1" style={{ fontSize: '12px' }}>Nom *</label>
-                      <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                      <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Nom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
                     <div>
                       <label className="block mb-1" style={{ fontSize: '12px' }}>Prénom *</label>
-                      <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                      <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} placeholder="Prénom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
                     <div>
                       <label className="block mb-1" style={{ fontSize: '12px' }}>Email *</label>
-                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
                     <div>
                       <label className="block mb-1" style={{ fontSize: '12px' }}>Téléphone mobile *</label>
-                      <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                      <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="Téléphone" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
 
-                    {/* Buttons */}
-                    <div className="flex gap-2">
-                      <button onClick={handleAnnulerClick} className="flex-1 bg-gray-300 py-2 rounded-full" style={{ fontSize: '12px' }}>Annuler</button>
-                      <button onClick={handleReturnToPayment} className="flex-1 bg-green-600 text-white py-2 rounded-full" style={{ fontSize: '11px' }}>Valider le formulaire et revenir au paiement</button>
+                    {/* Garantie Sérénité */}
+                    <div className="bg-gray-100 rounded-lg p-2.5">
+                      <div className="flex items-center gap-1.5 mb-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px' }}>
+                          <path d="M12.5 22.9167C12.5 22.9167 20.8333 18.75 20.8333 12.5V5.20833L12.5 2.08333L4.16667 5.20833V12.5C4.16667 18.75 12.5 22.9167 12.5 22.9167Z" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span className="font-medium underline" style={{ fontSize: '12px' }}>Garantie Sérénité</span>
+                      </div>
+                      <label className="flex items-start gap-1.5 cursor-pointer mb-1.5">
+                        <input type="checkbox" checked={garantieSerenite} onChange={(e) => setGarantieSerenite(e.target.checked)} className="mt-0.5" />
+                        <span style={{ fontSize: '11px' }}>Je souscris à la Garantie Sérénité: +57€ TTC (supplement facturé en plus du stage)</span>
+                      </label>
+                      <div className="flex items-center justify-center gap-2 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="22" viewBox="0 0 25 22" fill="none" style={{ width: '25px', height: '25px' }}>
+                          <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <div className="font-medium" style={{ fontSize: '11px' }}>Voir le détail de la garantie</div>
+                      </div>
+                    </div>
+
+                    {/* CGV - Pre-checked */}
+                    <label className="flex items-start gap-1.5 cursor-pointer">
+                      <input type="checkbox" checked={true} onChange={(e) => setCgvAccepted(e.target.checked)} className="mt-0.5" />
+                      <span style={{ fontSize: '11px' }}>J'accepte <a href="#" className="text-blue-600 underline">les conditions générales de vente</a></span>
+                    </label>
+
+                    {/* Buttons - Stacked vertically */}
+                    <div className="space-y-2">
+                      <button onClick={handleAnnulerClick} className="w-full bg-gray-300 py-2 rounded-full" style={{ fontSize: '12px' }}>Annuler</button>
+                      <button onClick={handleReturnToPayment} className="w-full bg-green-600 text-white py-2 rounded-full" style={{ fontSize: '12px' }}>Valider le formulaire et repasser au paiement</button>
                     </div>
                   </div>
                 </>
@@ -803,7 +892,9 @@ export default function InscriptionPage() {
               <div className="bg-gray-200 rounded-lg p-2.5 text-center">
                 <p className="font-medium mb-1" style={{ fontSize: '12px' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)} à {stage && formatCityName(stage.site.ville)}</p>
                 <p style={{ fontSize: '11px' }}>Prix du stage : {stage?.prix}€ TTC</p>
-                <p style={{ fontSize: '11px' }}>Garantie Sérénité : {garantieSerenite ? '+57€ TTC' : 'N/A'}</p>
+                {garantieSerenite && (
+                  <p style={{ fontSize: '11px' }}>Garantie Sérénité : +57€ TTC</p>
+                )}
                 <p className="font-medium mt-1" style={{ fontSize: '13px' }}>Total à payer : {totalPrice}€ TTC</p>
               </div>
 
@@ -850,70 +941,70 @@ export default function InscriptionPage() {
                 Après avoir cliqué sur &quot;Payer&quot;, votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédiatement par email votre convocation au stage.
               </p>
             </div>
-
-            {/* Info pratiques section */}
-            <div className="mt-6 border-t pt-6">
-              <h3 className="font-medium mb-1.5" style={{
-                height: '55px',
-                fontSize: '20px',
-                fontWeight: '500',
-                lineHeight: '25px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                flexShrink: 0,
-                alignSelf: 'stretch'
-              }}>Informations pratiques sur votre stage</h3>
-              <p className="text-gray-700 mb-2" style={{ fontSize: '11px' }}>
-                Pour en savoir plus sur ce que comprends le prix de votre stage (programme, déroulement, agrément.
-              </p>
-
-              {/* Tabs */}
-              <div className="border border-gray-300 rounded-lg bg-gray-200 flex p-0.5 mb-1.5">
-                <button
-                  onClick={() => setActiveTab('prix')}
-                  className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'prix' ? 'bg-white' : 'bg-transparent'}`}
-                  style={{ fontSize: '10px' }}
-                >
-                  Détails du stage
-                </button>
-                <button
-                  onClick={() => setActiveTab('agrement')}
-                  className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'agrement' ? 'bg-white' : 'bg-transparent'}`}
-                  style={{ fontSize: '10px' }}
-                >
-                  Agrément
-                </button>
-                <button
-                  onClick={() => setActiveTab('programme')}
-                  className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'programme' ? 'bg-white' : 'bg-transparent'}`}
-                  style={{ fontSize: '10px' }}
-                >
-                  Programme
-                </button>
-              </div>
-
-              {/* Tab Content */}
-              <div className="border border-gray-300 rounded-lg p-2.5 bg-white">
-                {activeTab === 'prix' && (
-                  <ul className="space-y-1" style={{ fontSize: '11px' }}>
-                    <li>• 14 heures de formation</li>
-                    <li>• L&apos;attestation de stage remise le deuxième jour</li>
-                    <li>• La récupération automatique de 4 points</li>
-                    <li>• Le traitement de votre dossier administratif en préfecture</li>
-                    <li>• En cas d&apos;empêchement, le transfert sur un autre stage de notre réseau</li>
-                  </ul>
-                )}
-                {activeTab === 'agrement' && (
-                  <p style={{ fontSize: '11px' }}>Informations sur l&apos;agrément préfectoral</p>
-                )}
-                {activeTab === 'programme' && (
-                  <p style={{ fontSize: '11px' }}>Programme détaillé du stage de récupération de points</p>
-                )}
-              </div>
-            </div>
           </div>
         )}
+
+        {/* Informations pratiques section - shown by default */}
+        <div className="px-3 py-4">
+          <h3 className="font-medium mb-1.5" style={{
+            height: '55px',
+            fontSize: '20px',
+            fontWeight: '500',
+            lineHeight: '25px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            flexShrink: 0,
+            alignSelf: 'stretch'
+          }}>Informations pratiques sur votre stage</h3>
+          <p className="text-gray-700 mb-2" style={{ fontSize: '11px' }}>
+            Pour en savoir plus sur ce que comprends le prix de votre stage (programme, déroulement, agrément.
+          </p>
+
+          {/* Tabs */}
+          <div className="border border-gray-300 rounded-lg bg-gray-200 flex p-0.5 mb-1.5">
+            <button
+              onClick={() => setActiveTab('prix')}
+              className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'prix' ? 'bg-white' : 'bg-transparent'}`}
+              style={{ fontSize: '10px' }}
+            >
+              Détails du stage
+            </button>
+            <button
+              onClick={() => setActiveTab('agrement')}
+              className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'agrement' ? 'bg-white' : 'bg-transparent'}`}
+              style={{ fontSize: '10px' }}
+            >
+              Agrément
+            </button>
+            <button
+              onClick={() => setActiveTab('programme')}
+              className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'programme' ? 'bg-white' : 'bg-transparent'}`}
+              style={{ fontSize: '10px' }}
+            >
+              Programme
+            </button>
+          </div>
+
+          {/* Tab Content */}
+          <div className="border border-gray-300 rounded-lg p-2.5 bg-white">
+            {activeTab === 'prix' && (
+              <ul className="space-y-1" style={{ fontSize: '11px' }}>
+                <li>• 14 heures de formation</li>
+                <li>• L&apos;attestation de stage remise le deuxième jour</li>
+                <li>• La récupération automatique de 4 points</li>
+                <li>• Le traitement de votre dossier administratif en préfecture</li>
+                <li>• En cas d&apos;empêchement, le transfert sur un autre stage de notre réseau</li>
+              </ul>
+            )}
+            {activeTab === 'agrement' && (
+              <p style={{ fontSize: '11px' }}>Informations sur l&apos;agrément préfectoral</p>
+            )}
+            {activeTab === 'programme' && (
+              <p style={{ fontSize: '11px' }}>Programme détaillé du stage de récupération de points</p>
+            )}
+          </div>
+        </div>
 
         {/* Questions fréquentes */}
         <div className="px-3 py-4 bg-gray-100">
@@ -969,8 +1060,30 @@ export default function InscriptionPage() {
         {/* Sticky Bar - CAS Logic */}
         {!isKeyboardOpen && (
           <>
-            {/* STICKY 1: CAS 1b - Form not validated, stage card not visible */}
-            {showStickyType1b && (
+            {/* DATE CHANGED NOTIFICATION - Shows for 5 seconds, replaces other stickies */}
+            {showDateChangedNotification ? (
+              <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50 flex items-center justify-center gap-3" style={{ padding: '16px' }}>
+                {/* Green checkmark icon */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                  <path d="M26.6667 8L12 22.6667L5.33337 16" stroke="#41A334" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                {/* Text */}
+                <p style={{
+                  color: '#000',
+                  fontFamily: 'Poppins',
+                  fontSize: '18px',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  lineHeight: '28px',
+                  margin: 0
+                }}>
+                  Date de stage mise à jour
+                </p>
+              </div>
+            ) : (
+              <>
+                {/* STICKY 1: CAS 1b - Form not validated, stage card not visible */}
+                {showStickyType1b && (
               <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '12px 16px' }}>
                 <h3 className="text-center mb-2" style={{
                   width: '100%',
@@ -986,14 +1099,6 @@ export default function InscriptionPage() {
                   Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
                 </h3>
                 <div className="flex justify-between items-center mb-2">
-                  <button onClick={handleChangeDateClick} style={{
-                    color: '#345FB0',
-                    fontFamily: 'Poppins',
-                    fontSize: '14px',
-                    fontStyle: 'normal',
-                    fontWeight: '400',
-                    lineHeight: '23px'
-                  }}>Changer de date</button>
                   <button onClick={handleDetailsClick} style={{
                     color: '#345FB0',
                     fontFamily: 'Poppins',
@@ -1002,6 +1107,14 @@ export default function InscriptionPage() {
                     fontWeight: '400',
                     lineHeight: '23px'
                   }}>Détails du stage</button>
+                  <button onClick={handleChangeDateClick} style={{
+                    color: '#345FB0',
+                    fontFamily: 'Poppins',
+                    fontSize: '14px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: '23px'
+                  }}>Changer de date</button>
                 </div>
                 <div className="flex justify-center">
                   <button
@@ -1156,6 +1269,8 @@ export default function InscriptionPage() {
                   </button>
                 </div>
               </div>
+            )}
+              </>
             )}
           </>
         )}
