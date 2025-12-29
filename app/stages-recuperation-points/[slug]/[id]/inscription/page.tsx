@@ -1401,21 +1401,29 @@ export default function InscriptionPage() {
                         <div style={{
                           position: 'absolute',
                           right: '12px',
-                          top: isCurrentStage ? '18px' : '50%',
+                          top: isCurrentStage ? '12px' : '50%',
                           transform: isCurrentStage ? 'none' : 'translateY(-50%)',
                           display: 'flex',
                           flexDirection: 'column',
                           alignItems: 'center',
-                          gap: '12px'
+                          gap: '8px'
                         }}>
                           {/* "Stage sélectionné" badge for current stage */}
                           {isCurrentStage && (
                             <div style={{
+                              display: 'flex',
+                              width: '117px',
+                              height: '17px',
+                              flexDirection: 'column',
+                              justifyContent: 'center',
+                              flexShrink: 0,
                               color: '#336FF0',
+                              textAlign: 'center',
                               fontFamily: 'Poppins',
-                              fontSize: '11px',
-                              fontWeight: '400',
-                              textAlign: 'center'
+                              fontSize: '13px',
+                              fontStyle: 'normal',
+                              fontWeight: 400,
+                              lineHeight: '35px'
                             }}>
                               Stage sélectionné
                             </div>
@@ -1428,7 +1436,7 @@ export default function InscriptionPage() {
                             fontFamily: 'Poppins',
                             fontSize: '20px',
                             fontStyle: 'normal',
-                            fontWeight: '500',
+                            fontWeight: 400,
                             lineHeight: '35px'
                           }}>
                             {stageItem.prix}€
