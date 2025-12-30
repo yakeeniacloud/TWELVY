@@ -5,6 +5,27 @@ import { useRouter } from 'next/navigation'
 import { useCities } from '@/hooks/useCities'
 import { CITY_POSTAL_MAP } from '@/lib/city-postal-map'
 
+// Format city name: MARSEILLE -> Marseille, AIX-EN-PROVENCE -> Aix-en-Provence
+const formatCityDisplay = (city: string) => {
+  return city
+    .split('-')
+    .map((word, index) => {
+      // Keep lowercase for common French prepositions (en, de, du, la, le, les, sur, sous)
+      const lowerWord = word.toLowerCase()
+      if (index > 0 && ['en', 'de', 'du', 'la', 'le', 'les', 'sur', 'sous'].includes(lowerWord)) {
+        return lowerWord
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    })
+    .join('-')
+}
+
+// Get department code from city using postal map
+const getDeptCode = (city: string) => {
+  const postal = CITY_POSTAL_MAP[city.toUpperCase()]
+  return postal ? postal.substring(0, 2) : ''
+}
+
 interface CitySearchBarProps {
   placeholder?: string
   variant?: 'large' | 'small' | 'sidebar' | 'filter'
@@ -192,7 +213,7 @@ export default function CitySearchBar({
         className="relative"
       >
         {isFilter ? (
-          // Filter variant - mobile header search bar specs
+          // Filter variant - mobile header search bar specs (white background for desktop)
           <div
             className="flex items-center gap-3.5"
             style={{
@@ -201,7 +222,7 @@ export default function CitySearchBar({
               padding: '1px 20px',
               borderRadius: '20px',
               border: '1px solid #989898',
-              background: 'linear-gradient(0deg, rgba(176, 175, 175, 0.20) 0%, rgba(176, 175, 175, 0.20) 100%), #FFF',
+              background: '#FFF',
               flexShrink: 0
             }}
           >
@@ -289,19 +310,22 @@ export default function CitySearchBar({
             }`}
             style={{ maxHeight: '300px', overflowY: 'auto' }}
           >
-            {filteredCities.map((city, index) => (
-              <button
-                key={city}
-                onClick={() => handleSearch(city)}
-                className={`w-full text-left px-3 py-2 text-sm transition-colors ${
-                  index === selectedIndex
-                    ? 'bg-blue-100 text-blue-900'
-                    : 'text-gray-700 hover:bg-gray-100'
-                }`}
-              >
-                {city}
-              </button>
-            ))}
+            {filteredCities.map((city, index) => {
+              const deptCode = getDeptCode(city)
+              return (
+                <button
+                  key={city}
+                  onClick={() => handleSearch(city)}
+                  className={`w-full text-left px-3 py-2 text-sm transition-colors ${
+                    index === selectedIndex
+                      ? 'bg-blue-100 text-blue-900'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  {formatCityDisplay(city)}{deptCode ? ` (${deptCode})` : ''}
+                </button>
+              )
+            })}
           </div>
         )}
       </form>

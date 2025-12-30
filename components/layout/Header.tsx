@@ -73,11 +73,11 @@ export default function Header() {
         </Link>
       </div>
 
-      {/* Main Navigation - Dark background */}
-      <nav className="bg-[#222222] px-8 py-3">
+      {/* Main Navigation - Dark background - reduced height by 20% */}
+      <nav className="bg-[#222222] px-8 py-2">
         <div className="flex items-center justify-end max-w-7xl mx-auto">
-          <Link href="/aide-et-contact" className="text-white text-sm hover:text-gray-200 transition-colors">
-            Aide et contact
+          <Link href="/aide-et-contact" className="text-white text-xs hover:text-gray-200 transition-colors lowercase">
+            aide et contact
           </Link>
         </div>
       </nav>

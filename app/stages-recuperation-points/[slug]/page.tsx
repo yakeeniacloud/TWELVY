@@ -8,6 +8,36 @@ import CitySearchBar from '@/components/stages/CitySearchBar'
 import StageDetailsModal from '@/components/stages/StageDetailsModal'
 import { removeStreetNumber } from '@/lib/formatAddress'
 
+// French department names map
+const DEPARTMENT_NAMES: { [key: string]: string } = {
+  '01': 'Ain', '02': 'Aisne', '03': 'Allier', '04': 'Alpes-de-Haute-Provence',
+  '05': 'Hautes-Alpes', '06': 'Alpes-Maritimes', '07': 'Ardèche', '08': 'Ardennes',
+  '09': 'Ariège', '10': 'Aube', '11': 'Aude', '12': 'Aveyron',
+  '13': 'Bouches-du-Rhône', '14': 'Calvados', '15': 'Cantal', '16': 'Charente',
+  '17': 'Charente-Maritime', '18': 'Cher', '19': 'Corrèze', '2A': 'Corse-du-Sud',
+  '2B': 'Haute-Corse', '21': 'Côte-d\'Or', '22': 'Côtes-d\'Armor', '23': 'Creuse',
+  '24': 'Dordogne', '25': 'Doubs', '26': 'Drôme', '27': 'Eure',
+  '28': 'Eure-et-Loir', '29': 'Finistère', '30': 'Gard', '31': 'Haute-Garonne',
+  '32': 'Gers', '33': 'Gironde', '34': 'Hérault', '35': 'Ille-et-Vilaine',
+  '36': 'Indre', '37': 'Indre-et-Loire', '38': 'Isère', '39': 'Jura',
+  '40': 'Landes', '41': 'Loir-et-Cher', '42': 'Loire', '43': 'Haute-Loire',
+  '44': 'Loire-Atlantique', '45': 'Loiret', '46': 'Lot', '47': 'Lot-et-Garonne',
+  '48': 'Lozère', '49': 'Maine-et-Loire', '50': 'Manche', '51': 'Marne',
+  '52': 'Haute-Marne', '53': 'Mayenne', '54': 'Meurthe-et-Moselle', '55': 'Meuse',
+  '56': 'Morbihan', '57': 'Moselle', '58': 'Nièvre', '59': 'Nord',
+  '60': 'Oise', '61': 'Orne', '62': 'Pas-de-Calais', '63': 'Puy-de-Dôme',
+  '64': 'Pyrénées-Atlantiques', '65': 'Hautes-Pyrénées', '66': 'Pyrénées-Orientales',
+  '67': 'Bas-Rhin', '68': 'Haut-Rhin', '69': 'Rhône', '70': 'Haute-Saône',
+  '71': 'Saône-et-Loire', '72': 'Sarthe', '73': 'Savoie', '74': 'Haute-Savoie',
+  '75': 'Paris', '76': 'Seine-Maritime', '77': 'Seine-et-Marne', '78': 'Yvelines',
+  '79': 'Deux-Sèvres', '80': 'Somme', '81': 'Tarn', '82': 'Tarn-et-Garonne',
+  '83': 'Var', '84': 'Vaucluse', '85': 'Vendée', '86': 'Vienne',
+  '87': 'Haute-Vienne', '88': 'Vosges', '89': 'Yonne', '90': 'Territoire de Belfort',
+  '91': 'Essonne', '92': 'Hauts-de-Seine', '93': 'Seine-Saint-Denis',
+  '94': 'Val-de-Marne', '95': 'Val-d\'Oise', '971': 'Guadeloupe', '972': 'Martinique',
+  '973': 'Guyane', '974': 'La Réunion', '976': 'Mayotte'
+}
+
 interface Stage {
   id: number
   id_site: number
@@ -454,9 +484,8 @@ export default function StagesResultsPage() {
                 objectFit: 'cover'
               }}
             />
-            {/* Text */}
+            {/* Text - Dynamic based on first stage's postal code */}
             <span style={{
-              width: '171px',
               flexShrink: 0,
               color: '#2C2C2C',
               textAlign: 'center',
@@ -467,19 +496,55 @@ export default function StagesResultsPage() {
               lineHeight: 'normal',
               letterSpacing: '0.7px'
             }}>
-              Agréés préfecture 13
+              Agréés préfecture {stages[0]?.site.code_postal?.substring(0, 2) || '13'}
             </span>
           </div>
 
-          {/* Desktop: Original image */}
-          <Image
-            src="/prefecture-badge.png"
-            alt="Stages Agréés par la Préfecture des Bouches-du-Rhône (13)"
-            width={800}
-            height={60}
-            className="hidden md:block h-14 w-auto max-w-full px-4"
-          />
+          {/* Desktop: Dynamic prefecture badge based on city's department */}
+          {(() => {
+            const firstStage = stages[0]
+            const deptCode = firstStage?.site.code_postal?.substring(0, 2) || '13'
+            const deptName = DEPARTMENT_NAMES[deptCode] || 'France'
+            // French preposition: "d'" before vowels, "du" for masculine "Le X", "de la" for feminine "La X", "de" otherwise
+            const getPreposition = (name: string) => {
+              if (/^[AEIOUYH]/i.test(name)) return "d'"
+              return 'de '
+            }
+            return (
+              <div className="hidden md:flex items-center justify-center gap-3 px-6 py-2" style={{
+                borderRadius: '8px',
+                background: 'rgba(219, 206, 157, 0.69)'
+              }}>
+                <img
+                  src="/flag.png"
+                  alt="Drapeau français"
+                  style={{ width: '24px', height: '16px', borderRadius: '2px', objectFit: 'cover' }}
+                />
+                <span style={{
+                  color: '#2C2C2C',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '16px',
+                  fontWeight: 400,
+                  letterSpacing: '0.8px'
+                }}>
+                  Stages Agréés par la Préfecture {getPreposition(deptName)}{deptName} ({deptCode})
+                </span>
+              </div>
+            )
+          })()}
         </div>
+
+        {/* Tagline below orange bar - Desktop only */}
+        <p className="hidden md:block text-center mb-6" style={{
+          fontFamily: 'var(--font-poppins)',
+          color: 'rgba(52, 52, 52, 0.86)',
+          fontSize: '15px',
+          fontStyle: 'italic',
+          fontWeight: 400,
+          lineHeight: '28px'
+        }}>
+          Depuis 2008, plus de 857 000 conducteurs ont récupéré leurs points avec ProStagesPermis
+        </p>
 
         {/* Filters Section */}
         <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 w-full md:w-[903px] mx-auto mb-4">
@@ -510,7 +575,7 @@ export default function StagesResultsPage() {
             <button
               onClick={() => setSortBy(sortBy === 'date' ? null : 'date')}
               className={`px-3 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
-                sortBy === 'date' ? 'bg-[#c4cce1]' : 'bg-white'
+                sortBy === 'date' ? 'bg-[#EBEBEB]' : 'bg-white'
               }`}
               style={{
                 height: '35px',
@@ -528,7 +593,7 @@ export default function StagesResultsPage() {
             <button
               onClick={() => setSortBy(sortBy === 'prix' ? null : 'prix')}
               className={`px-3 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
-                sortBy === 'prix' ? 'bg-[#c4cce1]' : 'bg-white'
+                sortBy === 'prix' ? 'bg-[#EBEBEB]' : 'bg-white'
               }`}
               style={{
                 height: '35px',
@@ -546,7 +611,7 @@ export default function StagesResultsPage() {
             <button
               onClick={() => setSortBy(sortBy === 'proximite' ? null : 'proximite')}
               className={`px-3 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
-                sortBy === 'proximite' ? 'bg-[#c4cce1]' : 'bg-white'
+                sortBy === 'proximite' ? 'bg-[#EBEBEB]' : 'bg-white'
               }`}
               style={{
                 height: '35px',
@@ -627,34 +692,213 @@ export default function StagesResultsPage() {
         </div>
       </div>
 
-        {/* Stages List */}
-        {loading && (
-          <div className="text-center py-12">
-            <p className="text-gray-600">Chargement des stages...</p>
-          </div>
-        )}
+        {/* Desktop: Two-column layout with stages list and sticky guarantees block */}
+        <div className="hidden md:flex gap-6 max-w-6xl mx-auto">
+          {/* Left column: Stages List (70% width) */}
+          <div className="flex-1" style={{ maxWidth: '70%' }}>
+            {loading && (
+              <div className="text-center py-12">
+                <p className="text-gray-600">Chargement des stages...</p>
+              </div>
+            )}
 
-        {error && (
-          <div className="text-center py-12">
-            <p className="text-red-600">Erreur: {error}</p>
-          </div>
-        )}
+            {error && (
+              <div className="text-center py-12">
+                <p className="text-red-600">Erreur: {error}</p>
+              </div>
+            )}
 
-        {!loading && !error && stages.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-600">Aucun stage trouvé pour cette ville.</p>
-          </div>
-        )}
+            {!loading && !error && stages.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-600">Aucun stage trouvé pour cette ville.</p>
+              </div>
+            )}
 
-        {!loading && !error && stages.length > 0 && (
-          <>
-            {visibleStages.map((stage) => (
+            {!loading && !error && stages.length > 0 && (
+              <>
+                {visibleStages.map((stage) => (
+                  <article
+                    key={stage.id}
+                    className="flex flex-row w-full h-[85px] p-[0_7px] items-center mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)]"
+                  >
+                    {/* Desktop Layout */}
+                    <div className="flex items-center w-full">
+                      {/* Left: Date and Details Link */}
+                      <div className="flex flex-col flex-shrink-0 gap-0 ml-3">
+                        <p className="w-[200px] text-[rgba(0,0,0,0.89)] text-[14px] font-medium leading-[14px]" style={{ fontFamily: 'var(--font-poppins)' }}>
+                          {formatDate(stage.date_start, stage.date_end)}
+                        </p>
+                        <button
+                          onClick={() => {
+                            setSelectedStage(stage)
+                            setIsModalOpen(true)
+                          }}
+                          className="flex items-center gap-[5px] text-[rgba(90,106,147,0.86)] text-[12px] font-normal leading-[12px] hover:underline text-left mt-2"
+                          style={{ fontFamily: 'var(--font-poppins)' }}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 15 15" fill="none" className="w-[12px] h-[12px] flex-shrink-0">
+                            <path d="M7.46665 10.1334V7.46672M7.46665 4.80005H7.47332M14.1333 7.46672C14.1333 11.1486 11.1486 14.1334 7.46665 14.1334C3.78476 14.1334 0.799988 11.1486 0.799988 7.46672C0.799988 3.78482 3.78476 0.800049 7.46665 0.800049C11.1486 0.800049 14.1333 3.78482 14.1333 7.46672Z" stroke="#5A6A93" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span>Détails du stage</span>
+                        </button>
+                      </div>
+
+                      {/* Center: Location Pin + City + Address */}
+                      <div className="flex items-center gap-2 flex-1 mx-4">
+                        <div className="flex w-[32px] h-[32px] p-[7px] justify-center items-center flex-shrink-0 rounded-full bg-gray-200">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" className="w-[18px] h-[18px] flex-shrink-0">
+                            <g clipPath="url(#clip0_desktop)">
+                              <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </g>
+                            <defs>
+                              <clipPath id="clip0_desktop">
+                                <rect width="20" height="20" fill="white"/>
+                              </clipPath>
+                            </defs>
+                          </svg>
+                        </div>
+                        <div className="flex flex-col justify-center gap-0">
+                          <p className="flex-shrink-0 text-[rgba(0,0,0,0.98)] text-[14px] font-normal leading-[14px]" style={{ fontFamily: 'var(--font-poppins)' }}>{formatCityName(stage.site.ville)}</p>
+                          <p className="flex-shrink-0 text-[rgba(6,6,6,0.56)] text-[11px] font-normal leading-[11px] mt-2" style={{ fontFamily: 'var(--font-poppins)' }}>{removeStreetNumber(stage.site.adresse)}</p>
+                        </div>
+                      </div>
+
+                      {/* Right: Price */}
+                      <div className="w-[80px] flex-shrink-0">
+                        <p className="text-[rgba(6,6,6,0.86)] text-center text-[18px] font-normal leading-[28px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.prix}€</p>
+                      </div>
+
+                      {/* Right: Green Button */}
+                      <Link
+                        href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
+                        className="flex px-[12px] py-[6px] justify-center items-center rounded-xl bg-[#41A334] text-white text-[10px] font-normal leading-normal tracking-[0.7px] hover:bg-[#389c2e] transition-colors whitespace-nowrap flex-shrink-0 mr-2"
+                        style={{ fontFamily: 'var(--font-poppins)' }}
+                      >
+                        Sélectionner
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+
+                <div className="flex items-center justify-center gap-4 mt-6">
+                  {visibleCount > STAGES_PER_LOAD && (
+                    <button
+                      onClick={() => setVisibleCount(STAGES_PER_LOAD)}
+                      className="px-8 py-2 bg-white border-2 border-[#EBEBEB] text-gray-800 text-sm rounded-2xl hover:bg-gray-50 transition-colors"
+                    >
+                      Afficher moins de stages
+                    </button>
+                  )}
+
+                  {hasMore && (
+                    <button
+                      onClick={() => setVisibleCount(prev => prev + STAGES_PER_LOAD)}
+                      className="px-8 py-2 bg-[#EBEBEB] text-gray-800 text-sm rounded-2xl hover:bg-[#DEDEDE] transition-colors"
+                    >
+                      Voir plus de stages
+                    </button>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Right column: Sticky Guarantees Block (30% width) */}
+          <div className="w-[280px] flex-shrink-0">
+            <div className="sticky top-4" style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '20px',
+              padding: '15px',
+              borderRadius: '15px',
+              border: '1px solid #F1F1F1',
+              background: '#FFF',
+              boxShadow: '0 4px 12px 2px rgba(0, 0, 0, 0.15)'
+            }}>
+              {/* Header */}
+              <div style={{
+                display: 'flex',
+                width: '100%',
+                padding: '10px 15px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: '8px',
+                background: '#EFEFEF'
+              }}>
+                <span style={{
+                  color: '#000',
+                  textAlign: 'center',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  lineHeight: '20px'
+                }}>
+                  Vos Garanties ProStagesPermis
+                </span>
+              </div>
+
+              {/* Benefit items */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', padding: '0 5px' }}>
+                {[
+                  'Stage officiel agréé Préfecture',
+                  '+4 points en 48h',
+                  '98,7% de clients satisfaits',
+                  'Report ou remboursement en cas d\'imprévu',
+                  'Paiement 100% sécurisé',
+                  'Attestation de stage remise le 2ème jour'
+                ].map((benefit, index) => (
+                  <div key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    {/* Yellow checkmark icon */}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
+                      <path d="M9.375 11.4583L12.5 14.5833L22.9167 4.16667M21.875 12.5V19.7917C21.875 20.3442 21.6555 20.8741 21.2648 21.2648C20.8741 21.6555 20.3442 21.875 19.7917 21.875H5.20833C4.6558 21.875 4.12589 21.6555 3.73519 21.2648C3.34449 20.8741 3.125 20.3442 3.125 19.7917V5.20833C3.125 4.6558 3.34449 4.12589 3.73519 3.73519C4.12589 3.34449 4.6558 3.125 5.20833 3.125H16.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span style={{
+                      color: 'rgba(6, 6, 6, 0.86)',
+                      fontFamily: 'var(--font-poppins)',
+                      fontSize: '13px',
+                      fontWeight: 400,
+                      lineHeight: '18px'
+                    }}>
+                      {benefit}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile: Stages List (full width, no guarantees block) */}
+        <div className="md:hidden">
+          {loading && (
+            <div className="text-center py-12">
+              <p className="text-gray-600">Chargement des stages...</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="text-center py-12">
+              <p className="text-red-600">Erreur: {error}</p>
+            </div>
+          )}
+
+          {!loading && !error && stages.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-600">Aucun stage trouvé pour cette ville.</p>
+            </div>
+          )}
+
+          {!loading && !error && stages.length > 0 && (
+            <>
+              {visibleStages.map((stage) => (
                 <article
                   key={stage.id}
-                  className="flex flex-col md:flex-row w-full md:w-[903px] md:h-[85px] p-3 md:p-[0_7px] md:items-center mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
+                  className="flex flex-col w-full p-3 mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
                 >
                   {/* Mobile Layout */}
-                  <div className="flex md:hidden w-full">
+                  <div className="flex w-full">
                     {/* Left side: Date, Location, Details link */}
                     <div className="flex flex-col flex-1">
                       {/* Date at top */}
@@ -666,12 +910,12 @@ export default function StagesResultsPage() {
                       <div className="flex items-start gap-2 mb-1">
                         <div className="flex w-[20px] h-[20px] justify-center items-center flex-shrink-0 rounded-full bg-gray-200 mt-0.5">
                           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 20 20" fill="none" className="w-3 h-3 flex-shrink-0">
-                            <g clipPath="url(#clip0_2180_399)">
+                            <g clipPath="url(#clip0_mobile)">
                               <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                               <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </g>
                             <defs>
-                              <clipPath id="clip0_2180_399">
+                              <clipPath id="clip0_mobile">
                                 <rect width="20" height="20" fill="white"/>
                               </clipPath>
                             </defs>
@@ -746,88 +990,31 @@ export default function StagesResultsPage() {
                       </Link>
                     </div>
                   </div>
-
-                  {/* Desktop Layout */}
-                  <div className="hidden md:flex md:items-center md:w-full">
-                    {/* Left: Date and Details Link */}
-                    <div className="flex flex-col flex-shrink-0 gap-0 ml-3">
-                      <p className="w-[223px] text-[rgba(0,0,0,0.89)] text-[15px] font-medium leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>
-                        {formatDate(stage.date_start, stage.date_end)}
-                      </p>
-                      <button
-                        onClick={() => {
-                          setSelectedStage(stage)
-                          setIsModalOpen(true)
-                        }}
-                        className="flex items-center gap-[5px] text-[rgba(90,106,147,0.86)] text-[13px] font-normal leading-[13px] hover:underline text-left mt-3"
-                        style={{ fontFamily: 'var(--font-poppins)' }}
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" className="w-[13.333px] h-[13.333px] flex-shrink-0">
-                          <path d="M7.46665 10.1334V7.46672M7.46665 4.80005H7.47332M14.1333 7.46672C14.1333 11.1486 11.1486 14.1334 7.46665 14.1334C3.78476 14.1334 0.799988 11.1486 0.799988 7.46672C0.799988 3.78482 3.78476 0.800049 7.46665 0.800049C11.1486 0.800049 14.1333 3.78482 14.1333 7.46672Z" stroke="#5A6A93" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                        <span>Détails du stage</span>
-                      </button>
-                    </div>
-
-                    {/* Center: Location Pin + City + Address */}
-                    <div className="flex items-center gap-2.5 flex-1 mx-[70px]">
-                      <div className="flex w-[38px] h-[38px] p-[9px] justify-center items-center gap-2.5 flex-shrink-0 rounded-full bg-gray-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
-                          <g clipPath="url(#clip0_2180_399)">
-                            <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#808080" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </g>
-                          <defs>
-                            <clipPath id="clip0_2180_399">
-                              <rect width="20" height="20" fill="white"/>
-                            </clipPath>
-                          </defs>
-                        </svg>
-                      </div>
-                      <div className="flex flex-col justify-center gap-0">
-                        <p className="w-[138px] flex-shrink-0 text-[rgba(0,0,0,0.98)] text-[15px] font-normal leading-[15px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville}</p>
-                        <p className="flex-shrink-0 self-stretch text-[rgba(6,6,6,0.56)] text-[12px] font-normal leading-[12px] mt-3" style={{ fontFamily: 'var(--font-poppins)' }}>{removeStreetNumber(stage.site.adresse)}</p>
-                      </div>
-                    </div>
-
-                    {/* Right: Price */}
-                    <div className="w-[121px] h-[31px] flex-shrink-0">
-                      <p className="text-[rgba(6,6,6,0.86)] text-center text-[20px] font-normal leading-[35px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.prix}€</p>
-                    </div>
-
-                    {/* Right: Green Button */}
-                    <Link
-                      href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
-                      className="flex px-[15px] py-[7px] justify-center items-center gap-5 rounded-xl bg-[#41A334] text-white text-[11px] font-normal leading-normal tracking-[0.77px] hover:bg-[#389c2e] transition-colors whitespace-nowrap flex-shrink-0 ml-[70px] mr-[25px]"
-                      style={{ fontFamily: 'var(--font-poppins)' }}
-                    >
-                      Sélectionner
-                    </Link>
-                  </div>
                 </article>
-            ))}
+              ))}
 
-            <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 mt-6 px-4">
-              {visibleCount > STAGES_PER_LOAD && (
-                <button
-                  onClick={() => setVisibleCount(STAGES_PER_LOAD)}
-                  className="w-full md:w-auto px-6 md:px-8 py-2 bg-white border-2 border-[#c4cce1] text-gray-800 text-sm rounded-2xl hover:bg-gray-50 transition-colors"
-                >
-                  Afficher moins de stages
-                </button>
-              )}
+              <div className="flex flex-col items-center justify-center gap-3 mt-6 px-4">
+                {visibleCount > STAGES_PER_LOAD && (
+                  <button
+                    onClick={() => setVisibleCount(STAGES_PER_LOAD)}
+                    className="w-full px-6 py-2 bg-white border-2 border-[#EBEBEB] text-gray-800 text-sm rounded-2xl hover:bg-gray-50 transition-colors"
+                  >
+                    Afficher moins de stages
+                  </button>
+                )}
 
-              {hasMore && (
-                <button
-                  onClick={() => setVisibleCount(prev => prev + STAGES_PER_LOAD)}
-                  className="w-full md:w-auto px-6 md:px-8 py-2 bg-[#c4cce1] text-gray-800 text-sm rounded-2xl hover:bg-[#b3bdd4] transition-colors"
-                >
-                  Voir plus de stages
-                </button>
-              )}
-            </div>
-          </>
-        )}
+                {hasMore && (
+                  <button
+                    onClick={() => setVisibleCount(prev => prev + STAGES_PER_LOAD)}
+                    className="w-full px-6 py-2 bg-[#EBEBEB] text-gray-800 text-sm rounded-2xl hover:bg-[#DEDEDE] transition-colors"
+                  >
+                    Voir plus de stages
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+        </div>
 
         {/* Benefit Box Section - Mobile Widget */}
         <section className="my-8 md:my-16 flex justify-center px-4">
@@ -1198,69 +1385,111 @@ export default function StagesResultsPage() {
             </div>
           </div>
 
-          {/* Desktop: Original layout */}
-          <div className="hidden md:block space-y-3 md:space-y-4">
-            {faqData.map((faq, index) => (
-              <article
-                key={faq.id}
-                className="rounded border border-black overflow-hidden"
+          {/* Desktop: Homepage-style grey background layout */}
+          <div className="hidden md:block" style={{ width: '100%', background: '#F6F6F6', padding: '30px 20px' }}>
+            <div
+              style={{
+                display: 'flex',
+                width: '692px',
+                minHeight: '402px',
+                margin: '0 auto',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '0'
+              }}
+            >
+              {/* Subtitle */}
+              <div
+                style={{
+                  color: '#000',
+                  textAlign: 'center',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '15px',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  lineHeight: '20px',
+                  marginBottom: '25px',
+                  width: '100%'
+                }}
               >
-                <button
-                  className="flex items-center justify-between p-3 md:p-4 w-full text-left hover:bg-gray-50 transition-colors"
-                  onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                >
-                  <div className="flex items-center gap-2 md:gap-3 flex-1">
-                    <svg className="w-5 h-5 md:w-6 md:h-6 text-gray-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <p className="text-gray-900 text-sm md:text-base">{faq.question}</p>
-                  </div>
-                  <svg
-                    className={`w-4 h-4 md:w-5 md:h-5 text-gray-600 transition-transform flex-shrink-0 ${openFaqIndex === index ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                Réponses aux questions que se posent le plus souvent les conducteurs
+              </div>
+
+              {/* Questions */}
+              {faqData.map((faq, index) => (
+                <div key={faq.id} style={{ width: '100%' }}>
+                  <div
+                    onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      gap: '10px'
+                    }}
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {openFaqIndex === index && (
-                  <div className="px-3 md:px-4 pb-3 md:pb-4 pt-2 bg-gray-50 border-t border-gray-200">
-                    <p className="text-gray-700 leading-relaxed text-sm md:text-base">
-                      Ceci est un placeholder pour la réponse à la question. Le contenu sera ajouté ultérieurement.
-                      Cette section peut contenir des informations détaillées sur la récupération de points,
-                      les délais, les conditions et toutes les informations pertinentes pour répondre à la question posée.
-                    </p>
+                    <div
+                      style={{
+                        flex: 1,
+                        color: '#060606',
+                        textAlign: 'left',
+                        fontFamily: 'var(--font-poppins)',
+                        fontSize: '15px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '35px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                    >
+                      {faq.question}
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === index ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                      <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
                   </div>
-                )}
-              </article>
-            ))}
-          </div>
+                  {openFaqIndex === index && (
+                    <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
+                      Ceci est un placeholder pour la réponse à la question. Le contenu sera ajouté ultérieurement.
+                    </div>
+                  )}
 
-          {/* Show More Questions Button - Desktop only */}
-          <div className="hidden md:flex justify-center mt-6 md:mt-8">
-            <button className="text-sm md:text-base" style={{
-              fontFamily: 'var(--font-poppins)',
-              color: '#000',
-              fontWeight: 500,
-              letterSpacing: '1.05px',
-              textDecoration: 'underline',
-              textDecorationStyle: 'solid',
-              textDecorationSkipInk: 'auto',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer'
-            }}>
-              Afficher plus de questions
-            </button>
+                  {/* Separator line */}
+                  {index < faqData.length - 1 && (
+                    <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
+                  )}
+                </div>
+              ))}
+
+              {/* Last line with more margin */}
+              <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '50px' }} />
+
+              {/* Afficher plus de questions */}
+              <div
+                style={{
+                  color: '#000',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '15px',
+                  fontStyle: 'normal',
+                  fontWeight: 500,
+                  lineHeight: 'normal',
+                  letterSpacing: '1.05px',
+                  textDecoration: 'underline',
+                  cursor: 'pointer'
+                }}
+              >
+                Afficher plus de questions
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Nearby Cities Section */}
         {nearbyCities.length > 0 && (
           <section className="my-8 md:my-16 px-4">
-            <h2 className="text-center mb-6 md:mb-8 text-[18px] md:text-[20px] font-[250] leading-[30px] md:leading-[35px]" style={{
+            <h2 className="text-center mb-2 md:mb-4 text-[18px] md:text-[20px] font-[250] leading-[30px] md:leading-[35px]" style={{
               fontFamily: 'var(--font-poppins)',
               color: 'rgba(6, 6, 6, 0.86)',
               WebkitTextStrokeWidth: '1px',
@@ -1270,6 +1499,16 @@ export default function StagesResultsPage() {
                 WebkitTextStrokeColor: 'rgba(201, 39, 39, 0.73)'
               }}>autour de {city.charAt(0) + city.slice(1).toLowerCase()}</span>
             </h2>
+            {/* Subtitle - Desktop only */}
+            <p className="hidden md:block text-center mb-6" style={{
+              fontFamily: 'var(--font-poppins)',
+              color: 'rgba(52, 52, 52, 0.80)',
+              fontSize: '15px',
+              fontWeight: 400,
+              lineHeight: '24px'
+            }}>
+              Vous n'avez pas trouvé votre stage idéal ? Découvrez les stages disponibles autour de {city.charAt(0) + city.slice(1).toLowerCase()}
+            </p>
 
             {/* 3x3 Grid of nearby cities (single column on mobile) */}
             <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-[30px]">
