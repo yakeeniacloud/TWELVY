@@ -218,8 +218,13 @@ export default function Home() {
                   {suggestions.map((city, index) => (
                     <button
                       key={index}
-                      onClick={() => handleCitySelect(city)}
-                      className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm"
+                      type="button"
+                      onMouseDown={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        handleCitySelect(city)
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer"
                       style={{ fontFamily: 'var(--font-poppins)' }}
                     >
                       {city}
@@ -1519,8 +1524,13 @@ export default function Home() {
                 {suggestions.map((city, index) => (
                   <button
                     key={index}
-                    onClick={() => handleCitySelect(city)}
-                    className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm"
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      handleCitySelect(city)
+                    }}
+                    className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer"
                     style={{ fontFamily: 'var(--font-poppins)' }}
                   >
                     {city}
