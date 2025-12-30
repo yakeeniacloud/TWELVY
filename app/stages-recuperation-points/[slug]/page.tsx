@@ -546,18 +546,10 @@ export default function StagesResultsPage() {
           Depuis 2008, plus de 857 000 conducteurs ont récupéré leurs points avec ProStagesPermis
         </p>
 
-        {/* Filters Section */}
-        <div className="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 w-full md:w-[903px] mx-auto mb-4">
-          {/* Search bar - only shown on desktop */}
-          <div className="hidden md:block md:flex-1">
-            <CitySearchBar
-              placeholder="Ville ou code postal"
-              variant="filter"
-            />
-          </div>
-
-          {/* Filter buttons row - centered on mobile, left-aligned on desktop */}
-          <div className="flex items-center justify-center md:justify-start gap-2 md:gap-4">
+        {/* Mobile Filters Section - Only visible on mobile */}
+        <div className="flex flex-col gap-3 w-full mb-4 md:hidden">
+          {/* Filter buttons row - centered on mobile */}
+          <div className="flex items-center justify-center gap-2">
             <div className="flex flex-col justify-center flex-shrink-0" style={{
               width: '76px',
               height: '35px',
@@ -626,76 +618,147 @@ export default function StagesResultsPage() {
             >
               Proximité
             </button>
-
-            {/* Ville dropdown - only shown on desktop */}
-            <div className="hidden md:block relative flex-shrink-0" ref={cityDropdownRef}>
-              <button
-                onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
-                className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border border-black min-w-[120px]"
-                style={{
-                  height: '35px',
-                  fontFamily: 'var(--font-poppins)',
-                  color: '#060606',
-                  fontSize: '12px',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  lineHeight: '35px'
-                }}
-              >
-                <span className="truncate flex-1 text-left">
-                  {allCitiesSelected
-                    ? 'Ville'
-                    : selectedCities.length === 1
-                      ? formatCityName(selectedCities[0])
-                      : `${selectedCities.length} villes`
-                  }
-                </span>
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-            {showCitiesDropdown && (
-              <div className="absolute top-full mt-2 w-64 bg-white border border-gray-300 rounded shadow-lg z-10 max-h-96 overflow-y-auto">
-                <label className="flex items-center w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={allCitiesSelected}
-                    onChange={handleAllCitiesToggle}
-                    className="mr-3 w-4 h-4"
-                  />
-                  <span className="text-sm font-medium">Toutes les villes</span>
-                </label>
-                <label className="flex items-center w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={!allCitiesSelected && selectedCities.includes(city)}
-                    onChange={() => handleCityToggle(city)}
-                    className="mr-3 w-4 h-4"
-                  />
-                  <span className="text-sm">{formatCityName(city)}</span>
-                </label>
-                {nearbyCities.map((nearby) => (
-                  <label key={nearby.city} className="flex items-center w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={!allCitiesSelected && selectedCities.includes(nearby.city)}
-                      onChange={() => handleCityToggle(nearby.city)}
-                      className="mr-3 w-4 h-4"
-                    />
-                    <span className="text-sm">{formatCityName(nearby.city)}</span>
-                  </label>
-                ))}
-              </div>
-            )}
           </div>
         </div>
-      </div>
 
         {/* Desktop: Two-column layout with stages list and sticky guarantees block */}
         <div className="hidden md:flex gap-6 max-w-6xl mx-auto">
           {/* Left column: Stages List (70% width) */}
           <div className="flex-1" style={{ maxWidth: '70%' }}>
+            {/* Desktop Filters - Aligned with cards width */}
+            <div className="flex items-center gap-3 w-full mb-4">
+              {/* Search bar */}
+              <div className="flex-shrink-0">
+                <CitySearchBar
+                  placeholder="Ville ou code postal"
+                  variant="filter"
+                />
+              </div>
+
+              {/* Filter buttons */}
+              <div className="flex items-center gap-3 flex-1 justify-end">
+                <div className="flex flex-col justify-center flex-shrink-0" style={{
+                  fontFamily: 'var(--font-poppins)',
+                  color: '#000',
+                  fontSize: '13px',
+                  fontWeight: '400',
+                  letterSpacing: '0.91px'
+                }}>
+                  Trier par :
+                </div>
+
+                <button
+                  onClick={() => setSortBy(sortBy === 'date' ? null : 'date')}
+                  className={`px-3 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
+                    sortBy === 'date' ? 'bg-[#EBEBEB]' : 'bg-white'
+                  }`}
+                  style={{
+                    height: '35px',
+                    color: 'rgba(4, 4, 4, 0.96)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '12px',
+                    fontWeight: '400',
+                    letterSpacing: '0.84px'
+                  }}
+                >
+                  Date
+                </button>
+                <button
+                  onClick={() => setSortBy(sortBy === 'prix' ? null : 'prix')}
+                  className={`px-3 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
+                    sortBy === 'prix' ? 'bg-[#EBEBEB]' : 'bg-white'
+                  }`}
+                  style={{
+                    height: '35px',
+                    color: 'rgba(4, 4, 4, 0.96)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '12px',
+                    fontWeight: '400',
+                    letterSpacing: '0.84px'
+                  }}
+                >
+                  Prix
+                </button>
+                <button
+                  onClick={() => setSortBy(sortBy === 'proximite' ? null : 'proximite')}
+                  className={`px-3 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
+                    sortBy === 'proximite' ? 'bg-[#EBEBEB]' : 'bg-white'
+                  }`}
+                  style={{
+                    height: '35px',
+                    color: 'rgba(4, 4, 4, 0.96)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '12px',
+                    fontWeight: '400',
+                    letterSpacing: '0.84px'
+                  }}
+                >
+                  Proximité
+                </button>
+
+                {/* Ville dropdown */}
+                <div className="relative flex-shrink-0" ref={cityDropdownRef}>
+                  <button
+                    onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
+                    className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border border-black min-w-[100px]"
+                    style={{
+                      height: '35px',
+                      fontFamily: 'var(--font-poppins)',
+                      color: '#060606',
+                      fontSize: '12px',
+                      fontWeight: '400',
+                      lineHeight: '35px'
+                    }}
+                  >
+                    <span className="truncate flex-1 text-left">
+                      {allCitiesSelected
+                        ? 'Ville'
+                        : selectedCities.length === 1
+                          ? formatCityName(selectedCities[0])
+                          : `${selectedCities.length} villes`
+                      }
+                    </span>
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {showCitiesDropdown && (
+                    <div className="absolute top-full mt-2 right-0 w-64 bg-white border border-gray-300 rounded shadow-lg z-10 max-h-96 overflow-y-auto">
+                      <label className="flex items-center w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={allCitiesSelected}
+                          onChange={handleAllCitiesToggle}
+                          className="mr-3 w-4 h-4"
+                        />
+                        <span className="text-sm font-medium">Toutes les villes</span>
+                      </label>
+                      <label className="flex items-center w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={!allCitiesSelected && selectedCities.includes(city)}
+                          onChange={() => handleCityToggle(city)}
+                          className="mr-3 w-4 h-4"
+                        />
+                        <span className="text-sm">{formatCityName(city)}</span>
+                      </label>
+                      {nearbyCities.map((nearby) => (
+                        <label key={nearby.city} className="flex items-center w-full px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={!allCitiesSelected && selectedCities.includes(nearby.city)}
+                            onChange={() => handleCityToggle(nearby.city)}
+                            className="mr-3 w-4 h-4"
+                          />
+                          <span className="text-sm">{formatCityName(nearby.city)}</span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
             {loading && (
               <div className="text-center py-12">
                 <p className="text-gray-600">Chargement des stages...</p>
@@ -1016,10 +1079,10 @@ export default function StagesResultsPage() {
           )}
         </div>
 
-        {/* Benefit Box Section - Mobile Widget */}
-        <section className="my-8 md:my-16 flex justify-center px-4">
+        {/* Benefit Box Section - Mobile Only (Desktop uses sticky sidebar) */}
+        <section className="my-8 flex justify-center px-4 md:hidden">
           {/* Mobile: New benefit widget */}
-          <div className="md:hidden" style={{
+          <div style={{
             display: 'flex',
             width: '340px',
             height: '377px',
@@ -1089,15 +1152,6 @@ export default function StagesResultsPage() {
               ))}
             </div>
           </div>
-
-          {/* Desktop: Original image */}
-          <Image
-            src="/pourquoi-reserver.png"
-            alt="Pourquoi réserver votre stage chez ProStagesPermis"
-            width={900}
-            height={350}
-            className="hidden md:block w-auto h-auto max-w-3xl"
-          />
         </section>
 
         {/* Customer Reviews Section */}
