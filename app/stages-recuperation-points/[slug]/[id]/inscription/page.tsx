@@ -456,7 +456,7 @@ export default function InscriptionPage() {
         </div>
 
         {/* Stage Card */}
-        <div id="mobile-stage-card" className="mx-auto my-3" style={{ width: '363px', padding: '10px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', border: '1px solid #EAEAEA', background: '#FFF' }}>
+        <div id="mobile-stage-card" className="mx-auto my-3" style={{ width: '363px', padding: '10px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', background: '#FFF' }}>
           <div className="mb-2" style={{ display: 'flex', width: '337px', height: '38px', padding: '8px 106px', justifyContent: 'center', alignItems: 'center', gap: '10px', borderRadius: '8px', background: '#EFEFEF' }}>
             <p className="text-center font-normal" style={{ fontSize: '13px' }}>Stage sélectionné</p>
           </div>
@@ -540,10 +540,10 @@ export default function InscriptionPage() {
         </div>
 
         {/* Grey separator line below stage card */}
-        <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '12px', marginBottom: '12px' }} />
+        <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '20px', marginBottom: '20px' }} />
 
         {/* Form Section */}
-        <div className="px-3 py-3">
+        <div className="px-3 py-0">
           {!formValidated ? (
             <>
               <h2 className="font-medium mb-1" style={{ fontSize: '14px' }}>Étape 1/2 : coordonnées personnelles</h2>
@@ -575,56 +575,67 @@ export default function InscriptionPage() {
                   <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
 
-                <div className="relative">
+                <div>
                   <div className="flex items-center gap-1 mb-1">
                     <label style={{ fontSize: '12px' }}>Téléphone mobile *</label>
-                    <button
-                      type="button"
-                      onClick={() => setShowPhoneTooltip(true)}
-                      className="cursor-pointer"
-                      aria-label="Information téléphone mobile"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ width: '16px', height: '16px', flexShrink: 0 }}>
-                        <g clipPath="url(#clip0_75_35)">
-                          <path d="M7.99999 10.6667V8.00004M7.99999 5.33337H8.00666M14.6667 8.00004C14.6667 11.6819 11.6819 14.6667 7.99999 14.6667C4.3181 14.6667 1.33333 11.6819 1.33333 8.00004C1.33333 4.31814 4.3181 1.33337 7.99999 1.33337C11.6819 1.33337 14.6667 4.31814 14.6667 8.00004Z" stroke="#1E1E1E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                        </g>
-                        <defs>
-                          <clipPath id="clip0_75_35">
-                            <rect width="16" height="16" fill="white"/>
-                          </clipPath>
-                        </defs>
-                      </svg>
-                    </button>
-                  </div>
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => setShowPhoneTooltip(true)}
+                        className="cursor-pointer"
+                        aria-label="Information téléphone mobile"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ width: '16px', height: '16px', flexShrink: 0 }}>
+                          <g clipPath="url(#clip0_75_35)">
+                            <path d="M7.99999 10.6667V8.00004M7.99999 5.33337H8.00666M14.6667 8.00004C14.6667 11.6819 11.6819 14.6667 7.99999 14.6667C4.3181 14.6667 1.33333 11.6819 1.33333 8.00004C1.33333 4.31814 4.3181 1.33337 7.99999 1.33337C11.6819 1.33337 14.6667 4.31814 14.6667 8.00004Z" stroke="#1E1E1E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </g>
+                          <defs>
+                            <clipPath id="clip0_75_35">
+                              <rect width="16" height="16" fill="white"/>
+                            </clipPath>
+                          </defs>
+                        </svg>
+                      </button>
 
-                  {/* Phone Tooltip */}
-                  {showPhoneTooltip && (
-                    <>
-                      {/* Backdrop for click outside detection */}
-                      <div
-                        className="fixed inset-0 z-40"
-                        onClick={() => setShowPhoneTooltip(false)}
-                      />
-                      {/* Tooltip */}
-                      <div className="absolute top-0 left-0 right-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-3" style={{ marginTop: '-10px' }}>
-                        <div className="flex justify-between items-start mb-2">
-                          <p className="italic pr-2" style={{ color: '#2E2E2E', fontFamily: 'Poppins', fontSize: '13px', fontStyle: 'italic', fontWeight: '400', lineHeight: '17px' }}>
-                            Important : indiquez un numéro de mobile valide. Il servira au SMS de confirmation et aux informations essentielles liées à votre stage.
-                          </p>
-                          <button
-                            type="button"
+                      {/* Phone Tooltip - positioned top-right of the i icon */}
+                      {showPhoneTooltip && (
+                        <>
+                          {/* Backdrop for click outside detection */}
+                          <div
+                            className="fixed inset-0 z-40"
                             onClick={() => setShowPhoneTooltip(false)}
-                            className="flex-shrink-0 w-5 h-5 flex items-center justify-center text-gray-600 hover:text-black"
-                            aria-label="Fermer"
+                          />
+                          {/* Tooltip */}
+                          <div
+                            className="absolute z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-2.5"
+                            style={{
+                              width: '220px',
+                              bottom: '100%',
+                              left: '50%',
+                              transform: 'translateX(-30%)',
+                              marginBottom: '8px'
+                            }}
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                              <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </>
-                  )}
+                            <div className="flex justify-between items-start gap-2">
+                              <p className="italic" style={{ color: '#2E2E2E', fontFamily: 'Poppins', fontSize: '11px', fontStyle: 'italic', fontWeight: '400', lineHeight: '15px' }}>
+                                Important : indiquez un numéro de mobile valide. Il servira au SMS de confirmation et aux informations essentielles liées à votre stage.
+                              </p>
+                              <button
+                                type="button"
+                                onClick={() => setShowPhoneTooltip(false)}
+                                className="flex-shrink-0 w-4 h-4 flex items-center justify-center text-gray-600 hover:text-black"
+                                aria-label="Fermer"
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 16 16" fill="none">
+                                  <path d="M12 4L4 12M4 4L12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
 
                   <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="Téléphone" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
