@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { CITY_POSTAL_MAP } from '@/lib/city-postal-map'
 
 export default function Home() {
   const router = useRouter()
@@ -57,18 +58,58 @@ export default function Home() {
     }
   }
 
-  const handleCitySelect = (city: string) => {
+  const handleCitySelect = async (city: string) => {
     setSearchQuery(city)
     setShowSuggestions(false)
-    // Navigate to city page
-    const slug = city.toUpperCase().replace(/ /g, '-')
-    router.push(`/stages-recuperation-points/${slug}`)
+
+    const cityUpper = city.toUpperCase().replace(/ /g, '-')
+
+    // Try postal map first for instant navigation
+    const postalFromMap = CITY_POSTAL_MAP[cityUpper]
+    if (postalFromMap) {
+      router.push(`/stages-recuperation-points/${cityUpper}-${postalFromMap}`)
+      return
+    }
+
+    // Fallback: fetch postal code from API
+    try {
+      const response = await fetch(`/api/stages/${cityUpper}`)
+      const data = await response.json()
+      if (data.stages && data.stages.length > 0) {
+        const postal = data.stages[0].site.code_postal
+        router.push(`/stages-recuperation-points/${cityUpper}-${postal}`)
+      } else {
+        router.push(`/stages-recuperation-points/${cityUpper}-00000`)
+      }
+    } catch {
+      router.push(`/stages-recuperation-points/${cityUpper}-00000`)
+    }
   }
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (searchQuery.trim()) {
-      const slug = searchQuery.toUpperCase().replace(/ /g, '-')
-      router.push(`/stages-recuperation-points/${slug}`)
+      const cityUpper = searchQuery.toUpperCase().replace(/ /g, '-')
+
+      // Try postal map first
+      const postalFromMap = CITY_POSTAL_MAP[cityUpper]
+      if (postalFromMap) {
+        router.push(`/stages-recuperation-points/${cityUpper}-${postalFromMap}`)
+        return
+      }
+
+      // Fallback: fetch postal code from API
+      try {
+        const response = await fetch(`/api/stages/${cityUpper}`)
+        const data = await response.json()
+        if (data.stages && data.stages.length > 0) {
+          const postal = data.stages[0].site.code_postal
+          router.push(`/stages-recuperation-points/${cityUpper}-${postal}`)
+        } else {
+          router.push(`/stages-recuperation-points/${cityUpper}-00000`)
+        }
+      } catch {
+        router.push(`/stages-recuperation-points/${cityUpper}-00000`)
+      }
     }
   }
 
