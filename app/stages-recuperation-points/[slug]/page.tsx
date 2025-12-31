@@ -626,71 +626,91 @@ export default function StagesResultsPage() {
           {/* Left column: Stages List (70% width) */}
           <div className="flex-1" style={{ maxWidth: '70%' }}>
             {/* Desktop Filters - Aligned with cards width */}
-            <div className="flex items-center gap-3 w-full mb-4">
-              {/* Search bar */}
-              <div className="flex-shrink-0">
-                <CitySearchBar
+            <div className="flex items-center gap-2 w-full mb-4">
+              {/* Search bar - new style with 8px radius, grey border, icon on right */}
+              <div
+                className="flex items-center gap-2"
+                style={{
+                  minWidth: '120px',
+                  maxWidth: '180px',
+                  flex: '1 1 auto',
+                  height: '32px',
+                  padding: '6px 10px',
+                  borderRadius: '8px',
+                  border: '1px solid #D9D9D9',
+                  background: '#FFF'
+                }}
+              >
+                <input
+                  type="text"
                   placeholder="Ville ou code postal"
-                  variant="filter"
+                  className="flex-1 bg-transparent border-none outline-none text-xs placeholder:text-gray-400"
+                  style={{ minWidth: '0', fontFamily: 'var(--font-poppins)' }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      const value = (e.target as HTMLInputElement).value
+                      if (value.trim()) {
+                        window.location.href = `/stages-recuperation-points/${value.toUpperCase()}-00000`
+                      }
+                    }
+                  }}
                 />
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" className="flex-shrink-0">
+                  <path d="M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </div>
 
               {/* Filter buttons */}
-              <div className="flex items-center gap-3 flex-1 justify-end">
-                <div className="flex flex-col justify-center flex-shrink-0" style={{
+              <div className="flex items-center gap-2 flex-1 justify-end">
+                <span className="flex-shrink-0 text-xs" style={{
                   fontFamily: 'var(--font-poppins)',
                   color: '#000',
-                  fontSize: '13px',
-                  fontWeight: '400',
-                  letterSpacing: '0.91px'
+                  letterSpacing: '0.5px'
                 }}>
                   Trier par :
-                </div>
+                </span>
 
                 <button
                   onClick={() => setSortBy(sortBy === 'date' ? null : 'date')}
-                  className={`px-3 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
+                  className={`px-2 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
                     sortBy === 'date' ? 'bg-[#EBEBEB]' : 'bg-white'
                   }`}
                   style={{
-                    height: '35px',
+                    height: '32px',
                     color: 'rgba(4, 4, 4, 0.96)',
                     fontFamily: 'var(--font-poppins)',
-                    fontSize: '12px',
-                    fontWeight: '400',
-                    letterSpacing: '0.84px'
+                    fontSize: '11px',
+                    fontWeight: '400'
                   }}
                 >
                   Date
                 </button>
                 <button
                   onClick={() => setSortBy(sortBy === 'prix' ? null : 'prix')}
-                  className={`px-3 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
+                  className={`px-2 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
                     sortBy === 'prix' ? 'bg-[#EBEBEB]' : 'bg-white'
                   }`}
                   style={{
-                    height: '35px',
+                    height: '32px',
                     color: 'rgba(4, 4, 4, 0.96)',
                     fontFamily: 'var(--font-poppins)',
-                    fontSize: '12px',
-                    fontWeight: '400',
-                    letterSpacing: '0.84px'
+                    fontSize: '11px',
+                    fontWeight: '400'
                   }}
                 >
                   Prix
                 </button>
                 <button
                   onClick={() => setSortBy(sortBy === 'proximite' ? null : 'proximite')}
-                  className={`px-3 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
+                  className={`px-2 rounded-lg border border-gray-400 transition-colors flex-shrink-0 ${
                     sortBy === 'proximite' ? 'bg-[#EBEBEB]' : 'bg-white'
                   }`}
                   style={{
-                    height: '35px',
+                    height: '32px',
                     color: 'rgba(4, 4, 4, 0.96)',
                     fontFamily: 'var(--font-poppins)',
-                    fontSize: '12px',
-                    fontWeight: '400',
-                    letterSpacing: '0.84px'
+                    fontSize: '11px',
+                    fontWeight: '400'
                   }}
                 >
                   Proximité
@@ -700,14 +720,14 @@ export default function StagesResultsPage() {
                 <div className="relative flex-shrink-0" ref={cityDropdownRef}>
                   <button
                     onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
-                    className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border border-black min-w-[100px]"
+                    className="flex items-center justify-between gap-1 px-2 py-1 rounded-lg border border-black"
                     style={{
-                      height: '35px',
+                      height: '32px',
+                      minWidth: '70px',
                       fontFamily: 'var(--font-poppins)',
                       color: '#060606',
-                      fontSize: '12px',
-                      fontWeight: '400',
-                      lineHeight: '35px'
+                      fontSize: '11px',
+                      fontWeight: '400'
                     }}
                   >
                     <span className="truncate flex-1 text-left">
@@ -718,7 +738,7 @@ export default function StagesResultsPage() {
                           : `${selectedCities.length} villes`
                       }
                     </span>
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
@@ -1322,10 +1342,10 @@ export default function StagesResultsPage() {
           </div>
         </section>
 
-        {/* FAQ Section */}
-        <section className="my-8 md:my-16 px-4">
-          {/* Desktop: Title */}
-          <h2 className="hidden md:block text-center mb-6 md:mb-8 text-[18px] md:text-[20px] font-[250] leading-[30px] md:leading-[35px]" style={{
+        {/* FAQ Section - Full width grey background on desktop */}
+        <section className="my-8 md:my-16">
+          {/* Desktop: Title - outside grey background */}
+          <h2 className="hidden md:block text-center mb-6 md:mb-8 text-[18px] md:text-[20px] font-[250] leading-[30px] md:leading-[35px] px-4" style={{
             fontFamily: 'var(--font-poppins)',
             color: 'rgba(6, 6, 6, 0.86)',
             WebkitTextStrokeWidth: '1px',
@@ -1337,7 +1357,7 @@ export default function StagesResultsPage() {
           </h2>
 
           {/* Mobile: Grey box with title, subtitle, and questions */}
-          <div className="md:hidden flex flex-col items-center">
+          <div className="md:hidden flex flex-col items-center px-4">
             {/* Grey box container - dynamic height */}
             <div style={{
               display: 'flex',
@@ -1439,8 +1459,13 @@ export default function StagesResultsPage() {
             </div>
           </div>
 
-          {/* Desktop: Homepage-style grey background layout */}
-          <div className="hidden md:block" style={{ width: '100%', background: '#F6F6F6', padding: '30px 20px' }}>
+          {/* Desktop: Full-width grey background - breaks out of container */}
+          <div className="hidden md:block" style={{
+            width: '100vw',
+            marginLeft: 'calc(-50vw + 50%)',
+            background: '#F6F6F6',
+            padding: '30px 20px'
+          }}>
             <div
               style={{
                 display: 'flex',

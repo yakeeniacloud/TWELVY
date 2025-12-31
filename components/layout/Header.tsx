@@ -48,7 +48,7 @@ export default function Header() {
     setOpenMenuId(openMenuId === menuId ? null : menuId)
   }
 
-  // Split children into columns (4 columns like screenshot)
+  // Split children into columns (max 4 columns)
   const getMenuColumns = (children: any[]) => {
     if (children.length === 0) return []
 
@@ -73,11 +73,70 @@ export default function Header() {
         </Link>
       </div>
 
-      {/* Main Navigation - Dark background - reduced height by 20% */}
+      {/* Main Navigation - Dark background */}
       <nav className="bg-[#222222] px-8 py-2">
-        <div className="flex items-center justify-end max-w-7xl mx-auto">
-          <Link href="/aide-et-contact" className="text-white text-xs hover:text-gray-200 transition-colors lowercase">
-            aide et contact
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
+          {/* WordPress Menu Items */}
+          <div className="flex items-center gap-6">
+            {!loading && menu.map((item) => (
+              <div
+                key={item.id}
+                ref={(el) => { menuRefs.current[item.id] = el }}
+                className="relative"
+              >
+                {item.children.length > 0 ? (
+                  // Parent with children - clickable dropdown
+                  <>
+                    <button
+                      onClick={() => toggleMenu(item.id)}
+                      className="flex items-center gap-1 text-white text-xs hover:text-gray-200 transition-colors"
+                    >
+                      <span>{decodeHtmlEntities(item.title)}</span>
+                      <svg
+                        className={`w-3 h-3 transition-transform ${openMenuId === item.id ? 'rotate-180' : ''}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {openMenuId === item.id && (
+                      <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 shadow-lg z-50 min-w-[200px] rounded">
+                        <div className="border-t-2 border-red-500" />
+                        <div className="p-4">
+                          {item.children.map((child) => (
+                            <Link
+                              key={child.id}
+                              href={`/${child.slug}`}
+                              className="block py-2 text-sm text-gray-700 hover:text-red-600 transition-colors"
+                              onClick={() => setOpenMenuId(null)}
+                            >
+                              {decodeHtmlEntities(child.title)}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  // No children - simple link
+                  <Link
+                    href={`/${item.slug}`}
+                    className="text-white text-xs hover:text-gray-200 transition-colors"
+                  >
+                    {decodeHtmlEntities(item.title)}
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Right side - Aide et contact */}
+          <Link href="/aide-et-contact" className="text-white text-xs hover:text-gray-200 transition-colors">
+            Aide et contact
           </Link>
         </div>
       </nav>
