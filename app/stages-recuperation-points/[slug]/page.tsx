@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import CitySearchBar from '@/components/stages/CitySearchBar'
 import StageDetailsModal from '@/components/stages/StageDetailsModal'
 import { removeStreetNumber } from '@/lib/formatAddress'
 
@@ -80,10 +79,14 @@ export default function StagesResultsPage() {
   const [selectedStage, setSelectedStage] = useState<Stage | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isStagesVisible, setIsStagesVisible] = useState(false)
+  const [showReassuranceModal, setShowReassuranceModal] = useState(false)
 
   const STAGES_PER_LOAD = 6
 
   const cityDropdownRef = useRef<HTMLDivElement>(null)
+  const stagesSectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     async function fetchStages() {
@@ -213,6 +216,35 @@ export default function StagesResultsPage() {
     }
   }, [showCitiesDropdown])
 
+  // Scroll detection for sticky header behavior
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show compact header after scrolling 100px
+      setIsScrolled(window.scrollY > 100)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Intersection Observer for stages visibility (for sticky footer)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsStagesVisible(entry.isIntersecting)
+        })
+      },
+      { threshold: 0.1 }
+    )
+
+    if (stagesSectionRef.current) {
+      observer.observe(stagesSectionRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
   const formatDate = (dateStart: string, dateEnd: string) => {
     const start = new Date(dateStart)
     const end = new Date(dateEnd)
@@ -281,35 +313,61 @@ export default function StagesResultsPage() {
     <div className="bg-white w-full min-h-screen">
       {/* Mobile Header - Only shown on mobile */}
       <header className="md:hidden bg-white border-b border-gray-200 sticky top-0 z-50">
-        {/* Top row: Logo and Hamburger */}
-        <div className="flex items-center justify-between px-4 py-3">
-          {/* Logo */}
-          <Link href="/">
-            <img
-              src="/prostagespermis-logo.png"
-              alt="ProStagesPermis"
-              className="h-8 w-auto"
-            />
-          </Link>
+        {/* Top row: Logo and Hamburger - hidden when scrolled */}
+        {!isScrolled && (
+          <div className="flex items-center justify-between px-4 py-3">
+            {/* Logo */}
+            <Link href="/">
+              <img
+                src="/prostagespermis-logo.png"
+                alt="ProStagesPermis"
+                className="h-8 w-auto"
+              />
+            </Link>
 
-          {/* Hamburger Menu */}
-          <button
-            onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="flex flex-col gap-1 p-2"
-            aria-label="Toggle menu"
+            {/* Hamburger Menu */}
+            <button
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="flex flex-col gap-1 p-2"
+              aria-label="Toggle menu"
+            >
+              <span className="w-6 h-0.5 bg-black"></span>
+              <span className="w-6 h-0.5 bg-black"></span>
+              <span className="w-6 h-0.5 bg-black"></span>
+            </button>
+          </div>
+        )}
+
+        {/* Search bar - full width rounded when scrolled */}
+        <div className={`px-4 ${isScrolled ? 'py-2' : 'pb-3'}`}>
+          <div
+            className="flex items-center gap-2 mx-auto"
+            style={{
+              width: isScrolled ? '100%' : 'auto',
+              maxWidth: isScrolled ? '400px' : 'none',
+              height: '40px',
+              padding: '8px 16px',
+              borderRadius: '20px',
+              border: '1px solid #D9D9D9',
+              background: '#F5F5F5'
+            }}
           >
-            <span className="w-6 h-0.5 bg-black"></span>
-            <span className="w-6 h-0.5 bg-black"></span>
-            <span className="w-6 h-0.5 bg-black"></span>
-          </button>
-        </div>
-
-        {/* Search bar - centered below logo/hamburger */}
-        <div className="pb-3 px-4">
-          <div className="flex justify-center items-center">
-            <CitySearchBar
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="none" className="flex-shrink-0">
+              <path d="M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z" stroke="#808080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <input
+              type="text"
               placeholder="Ville ou code postal"
-              variant="filter"
+              className="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-gray-400"
+              style={{ fontFamily: 'var(--font-poppins)' }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  const value = (e.target as HTMLInputElement).value
+                  if (value.trim()) {
+                    window.location.href = `/stages-recuperation-points/${value.toUpperCase()}-00000`
+                  }
+                }
+              }}
             />
           </div>
         </div>
@@ -496,7 +554,7 @@ export default function StagesResultsPage() {
               lineHeight: 'normal',
               letterSpacing: '0.7px'
             }}>
-              Agréés préfecture {stages[0]?.site.code_postal?.substring(0, 2) || '13'}
+              Stages agréés Préfecture {stages[0]?.site.code_postal?.substring(0, 2) || '13'}
             </span>
           </div>
 
@@ -954,7 +1012,7 @@ export default function StagesResultsPage() {
         </div>
 
         {/* Mobile: Stages List (full width, no guarantees block) */}
-        <div className="md:hidden">
+        <div className="md:hidden" data-stages-section ref={stagesSectionRef}>
           {loading && (
             <div className="text-center py-12">
               <p className="text-gray-600">Chargement des stages...</p>
@@ -1005,7 +1063,7 @@ export default function StagesResultsPage() {
                           </svg>
                         </div>
                         <div className="flex flex-col">
-                          <p className="text-[rgba(0,0,0,0.98)] text-[14px] font-medium leading-[14px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville}</p>
+                          <p className="text-[rgba(0,0,0,0.98)] text-[14px] font-medium leading-[14px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville.charAt(0).toUpperCase() + stage.site.ville.slice(1).toLowerCase()}</p>
                           <p className="text-[rgba(6,6,6,0.56)] text-[11px] font-normal leading-[11px] mt-1" style={{ fontFamily: 'var(--font-poppins)' }}>{removeStreetNumber(stage.site.adresse)}</p>
                         </div>
                       </div>
@@ -1079,8 +1137,24 @@ export default function StagesResultsPage() {
               <div className="flex flex-col items-center justify-center gap-3 mt-6 px-4">
                 {visibleCount > STAGES_PER_LOAD && (
                   <button
-                    onClick={() => setVisibleCount(STAGES_PER_LOAD)}
-                    className="w-full px-6 py-2 bg-white border-2 border-[#EBEBEB] text-gray-800 text-sm rounded-2xl hover:bg-gray-50 transition-colors"
+                    onClick={() => {
+                      setVisibleCount(STAGES_PER_LOAD)
+                      // Scroll to top of stages section
+                      const stagesSection = document.querySelector('[data-stages-section]')
+                      if (stagesSection) {
+                        stagesSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      }
+                    }}
+                    className="text-sm hover:opacity-70 transition-opacity"
+                    style={{
+                      fontFamily: 'var(--font-poppins)',
+                      color: '#000',
+                      fontWeight: 400,
+                      textDecoration: 'underline',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
                   >
                     Afficher moins de stages
                   </button>
@@ -1398,7 +1472,7 @@ export default function StagesResultsPage() {
               {faqData.map((faq, index) => (
                 <div key={faq.id} className="w-full">
                   <button
-                    className="flex items-center justify-between p-3 w-full text-left"
+                    className="flex items-start justify-between p-3 w-full text-left"
                     onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
                   >
                     <p className="text-gray-900 text-sm flex-1" style={{
@@ -1407,7 +1481,7 @@ export default function StagesResultsPage() {
                       fontWeight: 400
                     }}>{faq.question}</p>
                     <svg
-                      className={`w-5 h-5 text-gray-600 transition-transform flex-shrink-0 ${openFaqIndex === index ? 'rotate-180' : ''}`}
+                      className={`w-5 h-5 text-gray-600 transition-transform flex-shrink-0 mt-0.5 ${openFaqIndex === index ? 'rotate-180' : ''}`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -1749,6 +1823,229 @@ export default function StagesResultsPage() {
           slug={fullSlug}
         />
       )}
+
+      {/* Mobile Sticky Footer - Only shown on mobile */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 px-4 py-3">
+        {/* 3 Reassurance items */}
+        <div className="flex items-center justify-center gap-4 mb-2">
+          {/* +4 Pts */}
+          <div className="flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 25 25" fill="none">
+              <path d="M9.375 11.4583L12.5 14.5833L22.9167 4.16667M21.875 12.5V19.7917C21.875 20.3442 21.6555 20.8741 21.2648 21.2648C20.8741 21.6555 20.3442 21.875 19.7917 21.875H5.20833C4.6558 21.875 4.12589 21.6555 3.73519 21.2648C3.34449 20.8741 3.125 20.3442 3.125 19.7917V5.20833C3.125 4.6558 3.34449 4.12589 3.73519 3.73519C4.12589 3.34449 4.6558 3.125 5.20833 3.125H16.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '12px', fontWeight: 400, color: '#000' }}>+4 Pts</span>
+          </div>
+          {/* Agréés */}
+          <div className="flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 25 25" fill="none">
+              <path d="M9.375 11.4583L12.5 14.5833L22.9167 4.16667M21.875 12.5V19.7917C21.875 20.3442 21.6555 20.8741 21.2648 21.2648C20.8741 21.6555 20.3442 21.875 19.7917 21.875H5.20833C4.6558 21.875 4.12589 21.6555 3.73519 21.2648C3.34449 20.8741 3.125 20.3442 3.125 19.7917V5.20833C3.125 4.6558 3.34449 4.12589 3.73519 3.73519C4.12589 3.34449 4.6558 3.125 5.20833 3.125H16.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '12px', fontWeight: 400, color: '#000' }}>Agréés</span>
+          </div>
+          {/* Satisfait-Remboursé */}
+          <div className="flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 25 25" fill="none">
+              <path d="M9.375 11.4583L12.5 14.5833L22.9167 4.16667M21.875 12.5V19.7917C21.875 20.3442 21.6555 20.8741 21.2648 21.2648C20.8741 21.6555 20.3442 21.875 19.7917 21.875H5.20833C4.6558 21.875 4.12589 21.6555 3.73519 21.2648C3.34449 20.8741 3.125 20.3442 3.125 19.7917V5.20833C3.125 4.6558 3.34449 4.12589 3.73519 3.73519C4.12589 3.34449 4.6558 3.125 5.20833 3.125H16.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span style={{ fontFamily: 'var(--font-poppins)', fontSize: '12px', fontWeight: 400, color: '#000' }}>Satisfait-Remboursé</span>
+          </div>
+        </div>
+
+        {/* Conditional button/link based on stages visibility */}
+        {isStagesVisible ? (
+          // Sticky (1): "+ Plus d'infos" link when viewing stages
+          <div className="flex justify-center">
+            <button
+              onClick={() => setShowReassuranceModal(true)}
+              style={{
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '13px',
+                fontWeight: 400,
+                color: '#2563EB',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              + Plus d'infos
+            </button>
+          </div>
+        ) : (
+          // Sticky (2): "Voir les stages" button when NOT viewing stages
+          <div className="flex justify-center">
+            <button
+              onClick={() => {
+                const stagesSection = document.querySelector('[data-stages-section]')
+                if (stagesSection) {
+                  stagesSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                }
+              }}
+              style={{
+                display: 'flex',
+                width: '200px',
+                height: '40px',
+                padding: '8px 24px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: '20px',
+                background: '#41A334',
+                color: '#FFF',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '14px',
+                fontWeight: 500,
+                border: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              Voir les stages
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Reassurance Modal - Mobile only */}
+      {showReassuranceModal && (
+        <div
+          className="md:hidden fixed inset-0 z-50"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.5)'
+          }}
+          onClick={() => setShowReassuranceModal(false)}
+        >
+          <div
+            className="fixed bottom-0 left-0 right-0 bg-white overflow-y-auto"
+            style={{
+              borderTopLeftRadius: '20px',
+              borderTopRightRadius: '20px',
+              maxHeight: '80vh',
+              animation: 'slideUp 0.3s ease-out'
+            }}
+            onClick={e => e.stopPropagation()}
+            onTouchStart={(e) => {
+              const touch = e.touches[0]
+              e.currentTarget.dataset.touchStartY = String(touch.clientY)
+            }}
+            onTouchMove={(e) => {
+              const touch = e.touches[0]
+              const startY = Number(e.currentTarget.dataset.touchStartY || 0)
+              const deltaY = touch.clientY - startY
+              // If swiping down from near the top of the modal
+              if (deltaY > 80 && startY < 150) {
+                setShowReassuranceModal(false)
+              }
+            }}
+          >
+            {/* Drag indicator */}
+            <div className="flex justify-center pt-3 pb-2">
+              <div style={{
+                width: '40px',
+                height: '4px',
+                backgroundColor: '#666',
+                borderRadius: '2px'
+              }} />
+            </div>
+
+            {/* Close button */}
+            <button
+              onClick={() => setShowReassuranceModal(false)}
+              className="absolute top-3 right-3"
+              style={{
+                width: '32px',
+                height: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M15 9l-6 6M9 9l6 6"/>
+              </svg>
+            </button>
+
+            {/* Content */}
+            <div className="px-6 pb-8">
+              <h2 className="text-center mb-6" style={{
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '18px',
+                fontWeight: 500,
+                color: '#000'
+              }}>
+                Vos Garanties ProStagesPermis
+              </h2>
+
+              {/* Separator line */}
+              <div style={{ width: '100%', height: '1px', background: '#E0E0E0', marginBottom: '24px' }} />
+
+              {/* Guarantees list */}
+              <div className="space-y-4">
+                {[
+                  'Stage agréé tout type de stage (volontaire et obligatoire)',
+                  '+4 points en 48h',
+                  'Aucun examen',
+                  'Attestation officielle remise le 2ème jour',
+                  'Report ou remboursement en cas d\'imprévu',
+                  'Convocation envoyée immédiatement par email après inscription'
+                ].map((guarantee, index) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-0.5">
+                      <path d="M9.375 11.4583L12.5 14.5833L22.9167 4.16667M21.875 12.5V19.7917C21.875 20.3442 21.6555 20.8741 21.2648 21.2648C20.8741 21.6555 20.3442 21.875 19.7917 21.875H5.20833C4.6558 21.875 4.12589 21.6555 3.73519 21.2648C3.34449 20.8741 3.125 20.3442 3.125 19.7917V5.20833C3.125 4.6558 3.34449 4.12589 3.73519 3.73519C4.12589 3.34449 4.6558 3.125 5.20833 3.125H16.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span style={{
+                      fontFamily: 'var(--font-poppins)',
+                      fontSize: '15px',
+                      fontWeight: 400,
+                      color: '#000',
+                      lineHeight: '22px'
+                    }}>
+                      {guarantee}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Fermer button */}
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={() => setShowReassuranceModal(false)}
+                  style={{
+                    display: 'flex',
+                    height: '44px',
+                    padding: '10px 32px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: '12px',
+                    background: '#E5E5E5',
+                    color: '#000',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '15px',
+                    fontWeight: 400,
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* CSS for slide up animation */}
+      <style jsx>{`
+        @keyframes slideUp {
+          from {
+            transform: translateY(100%);
+          }
+          to {
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   )
 }

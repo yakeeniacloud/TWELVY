@@ -516,8 +516,7 @@ export default function StageDetailsModal({
             borderTopRightRadius: '20px',
             maxHeight: '90vh',
             transform: isAnimating ? 'translateY(0)' : 'translateY(100%)',
-            transition: 'transform 0.3s ease-out',
-            boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.1)'
+            transition: 'transform 0.3s ease-out'
           }}
           onClick={e => e.stopPropagation()}
           onTouchStart={handleTouchStart}
@@ -536,42 +535,72 @@ export default function StageDetailsModal({
 
           {/* Content */}
           <div className="px-4 pb-6 flex flex-col items-center">
-            {/* Title */}
-            <h2
-              className="text-center mb-1"
+            {/* Title - on grey background */}
+            <div
+              className="w-full mb-3 py-2 px-4"
               style={{
-                color: 'rgba(34, 34, 34, 0.86)',
-                fontFamily: 'var(--font-poppins)',
-                fontSize: '16px',
-                fontStyle: 'normal',
-                fontWeight: '500',
-                lineHeight: '24px'
+                background: '#F5F5F5',
+                borderRadius: '8px'
               }}
             >
-              Stage {formatDate(stage.date_start, stage.date_end)}
-            </h2>
+              <h2
+                className="text-center"
+                style={{
+                  color: 'rgba(34, 34, 34, 0.86)',
+                  fontFamily: 'var(--font-poppins)',
+                  fontSize: '16px',
+                  fontStyle: 'normal',
+                  fontWeight: '500',
+                  lineHeight: '24px'
+                }}
+              >
+                Stage {formatDate(stage.date_start, stage.date_end)}
+              </h2>
+            </div>
 
-            {/* Price */}
+            {/* Price - in black */}
             <p
-              className="text-center mb-4"
+              className="text-center mb-1"
               style={{
-                color: 'rgba(188, 71, 71, 0.86)',
+                color: '#000',
                 textAlign: 'center',
                 fontFamily: 'var(--font-poppins)',
                 fontSize: '18px',
                 fontStyle: 'normal',
-                fontWeight: '400',
+                fontWeight: '500',
                 lineHeight: '24px'
               }}
             >
               {stage.prix.toFixed(0)}€ TTC
             </p>
 
-            {/* Main Widget Container */}
+            {/* Places disponibles - in green */}
+            <p
+              className="text-center mb-2"
+              style={{
+                color: '#267E1C',
+                fontFamily: 'var(--font-poppins)',
+                fontSize: '13px',
+                fontStyle: 'normal',
+                fontWeight: '400',
+                lineHeight: '18px'
+              }}
+            >
+              Places disponibles
+            </p>
+
+            {/* Black separator line */}
+            <div style={{
+              width: '100%',
+              height: '1px',
+              background: '#000',
+              marginBottom: '16px'
+            }} />
+
+            {/* Main Widget Container - no shadow */}
             <div style={{
               display: 'flex',
               width: '366px',
-              height: '511px',
               padding: '10px 8px',
               flexDirection: 'column',
               alignItems: 'center',
@@ -579,8 +608,7 @@ export default function StageDetailsModal({
               flexShrink: 0,
               borderRadius: '20px',
               border: '1px solid #EAEAEA',
-              background: '#FFF',
-              boxShadow: '0 4px 12px 2px rgba(0, 0, 0, 0.20)'
+              background: '#FFF'
             }}>
               {/* Address */}
               <div className="flex gap-2 mb-3">
@@ -655,21 +683,6 @@ export default function StageDetailsModal({
                 </p>
               </div>
             </div>
-
-              {/* Place disponibles */}
-              <p
-                className="text-center mb-2"
-                style={{
-                  color: '#267E1C',
-                  fontFamily: 'var(--font-poppins)',
-                  fontSize: '13px',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  lineHeight: '18px'
-                }}
-              >
-                Place disponibles
-              </p>
 
               {/* Nested Benefits Widget */}
               <div style={{
