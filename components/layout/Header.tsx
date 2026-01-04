@@ -12,6 +12,12 @@ const decodeHtmlEntities = (text: string): string => {
   return textarea.value
 }
 
+// Format menu item to lowercase (like "qui sommes nous")
+const formatMenuItem = (text: string): string => {
+  const decoded = decodeHtmlEntities(text)
+  return decoded.toLowerCase()
+}
+
 export default function Header() {
   const { menu, loading } = useWordPressMenu()
   const [openMenuId, setOpenMenuId] = useState<number | null>(null)
@@ -73,8 +79,8 @@ export default function Header() {
         </Link>
       </div>
 
-      {/* Main Navigation - Dark background */}
-      <nav className="bg-[#222222] px-8 py-2">
+      {/* Main Navigation - Dark background (reduced height by 20%) */}
+      <nav className="bg-[#222222] px-8 py-1.5">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           {/* WordPress Menu Items */}
           <div className="flex items-center gap-6">
@@ -89,9 +95,10 @@ export default function Header() {
                   <>
                     <button
                       onClick={() => toggleMenu(item.id)}
-                      className="flex items-center gap-1 text-white text-xs hover:text-gray-200 transition-colors"
+                      className="flex items-center gap-1 text-white hover:text-gray-200 transition-colors"
+                      style={{ fontSize: '11px' }}
                     >
-                      <span>{decodeHtmlEntities(item.title)}</span>
+                      <span>{formatMenuItem(item.title)}</span>
                       <svg
                         className={`w-3 h-3 transition-transform ${openMenuId === item.id ? 'rotate-180' : ''}`}
                         fill="none"
@@ -125,9 +132,10 @@ export default function Header() {
                   // No children - simple link
                   <Link
                     href={`/${item.slug}`}
-                    className="text-white text-xs hover:text-gray-200 transition-colors"
+                    className="text-white hover:text-gray-200 transition-colors"
+                    style={{ fontSize: '11px' }}
                   >
-                    {decodeHtmlEntities(item.title)}
+                    {formatMenuItem(item.title)}
                   </Link>
                 )}
               </div>
@@ -135,8 +143,8 @@ export default function Header() {
           </div>
 
           {/* Right side - Aide et contact */}
-          <Link href="/aide-et-contact" className="text-white text-xs hover:text-gray-200 transition-colors">
-            Aide et contact
+          <Link href="/aide-et-contact" className="text-white hover:text-gray-200 transition-colors" style={{ fontSize: '11px' }}>
+            aide et contact
           </Link>
         </div>
       </nav>

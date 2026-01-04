@@ -4,6 +4,27 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { CITY_POSTAL_MAP } from '@/lib/city-postal-map'
 
+// Format city name: MARSEILLE -> Marseille, AIX-EN-PROVENCE -> Aix-en-Provence
+const formatCityDisplay = (city: string) => {
+  return city
+    .split('-')
+    .map((word, index) => {
+      // Keep lowercase for common French prepositions (en, de, du, la, le, les, sur, sous)
+      const lowerWord = word.toLowerCase()
+      if (index > 0 && ['en', 'de', 'du', 'la', 'le', 'les', 'sur', 'sous'].includes(lowerWord)) {
+        return lowerWord
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    })
+    .join('-')
+}
+
+// Get department code from city using postal map
+const getDeptCode = (city: string) => {
+  const postal = CITY_POSTAL_MAP[city.toUpperCase()]
+  return postal ? postal.substring(0, 2) : ''
+}
+
 export default function Home() {
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
@@ -215,21 +236,24 @@ export default function Home() {
               {/* Suggestions Dropdown - Outside the flex container */}
               {showSuggestions && suggestions.length > 0 && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-                  {suggestions.map((city, index) => (
-                    <button
-                      key={index}
-                      type="button"
-                      onMouseDown={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        handleCitySelect(city)
-                      }}
-                      className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer"
-                      style={{ fontFamily: 'var(--font-poppins)' }}
-                    >
-                      {city}
-                    </button>
-                  ))}
+                  {suggestions.map((city, index) => {
+                    const deptCode = getDeptCode(city)
+                    return (
+                      <button
+                        key={index}
+                        type="button"
+                        onMouseDown={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          handleCitySelect(city)
+                        }}
+                        className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer"
+                        style={{ fontFamily: 'var(--font-poppins)' }}
+                      >
+                        {formatCityDisplay(city)}{deptCode ? ` (${deptCode})` : ''}
+                      </button>
+                    )
+                  })}
                 </div>
               )}
             </div>
@@ -1521,21 +1545,24 @@ export default function Home() {
             </div>
             {showSuggestions && suggestions.length > 0 && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-                {suggestions.map((city, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onMouseDown={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      handleCitySelect(city)
-                    }}
-                    className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer"
-                    style={{ fontFamily: 'var(--font-poppins)' }}
-                  >
-                    {city}
-                  </button>
-                ))}
+                {suggestions.map((city, index) => {
+                  const deptCode = getDeptCode(city)
+                  return (
+                    <button
+                      key={index}
+                      type="button"
+                      onMouseDown={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        handleCitySelect(city)
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer"
+                      style={{ fontFamily: 'var(--font-poppins)' }}
+                    >
+                      {formatCityDisplay(city)}{deptCode ? ` (${deptCode})` : ''}
+                    </button>
+                  )
+                })}
               </div>
             )}
           </div>
