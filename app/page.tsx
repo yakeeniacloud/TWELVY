@@ -4,6 +4,12 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { CITY_POSTAL_MAP } from '@/lib/city-postal-map'
 
+// Type for city with postal code
+interface CityWithPostal {
+  name: string
+  postal: string
+}
+
 // Format city name: MARSEILLE -> Marseille, AIX-EN-PROVENCE -> Aix-en-Provence
 const formatCityDisplay = (city: string) => {
   return city
@@ -19,7 +25,12 @@ const formatCityDisplay = (city: string) => {
     .join('-')
 }
 
-// Get department code from city using postal map
+// Get department code from postal code
+const getDeptCodeFromPostal = (postal: string) => {
+  return postal ? postal.substring(0, 2) : ''
+}
+
+// Fallback: Get department code from city using static postal map
 const getDeptCode = (city: string) => {
   const postal = CITY_POSTAL_MAP[city.toUpperCase()]
   return postal ? postal.substring(0, 2) : ''
@@ -28,8 +39,8 @@ const getDeptCode = (city: string) => {
 export default function Home() {
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
-  const [allCities, setAllCities] = useState<string[]>([])
-  const [suggestions, setSuggestions] = useState<string[]>([])
+  const [allCities, setAllCities] = useState<CityWithPostal[]>([])
+  const [suggestions, setSuggestions] = useState<CityWithPostal[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -42,7 +53,18 @@ export default function Home() {
       try {
         const response = await fetch('/api/cities')
         const data = await response.json()
-        setAllCities(data.cities || [])
+        // Handle both old format (string[]) and new format ({name, postal}[])
+        if (data.cities && data.cities.length > 0) {
+          if (typeof data.cities[0] === 'string') {
+            // Old format - convert to new format
+            setAllCities(data.cities.map((city: string) => ({ name: city, postal: '' })))
+          } else {
+            // New format with postal codes
+            setAllCities(data.cities)
+          }
+        } else {
+          setAllCities([])
+        }
       } catch {
         setAllCities([])
       }
@@ -69,7 +91,7 @@ export default function Home() {
     setSearchQuery(value)
     if (value.length >= 2) {
       const filtered = allCities
-        .filter(city => city.toLowerCase().includes(value.toLowerCase()))
+        .filter(city => city.name.toLowerCase().includes(value.toLowerCase()))
         .slice(0, 8)
       setSuggestions(filtered)
       setShowSuggestions(filtered.length > 0)
@@ -79,20 +101,26 @@ export default function Home() {
     }
   }
 
-  const handleCitySelect = async (city: string) => {
-    setSearchQuery(city)
+  const handleCitySelect = async (cityData: CityWithPostal) => {
+    setSearchQuery(cityData.name)
     setShowSuggestions(false)
 
-    const cityUpper = city.toUpperCase().replace(/ /g, '-')
+    const cityUpper = cityData.name.toUpperCase().replace(/ /g, '-')
 
-    // Try postal map first for instant navigation
+    // Use postal from city data if available
+    if (cityData.postal) {
+      router.push(`/stages-recuperation-points/${cityUpper}-${cityData.postal}`)
+      return
+    }
+
+    // Fallback: Try static postal map
     const postalFromMap = CITY_POSTAL_MAP[cityUpper]
     if (postalFromMap) {
       router.push(`/stages-recuperation-points/${cityUpper}-${postalFromMap}`)
       return
     }
 
-    // Fallback: fetch postal code from API
+    // Last resort: fetch postal code from stages API
     try {
       const response = await fetch(`/api/stages/${cityUpper}`)
       const data = await response.json()
@@ -236,8 +264,9 @@ export default function Home() {
               {/* Suggestions Dropdown - Outside the flex container */}
               {showSuggestions && suggestions.length > 0 && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-                  {suggestions.map((city, index) => {
-                    const deptCode = getDeptCode(city)
+                  {suggestions.map((cityData, index) => {
+                    // Use postal from API data, fallback to static map
+                    const deptCode = cityData.postal ? getDeptCodeFromPostal(cityData.postal) : getDeptCode(cityData.name)
                     return (
                       <button
                         key={index}
@@ -245,12 +274,12 @@ export default function Home() {
                         onMouseDown={(e) => {
                           e.preventDefault()
                           e.stopPropagation()
-                          handleCitySelect(city)
+                          handleCitySelect(cityData)
                         }}
                         className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer"
                         style={{ fontFamily: 'var(--font-poppins)' }}
                       >
-                        {formatCityDisplay(city)}{deptCode ? ` (${deptCode})` : ''}
+                        {formatCityDisplay(cityData.name)}{deptCode ? ` (${deptCode})` : ''}
                       </button>
                     )
                   })}
@@ -1545,8 +1574,9 @@ export default function Home() {
             </div>
             {showSuggestions && suggestions.length > 0 && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-                {suggestions.map((city, index) => {
-                  const deptCode = getDeptCode(city)
+                {suggestions.map((cityData, index) => {
+                  // Use postal from API data, fallback to static map
+                  const deptCode = cityData.postal ? getDeptCodeFromPostal(cityData.postal) : getDeptCode(cityData.name)
                   return (
                     <button
                       key={index}
@@ -1554,12 +1584,12 @@ export default function Home() {
                       onMouseDown={(e) => {
                         e.preventDefault()
                         e.stopPropagation()
-                        handleCitySelect(city)
+                        handleCitySelect(cityData)
                       }}
                       className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer"
                       style={{ fontFamily: 'var(--font-poppins)' }}
                     >
-                      {formatCityDisplay(city)}{deptCode ? ` (${deptCode})` : ''}
+                      {formatCityDisplay(cityData.name)}{deptCode ? ` (${deptCode})` : ''}
                     </button>
                   )
                 })}
