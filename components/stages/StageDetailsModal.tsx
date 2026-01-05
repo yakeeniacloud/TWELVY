@@ -554,8 +554,10 @@ export default function StageDetailsModal({
           {/* Close button - X without circle, top right */}
           <button
             onClick={handleClose}
-            className="absolute top-3 right-3 z-10"
+            className="absolute z-10"
             style={{
+              top: '8px',
+              right: '12px',
               width: '28px',
               height: '28px',
               display: 'flex',
