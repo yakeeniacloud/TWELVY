@@ -556,8 +556,8 @@ export default function StageDetailsModal({
             onClick={handleClose}
             className="absolute z-10"
             style={{
-              top: '8px',
-              right: '12px',
+              top: '4px',
+              right: '16px',
               width: '28px',
               height: '28px',
               display: 'flex',
