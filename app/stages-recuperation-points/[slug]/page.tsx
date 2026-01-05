@@ -652,13 +652,10 @@ export default function StagesResultsPage() {
           </div>
         </div>
 
-        {/* Desktop: Three-column flex layout - left spacer + centered stages + right sticky card */}
-        <div className="hidden md:flex" style={{ maxWidth: '1200px', margin: '0 auto', gap: '24px', padding: '0 20px' }}>
-          {/* Left spacer - same width as right column for centering balance */}
-          <div style={{ width: '260px', flexShrink: 0 }} className="hidden lg:block" />
-
-          {/* Center column: Stages List - 743px width as per design specs */}
-          <div style={{ display: 'flex', width: '743px', minWidth: '743px', flexShrink: 0, padding: '0 2px', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+        {/* Desktop: Two-column flex layout - stages on left + sticky card on right */}
+        <div className="hidden md:flex" style={{ gap: '24px' }}>
+          {/* Left column: Stages List - takes available space */}
+          <div style={{ display: 'flex', flex: 1, padding: '0 2px', flexDirection: 'column' }}>
             {/* Desktop Filters - Aligned with cards width */}
             <div className="flex items-center gap-2 w-full mb-4">
               {/* Search bar - new style with 8px radius, grey border, icon on right */}
