@@ -576,7 +576,7 @@ export default function StageDetailsModal({
           </button>
 
           {/* Content */}
-          <div className="px-4 pb-6 flex flex-col items-center">
+          <div className="px-4 pb-6 flex flex-col items-center" style={{ marginTop: '8px' }}>
             {/* Title - on grey background */}
             <div
               className="w-full mb-3 py-2 px-4"
