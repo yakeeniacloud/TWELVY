@@ -539,14 +539,17 @@ export default function StagesResultsPage() {
               return 'de '
             }
             return (
-              <div className="hidden md:flex items-center justify-center gap-3 px-6 py-2" style={{
-                borderRadius: '8px',
-                background: 'rgba(219, 206, 157, 0.69)'
+              <div className="hidden md:flex items-center justify-center gap-4" style={{
+                width: '536px',
+                height: '35px',
+                padding: '5px 10px',
+                borderRadius: '12px',
+                background: '#E6D9AB'
               }}>
                 <img
                   src="/flag.png"
                   alt="Drapeau français"
-                  style={{ width: '24px', height: '16px', borderRadius: '2px', objectFit: 'cover' }}
+                  style={{ width: '24px', height: '16px', borderRadius: '10px', objectFit: 'cover' }}
                 />
                 <span style={{
                   color: '#2C2C2C',
@@ -650,12 +653,12 @@ export default function StagesResultsPage() {
         </div>
 
         {/* Desktop: Three-column flex layout - left spacer + centered stages + right sticky card */}
-        <div className="hidden md:flex" style={{ maxWidth: '1200px', margin: '0 auto', gap: '24px' }}>
+        <div className="hidden md:flex" style={{ maxWidth: '1200px', margin: '0 auto', gap: '24px', padding: '0 20px' }}>
           {/* Left spacer - same width as right column for centering balance */}
           <div style={{ width: '260px', flexShrink: 0 }} className="hidden lg:block" />
 
-          {/* Center column: Stages List */}
-          <div style={{ flex: 1, maxWidth: '700px', margin: '0 auto' }}>
+          {/* Center column: Stages List - wider to align with "Depuis 2008" text */}
+          <div style={{ flex: 1, maxWidth: '800px', margin: '0 auto' }}>
             {/* Desktop Filters - Aligned with cards width */}
             <div className="flex items-center gap-2 w-full mb-4">
               {/* Search bar - new style with 8px radius, grey border, icon on right */}
@@ -942,12 +945,14 @@ export default function StagesResultsPage() {
                 background: '#EFEFEF'
               }}>
                 <span style={{
+                  width: '226px',
+                  flexShrink: 0,
                   color: '#000',
                   textAlign: 'center',
                   fontFamily: 'var(--font-poppins)',
-                  fontSize: '14px',
-                  fontWeight: 500,
-                  lineHeight: '20px'
+                  fontSize: '17px',
+                  fontWeight: 400,
+                  lineHeight: '25px'
                 }}>
                   Vos Garanties ProStagesPermis
                 </span>
@@ -956,12 +961,13 @@ export default function StagesResultsPage() {
               {/* Benefit items */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', padding: '0 5px' }}>
                 {[
-                  'Stage officiel agréé Préfecture',
+                  'Stages officiels agréés Préfecture',
                   '+4 points en 48h',
-                  '98,7% de clients satisfaits',
-                  'Report ou remboursement en cas d\'imprévu',
-                  'Paiement 100% sécurisé',
-                  'Attestation de stage remise le 2ème jour'
+                  'Meilleur prix garanti',
+                  'Inscriptions en quelques clics',
+                  'Convocation envoyée immédiatement',
+                  'Remboursement en cas d\'imprévu',
+                  '98,7% de clients satisfaits'
                 ].map((benefit, index) => (
                   <div key={index} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
                     {/* Yellow checkmark icon */}
