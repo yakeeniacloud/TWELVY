@@ -486,37 +486,7 @@ export default function StagesResultsPage() {
           Réservez votre stage agréé en quelques clics et récupérez 4 points en 2 jours
         </p>
 
-        {/* Reassurance Icons - Hidden on mobile, shown on desktop */}
-        <div className="hidden md:flex items-center justify-center gap-8 mb-6">
-          <Image
-            src="/agree-prefecture.png"
-            alt="Agréé Préfecture"
-            width={200}
-            height={50}
-            className="h-10 w-auto"
-          />
-          <Image
-            src="/4points-48h.png"
-            alt="+ 4 points en 48h"
-            width={200}
-            height={50}
-            className="h-10 w-auto"
-          />
-          <Image
-            src="/prix-bas-garanti.png"
-            alt="Prix le plus bas garanti"
-            width={240}
-            height={50}
-            className="h-10 w-auto opacity-90"
-          />
-          <Image
-            src="/14jours-changer-avis.png"
-            alt="14 jours pour changer d'avis"
-            width={280}
-            height={50}
-            className="h-10 w-auto"
-          />
-        </div>
+        {/* Reassurance Icons - REMOVED from desktop as per redesign */}
 
         {/* Prefecture Badge */}
         <div className="flex items-center justify-center mb-4 md:mb-6">
@@ -679,10 +649,12 @@ export default function StagesResultsPage() {
           </div>
         </div>
 
-        {/* Desktop: Two-column layout with stages list and sticky guarantees block */}
-        <div className="hidden md:flex gap-6 max-w-6xl mx-auto">
-          {/* Left column: Stages List (70% width) */}
-          <div className="flex-1" style={{ maxWidth: '70%' }}>
+        {/* Desktop: Two-column layout with centered stages list and sticky guarantees on right */}
+        <div className="hidden md:block relative" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          {/* Wrapper for centered stages content */}
+          <div className="flex justify-center">
+            {/* Center column: Stages List */}
+            <div style={{ width: '700px', maxWidth: '100%' }}>
             {/* Desktop Filters - Aligned with cards width */}
             <div className="flex items-center gap-2 w-full mb-4">
               {/* Search bar - new style with 8px radius, grey border, icon on right */}
@@ -945,8 +917,16 @@ export default function StagesResultsPage() {
             )}
           </div>
 
-          {/* Right column: Sticky Guarantees Block (30% width) */}
-          <div className="w-[280px] flex-shrink-0">
+          </div>
+          {/* End of centered stages wrapper */}
+
+          {/* Right column: Sticky Guarantees Block - Positioned absolutely to the right */}
+          <div style={{
+            position: 'absolute',
+            right: '0',
+            top: '0',
+            width: '260px'
+          }}>
             <div className="sticky top-4" style={{
               display: 'flex',
               flexDirection: 'column',

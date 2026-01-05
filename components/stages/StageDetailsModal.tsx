@@ -121,30 +121,32 @@ export default function StageDetailsModal({
         aria-modal="true"
       >
         <div
-          className="bg-white rounded-2xl shadow-2xl relative overflow-y-auto"
+          className="bg-white rounded-2xl shadow-2xl relative"
           style={{
             width: '780px',
-            maxHeight: '90vh'
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            overflowX: 'hidden'
           }}
           onClick={e => e.stopPropagation()}
         >
-        {/* Close button - positioned slightly outside the popup */}
+        {/* Close button - positioned inside the popup, smaller */}
         <button
           onClick={onClose}
           className="absolute flex items-center justify-center z-10 hover:opacity-80 transition-opacity"
           style={{
-            top: '-10px',
-            right: '-10px',
-            width: '40px',
-            height: '40px',
+            top: '12px',
+            right: '12px',
+            width: '28px',
+            height: '28px',
             background: 'transparent',
             border: 'none',
             cursor: 'pointer'
           }}
           aria-label="Fermer"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
-            <path d="M28 16L16 28M16 16L28 28M42 22C42 33.0457 33.0457 42 22 42C10.9543 42 2 33.0457 2 22C2 10.9543 10.9543 2 22 2C33.0457 2 42 10.9543 42 22Z" stroke="#A1A1A1" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6L18 18" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
 
@@ -169,24 +171,40 @@ export default function StageDetailsModal({
             Stage {formatDate(stage.date_start, stage.date_end)}
           </h2>
 
-          {/* Price */}
+          {/* Price - in black */}
           <p
-            className="text-center mb-4"
+            className="text-center mb-1"
             style={{
               width: '235px',
-              height: '30px',
               flexShrink: 0,
-              color: 'rgba(188, 71, 71, 0.86)',
+              color: '#000',
               textAlign: 'center',
               fontFamily: 'var(--font-poppins)',
               fontSize: '24px',
               fontStyle: 'normal',
-              fontWeight: '400',
+              fontWeight: '500',
               lineHeight: '35px',
-              margin: '0 auto 16px'
+              margin: '0 auto'
             }}
           >
             {stage.prix.toFixed(0)}€ TTC
+          </p>
+
+          {/* Places disponibles - in green */}
+          <p
+            className="text-center mb-4"
+            style={{
+              color: '#267E1C',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: '400',
+              lineHeight: '20px',
+              margin: '0 auto 16px'
+            }}
+          >
+            Places disponibles
           </p>
 
           {/* Two column layout */}
