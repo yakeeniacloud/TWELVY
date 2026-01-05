@@ -658,7 +658,7 @@ export default function StagesResultsPage() {
           <div style={{ width: '260px', flexShrink: 0 }} className="hidden lg:block" />
 
           {/* Center column: Stages List - 743px width as per design specs */}
-          <div style={{ display: 'flex', width: '743px', padding: '0 2px', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', width: '743px', minWidth: '743px', flexShrink: 0, padding: '0 2px', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
             {/* Desktop Filters - Aligned with cards width */}
             <div className="flex items-center gap-2 w-full mb-4">
               {/* Search bar - new style with 8px radius, grey border, icon on right */}
