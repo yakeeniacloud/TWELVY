@@ -551,6 +551,28 @@ export default function StageDetailsModal({
             }} />
           </div>
 
+          {/* Close button - X without circle, top right */}
+          <button
+            onClick={handleClose}
+            className="absolute top-3 right-3 z-10"
+            style={{
+              width: '28px',
+              height: '28px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: 0
+            }}
+            aria-label="Fermer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6L18 18" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+
           {/* Content */}
           <div className="px-4 pb-6 flex flex-col items-center">
             {/* Title - on grey background */}

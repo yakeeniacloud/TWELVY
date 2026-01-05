@@ -1924,24 +1924,25 @@ export default function StagesResultsPage() {
               }} />
             </div>
 
-            {/* Close button */}
+            {/* Close button - X without circle */}
             <button
               onClick={() => setShowReassuranceModal(false)}
-              className="absolute top-3 right-3"
+              className="absolute top-3 right-3 z-10"
               style={{
-                width: '32px',
-                height: '32px',
+                width: '28px',
+                height: '28px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 background: 'none',
                 border: 'none',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                padding: 0
               }}
+              aria-label="Fermer"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M15 9l-6 6M9 9l6 6"/>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M18 6L6 18M6 6L18 18" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
 
