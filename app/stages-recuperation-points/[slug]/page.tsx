@@ -652,19 +652,17 @@ export default function StagesResultsPage() {
           </div>
         </div>
 
-        {/* Desktop: Two-column flex layout - stages on left + sticky card on right */}
-        <div className="hidden md:flex" style={{ gap: '24px' }}>
+        {/* Desktop: Two-column flex layout - shifted right to align center of stages with center of yellow widget */}
+        <div className="hidden md:flex" style={{ gap: '24px', marginLeft: '80px' }}>
           {/* Left column: Stages List - takes available space */}
           <div style={{ display: 'flex', flex: 1, padding: '0 2px', flexDirection: 'column' }}>
-            {/* Desktop Filters - Aligned with cards width */}
-            <div className="flex items-center gap-2 w-full mb-4">
-              {/* Search bar - new style with 8px radius, grey border, icon on right */}
+            {/* Desktop Filters - Search left, Trier par center, Ville dropdown right */}
+            <div className="flex items-center w-full mb-4">
+              {/* LEFT: Search bar */}
               <div
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 flex-shrink-0"
                 style={{
-                  minWidth: '120px',
-                  maxWidth: '180px',
-                  flex: '1 1 auto',
+                  width: '180px',
                   height: '32px',
                   padding: '6px 10px',
                   borderRadius: '8px',
@@ -691,8 +689,8 @@ export default function StagesResultsPage() {
                 </svg>
               </div>
 
-              {/* Filter buttons */}
-              <div className="flex items-center gap-2 flex-1 justify-end">
+              {/* CENTER: Trier par + Date/Prix/Proximité buttons */}
+              <div className="flex items-center gap-2 flex-1 justify-center">
                 <span className="flex-shrink-0 text-xs" style={{
                   fontFamily: 'var(--font-poppins)',
                   color: '#000',
@@ -746,21 +744,27 @@ export default function StagesResultsPage() {
                 >
                   Proximité
                 </button>
+              </div>
 
-                {/* Ville dropdown */}
-                <div className="relative flex-shrink-0" ref={cityDropdownRef}>
-                  <button
-                    onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
-                    className="flex items-center justify-between gap-1 px-2 py-1 rounded-lg border border-black"
-                    style={{
-                      height: '32px',
-                      minWidth: '70px',
-                      fontFamily: 'var(--font-poppins)',
-                      color: '#060606',
-                      fontSize: '11px',
-                      fontWeight: '400'
-                    }}
-                  >
+              {/* RIGHT: Ville dropdown */}
+              <div className="relative flex-shrink-0" ref={cityDropdownRef}>
+                <button
+                  onClick={() => setShowCitiesDropdown(!showCitiesDropdown)}
+                  className="flex items-center rounded-lg border border-black"
+                  style={{
+                    display: 'flex',
+                    width: '144px',
+                    height: '32px',
+                    padding: '0 11px',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexShrink: 0,
+                    fontFamily: 'var(--font-poppins)',
+                    color: '#060606',
+                    fontSize: '11px',
+                    fontWeight: '400'
+                  }}
+                >
                     <span className="truncate flex-1 text-left">
                       {allCitiesSelected
                         ? 'Ville'
@@ -808,7 +812,6 @@ export default function StagesResultsPage() {
                     </div>
                   )}
                 </div>
-              </div>
             </div>
             {loading && (
               <div className="text-center py-12">
