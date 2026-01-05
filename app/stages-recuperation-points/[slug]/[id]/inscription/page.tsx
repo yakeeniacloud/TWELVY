@@ -3413,39 +3413,16 @@ export default function InscriptionPage() {
                   Stage du {formatDate(stage.date_start, stage.date_end)}
                 </p>
 
-                {/* Price and Places disponibles - Moved to top */}
+                {/* Price and Places disponibles - Price first, then Places disponibles */}
                 <div className="mb-3 flex flex-col items-center">
-                  <div
-                    style={{
-                      display: 'flex',
-                      height: '30px',
-                      flexDirection: 'column',
-                      justifyContent: 'flex-start',
-                      flexShrink: 0,
-                      marginBottom: '2px'
-                    }}
-                  >
-                    <p
-                      style={{
-                        color: 'rgba(38, 126, 28, 0.95)',
-                        textAlign: 'center',
-                        fontFamily: 'Poppins',
-                        fontSize: '15px',
-                        fontStyle: 'normal',
-                        fontWeight: 400,
-                        lineHeight: '25px'
-                      }}
-                    >
-                      Places disponibles
-                    </p>
-                  </div>
                   <div
                     style={{
                       display: 'flex',
                       height: '37px',
                       flexDirection: 'column',
                       justifyContent: 'center',
-                      flexShrink: 0
+                      flexShrink: 0,
+                      marginBottom: '2px'
                     }}
                   >
                     <p
@@ -3460,6 +3437,29 @@ export default function InscriptionPage() {
                       }}
                     >
                       {stage.prix}€ TTC
+                    </p>
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      height: '30px',
+                      flexDirection: 'column',
+                      justifyContent: 'flex-start',
+                      flexShrink: 0
+                    }}
+                  >
+                    <p
+                      style={{
+                        color: 'rgba(38, 126, 28, 0.95)',
+                        textAlign: 'center',
+                        fontFamily: 'Poppins',
+                        fontSize: '15px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '25px'
+                      }}
+                    >
+                      Places disponibles
                     </p>
                   </div>
                 </div>
