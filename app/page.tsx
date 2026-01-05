@@ -1497,7 +1497,8 @@ export default function Home() {
             left: 0,
             right: 0,
             zIndex: 100,
-            background: '#F5F5F5',
+            background: '#FFF',
+            borderBottom: '1px solid #E0E0E0',
             padding: '12px 16px'
           }}>
             {/* Logo + Hamburger row */}
