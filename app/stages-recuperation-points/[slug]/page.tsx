@@ -649,12 +649,13 @@ export default function StagesResultsPage() {
           </div>
         </div>
 
-        {/* Desktop: Two-column layout with centered stages list and sticky guarantees on right */}
-        <div className="hidden md:block relative" style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          {/* Wrapper for centered stages content */}
-          <div className="flex justify-center">
-            {/* Center column: Stages List */}
-            <div style={{ width: '700px', maxWidth: '100%' }}>
+        {/* Desktop: Three-column flex layout - left spacer + centered stages + right sticky card */}
+        <div className="hidden md:flex" style={{ maxWidth: '1200px', margin: '0 auto', gap: '24px' }}>
+          {/* Left spacer - same width as right column for centering balance */}
+          <div style={{ width: '260px', flexShrink: 0 }} className="hidden lg:block" />
+
+          {/* Center column: Stages List */}
+          <div style={{ flex: 1, maxWidth: '700px', margin: '0 auto' }}>
             {/* Desktop Filters - Aligned with cards width */}
             <div className="flex items-center gap-2 w-full mb-4">
               {/* Search bar - new style with 8px radius, grey border, icon on right */}
@@ -917,16 +918,8 @@ export default function StagesResultsPage() {
             )}
           </div>
 
-          </div>
-          {/* End of centered stages wrapper */}
-
-          {/* Right column: Sticky Guarantees Block - Positioned absolutely to the right */}
-          <div style={{
-            position: 'absolute',
-            right: '0',
-            top: '0',
-            width: '260px'
-          }}>
+          {/* Right column: Sticky Guarantees Block */}
+          <div style={{ width: '260px', flexShrink: 0 }}>
             <div className="sticky top-4" style={{
               display: 'flex',
               flexDirection: 'column',
