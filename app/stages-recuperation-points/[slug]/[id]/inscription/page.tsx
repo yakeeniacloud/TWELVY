@@ -324,8 +324,28 @@ export default function InscriptionPage() {
 
       alert(`Veuillez remplir tous les champs obligatoires:\n\n${missingFields.join('\n')}`)
 
-      // Scroll to top to see form
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      // Find the first missing field and scroll to it
+      let firstMissingFieldId: string | null = null
+      if (!civilite) firstMissingFieldId = 'mobile-civilite'
+      else if (!nom) firstMissingFieldId = 'mobile-nom'
+      else if (!prenom) firstMissingFieldId = 'mobile-prenom'
+      else if (!email) firstMissingFieldId = 'mobile-email'
+      else if (!telephone) firstMissingFieldId = 'mobile-telephone'
+      else if (!cgvAccepted) firstMissingFieldId = 'mobile-cgv'
+
+      // Scroll to the first missing field
+      if (firstMissingFieldId) {
+        setTimeout(() => {
+          const element = document.getElementById(firstMissingFieldId!)
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+            // Try to focus the element if it's an input/select
+            if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
+              element.focus()
+            }
+          }
+        }, 100)
+      }
 
       // Keep payment block CLOSED
       return
@@ -553,7 +573,7 @@ export default function InscriptionPage() {
               <div className="space-y-3">
                 <div>
                   <label className="block mb-1" style={{ fontSize: '12px' }}>Civilité *</label>
-                  <select value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }}>
+                  <select id="mobile-civilite" value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }}>
                     <option value="">Sélectionner</option>
                     <option value="Monsieur">Monsieur</option>
                     <option value="Madame">Madame</option>
@@ -562,17 +582,17 @@ export default function InscriptionPage() {
 
                 <div>
                   <label className="block mb-1" style={{ fontSize: '12px' }}>Nom *</label>
-                  <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Nom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                  <input id="mobile-nom" type="text" value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Nom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
 
                 <div>
                   <label className="block mb-1" style={{ fontSize: '12px' }}>Prénom *</label>
-                  <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} placeholder="Prénom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                  <input id="mobile-prenom" type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} placeholder="Prénom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
 
                 <div>
                   <label className="block mb-1" style={{ fontSize: '12px' }}>Email *</label>
-                  <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                  <input id="mobile-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
 
                 <div>
@@ -637,7 +657,7 @@ export default function InscriptionPage() {
                     </div>
                   </div>
 
-                  <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="Téléphone" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                  <input id="mobile-telephone" type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="Téléphone" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
 
                 {/* Garantie Sérénité */}
@@ -668,7 +688,7 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* CGV */}
-                <label className="flex items-start gap-1.5 cursor-pointer">
+                <label id="mobile-cgv" className="flex items-start gap-1.5 cursor-pointer">
                   <input type="checkbox" checked={cgvAccepted} onChange={(e) => setCgvAccepted(e.target.checked)} className="mt-0.5" />
                   <span style={{ fontSize: '11px' }}>J'accepte les <a href="#" className="text-blue-600 underline">conditions générales de vente</a></span>
                 </label>
