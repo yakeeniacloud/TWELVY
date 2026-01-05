@@ -44,8 +44,13 @@ export default function Home() {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  // Mobile sticky header states
+  const [mobileHeaderVisible, setMobileHeaderVisible] = useState(true) // Original header with logo visible
+  const [mobileSearchVisible, setMobileSearchVisible] = useState(true) // Main search bar visible
   const searchRef = useRef<HTMLDivElement>(null)
   const heroSearchRef = useRef<HTMLDivElement>(null)
+  const mobileHeaderRef = useRef<HTMLDivElement>(null)
+  const mobileSearchBarRef = useRef<HTMLDivElement>(null)
 
   // Fetch all cities on mount
   useEffect(() => {
@@ -84,6 +89,27 @@ export default function Home() {
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  // Mobile sticky header scroll detection
+  useEffect(() => {
+    const handleScroll = () => {
+      // Check if mobile header (logo + hamburger) is visible
+      if (mobileHeaderRef.current) {
+        const headerRect = mobileHeaderRef.current.getBoundingClientRect()
+        setMobileHeaderVisible(headerRect.bottom > 0)
+      }
+
+      // Check if main search bar is visible
+      if (mobileSearchBarRef.current) {
+        const searchRect = mobileSearchBarRef.current.getBoundingClientRect()
+        setMobileSearchVisible(searchRect.bottom > 0)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Initial check
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   // Filter cities based on input
@@ -1430,8 +1456,132 @@ export default function Home() {
 
       {/* MOBILE VERSION - Only visible on mobile */}
       <div className="md:hidden">
-        {/* Mobile Header */}
-        <header style={{
+        {/* Mobile Sticky Header (1) - Logo + Hamburger only - shows when original header hidden but search visible */}
+        {!mobileHeaderVisible && mobileSearchVisible && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 100,
+            background: '#FFF',
+            borderBottom: '1px solid #E0E0E0',
+            padding: '12px 16px'
+          }}>
+            <div className="flex items-center justify-between">
+              <img src="/prostagespermis-logo.png" alt="ProStagesPermis" style={{ height: '32px' }} />
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                style={{
+                  width: '40px',
+                  height: '35px',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="35" viewBox="0 0 40 35" fill="none">
+                  <path d="M35 14.5833H5M35 8.75H5M35 20.4167H5M35 26.25H5" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Sticky Header (2) - Logo + Hamburger + Search bar - shows when both hidden */}
+        {!mobileHeaderVisible && !mobileSearchVisible && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 100,
+            background: '#F5F5F5',
+            padding: '12px 16px'
+          }}>
+            {/* Logo + Hamburger row */}
+            <div className="flex items-center justify-between mb-3">
+              <img src="/prostagespermis-logo.png" alt="ProStagesPermis" style={{ height: '32px' }} />
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                style={{
+                  width: '40px',
+                  height: '35px',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="35" viewBox="0 0 40 35" fill="none">
+                  <path d="M35 14.5833H5M35 8.75H5M35 20.4167H5M35 26.25H5" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            {/* Sticky Search bar */}
+            <div className="relative flex justify-center">
+              <div style={{
+                display: 'flex',
+                width: '100%',
+                maxWidth: '324px',
+                height: '48px',
+                padding: '1px 16px',
+                alignItems: 'center',
+                gap: '12px',
+                borderRadius: '24px',
+                border: '1px solid #686868',
+                background: '#FFF'
+              }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M15.75 15.75L12.4875 12.4875M14.25 8.25C14.25 11.5637 11.5637 14.25 8.25 14.25C4.93629 14.25 2.25 11.5637 2.25 8.25C2.25 4.93629 4.93629 2.25 8.25 2.25C11.5637 2.25 14.25 4.93629 14.25 8.25Z" stroke="#727171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => handleInputChange(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  placeholder="Ville ou code postal"
+                  style={{
+                    flex: 1,
+                    border: 'none',
+                    outline: 'none',
+                    background: 'transparent',
+                    fontSize: '14px',
+                    fontFamily: 'var(--font-poppins)',
+                    color: searchQuery ? '#000' : '#949393'
+                  }}
+                />
+              </div>
+              {/* Sticky header suggestions dropdown */}
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto mx-4">
+                  {suggestions.map((cityData, index) => {
+                    const deptCode = cityData.postal ? getDeptCodeFromPostal(cityData.postal) : getDeptCode(cityData.name)
+                    return (
+                      <button
+                        key={index}
+                        type="button"
+                        onMouseDown={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          handleCitySelect(cityData)
+                        }}
+                        className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer"
+                        style={{ fontFamily: 'var(--font-poppins)' }}
+                      >
+                        {formatCityDisplay(cityData.name)}{deptCode ? ` (${deptCode})` : ''}
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Mobile Header - Original (with ref for visibility tracking) */}
+        <header ref={mobileHeaderRef} style={{
           background: '#FFF',
           borderBottom: '1px solid #E0E0E0',
           padding: '12px 16px'
@@ -1540,7 +1690,7 @@ export default function Home() {
 
           {/* Search Bar */}
           <div ref={heroSearchRef} className="relative mb-8 flex justify-center">
-            <div ref={searchRef} style={{
+            <div ref={(el) => { searchRef.current = el; mobileSearchBarRef.current = el; }} style={{
               display: 'flex',
               width: '324px',
               height: '56px',
@@ -2204,21 +2354,21 @@ export default function Home() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             style={{
               display: 'flex',
-              width: '295px',
-              height: '61px',
-              padding: '7px 15px',
+              width: 'auto',
+              height: '50px',
+              padding: '12px 24px',
               justifyContent: 'center',
               alignItems: 'center',
-              gap: '20px',
               flexShrink: 0,
               borderRadius: '40px',
               background: '#41A334',
               border: 'none',
               color: '#FFF',
               fontFamily: 'var(--font-poppins)',
-              fontSize: '15px',
+              fontSize: '14px',
               fontWeight: 400,
-              letterSpacing: '0.5px'
+              letterSpacing: '0.5px',
+              whiteSpace: 'nowrap'
             }}
           >
             Trouver un stage près de chez moi
@@ -2287,7 +2437,7 @@ export default function Home() {
               ].map((faq, index) => (
                 <div key={faq.id} className="w-full">
                   <button
-                    className="flex items-center justify-between p-3 w-full text-left"
+                    className="flex items-start justify-between p-3 w-full text-left"
                     onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
                   >
                     <p className="text-gray-900 text-sm flex-1" style={{
@@ -2296,7 +2446,7 @@ export default function Home() {
                       fontWeight: 400
                     }}>{faq.question}</p>
                     <svg
-                      className={`w-5 h-5 text-gray-600 transition-transform flex-shrink-0 ${openFaqIndex === index ? 'rotate-180' : ''}`}
+                      className={`w-5 h-5 text-gray-600 transition-transform flex-shrink-0 mt-0.5 ${openFaqIndex === index ? 'rotate-180' : ''}`}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -2354,7 +2504,26 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-[#343435] py-6">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-center gap-6 mb-3">
+          {/* Desktop: horizontal layout */}
+          <div className="hidden md:flex items-center justify-center gap-6 mb-3">
+            <a href="/qui-sommes-nous" className="text-white text-xs hover:underline">
+              Qui sommes-nous
+            </a>
+            <a href="/aide-et-contact" className="text-white text-xs hover:underline">
+              Aide et contact
+            </a>
+            <a href="/conditions-generales" className="text-white text-xs hover:underline">
+              Conditions générales de vente
+            </a>
+            <a href="/mentions-legales" className="text-white text-xs hover:underline">
+              Mentions légales
+            </a>
+            <a href="/espace-client" className="text-white text-xs hover:underline">
+              Espace Client
+            </a>
+          </div>
+          {/* Mobile: vertical stacked layout */}
+          <div className="md:hidden flex flex-col items-center gap-3 mb-4">
             <a href="/qui-sommes-nous" className="text-white text-xs hover:underline">
               Qui sommes-nous
             </a>
