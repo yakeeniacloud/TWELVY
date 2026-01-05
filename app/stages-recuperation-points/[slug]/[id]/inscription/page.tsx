@@ -1655,23 +1655,8 @@ export default function InscriptionPage() {
                   </h3>
                 </div>
 
-                {/* Price */}
-                <div className="text-center mb-2">
-                  <p style={{
-                    color: 'rgba(0, 0, 0, 0.86)',
-                    textAlign: 'center',
-                    fontFamily: 'Poppins',
-                    fontSize: '26px',
-                    fontStyle: 'normal',
-                    fontWeight: '400',
-                    lineHeight: '35px'
-                  }}>
-                    {stage?.prix}€ TTC
-                  </p>
-                </div>
-
                 {/* Places disponibles */}
-                <div className="text-center mb-4">
+                <div className="text-center mb-2">
                   <p style={{
                     color: 'rgba(38, 126, 28, 0.95)',
                     textAlign: 'center',
@@ -1682,6 +1667,21 @@ export default function InscriptionPage() {
                     lineHeight: '25px'
                   }}>
                     Places disponibles
+                  </p>
+                </div>
+
+                {/* Price */}
+                <div className="text-center mb-4">
+                  <p style={{
+                    color: 'rgba(0, 0, 0, 0.86)',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '26px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: '35px'
+                  }}>
+                    {stage?.prix}€ TTC
                   </p>
                 </div>
 
