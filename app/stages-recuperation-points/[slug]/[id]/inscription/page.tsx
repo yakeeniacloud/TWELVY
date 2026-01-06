@@ -313,18 +313,7 @@ export default function InscriptionPage() {
   const handleValidateForm = () => {
     // Check if all required fields are filled
     if (!civilite || !nom || !prenom || !email || !telephone || !cgvAccepted) {
-      // Show alert for missing fields
-      const missingFields: string[] = []
-      if (!civilite) missingFields.push('Civilité')
-      if (!nom) missingFields.push('Nom')
-      if (!prenom) missingFields.push('Prénom')
-      if (!email) missingFields.push('Email')
-      if (!telephone) missingFields.push('Téléphone mobile')
-      if (!cgvAccepted) missingFields.push('Conditions générales de vente')
-
-      alert(`Veuillez remplir tous les champs obligatoires:\n\n${missingFields.join('\n')}`)
-
-      // Find the first missing field and scroll to it
+      // Find the first missing field and scroll to it (no popup)
       let firstMissingFieldId: string | null = null
       if (!civilite) firstMissingFieldId = 'mobile-civilite'
       else if (!nom) firstMissingFieldId = 'mobile-nom'
@@ -335,16 +324,14 @@ export default function InscriptionPage() {
 
       // Scroll to the first missing field
       if (firstMissingFieldId) {
-        setTimeout(() => {
-          const element = document.getElementById(firstMissingFieldId!)
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-            // Try to focus the element if it's an input/select
-            if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
-              element.focus()
-            }
+        const element = document.getElementById(firstMissingFieldId)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          // Try to focus the element if it's an input/select
+          if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
+            element.focus()
           }
-        }, 100)
+        }
       }
 
       // Keep payment block CLOSED
