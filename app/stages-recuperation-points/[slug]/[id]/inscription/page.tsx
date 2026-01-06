@@ -322,15 +322,11 @@ export default function InscriptionPage() {
       else if (!telephone) firstMissingFieldId = 'mobile-telephone'
       else if (!cgvAccepted) firstMissingFieldId = 'mobile-cgv'
 
-      // Scroll to the first missing field
+      // Scroll to the first missing field (without focusing/selecting it)
       if (firstMissingFieldId) {
         const element = document.getElementById(firstMissingFieldId)
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-          // Try to focus the element if it's an input/select
-          if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
-            element.focus()
-          }
         }
       }
 
