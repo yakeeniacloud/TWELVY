@@ -69,6 +69,7 @@ export default function InscriptionPage() {
   const [paymentBlockVisible, setPaymentBlockVisible] = useState(false)
   const [isFormExpanded, setIsFormExpanded] = useState(true)
   const [isStageCardVisible, setIsStageCardVisible] = useState(true)
+  const [isFormSectionVisible, setIsFormSectionVisible] = useState(true)
   const [isPaymentSectionVisible, setIsPaymentSectionVisible] = useState(false)
   const [isPayerButtonVisible, setIsPayerButtonVisible] = useState(false)
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
@@ -130,12 +131,25 @@ export default function InscriptionPage() {
     const handleScroll = () => {
       // Check if stage card is visible
       const stageCard = document.getElementById('mobile-stage-card')
+      const formSection = document.getElementById('mobile-form-section')
+      const validateFormButton = document.getElementById('mobile-validate-form-button')
       const paymentSection = document.getElementById('mobile-payment-section')
       const payerButton = document.getElementById('mobile-payer-button')
 
       if (stageCard) {
         const rect = stageCard.getBoundingClientRect()
         setIsStageCardVisible(rect.top < window.innerHeight && rect.bottom > 0)
+      }
+
+      // Form section is visible if either the form section OR the validate button is on screen
+      if (formSection || validateFormButton) {
+        const formRect = formSection?.getBoundingClientRect()
+        const buttonRect = validateFormButton?.getBoundingClientRect()
+
+        const formVisible = formRect ? (formRect.top < window.innerHeight && formRect.bottom > 0) : false
+        const buttonVisible = buttonRect ? (buttonRect.top < window.innerHeight && buttonRect.bottom > 0) : false
+
+        setIsFormSectionVisible(formVisible || buttonVisible)
       }
 
       if (paymentSection) {
@@ -386,8 +400,11 @@ export default function InscriptionPage() {
   const totalPrice = garantieSerenite ? (stage?.prix || 0) + 57 : (stage?.prix || 0)
 
   // Determine which sticky to show (CAS logic)
-  // STICKY 1: CAS 1b - Form not validated AND stage card not visible
-  const showStickyType1b = !formValidated && !isStageCardVisible && !isKeyboardOpen
+  // STICKY 1a (MOBILE2 - no button): Form NOT validated, stage card NOT visible, but form section IS visible
+  const showStickyType1a = !formValidated && !isStageCardVisible && isFormSectionVisible && !isKeyboardOpen
+
+  // STICKY 1b (MOBILE1 - with button): Form NOT validated, stage card NOT visible, form section NOT visible
+  const showStickyType1b = !formValidated && !isStageCardVisible && !isFormSectionVisible && !isKeyboardOpen
 
   // STICKY 2: CAS 2a1 - Form validated, payment fields NOT filled, Payer button not visible, IS on payment section
   const showStickyType2a1 = formValidated && paymentBlockVisible && !arePaymentFieldsFilled && !isPayerButtonVisible && isPaymentSectionVisible && !isKeyboardOpen
@@ -546,7 +563,7 @@ export default function InscriptionPage() {
         <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '20px', marginBottom: '20px' }} />
 
         {/* Form Section */}
-        <div className="px-3 py-0">
+        <div id="mobile-form-section" className="px-3 py-0">
           {!formValidated ? (
             <>
               <h2 className="font-medium mb-1" style={{ fontSize: '14px' }}>Étape 1/2 : coordonnées personnelles</h2>
@@ -679,6 +696,7 @@ export default function InscriptionPage() {
                 {/* Submit Button */}
                 <div className="flex justify-center">
                   <button
+                    id="mobile-validate-form-button"
                     onClick={handleValidateForm}
                     className="text-white disabled:opacity-50"
                     style={{
@@ -1090,7 +1108,44 @@ export default function InscriptionPage() {
               </div>
             ) : (
               <>
-                {/* STICKY 1: CAS 1b - Form not validated, stage card not visible */}
+                {/* STICKY 1a (MOBILE2): Form NOT validated, at form level - NO button */}
+                {showStickyType1a && (
+                  <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '12px 16px' }}>
+                    <h3 className="text-center mb-2" style={{
+                      width: '100%',
+                      maxWidth: '391px',
+                      margin: '0 auto 8px',
+                      color: '#000',
+                      fontFamily: 'Poppins',
+                      fontSize: '18px',
+                      fontStyle: 'normal',
+                      fontWeight: '500',
+                      lineHeight: '28px'
+                    }}>
+                      Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
+                    </h3>
+                    <div className="flex justify-center items-center gap-8">
+                      <button onClick={handleDetailsClick} style={{
+                        color: '#345FB0',
+                        fontFamily: 'Poppins',
+                        fontSize: '14px',
+                        fontStyle: 'normal',
+                        fontWeight: '400',
+                        lineHeight: '23px'
+                      }}>Détails du stage</button>
+                      <button onClick={handleChangeDateClick} style={{
+                        color: '#345FB0',
+                        fontFamily: 'Poppins',
+                        fontSize: '14px',
+                        fontStyle: 'normal',
+                        fontWeight: '400',
+                        lineHeight: '23px'
+                      }}>Changer de date</button>
+                    </div>
+                  </div>
+                )}
+
+                {/* STICKY 1b (MOBILE1): Form NOT validated, form NOT visible - WITH button */}
                 {showStickyType1b && (
               <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg z-50" style={{ padding: '12px 16px' }}>
                 <h3 className="text-center mb-2" style={{
@@ -1127,11 +1182,10 @@ export default function InscriptionPage() {
                 <div className="flex justify-center">
                   <button
                     onClick={() => {
-                      if (isFormComplete) {
-                        handleValidateForm()
-                      } else {
-                        const formSection = document.querySelector('[id*="formulaire"]') || document.querySelector('form')
-                        formSection?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                      // Scroll to the top of the form section
+                      const formSection = document.getElementById('mobile-form-section')
+                      if (formSection) {
+                        formSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
                       }
                     }}
                     className="text-white"
@@ -1291,24 +1345,27 @@ export default function InscriptionPage() {
               className="w-full bg-white rounded-t-3xl"
               style={{ maxHeight: '90vh', display: 'flex', flexDirection: 'column', padding: '24px 16px', position: 'relative' }}
             >
-              {/* Close X button */}
+              {/* Close X button - small X without circle (same as fiche ville) */}
               <button
                 onClick={() => setIsDatePopupOpen(false)}
+                className="absolute z-10"
                 style={{
-                  position: 'absolute',
-                  top: '15px',
-                  right: '15px',
-                  width: '40px',
-                  height: '40px',
-                  background: 'transparent',
+                  top: '4px',
+                  right: '16px',
+                  width: '28px',
+                  height: '28px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  padding: 0,
-                  zIndex: 10
+                  padding: 0
                 }}
+                aria-label="Fermer"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
-                  <path d="M28 16L16 28M16 16L28 28M42 22C42 33.0457 33.0457 42 22 42C10.9543 42 2 33.0457 2 22C2 10.9543 10.9543 2 22 2C33.0457 2 42 10.9543 42 22Z" stroke="#A1A1A1" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M18 6L6 18M6 6L18 18" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </button>
 
@@ -1631,13 +1688,37 @@ export default function InscriptionPage() {
           <div className="fixed inset-0 z-50 flex items-end md:hidden" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} onClick={() => setIsDetailsModalOpen(false)}>
             <div
               onClick={(e) => e.stopPropagation()}
-              className="w-full bg-white rounded-t-3xl"
+              className="w-full bg-white rounded-t-3xl relative"
               style={{ maxHeight: '85vh', display: 'flex', flexDirection: 'column', padding: '24px 16px' }}
             >
               {/* Handle bar */}
               <div className="flex justify-center mb-4">
                 <div style={{ width: '100px', height: '4px', backgroundColor: '#B0B0B0', borderRadius: '2px' }} />
               </div>
+
+              {/* Close button - X without circle, top right (same as fiche ville) */}
+              <button
+                onClick={() => setIsDetailsModalOpen(false)}
+                className="absolute z-10"
+                style={{
+                  top: '4px',
+                  right: '16px',
+                  width: '28px',
+                  height: '28px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  padding: 0
+                }}
+                aria-label="Fermer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M18 6L6 18M6 6L18 18" stroke="#666" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
 
               {/* Scrollable content */}
               <div className="flex-1 overflow-y-auto">
