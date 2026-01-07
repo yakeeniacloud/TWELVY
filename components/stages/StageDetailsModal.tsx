@@ -639,7 +639,7 @@ export default function StageDetailsModal({
               marginBottom: '16px'
             }} />
 
-            {/* Main Widget Container - no shadow */}
+            {/* Main Widget Container - no shadow, no border */}
             <div style={{
               display: 'flex',
               width: '366px',
@@ -649,7 +649,6 @@ export default function StageDetailsModal({
               gap: '10px',
               flexShrink: 0,
               borderRadius: '20px',
-              border: '1px solid #EAEAEA',
               background: '#FFF'
             }}>
               {/* Address */}
