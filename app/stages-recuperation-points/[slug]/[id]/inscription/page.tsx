@@ -1124,7 +1124,7 @@ export default function InscriptionPage() {
                     }}>
                       Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
                     </h3>
-                    <div className="flex justify-center items-center gap-8">
+                    <div className="flex justify-between items-center w-full">
                       <button onClick={handleDetailsClick} style={{
                         color: '#345FB0',
                         fontFamily: 'Poppins',
@@ -1161,7 +1161,7 @@ export default function InscriptionPage() {
                 }}>
                   Stage du {stage && formatDate(stage.date_start, stage.date_end)} - {totalPrice}€
                 </h3>
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center w-full mb-2">
                   <button onClick={handleDetailsClick} style={{
                     color: '#345FB0',
                     fontFamily: 'Poppins',
