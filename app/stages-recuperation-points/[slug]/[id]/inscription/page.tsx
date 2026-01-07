@@ -1339,11 +1339,26 @@ export default function InscriptionPage() {
 
         {/* Mobile Date Change Modal - Bottom Sheet */}
         {isDatePopupOpen && (
-          <div className="fixed inset-0 z-50 flex items-end md:hidden" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }} onClick={() => setIsDatePopupOpen(false)}>
+          <div
+            className="fixed inset-0 z-50 flex items-end md:hidden"
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', overflow: 'hidden', touchAction: 'none' }}
+            onClick={() => setIsDatePopupOpen(false)}
+          >
             <div
               onClick={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
               className="w-full bg-white rounded-t-3xl"
-              style={{ maxHeight: '90vh', display: 'flex', flexDirection: 'column', padding: '24px 16px', position: 'relative' }}
+              style={{
+                height: '85vh',
+                maxHeight: '85vh',
+                minHeight: '85vh',
+                display: 'flex',
+                flexDirection: 'column',
+                padding: '24px 16px',
+                position: 'relative',
+                overflow: 'hidden',
+                touchAction: 'pan-y'
+              }}
             >
               {/* Close X button - small X without circle (same as fiche ville) */}
               <button
