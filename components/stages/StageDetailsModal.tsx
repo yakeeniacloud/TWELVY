@@ -769,6 +769,21 @@ export default function StageDetailsModal({
 
             {/* Buttons - Outside main widget, stacked vertically */}
             <div className="flex flex-col gap-3 mt-4 items-center">
+              <button
+                onClick={handleClose}
+                className="text-sm hover:opacity-70 transition-opacity"
+                style={{
+                  fontFamily: 'var(--font-poppins)',
+                  color: '#000',
+                  fontWeight: 400,
+                  textDecoration: 'underline',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Fermer
+              </button>
               <Link
                 href={slug ? `/stages-recuperation-points/${slug}/${stage.id}/inscription` : `/stages-recuperation-points/${city.toUpperCase()}-${stage.site.code_postal}/${stage.id}/inscription`}
                 onClick={handleClose}
@@ -795,21 +810,6 @@ export default function StageDetailsModal({
               >
                 Sélectionner ce stage
               </Link>
-              <button
-                onClick={handleClose}
-                className="text-sm hover:opacity-70 transition-opacity"
-                style={{
-                  fontFamily: 'var(--font-poppins)',
-                  color: '#000',
-                  fontWeight: 400,
-                  textDecoration: 'underline',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer'
-                }}
-              >
-                Fermer
-              </button>
             </div>
           </div>
         </div>
