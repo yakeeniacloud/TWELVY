@@ -1266,28 +1266,28 @@ export default function StagesResultsPage() {
                         href={`/stages-recuperation-points/${fullSlug}/${stage.id}/inscription`}
                         style={{
                           display: 'flex',
-                          width: '109px',
-                          height: '40px',
-                          padding: '7px 0',
+                          width: '87px',
+                          height: '32px',
+                          padding: '6px 0',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          borderRadius: '12px',
+                          borderRadius: '10px',
                           background: '#41A334',
                           textDecoration: 'none'
                         }}
                         className="hover:bg-[#389c2e] transition-colors"
                       >
                         <span style={{
-                          width: '106px',
+                          width: '85px',
                           flexShrink: 0,
                           color: '#FFF',
                           textAlign: 'center',
                           fontFamily: 'var(--font-poppins)',
-                          fontSize: '15px',
+                          fontSize: '12px',
                           fontStyle: 'normal',
                           fontWeight: 400,
                           lineHeight: 'normal',
-                          letterSpacing: '0.3px'
+                          letterSpacing: '0.24px'
                         }}>
                           Sélectionner
                         </span>
