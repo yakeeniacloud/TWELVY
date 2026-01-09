@@ -98,6 +98,13 @@ export default function StagesResultsPage() {
   const desktopSearchRef = useRef<HTMLInputElement>(null)
   const desktopSuggestionsRef = useRef<HTMLDivElement>(null)
 
+  // Mobile search bar state
+  const [mobileSearchQuery, setMobileSearchQuery] = useState('')
+  const [showMobileSuggestions, setShowMobileSuggestions] = useState(false)
+  const [mobileSelectedIndex, setMobileSelectedIndex] = useState(-1)
+  const mobileSearchRef = useRef<HTMLInputElement>(null)
+  const mobileSuggestionsRef = useRef<HTMLDivElement>(null)
+
   const STAGES_PER_LOAD = 6
 
   const cityDropdownRef = useRef<HTMLDivElement>(null)
@@ -259,6 +266,23 @@ export default function StagesResultsPage() {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  // Close mobile search suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        mobileSuggestionsRef.current &&
+        !mobileSuggestionsRef.current.contains(event.target as Node) &&
+        mobileSearchRef.current &&
+        !mobileSearchRef.current.contains(event.target as Node)
+      ) {
+        setShowMobileSuggestions(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
   // Intersection Observer for stages visibility (for sticky footer)
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -370,8 +394,8 @@ export default function StagesResultsPage() {
           </div>
         )}
 
-        {/* Search bar - full width rounded when scrolled */}
-        <div className={`px-4 ${isScrolled ? 'py-2' : 'pb-3'}`}>
+        {/* Search bar - full width rounded when scrolled - with autocomplete */}
+        <div className={`px-4 ${isScrolled ? 'py-2' : 'pb-3'} relative`}>
           <div
             className="flex items-center gap-2 mx-auto"
             style={{
@@ -388,20 +412,84 @@ export default function StagesResultsPage() {
               <path d="M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z" stroke="#808080" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
             <input
+              ref={mobileSearchRef}
               type="text"
+              value={mobileSearchQuery}
+              onChange={(e) => {
+                setMobileSearchQuery(e.target.value)
+                setShowMobileSuggestions(true)
+                setMobileSelectedIndex(-1)
+              }}
+              onFocus={() => setShowMobileSuggestions(true)}
+              onKeyDown={(e) => {
+                const filteredCities = mobileSearchQuery.length > 0
+                  ? allCities.filter(c => c.toLowerCase().startsWith(mobileSearchQuery.toLowerCase())).slice(0, 8)
+                  : []
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  const cityToSearch = mobileSelectedIndex >= 0 && mobileSelectedIndex < filteredCities.length
+                    ? filteredCities[mobileSelectedIndex]
+                    : mobileSearchQuery
+                  if (cityToSearch.trim()) {
+                    const cityUpper = cityToSearch.toUpperCase()
+                    const postal = CITY_POSTAL_MAP[cityUpper] || '00000'
+                    window.location.href = `/stages-recuperation-points/${cityUpper}-${postal}`
+                  }
+                } else if (e.key === 'ArrowDown') {
+                  e.preventDefault()
+                  setMobileSelectedIndex(prev => prev < filteredCities.length - 1 ? prev + 1 : prev)
+                } else if (e.key === 'ArrowUp') {
+                  e.preventDefault()
+                  setMobileSelectedIndex(prev => prev > 0 ? prev - 1 : -1)
+                } else if (e.key === 'Escape') {
+                  setShowMobileSuggestions(false)
+                  setMobileSelectedIndex(-1)
+                }
+              }}
               placeholder="Ville ou code postal"
               className="flex-1 bg-transparent border-none outline-none text-sm placeholder:text-gray-400"
               style={{ fontFamily: 'var(--font-poppins)' }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  const value = (e.target as HTMLInputElement).value
-                  if (value.trim()) {
-                    window.location.href = `/stages-recuperation-points/${value.toUpperCase()}-00000`
-                  }
-                }
-              }}
             />
           </div>
+          {/* Mobile Suggestions dropdown */}
+          {showMobileSuggestions && mobileSearchQuery.length > 0 && (() => {
+            const filteredCities = allCities
+              .filter(c => c.toLowerCase().startsWith(mobileSearchQuery.toLowerCase()))
+              .slice(0, 8)
+            if (filteredCities.length === 0) return null
+            return (
+              <div
+                ref={mobileSuggestionsRef}
+                className="absolute left-4 right-4 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50"
+                style={{ maxHeight: '250px', overflowY: 'auto' }}
+              >
+                {filteredCities.map((cityName, index) => {
+                  const deptCode = CITY_POSTAL_MAP[cityName.toUpperCase()]?.substring(0, 2) || ''
+                  const displayName = cityName.split('-').map((word, i) => {
+                    const lower = word.toLowerCase()
+                    if (i > 0 && ['en', 'de', 'du', 'la', 'le', 'les', 'sur', 'sous'].includes(lower)) return lower
+                    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                  }).join('-')
+                  return (
+                    <button
+                      key={cityName}
+                      onClick={() => {
+                        const cityUpper = cityName.toUpperCase()
+                        const postal = CITY_POSTAL_MAP[cityUpper] || '00000'
+                        window.location.href = `/stages-recuperation-points/${cityUpper}-${postal}`
+                      }}
+                      className={`w-full text-left px-4 py-3 text-sm transition-colors ${
+                        index === mobileSelectedIndex ? 'bg-blue-100 text-blue-900' : 'text-gray-700 hover:bg-gray-100'
+                      }`}
+                      style={{ fontFamily: 'var(--font-poppins)' }}
+                    >
+                      {displayName}{deptCode ? ` (${deptCode})` : ''}
+                    </button>
+                  )
+                })}
+              </div>
+            )
+          })()}
         </div>
       </header>
 
