@@ -696,7 +696,7 @@ export default function StagesResultsPage() {
         </p>
 
         {/* Mobile Filters Section - Only visible on mobile */}
-        <div className="flex flex-col gap-3 w-full mb-[5px] md:hidden">
+        <div className="flex flex-col gap-3 w-full mb-[9px] md:hidden">
           {/* Filter buttons row - centered on mobile */}
           <div className="flex items-center justify-center gap-2">
             <div className="flex flex-col justify-center flex-shrink-0" style={{
