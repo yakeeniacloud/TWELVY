@@ -1248,18 +1248,18 @@ export default function StagesResultsPage() {
                     <div className="flex flex-col items-center ml-4" style={{ gap: '6px', paddingTop: '2px' }}>
                       <p style={{
                         display: 'flex',
-                        width: '79px',
-                        height: '27px',
+                        width: '63px',
+                        height: '22px',
                         flexDirection: 'column',
                         justifyContent: 'center',
                         flexShrink: 0,
                         color: 'rgba(6, 6, 6, 0.86)',
                         textAlign: 'center',
                         fontFamily: 'var(--font-poppins)',
-                        fontSize: '20px',
+                        fontSize: '16px',
                         fontStyle: 'normal',
                         fontWeight: 500,
-                        lineHeight: '35px',
+                        lineHeight: '28px',
                         marginRight: '2px'
                       }}>{stage.prix}€</p>
                       <Link
