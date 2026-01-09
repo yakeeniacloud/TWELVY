@@ -612,7 +612,7 @@ export default function StagesResultsPage() {
         <div className="flex items-center justify-center mb-4 md:mb-6">
           {/* Mobile: Custom badge with flag and text */}
           <div className="md:hidden flex" style={{
-            padding: '5px 26px',
+            padding: '5px 14px',
             justifyContent: 'center',
             alignItems: 'center',
             gap: '5px',
