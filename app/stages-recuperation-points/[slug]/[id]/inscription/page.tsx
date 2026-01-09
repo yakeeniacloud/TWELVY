@@ -620,10 +620,10 @@ export default function InscriptionPage() {
               '98,7% de clients satisfaits'
             ].map((benefit, index) => (
               <div key={index} className="flex gap-1.5 items-start">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-0.5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-0.5">
                   <path d="M9.375 11.4583L12.5 14.5833L22.9167 4.16667M21.875 12.5V19.7917C21.875 20.3442 21.6555 20.8741 21.2648 21.2648C20.8741 21.6555 20.3442 21.875 19.7917 21.875H5.20833C4.6558 21.875 4.12589 21.6555 3.73519 21.2648C3.34449 20.8741 3.125 20.3442 3.125 19.7917V5.20833C3.125 4.6558 3.34449 4.12589 3.73519 3.73519C4.12589 3.34449 4.6558 3.125 5.20833 3.125H16.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <p className="text-gray-800" style={{ fontSize: '11px', lineHeight: '1.4' }}>{benefit}</p>
+                <p className="text-gray-800" style={{ fontSize: '13px', lineHeight: '1.4' }}>{benefit}</p>
               </div>
             ))}
           </div>
