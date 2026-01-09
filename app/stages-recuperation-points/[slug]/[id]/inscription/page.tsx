@@ -808,17 +808,17 @@ export default function InscriptionPage() {
               {!isFormExpanded ? (
                 <div className="p-2.5 mb-3">
                   <div className="flex items-center justify-between gap-1.5 mb-1.5">
-                    <h3 className="font-medium" style={{ fontSize: '13px' }}>Étape 1/2 : coordonnées personnelles renseignées</h3>
+                    <h3 className="font-medium" style={{ fontSize: '18px' }}>Étape 1/2 : coordonnées personnelles renseignées</h3>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
                       <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="#41A334" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
-                  <div className="text-gray-700 space-y-0.5" style={{ fontSize: '11px' }}>
+                  <div className="text-gray-700 space-y-0.5" style={{ fontSize: '13px' }}>
                     <p>{prenom} {nom}</p>
                     <p>Mail: {email}</p>
                     <p>Tel: {telephone}</p>
                   </div>
-                  <div className="flex justify-center mt-2">
+                  <div className="flex justify-center mt-4">
                     <button
                       onClick={handleModifierClick}
                       style={{
@@ -832,7 +832,7 @@ export default function InscriptionPage() {
                         flexShrink: 0,
                         borderRadius: '12px',
                         background: '#E1E1E1',
-                        fontSize: '12px'
+                        fontSize: '16px'
                       }}
                     >
                       Modifier
@@ -912,21 +912,21 @@ export default function InscriptionPage() {
         {/* Payment Section */}
         {paymentBlockVisible && (
           <div id="mobile-payment-section" className="px-3 py-3">
-            <h2 className="font-medium mb-3" style={{ fontSize: '14px' }}>Étape 2/2 : paiement sécurisé</h2>
+            <h2 className="font-medium mb-3" style={{ fontSize: '18px' }}>Étape 2/2 : paiement sécurisé</h2>
 
             <p className="text-center font-medium mb-1" style={{ fontSize: '13px' }}>Paiement sécurisé par Crédit Agricole</p>
-            <p className="text-center italic text-gray-600 mb-2" style={{ fontSize: '10px' }}>
+            <p className="text-center italic text-gray-600 mb-2" style={{ fontSize: '12px' }}>
               Vos données bancaires sont chiffrées par la solution Up2Pay-Crédit Agricole (cryptage SSL) et ne sont jamais stockées par ProStagesPermis
             </p>
 
             <div className="flex justify-center mb-3">
-              <img src="/cards.png" alt="Cards" className="h-6" />
+              <img src="/cards.png" alt="Cards" className="h-7" />
             </div>
 
             {/* Payment Fields */}
             <div className="space-y-3">
               <div>
-                <label className="block mb-1" style={{ fontSize: '12px' }}>Nom sur la carte</label>
+                <label className="block mb-1" style={{ fontSize: '14px' }}>Nom sur la carte</label>
                 <input
                   type="text"
                   value={nomCarte}
@@ -938,7 +938,7 @@ export default function InscriptionPage() {
               </div>
 
               <div>
-                <label className="block mb-1" style={{ fontSize: '12px' }}>Numéro de carte</label>
+                <label className="block mb-1" style={{ fontSize: '14px' }}>Numéro de carte</label>
                 <input
                   type="text"
                   value={numeroCarte}
@@ -951,7 +951,7 @@ export default function InscriptionPage() {
               </div>
 
               <div>
-                <label className="block mb-1" style={{ fontSize: '12px' }}>Date d&apos;expiration</label>
+                <label className="block mb-1" style={{ fontSize: '14px' }}>Date d&apos;expiration</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
@@ -974,8 +974,8 @@ export default function InscriptionPage() {
                 </div>
               </div>
 
-              <div>
-                <label className="block mb-1" style={{ fontSize: '12px' }}>Code (cvv)</label>
+              <div style={{ marginBottom: '24px' }}>
+                <label className="block mb-1" style={{ fontSize: '14px' }}>Code (cvv)</label>
                 <input
                   type="text"
                   value={codeCVV}
@@ -988,17 +988,17 @@ export default function InscriptionPage() {
               </div>
 
               {/* Price Summary */}
-              <div className="bg-gray-200 rounded-lg p-2.5 text-center">
-                <p className="font-medium mb-1" style={{ fontSize: '12px' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)} à {stage && formatCityName(stage.site.ville)}</p>
-                <p style={{ fontSize: '11px' }}>Prix du stage : {stage?.prix}€ TTC</p>
+              <div className="bg-gray-200 rounded-lg p-2.5 text-center" style={{ marginBottom: '24px' }}>
+                <p className="font-medium mb-1" style={{ fontSize: '14px' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)} à {stage && formatCityName(stage.site.ville)}</p>
+                <p style={{ fontSize: '13px' }}>Prix du stage : {stage?.prix}€ TTC</p>
                 {garantieSerenite && (
-                  <p style={{ fontSize: '11px' }}>Garantie Sérénité : +57€ TTC</p>
+                  <p style={{ fontSize: '13px' }}>Garantie Sérénité : +57€ TTC</p>
                 )}
-                <p className="font-medium mt-1" style={{ fontSize: '13px' }}>Total à payer : {totalPrice}€ TTC</p>
+                <p className="font-medium mt-1" style={{ fontSize: '16px' }}>Total à payer : {totalPrice}€ TTC</p>
               </div>
 
               {/* Payer Button */}
-              <div className="flex justify-center">
+              <div className="flex justify-center" style={{ marginBottom: '16px' }}>
                 <button
                   id="mobile-payer-button"
                   onClick={handleSubmit}
@@ -1036,16 +1036,19 @@ export default function InscriptionPage() {
                 </button>
               </div>
 
-              <p className="text-center italic mt-2 mb-6" style={{ fontSize: '10px' }}>
+              <p className="text-center italic mb-4" style={{ fontSize: '13px' }}>
                 Après avoir cliqué sur &quot;Payer&quot;, votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédiatement par email votre convocation au stage.
               </p>
+
+              {/* Grey separator line below payment text */}
+              <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginBottom: '24px' }} />
             </div>
           </div>
         )}
 
         {/* Informations pratiques section - shown by default */}
         <div className="px-3 py-4">
-          <h3 className="font-medium mb-1.5" style={{
+          <h3 className="font-medium mb-2" style={{
             height: '55px',
             fontSize: '20px',
             fontWeight: '500',
