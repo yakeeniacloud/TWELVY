@@ -1210,8 +1210,8 @@ export default function StagesResultsPage() {
                         {formatDate(stage.date_start, stage.date_end)}
                       </p>
 
-                      {/* Location pin + City + Address */}
-                      <div className="flex items-start gap-2 mb-1">
+                      {/* Location pin + City + Address + Details link */}
+                      <div className="flex items-start gap-2">
                         <div className="flex w-[20px] h-[20px] justify-center items-center flex-shrink-0 rounded-full bg-gray-200 mt-0.5">
                           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 20 20" fill="none" className="w-3 h-3 flex-shrink-0">
                             <g clipPath="url(#clip0_mobile)">
@@ -1228,20 +1228,19 @@ export default function StagesResultsPage() {
                         <div className="flex flex-col">
                           <p className="text-[rgba(0,0,0,0.98)] text-[14px] font-medium leading-[14px]" style={{ fontFamily: 'var(--font-poppins)' }}>{stage.site.ville.charAt(0).toUpperCase() + stage.site.ville.slice(1).toLowerCase()}</p>
                           <p className="text-[rgba(6,6,6,0.56)] text-[11px] font-normal leading-[11px] mt-1" style={{ fontFamily: 'var(--font-poppins)' }}>{removeStreetNumber(stage.site.adresse)}</p>
+                          {/* Details link - aligned with city/address text */}
+                          <button
+                            onClick={() => {
+                              setSelectedStage(stage)
+                              setIsModalOpen(true)
+                            }}
+                            className="flex items-center text-[rgba(90,106,147,0.86)] text-[12px] font-normal leading-[12px] hover:underline text-left mt-1"
+                            style={{ fontFamily: 'var(--font-poppins)' }}
+                          >
+                            Détails du stage
+                          </button>
                         </div>
                       </div>
-
-                      {/* Details link */}
-                      <button
-                        onClick={() => {
-                          setSelectedStage(stage)
-                          setIsModalOpen(true)
-                        }}
-                        className="flex items-center text-[rgba(90,106,147,0.86)] text-[12px] font-normal leading-[12px] hover:underline text-left mt-1"
-                        style={{ fontFamily: 'var(--font-poppins)' }}
-                      >
-                        Détails du stage
-                      </button>
                     </div>
 
                     {/* Right side: Price and Button */}
