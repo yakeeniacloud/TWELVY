@@ -5,8 +5,9 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import StageDetailsModal from '@/components/stages/StageDetailsModal'
-import CitySearchBar from '@/components/stages/CitySearchBar'
 import { removeStreetNumber } from '@/lib/formatAddress'
+import { useCities } from '@/hooks/useCities'
+import { CITY_POSTAL_MAP } from '@/lib/city-postal-map'
 
 // French department names map
 const DEPARTMENT_NAMES: { [key: string]: string } = {
@@ -88,6 +89,14 @@ export default function StagesResultsPage() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isStagesVisible, setIsStagesVisible] = useState(false)
   const [showReassuranceModal, setShowReassuranceModal] = useState(false)
+
+  // Desktop search bar state
+  const [desktopSearchQuery, setDesktopSearchQuery] = useState('')
+  const [showDesktopSuggestions, setShowDesktopSuggestions] = useState(false)
+  const [desktopSelectedIndex, setDesktopSelectedIndex] = useState(-1)
+  const { cities: allCities } = useCities()
+  const desktopSearchRef = useRef<HTMLInputElement>(null)
+  const desktopSuggestionsRef = useRef<HTMLDivElement>(null)
 
   const STAGES_PER_LOAD = 6
 
@@ -231,6 +240,23 @@ export default function StagesResultsPage() {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Close desktop search suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        desktopSuggestionsRef.current &&
+        !desktopSuggestionsRef.current.contains(event.target as Node) &&
+        desktopSearchRef.current &&
+        !desktopSearchRef.current.contains(event.target as Node)
+      ) {
+        setShowDesktopSuggestions(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
   // Intersection Observer for stages visibility (for sticky footer)
@@ -663,8 +689,100 @@ export default function StagesResultsPage() {
             {/* Desktop Filters - Search left, Trier par center, Ville dropdown right */}
             <div className="flex items-center w-full mb-4">
               {/* LEFT: Search bar with autocomplete */}
-              <div className="flex-shrink-0">
-                <CitySearchBar variant="filter" placeholder="Ville ou code postal" />
+              <div className="relative flex-shrink-0">
+                <div
+                  className="flex items-center gap-2"
+                  style={{
+                    width: '180px',
+                    height: '32px',
+                    padding: '6px 10px',
+                    borderRadius: '8px',
+                    border: '1px solid #D9D9D9',
+                    background: '#FFF'
+                  }}
+                >
+                  <input
+                    ref={desktopSearchRef}
+                    type="text"
+                    value={desktopSearchQuery}
+                    onChange={(e) => {
+                      setDesktopSearchQuery(e.target.value)
+                      setShowDesktopSuggestions(true)
+                      setDesktopSelectedIndex(-1)
+                    }}
+                    onFocus={() => setShowDesktopSuggestions(true)}
+                    onKeyDown={(e) => {
+                      const filteredCities = desktopSearchQuery.length > 0
+                        ? allCities.filter(c => c.toLowerCase().startsWith(desktopSearchQuery.toLowerCase())).slice(0, 8)
+                        : []
+                      if (e.key === 'Enter') {
+                        e.preventDefault()
+                        const cityToSearch = desktopSelectedIndex >= 0 && desktopSelectedIndex < filteredCities.length
+                          ? filteredCities[desktopSelectedIndex]
+                          : desktopSearchQuery
+                        if (cityToSearch.trim()) {
+                          const cityUpper = cityToSearch.toUpperCase()
+                          const postal = CITY_POSTAL_MAP[cityUpper] || '00000'
+                          window.location.href = `/stages-recuperation-points/${cityUpper}-${postal}`
+                        }
+                      } else if (e.key === 'ArrowDown') {
+                        e.preventDefault()
+                        setDesktopSelectedIndex(prev => prev < filteredCities.length - 1 ? prev + 1 : prev)
+                      } else if (e.key === 'ArrowUp') {
+                        e.preventDefault()
+                        setDesktopSelectedIndex(prev => prev > 0 ? prev - 1 : -1)
+                      } else if (e.key === 'Escape') {
+                        setShowDesktopSuggestions(false)
+                        setDesktopSelectedIndex(-1)
+                      }
+                    }}
+                    placeholder="Ville ou code postal"
+                    className="flex-1 bg-transparent border-none outline-none text-xs placeholder:text-gray-400"
+                    style={{ minWidth: '0', fontFamily: 'var(--font-poppins)' }}
+                  />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" className="flex-shrink-0">
+                    <path d="M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                {/* Suggestions dropdown */}
+                {showDesktopSuggestions && desktopSearchQuery.length > 0 && (() => {
+                  const filteredCities = allCities
+                    .filter(c => c.toLowerCase().startsWith(desktopSearchQuery.toLowerCase()))
+                    .slice(0, 8)
+                  if (filteredCities.length === 0) return null
+                  return (
+                    <div
+                      ref={desktopSuggestionsRef}
+                      className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50"
+                      style={{ width: '180px', maxHeight: '200px', overflowY: 'auto' }}
+                    >
+                      {filteredCities.map((cityName, index) => {
+                        const deptCode = CITY_POSTAL_MAP[cityName.toUpperCase()]?.substring(0, 2) || ''
+                        const displayName = cityName.split('-').map((word, i) => {
+                          const lower = word.toLowerCase()
+                          if (i > 0 && ['en', 'de', 'du', 'la', 'le', 'les', 'sur', 'sous'].includes(lower)) return lower
+                          return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                        }).join('-')
+                        return (
+                          <button
+                            key={cityName}
+                            onClick={() => {
+                              const cityUpper = cityName.toUpperCase()
+                              const postal = CITY_POSTAL_MAP[cityUpper] || '00000'
+                              window.location.href = `/stages-recuperation-points/${cityUpper}-${postal}`
+                            }}
+                            className={`w-full text-left px-3 py-2 text-xs transition-colors ${
+                              index === desktopSelectedIndex ? 'bg-blue-100 text-blue-900' : 'text-gray-700 hover:bg-gray-100'
+                            }`}
+                            style={{ fontFamily: 'var(--font-poppins)' }}
+                          >
+                            {displayName}{deptCode ? ` (${deptCode})` : ''}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )
+                })()}
               </div>
 
               {/* CENTER: Trier par + Date/Prix/Proximité buttons */}
