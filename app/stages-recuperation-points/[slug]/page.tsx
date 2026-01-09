@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import StageDetailsModal from '@/components/stages/StageDetailsModal'
+import CitySearchBar from '@/components/stages/CitySearchBar'
 import { removeStreetNumber } from '@/lib/formatAddress'
 
 // French department names map
@@ -63,6 +64,11 @@ export default function StagesResultsPage() {
 
   const lastHyphenIndex = fullSlug ? fullSlug.lastIndexOf('-') : -1
   const city = (lastHyphenIndex > 0 ? fullSlug.substring(0, lastHyphenIndex) : fullSlug).toUpperCase()
+  // Extract postal code from slug (e.g., "NICE-06000" -> "06000")
+  const slugPostalCode = lastHyphenIndex > 0 ? fullSlug.substring(lastHyphenIndex + 1) : ''
+  // Get department code from slug postal code (first 2 digits)
+  const cityDeptCode = slugPostalCode.substring(0, 2) || '13'
+  const cityDeptName = DEPARTMENT_NAMES[cityDeptCode] || 'France'
 
   const [stages, setStages] = useState<Stage[]>([])
   const [allStages, setAllStages] = useState<Stage[]>([])
@@ -528,21 +534,18 @@ export default function StagesResultsPage() {
             </span>
           </div>
 
-          {/* Desktop: Dynamic prefecture badge based on city's department */}
+          {/* Desktop: Dynamic prefecture badge based on city's department from URL slug */}
           {(() => {
-            const firstStage = stages[0]
-            const deptCode = firstStage?.site.code_postal?.substring(0, 2) || '13'
-            const deptName = DEPARTMENT_NAMES[deptCode] || 'France'
-            // French preposition: "d'" before vowels, "du" for masculine "Le X", "de la" for feminine "La X", "de" otherwise
+            // Use cityDeptCode/cityDeptName from URL slug (not stages[0] which changes with filtering)
+            // French preposition: "d'" before vowels, "de " otherwise
             const getPreposition = (name: string) => {
               if (/^[AEIOUYH]/i.test(name)) return "d'"
               return 'de '
             }
             return (
               <div className="hidden md:flex items-center justify-center gap-4" style={{
-                width: '536px',
                 height: '35px',
-                padding: '5px 10px',
+                padding: '5px 20px',
                 borderRadius: '12px',
                 background: '#E6D9AB'
               }}>
@@ -556,9 +559,10 @@ export default function StagesResultsPage() {
                   fontFamily: 'var(--font-poppins)',
                   fontSize: '16px',
                   fontWeight: 400,
-                  letterSpacing: '0.8px'
+                  letterSpacing: '0.8px',
+                  whiteSpace: 'nowrap'
                 }}>
-                  Stages Agréés par la Préfecture {getPreposition(deptName)}{deptName} ({deptCode})
+                  Stages Agréés par la Préfecture {getPreposition(cityDeptName)}{cityDeptName} ({cityDeptCode})
                 </span>
               </div>
             )
@@ -658,35 +662,9 @@ export default function StagesResultsPage() {
           <div style={{ display: 'flex', flex: 1, padding: '0 2px', flexDirection: 'column' }}>
             {/* Desktop Filters - Search left, Trier par center, Ville dropdown right */}
             <div className="flex items-center w-full mb-4">
-              {/* LEFT: Search bar */}
-              <div
-                className="flex items-center gap-2 flex-shrink-0"
-                style={{
-                  width: '180px',
-                  height: '32px',
-                  padding: '6px 10px',
-                  borderRadius: '8px',
-                  border: '1px solid #D9D9D9',
-                  background: '#FFF'
-                }}
-              >
-                <input
-                  type="text"
-                  placeholder="Ville ou code postal"
-                  className="flex-1 bg-transparent border-none outline-none text-xs placeholder:text-gray-400"
-                  style={{ minWidth: '0', fontFamily: 'var(--font-poppins)' }}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      const value = (e.target as HTMLInputElement).value
-                      if (value.trim()) {
-                        window.location.href = `/stages-recuperation-points/${value.toUpperCase()}-00000`
-                      }
-                    }
-                  }}
-                />
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 16 16" fill="none" className="flex-shrink-0">
-                  <path d="M14 14L11.1 11.1M12.6667 7.33333C12.6667 10.2789 10.2789 12.6667 7.33333 12.6667C4.38781 12.6667 2 10.2789 2 7.33333C2 4.38781 4.38781 2 7.33333 2C10.2789 2 12.6667 4.38781 12.6667 7.33333Z" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+              {/* LEFT: Search bar with autocomplete */}
+              <div className="flex-shrink-0">
+                <CitySearchBar variant="filter" placeholder="Ville ou code postal" />
               </div>
 
               {/* CENTER: Trier par + Date/Prix/Proximité buttons */}

@@ -171,26 +171,9 @@ export default function StageDetailsModal({
             Stage {formatDate(stage.date_start, stage.date_end)}
           </h2>
 
-          {/* Places disponibles - in green */}
-          <p
-            className="text-center mb-1"
-            style={{
-              color: '#267E1C',
-              textAlign: 'center',
-              fontFamily: 'var(--font-poppins)',
-              fontSize: '14px',
-              fontStyle: 'normal',
-              fontWeight: '400',
-              lineHeight: '20px',
-              margin: '0 auto'
-            }}
-          >
-            Places disponibles
-          </p>
-
           {/* Price - in black */}
           <p
-            className="text-center mb-4"
+            className="text-center mb-1"
             style={{
               width: '235px',
               flexShrink: 0,
@@ -201,10 +184,27 @@ export default function StageDetailsModal({
               fontStyle: 'normal',
               fontWeight: '500',
               lineHeight: '35px',
-              margin: '0 auto 16px'
+              margin: '0 auto'
             }}
           >
             {stage.prix.toFixed(0)}€ TTC
+          </p>
+
+          {/* Places disponibles - in green (below price) */}
+          <p
+            className="text-center mb-4"
+            style={{
+              color: '#267E1C',
+              textAlign: 'center',
+              fontFamily: 'var(--font-poppins)',
+              fontSize: '14px',
+              fontStyle: 'normal',
+              fontWeight: '400',
+              lineHeight: '20px',
+              margin: '0 auto 16px'
+            }}
+          >
+            Places disponibles
           </p>
 
           {/* Two column layout */}
