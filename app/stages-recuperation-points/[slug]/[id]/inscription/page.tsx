@@ -799,7 +799,7 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* Grey separator line below submit button */}
-                <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '29px', marginBottom: '29px' }} />
+                <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '32px', marginBottom: '32px' }} />
               </div>
             </>
           ) : (
@@ -1056,7 +1056,7 @@ export default function InscriptionPage() {
             flexShrink: 0,
             alignSelf: 'stretch'
           }}>Informations pratiques sur votre stage</h3>
-          <p className="text-gray-700 mb-2" style={{ fontSize: '11px' }}>
+          <p className="text-gray-700 mb-4" style={{ fontSize: '13px' }}>
             Pour en savoir plus sur ce que comprends le prix de votre stage (programme, déroulement, agrément.
           </p>
 
@@ -1065,21 +1065,21 @@ export default function InscriptionPage() {
             <button
               onClick={() => setActiveTab('prix')}
               className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'prix' ? 'bg-white' : 'bg-transparent'}`}
-              style={{ fontSize: '10px' }}
+              style={{ fontSize: '12px' }}
             >
               Détails du stage
             </button>
             <button
               onClick={() => setActiveTab('agrement')}
               className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'agrement' ? 'bg-white' : 'bg-transparent'}`}
-              style={{ fontSize: '10px' }}
+              style={{ fontSize: '12px' }}
             >
               Agrément
             </button>
             <button
               onClick={() => setActiveTab('programme')}
               className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'programme' ? 'bg-white' : 'bg-transparent'}`}
-              style={{ fontSize: '10px' }}
+              style={{ fontSize: '12px' }}
             >
               Programme
             </button>
@@ -1088,7 +1088,7 @@ export default function InscriptionPage() {
           {/* Tab Content */}
           <div className="border border-gray-300 rounded-lg p-2.5 bg-white" style={{ marginBottom: '48px' }}>
             {activeTab === 'prix' && (
-              <ul className="space-y-1" style={{ fontSize: '11px' }}>
+              <ul className="space-y-1" style={{ fontSize: '13px' }}>
                 <li>• 14 heures de formation</li>
                 <li>• L&apos;attestation de stage remise le deuxième jour</li>
                 <li>• La récupération automatique de 4 points</li>
@@ -1097,10 +1097,10 @@ export default function InscriptionPage() {
               </ul>
             )}
             {activeTab === 'agrement' && (
-              <p style={{ fontSize: '11px' }}>Informations sur l&apos;agrément préfectoral</p>
+              <p style={{ fontSize: '13px' }}>Informations sur l&apos;agrément préfectoral</p>
             )}
             {activeTab === 'programme' && (
-              <p style={{ fontSize: '11px' }}>Programme détaillé du stage de récupération de points</p>
+              <p style={{ fontSize: '13px' }}>Programme détaillé du stage de récupération de points</p>
             )}
           </div>
         </div>
