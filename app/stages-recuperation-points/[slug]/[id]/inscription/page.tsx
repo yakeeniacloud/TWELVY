@@ -499,7 +499,7 @@ export default function InscriptionPage() {
           <h1 className="text-center font-normal leading-tight" style={{ fontFamily: 'Poppins', fontSize: '15px' }}>
             Stage Récupération de Points - av République, Marseille (13)
           </h1>
-          <p className="text-center text-gray-600 mt-1" style={{ fontFamily: 'Poppins', fontSize: '13px' }}>
+          <p className="text-center text-gray-600 mt-1" style={{ fontFamily: 'Poppins', fontSize: '15px' }}>
             + 4 points en 48h - Agréé Préfecture
           </p>
         </div>
@@ -546,37 +546,40 @@ export default function InscriptionPage() {
 
         {/* Stage Card */}
         <div id="mobile-stage-card" className="mx-auto my-3" style={{ width: '363px', padding: '10px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', background: '#FFF' }}>
-          <div className="mb-2" style={{ display: 'flex', width: '337px', height: '38px', padding: '8px 106px', justifyContent: 'center', alignItems: 'center', gap: '10px', borderRadius: '8px', background: '#EFEFEF' }}>
-            <p className="text-center font-normal" style={{ fontSize: '14px' }}>Stage sélectionné</p>
+          <div className="mb-2" style={{ display: 'flex', width: '337px', height: '38px', padding: '8px 20px', justifyContent: 'center', alignItems: 'center', gap: '10px', borderRadius: '8px', background: '#EFEFEF' }}>
+            <p className="text-center font-medium" style={{ fontSize: '17px', whiteSpace: 'nowrap' }}>Stage sélectionné</p>
           </div>
 
           <p className="text-center font-medium mb-2" style={{ fontSize: '17px' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)}</p>
 
-          <div className="flex items-center gap-1.5 mb-1.5 w-full">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
+          <p className="text-center font-normal mb-0.5" style={{ fontSize: '26px' }}>{stage?.prix}€ TTC</p>
+          <p className="text-center text-green-700 mb-2" style={{ fontSize: '11px' }}>Places disponibles</p>
+
+          <div className="flex items-center gap-2 mb-1.5 w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
               <g clipPath="url(#clip0_180_68)">
                 <path d="M13.3333 1.66669V5.00002M6.66667 1.66669V5.00002M2.5 8.33335H17.5M4.16667 3.33335H15.8333C16.7538 3.33335 17.5 4.07955 17.5 5.00002V16.6667C17.5 17.5872 16.7538 18.3334 15.8333 18.3334H4.16667C3.24619 18.3334 2.5 17.5872 2.5 16.6667V5.00002C2.5 4.07955 3.24619 3.33335 4.16667 3.33335Z" stroke="#595656" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
               </g>
             </svg>
-            <button onClick={handleChangeDateClick} className="text-blue-600" style={{ fontSize: '12px' }}>Changer de date</button>
+            <button onClick={handleChangeDateClick} className="text-blue-600" style={{ fontSize: '14px' }}>Changer de date</button>
           </div>
 
-          <div className="flex gap-1.5 mb-1.5 text-gray-600 w-full">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
+          <div className="flex gap-2 mb-1.5 text-gray-600 w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
               <path d="M17.5 8.33337C17.5 14.1667 10 19.1667 10 19.1667C10 19.1667 2.5 14.1667 2.5 8.33337C2.5 6.34425 3.29018 4.4366 4.6967 3.03007C6.10322 1.62355 8.01088 0.833374 10 0.833374C11.9891 0.833374 13.8968 1.62355 15.3033 3.03007C16.7098 4.4366 17.5 6.34425 17.5 8.33337Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M10 10.8334C11.3807 10.8334 12.5 9.71409 12.5 8.33337C12.5 6.95266 11.3807 5.83337 10 5.83337C8.61929 5.83337 7.5 6.95266 7.5 8.33337C7.5 9.71409 8.61929 10.8334 10 10.8334Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <p style={{ fontSize: '11px' }}>{stage && `av de Saint Menet, 13001 ${formatCityName(stage.site.ville)}`}</p>
+            <p style={{ fontSize: '14px', color: '#4A4A4A', fontFamily: 'Poppins', lineHeight: '22px' }}>{stage && `av de Saint Menet, 13001 ${formatCityName(stage.site.ville)}`}</p>
           </div>
 
-          <div className="flex gap-1.5 mb-1.5 text-gray-600 w-full">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
+          <div className="flex gap-2 mb-1.5 text-gray-600 w-full">
+            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
               <path d="M10 5V10L13.3333 11.6667M18.3333 10C18.3333 14.6024 14.6024 18.3333 10 18.3333C5.39763 18.3333 1.66667 14.6024 1.66667 10C1.66667 5.39763 5.39763 1.66667 10 1.66667C14.6024 1.66667 18.3333 5.39763 18.3333 10Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            <p style={{ fontSize: '11px' }}>08h15-12h30 et 13h30-16h30</p>
+            <p style={{ fontSize: '14px', color: '#4A4A4A', fontFamily: 'Poppins', lineHeight: '22px' }}>08h15-12h30 et 13h30-16h30</p>
           </div>
 
-          <div className="flex gap-1.5 mb-2 text-gray-600 w-full">
+          <div className="flex gap-2 mb-2 text-gray-600 w-full">
             <Image
               src="/flag-france.png"
               alt="Drapeau français"
@@ -604,9 +607,6 @@ export default function InscriptionPage() {
               Agrément n° 25 R130060090064 par la Préfecture des Bouches-du-Rhône
             </p>
           </div>
-
-          <p className="text-center font-normal mb-0.5" style={{ fontSize: '26px' }}>{stage?.prix}€ TTC</p>
-          <p className="text-center text-green-700 mb-2" style={{ fontSize: '11px' }}>Places disponibles</p>
 
           {/* Benefits with yellow checkmarks */}
           <div className="space-y-1.5" style={{ display: 'flex', width: '308px', padding: '12px 16px', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: '-5px', borderRadius: '8px', border: '1px solid #9B9A9A' }}>
