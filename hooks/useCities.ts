@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react'
 
-interface City {
+// API can return either format
+interface CityWithPostal {
   name: string
-  count: number
+  postal: string
 }
 
 /**
@@ -43,32 +44,38 @@ export function useCities() {
   useEffect(() => {
     async function fetchCities() {
       try {
-        console.log('🔄 Fetching cities from /api/cities...')
         const response = await fetch('/api/cities')
-        console.log('📡 Response status:', response.status)
 
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: Failed to fetch cities`)
         }
 
-        const data = (await response.json()) as { cities: string[] }
-        console.log('✅ Raw cities loaded:', data.cities.length)
+        const data = await response.json()
+
+        // Handle both old format (string[]) and new format ({name, postal}[])
+        let cityNames: string[] = []
+        if (data.cities && data.cities.length > 0) {
+          if (typeof data.cities[0] === 'object' && data.cities[0].name) {
+            // New format: {name, postal}[]
+            cityNames = (data.cities as CityWithPostal[]).map(c => c.name)
+          } else {
+            // Old format: string[]
+            cityNames = data.cities as string[]
+          }
+        }
 
         // Normalize and deduplicate cities
         const normalizedSet = new Set<string>()
-        data.cities.forEach(city => {
+        cityNames.forEach(city => {
           const normalized = normalizeCityName(city)
           normalizedSet.add(normalized)
         })
 
         const uniqueCities = Array.from(normalizedSet).sort()
-        console.log('✅ Unique cities after grouping arrondissements:', uniqueCities.length)
-        console.log('📍 Sample cities:', uniqueCities.slice(0, 10))
-
         setCities(uniqueCities)
       } catch (err) {
         const errorMsg = err instanceof Error ? err.message : 'Unknown error'
-        console.error('❌ Error fetching cities:', errorMsg)
+        console.error('Error fetching cities:', errorMsg)
         setError(errorMsg)
         setCities([])
       } finally {
