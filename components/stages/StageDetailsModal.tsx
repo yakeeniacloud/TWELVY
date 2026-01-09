@@ -723,7 +723,7 @@ export default function StageDetailsModal({
                 </div>
               </div>
 
-              {/* Nested Benefits Widget */}
+              {/* Nested Benefits Widget - centered */}
               <div style={{
                 display: 'flex',
                 width: '330px',
@@ -734,7 +734,8 @@ export default function StageDetailsModal({
                 alignItems: 'flex-start',
                 flexShrink: 0,
                 borderRadius: '8px',
-                border: '1px solid #9B9A9A'
+                border: '1px solid #9B9A9A',
+                margin: '0 auto'
               }}>
                 {/* Benefits list */}
                 <div className="space-y-2">
@@ -767,32 +768,7 @@ export default function StageDetailsModal({
             </div>
 
             {/* Buttons - Outside main widget, stacked vertically */}
-            <div className="flex flex-col gap-2 mt-4 items-center">
-              <button
-                onClick={handleClose}
-                style={{
-                  display: 'flex',
-                  height: '44px',
-                  padding: '7px 15px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: '20px',
-                  flexShrink: 0,
-                  borderRadius: '12px',
-                  background: '#E0E0E0',
-                  color: '#000',
-                  fontFamily: 'Poppins',
-                  fontSize: '15px',
-                  fontStyle: 'normal',
-                  fontWeight: 300,
-                  lineHeight: 'normal',
-                  letterSpacing: '1.05px',
-                  border: 'none',
-                  cursor: 'pointer'
-                }}
-              >
-                Fermer
-              </button>
+            <div className="flex flex-col gap-3 mt-4 items-center">
               <Link
                 href={slug ? `/stages-recuperation-points/${slug}/${stage.id}/inscription` : `/stages-recuperation-points/${city.toUpperCase()}-${stage.site.code_postal}/${stage.id}/inscription`}
                 onClick={handleClose}
@@ -819,6 +795,21 @@ export default function StageDetailsModal({
               >
                 Sélectionner ce stage
               </Link>
+              <button
+                onClick={handleClose}
+                className="text-sm hover:opacity-70 transition-opacity"
+                style={{
+                  fontFamily: 'var(--font-poppins)',
+                  color: '#000',
+                  fontWeight: 400,
+                  textDecoration: 'underline',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                Fermer
+              </button>
             </div>
           </div>
         </div>
