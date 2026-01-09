@@ -636,7 +636,7 @@ export default function StageDetailsModal({
               width: '75%',
               height: '1px',
               background: '#ABABAB',
-              marginBottom: '16px'
+              marginBottom: '8px'
             }} />
 
             {/* Main Widget Container - no shadow, no border */}
@@ -735,7 +735,7 @@ export default function StageDetailsModal({
                 flexShrink: 0,
                 borderRadius: '8px',
                 border: '1px solid #9B9A9A',
-                margin: '0 auto'
+                margin: '10px auto 0 auto'
               }}>
                 {/* Benefits list */}
                 <div className="space-y-2">
