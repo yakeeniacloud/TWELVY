@@ -631,99 +631,97 @@ export default function StageDetailsModal({
               Places disponibles
             </p>
 
-            {/* Black separator line */}
+            {/* Separator line */}
             <div style={{
-              width: '100%',
+              width: '75%',
               height: '1px',
-              background: '#000',
+              background: '#ABABAB',
               marginBottom: '16px'
             }} />
 
             {/* Main Widget Container - no shadow, no border */}
             <div style={{
               display: 'flex',
-              width: '366px',
-              padding: '10px 8px',
+              width: '100%',
+              padding: '10px 0',
               flexDirection: 'column',
-              alignItems: 'center',
-              gap: '10px',
+              alignItems: 'flex-start',
+              gap: '6px',
               flexShrink: 0,
               borderRadius: '20px',
               background: '#FFF'
             }}>
-              {/* Address */}
-              <div className="flex gap-2 mb-3">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-0.5">
-                <g clipPath="url(#clip0_1_70)">
-                  <path d="M21.875 10.4167C21.875 17.7083 12.5 23.9583 12.5 23.9583C12.5 23.9583 3.125 17.7083 3.125 10.4167C3.125 7.93026 4.11272 5.54569 5.87087 3.78754C7.62903 2.02938 10.0136 1.04166 12.5 1.04166C14.9864 1.04166 17.371 2.02938 19.1291 3.78754C20.8873 5.54569 21.875 7.93026 21.875 10.4167Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M12.5 13.5417C14.2259 13.5417 15.625 12.1426 15.625 10.4167C15.625 8.69077 14.2259 7.29166 12.5 7.29166C10.7741 7.29166 9.375 8.69077 9.375 10.4167C9.375 12.1426 10.7741 13.5417 12.5 13.5417Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </g>
-                <defs>
-                  <clipPath id="clip0_1_70">
-                    <rect width="25" height="25" fill="white"/>
-                  </clipPath>
-                </defs>
-              </svg>
-              <div>
-                <p style={{
-                  color: 'rgba(89, 86, 86, 0.86)',
-                  fontFamily: 'var(--font-poppins)',
-                  fontSize: '13px',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  lineHeight: '18px'
-                }}>
-                  {removeStreetNumber(stage.site.adresse)}, {stage.site.code_postal} {stage.site.ville}
-                </p>
-              </div>
-            </div>
+              {/* Three info rows - aligned with "Stage" title (px-4 = 16px padding) */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '100%', paddingLeft: '16px', paddingRight: '16px' }}>
+                {/* Address */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0, marginTop: '2px' }}>
+                    <g clipPath="url(#clip0_1_70)">
+                      <path d="M21.875 10.4167C21.875 17.7083 12.5 23.9583 12.5 23.9583C12.5 23.9583 3.125 17.7083 3.125 10.4167C3.125 7.93026 4.11272 5.54569 5.87087 3.78754C7.62903 2.02938 10.0136 1.04166 12.5 1.04166C14.9864 1.04166 17.371 2.02938 19.1291 3.78754C20.8873 5.54569 21.875 7.93026 21.875 10.4167Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M12.5 13.5417C14.2259 13.5417 15.625 12.1426 15.625 10.4167C15.625 8.69077 14.2259 7.29166 12.5 7.29166C10.7741 7.29166 9.375 8.69077 9.375 10.4167C9.375 12.1426 10.7741 13.5417 12.5 13.5417Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_1_70">
+                        <rect width="25" height="25" fill="white"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                  <p style={{
+                    color: 'rgba(89, 86, 86, 0.86)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '13px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: '18px'
+                  }}>
+                    {removeStreetNumber(stage.site.adresse)}, {stage.site.code_postal} {stage.site.ville}
+                  </p>
+                </div>
 
-            {/* Hours */}
-            <div className="flex gap-2 mb-3">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-0.5">
-                <path d="M12.5 6.24999V12.5L16.6667 14.5833M22.9167 12.5C22.9167 18.253 18.253 22.9167 12.5 22.9167C6.74704 22.9167 2.08334 18.253 2.08334 12.5C2.08334 6.74703 6.74704 2.08333 12.5 2.08333C18.253 2.08333 22.9167 6.74703 22.9167 12.5Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <div>
-                <p style={{
-                  color: 'rgba(89, 86, 86, 0.86)',
-                  fontFamily: 'var(--font-poppins)',
-                  fontSize: '13px',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  lineHeight: '18px'
-                }}>
-                  08h15-12h30 et 13h30-16h30
-                </p>
-              </div>
-            </div>
+                {/* Hours */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0, marginTop: '2px' }}>
+                    <path d="M12.5 6.24999V12.5L16.6667 14.5833M22.9167 12.5C22.9167 18.253 18.253 22.9167 12.5 22.9167C6.74704 22.9167 2.08334 18.253 2.08334 12.5C2.08334 6.74703 6.74704 2.08333 12.5 2.08333C18.253 2.08333 22.9167 6.74703 22.9167 12.5Z" stroke="#595656" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <p style={{
+                    color: 'rgba(89, 86, 86, 0.86)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '13px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: '18px'
+                  }}>
+                    08h15-12h30 et 13h30-16h30
+                  </p>
+                </div>
 
-            {/* Prefecture agreement */}
-            <div className="flex gap-2 mb-4">
-              <Image
-                src="/flag-france.png"
-                alt="Drapeau français"
-                width={24}
-                height={16}
-                className="flex-shrink-0 mt-0.5 rounded-lg"
-                style={{
-                  width: '24px',
-                  height: '16px',
-                  borderRadius: '6px'
-                }}
-              />
-              <div>
-                <p style={{
-                  color: 'rgba(89, 86, 86, 0.86)',
-                  fontFamily: 'var(--font-poppins)',
-                  fontSize: '13px',
-                  fontStyle: 'normal',
-                  fontWeight: '400',
-                  lineHeight: '18px'
-                }}>
-                  Agrement n°: 25 R130060009006 par la Préfecture des Bouches du Rhône
-                </p>
+                {/* Prefecture agreement */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                  <Image
+                    src="/flag-france.png"
+                    alt="Drapeau français"
+                    width={20}
+                    height={14}
+                    style={{
+                      flexShrink: 0,
+                      width: '20px',
+                      height: '14px',
+                      borderRadius: '4px',
+                      marginTop: '2px'
+                    }}
+                  />
+                  <p style={{
+                    color: 'rgba(89, 86, 86, 0.86)',
+                    fontFamily: 'var(--font-poppins)',
+                    fontSize: '13px',
+                    fontStyle: 'normal',
+                    fontWeight: '400',
+                    lineHeight: '18px'
+                  }}>
+                    Agrement n°: 25 R130060009006 par la Préfecture des Bouches du Rhône
+                  </p>
+                </div>
               </div>
-            </div>
 
               {/* Nested Benefits Widget */}
               <div style={{
