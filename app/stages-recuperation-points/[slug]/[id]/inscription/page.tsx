@@ -499,7 +499,7 @@ export default function InscriptionPage() {
           <h1 className="text-center font-normal leading-tight" style={{ fontFamily: 'Poppins', fontSize: '15px' }}>
             Stage Récupération de Points - av République, Marseille (13)
           </h1>
-          <p className="text-center text-gray-600 mt-1" style={{ fontFamily: 'Poppins', fontSize: '11px' }}>
+          <p className="text-center text-gray-600 mt-1" style={{ fontFamily: 'Poppins', fontSize: '13px' }}>
             + 4 points en 48h - Agréé Préfecture
           </p>
         </div>
@@ -539,7 +539,7 @@ export default function InscriptionPage() {
 
         {/* Back Link */}
         <div className="px-3 py-1">
-          <a href={`/stages-recuperation-points/${city.toLowerCase()}`} className="text-black" style={{ fontSize: '11px' }}>
+          <a href={`/stages-recuperation-points/${city.toLowerCase()}`} className="text-black" style={{ fontSize: '13px' }}>
             &lt; Retour aux stages à {formatCityName(city)}
           </a>
         </div>
@@ -547,10 +547,10 @@ export default function InscriptionPage() {
         {/* Stage Card */}
         <div id="mobile-stage-card" className="mx-auto my-3" style={{ width: '363px', padding: '10px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', background: '#FFF' }}>
           <div className="mb-2" style={{ display: 'flex', width: '337px', height: '38px', padding: '8px 106px', justifyContent: 'center', alignItems: 'center', gap: '10px', borderRadius: '8px', background: '#EFEFEF' }}>
-            <p className="text-center font-normal" style={{ fontSize: '13px' }}>Stage sélectionné</p>
+            <p className="text-center font-normal" style={{ fontSize: '14px' }}>Stage sélectionné</p>
           </div>
 
-          <p className="text-center font-medium mb-2" style={{ fontSize: '14px' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)}</p>
+          <p className="text-center font-medium mb-2" style={{ fontSize: '17px' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)}</p>
 
           <div className="flex items-center gap-1.5 mb-1.5 w-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
@@ -605,8 +605,8 @@ export default function InscriptionPage() {
             </p>
           </div>
 
-          <p className="text-center text-green-700 mb-0.5" style={{ fontSize: '11px' }}>Place disponibles</p>
-          <p className="text-center font-normal mb-2" style={{ fontSize: '26px' }}>{stage?.prix}€ TTC</p>
+          <p className="text-center font-normal mb-0.5" style={{ fontSize: '26px' }}>{stage?.prix}€ TTC</p>
+          <p className="text-center text-green-700 mb-2" style={{ fontSize: '11px' }}>Places disponibles</p>
 
           {/* Benefits with yellow checkmarks */}
           <div className="space-y-1.5" style={{ display: 'flex', width: '308px', padding: '12px 16px', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: '-5px', borderRadius: '8px', border: '1px solid #9B9A9A' }}>
