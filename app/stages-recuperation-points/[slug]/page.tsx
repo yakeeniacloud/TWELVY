@@ -565,7 +565,7 @@ export default function StagesResultsPage() {
 
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 md:px-4 py-4 md:py-8">
-        <h1 className="text-lg md:text-2xl font-normal text-center mb-3">
+        <h1 className="text-lg md:text-2xl font-normal text-center" style={{ marginBottom: '10px' }}>
           Stage Récupération de Points à {city.charAt(0) + city.slice(1).toLowerCase()}
         </h1>
 
