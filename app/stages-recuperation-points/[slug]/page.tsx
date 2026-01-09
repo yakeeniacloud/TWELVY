@@ -2141,7 +2141,7 @@ export default function StagesResultsPage() {
               </h2>
 
               {/* Separator line */}
-              <div style={{ width: '100%', height: '1px', background: '#E0E0E0', marginBottom: '24px' }} />
+              <div style={{ width: '75%', height: '1px', background: '#E0E0E0', marginBottom: '24px', margin: '0 auto 24px auto' }} />
 
               {/* Guarantees list */}
               <div className="space-y-4">
@@ -2154,15 +2154,15 @@ export default function StagesResultsPage() {
                   'Convocation envoyée immédiatement par email après inscription'
                 ].map((guarantee, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 25" fill="none" className="flex-shrink-0 mt-0.5">
                       <path d="M9.375 11.4583L12.5 14.5833L22.9167 4.16667M21.875 12.5V19.7917C21.875 20.3442 21.6555 20.8741 21.2648 21.2648C20.8741 21.6555 20.3442 21.875 19.7917 21.875H5.20833C4.6558 21.875 4.12589 21.6555 3.73519 21.2648C3.34449 20.8741 3.125 20.3442 3.125 19.7917V5.20833C3.125 4.6558 3.34449 4.12589 3.73519 3.73519C4.12589 3.34449 4.6558 3.125 5.20833 3.125H16.6667" stroke="#C4A226" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <span style={{
                       fontFamily: 'var(--font-poppins)',
-                      fontSize: '18px',
+                      fontSize: '14px',
                       fontWeight: 400,
                       color: '#000',
-                      lineHeight: '26px'
+                      lineHeight: '20px'
                     }}>
                       {guarantee}
                     </span>
