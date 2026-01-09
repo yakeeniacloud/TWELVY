@@ -771,7 +771,7 @@ export default function InscriptionPage() {
                     className="text-white disabled:opacity-50"
                     style={{
                       display: 'flex',
-                      width: '224px',
+                      width: '269px',
                       height: '50px',
                       padding: '10px',
                       justifyContent: 'center',
@@ -786,7 +786,7 @@ export default function InscriptionPage() {
                       color: '#FFF',
                       textAlign: 'center',
                       fontFamily: 'Poppins',
-                      fontSize: '12px',
+                      fontSize: '14px',
                       fontStyle: 'normal',
                       fontWeight: '400',
                       lineHeight: 'normal',
@@ -799,7 +799,7 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* Grey separator line below submit button */}
-                <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '36px', marginBottom: '36px' }} />
+                <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '29px', marginBottom: '29px' }} />
               </div>
             </>
           ) : (
@@ -1086,7 +1086,7 @@ export default function InscriptionPage() {
           </div>
 
           {/* Tab Content */}
-          <div className="border border-gray-300 rounded-lg p-2.5 bg-white">
+          <div className="border border-gray-300 rounded-lg p-2.5 bg-white" style={{ marginBottom: '48px' }}>
             {activeTab === 'prix' && (
               <ul className="space-y-1" style={{ fontSize: '11px' }}>
                 <li>• 14 heures de formation</li>
@@ -1107,7 +1107,7 @@ export default function InscriptionPage() {
 
         {/* Questions fréquentes */}
         <div className="px-3 py-4 bg-gray-100">
-          <h3 className="mb-1.5" style={{
+          <h3 className="mb-1.5 text-center" style={{
             color: 'rgba(6, 6, 6, 0.86)',
             WebkitTextStrokeWidth: '1px',
             WebkitTextStrokeColor: '#000',
@@ -1119,7 +1119,7 @@ export default function InscriptionPage() {
           }}>
             Questions fréquentes
           </h3>
-          <p className="mb-3" style={{ fontSize: '11px' }}>Vous vous posez encore des questions ?</p>
+          <p className="mb-3 text-center" style={{ fontSize: '11px' }}>Vous vous posez encore des questions ?</p>
 
           {/* FAQ Items */}
           {[0, 1, 2].map((index) => (
