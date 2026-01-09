@@ -395,7 +395,7 @@ export default function StagesResultsPage() {
         )}
 
         {/* Search bar - full width rounded when scrolled - with autocomplete */}
-        <div className={`px-4 ${isScrolled ? 'py-2' : 'pb-3'} relative`}>
+        <div className={`px-4 ${isScrolled ? 'py-2' : 'pb-1'} relative`}>
           <div
             className="flex items-center gap-2 mx-auto"
             style={{
