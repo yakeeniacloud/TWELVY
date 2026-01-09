@@ -553,8 +553,8 @@ export default function InscriptionPage() {
           <p className="text-center font-normal" style={{ fontSize: '21px', marginBottom: '2px' }}>{stage?.prix}€ TTC</p>
           <p className="text-center text-green-700" style={{ fontSize: '14px', marginBottom: '8px' }}>Places disponibles</p>
 
-          {/* Thin grey separator line - half width of widget */}
-          <div style={{ width: '168px', height: '1px', background: '#D9D9D9', marginBottom: '8px' }} />
+          {/* Thin grey separator line */}
+          <div style={{ width: '218px', height: '1px', background: '#D9D9D9', marginBottom: '8px' }} />
 
           <div className="flex items-center gap-2 mb-1.5 w-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
@@ -580,7 +580,7 @@ export default function InscriptionPage() {
             <p style={{ fontSize: '14px', color: '#4A4A4A', fontFamily: 'Poppins', lineHeight: '22px' }}>08h15-12h30 et 13h30-16h30</p>
           </div>
 
-          <div className="flex gap-2 text-gray-600 w-full" style={{ marginBottom: '12px' }}>
+          <div className="flex gap-2 text-gray-600 w-full" style={{ marginBottom: '12px', alignItems: 'flex-start' }}>
             <Image
               src="/flag-france.png"
               alt="Drapeau français"
@@ -592,25 +592,25 @@ export default function InscriptionPage() {
                 height: '16px',
                 aspectRatio: '3/2',
                 borderRadius: '10px',
-                objectFit: 'cover'
+                objectFit: 'cover',
+                marginTop: '3px'
               }}
             />
             <p style={{
               fontSize: '14px',
               width: '265px',
-              height: '42px',
               color: '#4A4A4A',
               fontFamily: 'Poppins',
               fontStyle: 'normal',
               fontWeight: '400',
-              lineHeight: '22px'
+              lineHeight: '20px'
             }}>
               Agrément n° 25 R130060090064 par la Préfecture des Bouches-du-Rhône
             </p>
           </div>
 
           {/* Benefits with yellow checkmarks */}
-          <div className="space-y-1.5" style={{ display: 'flex', width: '308px', padding: '12px 16px', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: '-5px', borderRadius: '8px', border: '1px solid #9B9A9A' }}>
+          <div className="space-y-1.5" style={{ display: 'flex', width: '337px', padding: '12px 16px', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', gap: '-5px', borderRadius: '8px', border: '1px solid #9B9A9A' }}>
             {[
               'Stage officiel agréé Préfecture',
               '+4 points en 48h',
