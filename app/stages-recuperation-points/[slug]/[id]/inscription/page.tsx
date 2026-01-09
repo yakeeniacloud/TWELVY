@@ -643,7 +643,7 @@ export default function InscriptionPage() {
               <div className="space-y-3">
                 <div>
                   <label className="block mb-1" style={{ fontSize: '14px' }}>Civilité *</label>
-                  <select id="mobile-civilite" value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }}>
+                  <select id="mobile-civilite" value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5 bg-white" style={{ fontSize: '12px' }}>
                     <option value="">Sélectionner</option>
                     <option value="Monsieur">Monsieur</option>
                     <option value="Madame">Madame</option>
@@ -799,7 +799,7 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* Grey separator line below submit button */}
-                <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '32px', marginBottom: '32px' }} />
+                <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '36px', marginBottom: '36px' }} />
               </div>
             </>
           ) : (
@@ -1065,21 +1065,21 @@ export default function InscriptionPage() {
             <button
               onClick={() => setActiveTab('prix')}
               className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'prix' ? 'bg-white' : 'bg-transparent'}`}
-              style={{ fontSize: '12px' }}
+              style={{ fontSize: '13px' }}
             >
               Détails du stage
             </button>
             <button
               onClick={() => setActiveTab('agrement')}
               className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'agrement' ? 'bg-white' : 'bg-transparent'}`}
-              style={{ fontSize: '12px' }}
+              style={{ fontSize: '13px' }}
             >
               Agrément
             </button>
             <button
               onClick={() => setActiveTab('programme')}
               className={`flex-1 py-1.5 px-1.5 rounded-lg font-medium ${activeTab === 'programme' ? 'bg-white' : 'bg-transparent'}`}
-              style={{ fontSize: '12px' }}
+              style={{ fontSize: '13px' }}
             >
               Programme
             </button>
@@ -1119,7 +1119,7 @@ export default function InscriptionPage() {
           }}>
             Questions fréquentes
           </h3>
-          <p className="mb-3 text-center" style={{ fontSize: '11px' }}>Vous vous posez encore des questions ?</p>
+          <p className="mb-3 text-center" style={{ fontSize: '13px' }}>Vous vous posez encore des questions ?</p>
 
           {/* FAQ Items */}
           {[0, 1, 2].map((index) => (
@@ -1128,7 +1128,7 @@ export default function InscriptionPage() {
                 onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
                 className="flex justify-between items-center cursor-pointer py-1.5"
               >
-                <p className="flex-1" style={{ fontSize: '11px' }}>A quel moment mes 4 points sont il crédités sur mon permis après un stage</p>
+                <p className="flex-1" style={{ fontSize: '13px' }}>A quel moment mes 4 points sont il crédités sur mon permis après un stage</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -1142,13 +1142,13 @@ export default function InscriptionPage() {
                 </svg>
               </div>
               {openFaqIndex === index && (
-                <p className="text-gray-600 py-1.5" style={{ fontSize: '10px' }}>Réponse à la question - Texte placeholder</p>
+                <p className="text-gray-600 py-1.5" style={{ fontSize: '11px' }}>Réponse à la question - Texte placeholder</p>
               )}
               {index < 2 && <div className="h-px bg-gray-300 mt-1.5" />}
             </div>
           ))}
 
-          <button className="font-medium underline mt-3 block mx-auto" style={{ fontSize: '11px' }}>
+          <button className="font-medium underline mt-3 block mx-auto" style={{ fontSize: '13px' }}>
             Afficher plus de questions
           </button>
         </div>
