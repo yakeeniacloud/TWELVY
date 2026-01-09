@@ -630,7 +630,7 @@ export default function InscriptionPage() {
         </div>
 
         {/* Grey separator line below stage card */}
-        <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '20px', marginBottom: '36px' }} />
+        <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '36px', marginBottom: '36px' }} />
 
         {/* Form Section */}
         <div id="mobile-form-section" className="px-3 py-0">
@@ -771,8 +771,8 @@ export default function InscriptionPage() {
                     className="text-white disabled:opacity-50"
                     style={{
                       display: 'flex',
-                      width: '280px',
-                      height: '62px',
+                      width: '224px',
+                      height: '50px',
                       padding: '10px',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -786,7 +786,7 @@ export default function InscriptionPage() {
                       color: '#FFF',
                       textAlign: 'center',
                       fontFamily: 'Poppins',
-                      fontSize: '16px',
+                      fontSize: '12px',
                       fontStyle: 'normal',
                       fontWeight: '400',
                       lineHeight: 'normal',
@@ -797,6 +797,9 @@ export default function InscriptionPage() {
                     </span>
                   </button>
                 </div>
+
+                {/* Grey separator line below submit button */}
+                <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '36px', marginBottom: '36px' }} />
               </div>
             </>
           ) : (
