@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useWordPressMenu } from '@/lib/useWordPressMenu'
 
 // Decode HTML entities (like &#8217; to ')
@@ -22,6 +23,10 @@ export default function Header() {
   const { menu, loading } = useWordPressMenu()
   const [openMenuId, setOpenMenuId] = useState<number | null>(null)
   const menuRefs = useRef<{ [key: number]: HTMLDivElement | null }>({})
+  const pathname = usePathname()
+
+  // Hide WordPress menu items on inscription (formulaire) page - only show "Aide et contact"
+  const isInscriptionPage = pathname?.includes('/inscription')
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -82,9 +87,9 @@ export default function Header() {
       {/* Main Navigation - Dark background (reduced height by 20%) */}
       <nav className="bg-[#222222] px-8 py-1.5">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
-          {/* WordPress Menu Items */}
+          {/* WordPress Menu Items - Hidden on inscription page */}
           <div className="flex items-center gap-6">
-            {!loading && menu.map((item) => (
+            {!isInscriptionPage && !loading && menu.map((item) => (
               <div
                 key={item.id}
                 ref={(el) => { menuRefs.current[item.id] = el }}

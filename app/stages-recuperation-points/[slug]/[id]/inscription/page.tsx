@@ -42,6 +42,16 @@ export default function InscriptionPage() {
   const [garantieSerenite, setGarantieSerenite] = useState(false)
   const [cgvAccepted, setCgvAccepted] = useState(false)
 
+  // Form validation errors
+  const [errors, setErrors] = useState<{
+    civilite?: string
+    nom?: string
+    prenom?: string
+    email?: string
+    telephone?: string
+    cgv?: string
+  }>({})
+
   // Payment form state
   const [nomCarte, setNomCarte] = useState('')
   const [numeroCarte, setNumeroCarte] = useState('')
@@ -78,6 +88,9 @@ export default function InscriptionPage() {
 
   // Desktop stepper state
   const [currentStep, setCurrentStep] = useState(1)
+
+  // Garantie Sérénité accordion state
+  const [isGarantieDetailOpen, setIsGarantieDetailOpen] = useState(false)
 
   // Refs for visibility detection
   const stageCardRef = useRef<HTMLDivElement>(null)
@@ -192,6 +205,62 @@ export default function InscriptionPage() {
     formatted = formatted.charAt(0).toUpperCase() + formatted.slice(1).toLowerCase()
 
     return formatted
+  }
+
+  // Form validation function
+  const validateForm = (): boolean => {
+    const newErrors: typeof errors = {}
+    let firstErrorId: string | null = null
+
+    // Validate civilité
+    if (!civilite) {
+      newErrors.civilite = 'Veuillez sélectionner une civilité'
+      if (!firstErrorId) firstErrorId = 'desktop-civilite'
+    }
+
+    // Validate nom
+    if (!nom.trim()) {
+      newErrors.nom = 'Veuillez entrer votre nom'
+      if (!firstErrorId) firstErrorId = 'desktop-nom'
+    }
+
+    // Validate prénom
+    if (!prenom.trim()) {
+      newErrors.prenom = 'Veuillez entrer votre prénom'
+      if (!firstErrorId) firstErrorId = 'desktop-prenom'
+    }
+
+    // Validate email
+    if (!email.trim()) {
+      newErrors.email = 'Veuillez entrer votre email'
+      if (!firstErrorId) firstErrorId = 'desktop-email'
+    }
+
+    // Validate telephone
+    if (!telephone.trim()) {
+      newErrors.telephone = 'Veuillez entrer un numéro de téléphone'
+      if (!firstErrorId) firstErrorId = 'desktop-telephone'
+    }
+
+    // Validate CGV
+    if (!cgvAccepted) {
+      newErrors.cgv = 'Veuillez accepter les conditions générales de vente'
+      if (!firstErrorId) firstErrorId = 'desktop-cgv'
+    }
+
+    setErrors(newErrors)
+
+    // If there are errors, scroll to the first one
+    if (firstErrorId) {
+      const element = document.getElementById(firstErrorId)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        element.focus()
+      }
+      return false
+    }
+
+    return true
   }
 
   const handleChangeDateClick = async (e: React.MouseEvent) => {
@@ -1992,13 +2061,13 @@ export default function InscriptionPage() {
           <div className="flex flex-col items-center" style={{ position: 'relative' }}>
             <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
-                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill={currentStep >= 1 ? 'white' : '#F5F5F5'} stroke={currentStep >= 1 ? '#030303' : '#D9D9D9'}/>
+                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill={currentStep === 1 ? 'white' : '#F5F5F5'} stroke={currentStep === 1 ? '#030303' : '#D9D9D9'}/>
               </svg>
               <span
                 style={{
                   position: 'relative',
                   zIndex: 1,
-                  color: currentStep >= 1 ? '#000' : '#828282',
+                  color: currentStep === 1 ? '#000' : '#828282',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
                   fontSize: '20px',
@@ -2012,7 +2081,7 @@ export default function InscriptionPage() {
             </div>
             <p
               style={{
-                color: currentStep >= 1 ? '#000' : '#828282',
+                color: currentStep === 1 ? '#000' : '#828282',
                 textAlign: 'center',
                 fontFamily: 'Poppins',
                 fontSize: '16px',
@@ -2041,13 +2110,13 @@ export default function InscriptionPage() {
           <div className="flex flex-col items-center" style={{ position: 'relative' }}>
             <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
-                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill={currentStep >= 2 ? 'white' : '#F5F5F5'} stroke={currentStep >= 2 ? '#030303' : '#D9D9D9'}/>
+                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill={currentStep === 2 ? 'white' : '#F5F5F5'} stroke={currentStep === 2 ? '#030303' : '#D9D9D9'}/>
               </svg>
               <span
                 style={{
                   position: 'relative',
                   zIndex: 1,
-                  color: currentStep >= 2 ? '#000' : '#828282',
+                  color: currentStep === 2 ? '#000' : '#828282',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
                   fontSize: '20px',
@@ -2061,7 +2130,7 @@ export default function InscriptionPage() {
             </div>
             <p
               style={{
-                color: currentStep >= 2 ? '#000' : '#828282',
+                color: currentStep === 2 ? '#000' : '#828282',
                 textAlign: 'center',
                 fontFamily: 'Poppins',
                 fontSize: '16px',
@@ -2090,13 +2159,13 @@ export default function InscriptionPage() {
           <div className="flex flex-col items-center" style={{ position: 'relative' }}>
             <div className="flex items-center justify-center" style={{ position: 'relative', width: '33px', height: '31px', marginBottom: '12px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}>
-                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill={currentStep >= 3 ? 'white' : '#F5F5F5'} stroke={currentStep >= 3 ? '#030303' : '#D9D9D9'}/>
+                <path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill={currentStep === 3 ? 'white' : '#F5F5F5'} stroke={currentStep === 3 ? '#030303' : '#D9D9D9'}/>
               </svg>
               <span
                 style={{
                   position: 'relative',
                   zIndex: 1,
-                  color: currentStep >= 3 ? '#000' : '#828282',
+                  color: currentStep === 3 ? '#000' : '#828282',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
                   fontSize: '20px',
@@ -2110,7 +2179,7 @@ export default function InscriptionPage() {
             </div>
             <p
               style={{
-                color: currentStep >= 3 ? '#000' : '#828282',
+                color: currentStep === 3 ? '#000' : '#828282',
                 textAlign: 'center',
                 fontFamily: 'Poppins',
                 fontSize: '16px',
@@ -2151,42 +2220,45 @@ export default function InscriptionPage() {
               Retour aux stages à {city.charAt(0) + city.slice(1).toLowerCase().replace(/-/g, ' ')}
             </a>
 
-            <div style={{ marginBottom: '28px' }}>
-              <h2
-                style={{
-                  display: 'flex',
-                  width: '673px',
-                  height: '43px',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  color: '#000',
-                  fontFamily: 'Poppins',
-                  fontSize: '18px',
-                  fontStyle: 'normal',
-                  fontWeight: 500,
-                  lineHeight: '25px'
-                }}
-              >
-                Étape 1/2 - vos coordonnées personnelles pour l'inscription
-              </h2>
-              <p
-                style={{
-                  marginTop: '28px',
-                  width: '297px',
-                  flexShrink: 0,
-                  color: '#363636',
-                  fontFamily: 'Poppins',
-                  fontSize: '13px',
-                  fontStyle: 'italic',
-                  fontWeight: 400,
-                  lineHeight: '25px'
-                }}
-              >
-                • Tous les champs sont obligatoires
-              </p>
-            </div>
+            {/* Show form OR summary based on currentStep */}
+            {currentStep === 1 ? (
+              <>
+                <div style={{ marginBottom: '28px' }}>
+                  <h2
+                    style={{
+                      display: 'flex',
+                      width: '673px',
+                      height: '43px',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      color: '#000',
+                      fontFamily: 'Poppins',
+                      fontSize: '18px',
+                      fontStyle: 'normal',
+                      fontWeight: 500,
+                      lineHeight: '25px'
+                    }}
+                  >
+                    Étape 1/2 - vos coordonnées personnelles pour l'inscription
+                  </h2>
+                  <p
+                    style={{
+                      marginTop: '28px',
+                      width: '297px',
+                      flexShrink: 0,
+                      color: '#363636',
+                      fontFamily: 'Poppins',
+                      fontSize: '13px',
+                      fontStyle: 'italic',
+                      fontWeight: 400,
+                      lineHeight: '25px'
+                    }}
+                  >
+                    • Tous les champs sont obligatoires
+                  </p>
+                </div>
 
-            <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
               {/* Civilité */}
               <div className="flex items-center mb-6" style={{ position: 'relative', marginLeft: '20px' }}>
                 <label
@@ -2205,10 +2277,14 @@ export default function InscriptionPage() {
                 </label>
                 <div style={{ marginLeft: '164px' }}>
                   <select
+                    id="desktop-civilite"
                     value={civilite}
-                    onChange={(e) => setCivilite(e.target.value)}
+                    onChange={(e) => {
+                      setCivilite(e.target.value)
+                      if (errors.civilite) setErrors(prev => ({ ...prev, civilite: undefined }))
+                    }}
                     required
-                    className="border border-black"
+                    className="border"
                     style={{
                       display: 'flex',
                       width: '413px',
@@ -2218,13 +2294,18 @@ export default function InscriptionPage() {
                       gap: '10px',
                       flexShrink: 0,
                       borderRadius: '8px',
-                      border: '1px solid #000'
+                      border: errors.civilite ? '2px solid #DC2626' : '1px solid #000'
                     }}
                   >
                     <option value="" disabled>Sélectionner</option>
                     <option value="Monsieur">Monsieur</option>
                     <option value="Madame">Madame</option>
                   </select>
+                  {errors.civilite && (
+                    <p style={{ color: '#DC2626', fontSize: '13px', marginTop: '4px', fontFamily: 'Poppins' }}>
+                      {errors.civilite}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -2246,12 +2327,16 @@ export default function InscriptionPage() {
                 </label>
                 <div style={{ marginLeft: '164px' }}>
                   <input
+                    id="desktop-nom"
                     type="text"
                     value={nom}
-                    onChange={(e) => setNom(e.target.value)}
+                    onChange={(e) => {
+                      setNom(e.target.value)
+                      if (errors.nom) setErrors(prev => ({ ...prev, nom: undefined }))
+                    }}
                     required
                     placeholder="Nom"
-                    className="border border-black"
+                    className="border"
                     style={{
                       display: 'flex',
                       width: '413px',
@@ -2261,9 +2346,14 @@ export default function InscriptionPage() {
                       gap: '10px',
                       flexShrink: 0,
                       borderRadius: '8px',
-                      border: '1px solid #000'
+                      border: errors.nom ? '2px solid #DC2626' : '1px solid #000'
                     }}
                   />
+                  {errors.nom && (
+                    <p style={{ color: '#DC2626', fontSize: '13px', marginTop: '4px', fontFamily: 'Poppins' }}>
+                      {errors.nom}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -2285,12 +2375,16 @@ export default function InscriptionPage() {
                 </label>
                 <div style={{ marginLeft: '164px' }}>
                   <input
+                    id="desktop-prenom"
                     type="text"
                     value={prenom}
-                    onChange={(e) => setPrenom(e.target.value)}
+                    onChange={(e) => {
+                      setPrenom(e.target.value)
+                      if (errors.prenom) setErrors(prev => ({ ...prev, prenom: undefined }))
+                    }}
                     required
                     placeholder="Prénom"
-                    className="border border-black"
+                    className="border"
                     style={{
                       display: 'flex',
                       width: '413px',
@@ -2300,9 +2394,14 @@ export default function InscriptionPage() {
                       gap: '10px',
                       flexShrink: 0,
                       borderRadius: '8px',
-                      border: '1px solid #000'
+                      border: errors.prenom ? '2px solid #DC2626' : '1px solid #000'
                     }}
                   />
+                  {errors.prenom && (
+                    <p style={{ color: '#DC2626', fontSize: '13px', marginTop: '4px', fontFamily: 'Poppins' }}>
+                      {errors.prenom}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -2324,12 +2423,16 @@ export default function InscriptionPage() {
                 </label>
                 <div style={{ marginLeft: '164px' }}>
                   <input
+                    id="desktop-email"
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value)
+                      if (errors.email) setErrors(prev => ({ ...prev, email: undefined }))
+                    }}
                     required
                     placeholder="Email"
-                    className="border border-black"
+                    className="border"
                     style={{
                       display: 'flex',
                       width: '413px',
@@ -2339,9 +2442,14 @@ export default function InscriptionPage() {
                       gap: '10px',
                       flexShrink: 0,
                       borderRadius: '8px',
-                      border: '1px solid #000'
+                      border: errors.email ? '2px solid #DC2626' : '1px solid #000'
                     }}
                   />
+                  {errors.email && (
+                    <p style={{ color: '#DC2626', fontSize: '13px', marginTop: '4px', fontFamily: 'Poppins' }}>
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -2364,12 +2472,16 @@ export default function InscriptionPage() {
                 <div style={{ marginLeft: '164px' }}>
                   <div className="flex items-center gap-2">
                     <input
+                      id="desktop-telephone"
                       type="tel"
                       value={telephone}
-                      onChange={(e) => setTelephone(e.target.value)}
+                      onChange={(e) => {
+                        setTelephone(e.target.value)
+                        if (errors.telephone) setErrors(prev => ({ ...prev, telephone: undefined }))
+                      }}
                       required
                       placeholder="Téléphone"
-                      className="border border-black"
+                      className="border"
                       style={{
                         display: 'flex',
                         width: '413px',
@@ -2379,7 +2491,7 @@ export default function InscriptionPage() {
                         gap: '10px',
                         flexShrink: 0,
                         borderRadius: '8px',
-                        border: '1px solid #000'
+                        border: errors.telephone ? '2px solid #DC2626' : '1px solid #000'
                       }}
                     />
                     <div
@@ -2447,6 +2559,11 @@ export default function InscriptionPage() {
                   >
                     Important : indiquez un numéro de mobile valide. Il servira au SMS de confirmation et aux infos essentielles sur votre stage.
                   </p>
+                  {errors.telephone && (
+                    <p style={{ color: '#DC2626', fontSize: '13px', marginTop: '4px', fontFamily: 'Poppins' }}>
+                      {errors.telephone}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -2456,7 +2573,6 @@ export default function InscriptionPage() {
                   style={{
                     display: 'flex',
                     width: '482px',
-                    height: '124px',
                     padding: '10px 15px',
                     flexDirection: 'column',
                     justifyContent: 'center',
@@ -2509,7 +2625,6 @@ export default function InscriptionPage() {
                       style={{
                         display: 'flex',
                         width: '411px',
-                        height: '54px',
                         flexDirection: 'column',
                         justifyContent: 'center',
                         flexShrink: 0,
@@ -2525,9 +2640,23 @@ export default function InscriptionPage() {
                     </div>
                   </label>
 
-                  {/* Voir le détail link */}
-                  <div className="flex items-center gap-1 cursor-pointer" style={{ marginLeft: '10px' }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  {/* Voir le détail link - accordion toggle */}
+                  <div
+                    className="flex items-center gap-1 cursor-pointer"
+                    style={{ marginLeft: '10px' }}
+                    onClick={() => setIsGarantieDetailOpen(!isGarantieDetailOpen)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      style={{
+                        transform: isGarantieDetailOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                        transition: 'transform 0.2s'
+                      }}
+                    >
                       <path d="M4 6L8 10L12 6" stroke="#0B0B0B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                     <span
@@ -2541,9 +2670,52 @@ export default function InscriptionPage() {
                         lineHeight: '25px'
                       }}
                     >
-                      Voir le détail de la garantie
+                      {isGarantieDetailOpen ? 'Masquer le détail' : 'Voir le détail de la garantie'}
                     </span>
                   </div>
+
+                  {/* Accordion content */}
+                  {isGarantieDetailOpen && (
+                    <div
+                      style={{
+                        marginTop: '10px',
+                        marginLeft: '10px',
+                        padding: '15px',
+                        background: '#fff',
+                        borderRadius: '8px',
+                        width: 'calc(100% - 20px)'
+                      }}
+                    >
+                      <p
+                        style={{
+                          color: '#333',
+                          fontFamily: 'Poppins',
+                          fontSize: '13px',
+                          fontWeight: 400,
+                          lineHeight: '20px',
+                          marginBottom: '10px'
+                        }}
+                      >
+                        La Garantie Sérénité vous permet de bénéficier des avantages suivants :
+                      </p>
+                      <ul
+                        style={{
+                          color: '#333',
+                          fontFamily: 'Poppins',
+                          fontSize: '13px',
+                          fontWeight: 400,
+                          lineHeight: '22px',
+                          paddingLeft: '20px',
+                          listStyleType: 'disc'
+                        }}
+                      >
+                        <li>Annulation sans frais jusqu&apos;à 24h avant le stage</li>
+                        <li>Report gratuit et illimité de votre stage</li>
+                        <li>Remboursement intégral en cas d&apos;empêchement justifié</li>
+                        <li>Assistance téléphonique prioritaire</li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -2551,34 +2723,43 @@ export default function InscriptionPage() {
               <div className="mb-6" style={{ marginLeft: '50px' }}>
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
+                    id="desktop-cgv"
                     type="checkbox"
                     checked={cgvAccepted}
-                    onChange={(e) => setCgvAccepted(e.target.checked)}
+                    onChange={(e) => {
+                      setCgvAccepted(e.target.checked)
+                      if (errors.cgv) setErrors(prev => ({ ...prev, cgv: undefined }))
+                    }}
                     required
                     className="mt-1"
+                    style={{ accentColor: errors.cgv ? '#DC2626' : undefined }}
                   />
-                  <span className="text-sm" style={{ color: '#333' }}>
+                  <span className="text-sm" style={{ color: errors.cgv ? '#DC2626' : '#333' }}>
                     J'accepte les{' '}
                     <a href="#" className="text-blue-600 underline">
                       conditions générales de vente
                     </a>
                   </span>
                 </label>
+                {errors.cgv && (
+                  <p style={{ color: '#DC2626', fontSize: '13px', marginTop: '4px', marginLeft: '28px', fontFamily: 'Poppins' }}>
+                    {errors.cgv}
+                  </p>
+                )}
               </div>
 
               {/* Submit Button */}
               <div style={{ marginLeft: '110px' }}>
                 <button
                   type="button"
-                  disabled={!cgvAccepted}
                   onClick={() => {
-                    if (cgvAccepted) {
+                    if (validateForm()) {
                       setCurrentStep(2)
                       // Scroll to payment section
                       document.getElementById('payment-section')?.scrollIntoView({ behavior: 'smooth' })
                     }
                   }}
-                  className="text-white font-medium disabled:opacity-50"
+                  className="text-white font-medium"
                   style={{
                     display: 'flex',
                     width: '432px',
@@ -2590,21 +2771,103 @@ export default function InscriptionPage() {
                     borderRadius: '30px',
                     background: '#41A334',
                     border: 'none',
-                    cursor: cgvAccepted ? 'pointer' : 'not-allowed'
+                    cursor: 'pointer'
                   }}
                 >
                   Valider le formulaire et passer au paiement
                 </button>
               </div>
             </form>
+              </>
+            ) : (
+              /* Summary section when form is validated (currentStep === 2) */
+              <div style={{ marginBottom: '28px' }}>
+                <div className="flex items-center justify-between" style={{ marginBottom: '20px' }}>
+                  <h2
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      color: '#000',
+                      fontFamily: 'Poppins',
+                      fontSize: '18px',
+                      fontWeight: 500,
+                      lineHeight: '25px'
+                    }}
+                  >
+                    Vos coordonnées
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setCurrentStep(1)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '8px 16px',
+                      borderRadius: '20px',
+                      border: '1px solid #000',
+                      background: '#fff',
+                      cursor: 'pointer',
+                      fontFamily: 'Poppins',
+                      fontSize: '14px',
+                      fontWeight: 500
+                    }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M11.334 2.00001C11.5091 1.82491 11.7169 1.68602 11.9457 1.59126C12.1745 1.4965 12.4197 1.44775 12.6673 1.44775C12.915 1.44775 13.1601 1.4965 13.389 1.59126C13.6178 1.68602 13.8256 1.82491 14.0007 2.00001C14.1758 2.17511 14.3147 2.38291 14.4094 2.61175C14.5042 2.84058 14.5529 3.08576 14.5529 3.33335C14.5529 3.58094 14.5042 3.82612 14.4094 4.05495C14.3147 4.28378 14.1758 4.49159 14.0007 4.66668L5.00065 13.6667L1.33398 14.6667L2.33398 11L11.334 2.00001Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    Modifier
+                  </button>
+                </div>
 
-            {/* Separator Line */}
-            <div style={{ marginTop: '60px', marginBottom: '60px' }}>
-              <div style={{ width: '672px', height: '1px', background: '#D9D9D9' }} />
-            </div>
+                {/* Summary Grid */}
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '150px 1fr',
+                    gap: '12px 20px',
+                    padding: '20px',
+                    background: '#F9F9F9',
+                    borderRadius: '10px',
+                    fontFamily: 'Poppins',
+                    fontSize: '14px'
+                  }}
+                >
+                  <span style={{ color: '#666' }}>Civilité</span>
+                  <span style={{ color: '#000', fontWeight: 500 }}>{civilite}</span>
 
-            {/* Payment Section - Étape 2/2 */}
-            <div id="payment-section">
+                  <span style={{ color: '#666' }}>Nom</span>
+                  <span style={{ color: '#000', fontWeight: 500 }}>{nom}</span>
+
+                  <span style={{ color: '#666' }}>Prénom</span>
+                  <span style={{ color: '#000', fontWeight: 500 }}>{prenom}</span>
+
+                  <span style={{ color: '#666' }}>Email</span>
+                  <span style={{ color: '#000', fontWeight: 500 }}>{email}</span>
+
+                  <span style={{ color: '#666' }}>Téléphone</span>
+                  <span style={{ color: '#000', fontWeight: 500 }}>{telephone}</span>
+
+                  {garantieSerenite && (
+                    <>
+                      <span style={{ color: '#666' }}>Garantie Sérénité</span>
+                      <span style={{ color: '#41A334', fontWeight: 500 }}>Oui (+57€)</span>
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Separator Line and Payment Section - Only shown when currentStep === 2 */}
+            {currentStep === 2 && (
+              <>
+                <div style={{ marginTop: '60px', marginBottom: '60px' }}>
+                  <div style={{ width: '672px', height: '1px', background: '#D9D9D9' }} />
+                </div>
+
+                {/* Payment Section - Étape 2/2 */}
+                <div id="payment-section">
               <h2
                 style={{
                   display: 'flex',
@@ -3428,6 +3691,8 @@ export default function InscriptionPage() {
                 </div>
               </div>
             </div>
+              </>
+            )}
           </div>
           {/* End Left Column */}
 
@@ -3562,6 +3827,9 @@ export default function InscriptionPage() {
                     </p>
                   </div>
                 </div>
+
+                {/* Grey horizontal line */}
+                <div style={{ width: '100%', height: '1px', background: '#D9D9D9', marginBottom: '12px' }} />
 
                 {/* Changer de date */}
                 <div className="flex items-center gap-2 mb-3">
@@ -3718,23 +3986,23 @@ export default function InscriptionPage() {
               flexDirection: 'column'
             }}
           >
-            {/* Close Button */}
+            {/* Close Button - small X */}
             <button
               onClick={() => setIsDatePopupOpen(false)}
               style={{
                 position: 'absolute',
                 top: '15px',
                 right: '15px',
-                width: '48px',
-                height: '48px',
+                width: '24px',
+                height: '24px',
                 background: 'transparent',
                 border: 'none',
                 cursor: 'pointer',
                 padding: 0
               }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
-                <path d="M30 18L18 30M18 18L30 30M44 24C44 35.0457 35.0457 44 24 44C12.9543 44 4 35.0457 4 24C4 12.9543 12.9543 4 24 4C35.0457 4 44 12.9543 44 24Z" stroke="#A1A1A1" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M18 6L6 18M6 6L18 18" stroke="#A1A1A1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
 
@@ -3858,7 +4126,7 @@ export default function InscriptionPage() {
                       className="flex w-full mb-3 rounded-[10px] border bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] relative"
                       style={{
                         borderColor: isCurrentStage ? '#BC4747' : '#BBB',
-                        backgroundColor: isCurrentStage ? '#F2DDDD' : 'white',
+                        backgroundColor: isCurrentStage ? '#F8EBE1' : 'white',
                         width: '589px',
                         height: '85px',
                         paddingTop: '7px',
