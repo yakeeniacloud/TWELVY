@@ -813,12 +813,12 @@ export default function InscriptionPage() {
                       <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="#41A334" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
-                  <div className="text-gray-700 space-y-0.5" style={{ fontSize: '13px' }}>
+                  <div className="text-gray-700 space-y-0.5" style={{ fontSize: '16px' }}>
                     <p>{prenom} {nom}</p>
                     <p>Mail: {email}</p>
                     <p>Tel: {telephone}</p>
                   </div>
-                  <div className="flex justify-center mt-4">
+                  <div className="flex justify-center mt-5">
                     <button
                       onClick={handleModifierClick}
                       style={{
@@ -839,7 +839,7 @@ export default function InscriptionPage() {
                     </button>
                   </div>
                   {/* Grey separator line below Modifier button */}
-                  <div className="mx-auto mt-3" style={{ width: '363px', height: '1px', background: '#D9D9D9' }} />
+                  <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '16px', marginBottom: '16px' }} />
                 </div>
               ) : (
                 <>
@@ -920,7 +920,7 @@ export default function InscriptionPage() {
             </p>
 
             <div className="flex justify-center mb-3">
-              <img src="/cards.png" alt="Cards" className="h-7" />
+              <img src="/cards.png" alt="Cards" className="h-8" />
             </div>
 
             {/* Payment Fields */}
@@ -1036,12 +1036,12 @@ export default function InscriptionPage() {
                 </button>
               </div>
 
-              <p className="text-center italic mb-4" style={{ fontSize: '13px' }}>
+              <p className="text-center italic" style={{ fontSize: '13px', marginBottom: '16px' }}>
                 Après avoir cliqué sur &quot;Payer&quot;, votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédiatement par email votre convocation au stage.
               </p>
 
               {/* Grey separator line below payment text */}
-              <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginBottom: '24px' }} />
+              <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginBottom: '16px' }} />
             </div>
           </div>
         )}
