@@ -546,14 +546,15 @@ export default function InscriptionPage() {
 
         {/* Stage Card */}
         <div id="mobile-stage-card" className="mx-auto my-3" style={{ width: '363px', padding: '10px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px', background: '#FFF' }}>
-          <div className="mb-2" style={{ display: 'flex', width: '337px', height: '38px', padding: '8px 20px', justifyContent: 'center', alignItems: 'center', gap: '10px', borderRadius: '8px', background: '#EFEFEF' }}>
-            <p className="text-center font-medium" style={{ fontSize: '17px', whiteSpace: 'nowrap' }}>Stage sélectionné</p>
+          <div className="mb-1" style={{ display: 'flex', width: '337px', height: '38px', padding: '8px 20px', justifyContent: 'center', alignItems: 'center', gap: '10px', borderRadius: '8px', background: '#EFEFEF' }}>
+            <p className="text-center font-medium" style={{ fontSize: '17px', whiteSpace: 'nowrap' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)}</p>
           </div>
 
-          <p className="text-center font-medium mb-2" style={{ fontSize: '17px' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)}</p>
+          <p className="text-center font-normal" style={{ fontSize: '21px', marginBottom: '2px' }}>{stage?.prix}€ TTC</p>
+          <p className="text-center text-green-700" style={{ fontSize: '14px', marginBottom: '8px' }}>Places disponibles</p>
 
-          <p className="text-center font-normal mb-0.5" style={{ fontSize: '26px' }}>{stage?.prix}€ TTC</p>
-          <p className="text-center text-green-700 mb-2" style={{ fontSize: '11px' }}>Places disponibles</p>
+          {/* Thin grey separator line - half width of widget */}
+          <div style={{ width: '168px', height: '1px', background: '#D9D9D9', marginBottom: '8px' }} />
 
           <div className="flex items-center gap-2 mb-1.5 w-full">
             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
@@ -579,16 +580,16 @@ export default function InscriptionPage() {
             <p style={{ fontSize: '14px', color: '#4A4A4A', fontFamily: 'Poppins', lineHeight: '22px' }}>08h15-12h30 et 13h30-16h30</p>
           </div>
 
-          <div className="flex gap-2 mb-2 text-gray-600 w-full">
+          <div className="flex gap-2 text-gray-600 w-full" style={{ marginBottom: '12px' }}>
             <Image
               src="/flag-france.png"
               alt="Drapeau français"
-              width={21}
-              height={14}
+              width={24}
+              height={16}
               className="flex-shrink-0 rounded-lg"
               style={{
-                width: '21px',
-                height: '14px',
+                width: '24px',
+                height: '16px',
                 aspectRatio: '3/2',
                 borderRadius: '10px',
                 objectFit: 'cover'
