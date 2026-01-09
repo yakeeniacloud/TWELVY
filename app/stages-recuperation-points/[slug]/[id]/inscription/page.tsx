@@ -642,7 +642,7 @@ export default function InscriptionPage() {
               {/* Form fields */}
               <div className="space-y-3">
                 <div>
-                  <label className="block mb-1" style={{ fontSize: '12px' }}>Civilité *</label>
+                  <label className="block mb-1" style={{ fontSize: '14px' }}>Civilité *</label>
                   <select id="mobile-civilite" value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }}>
                     <option value="">Sélectionner</option>
                     <option value="Monsieur">Monsieur</option>
@@ -651,23 +651,23 @@ export default function InscriptionPage() {
                 </div>
 
                 <div>
-                  <label className="block mb-1" style={{ fontSize: '12px' }}>Nom *</label>
+                  <label className="block mb-1" style={{ fontSize: '14px' }}>Nom *</label>
                   <input id="mobile-nom" type="text" value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Nom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
 
                 <div>
-                  <label className="block mb-1" style={{ fontSize: '12px' }}>Prénom *</label>
+                  <label className="block mb-1" style={{ fontSize: '14px' }}>Prénom *</label>
                   <input id="mobile-prenom" type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} placeholder="Prénom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
 
                 <div>
-                  <label className="block mb-1" style={{ fontSize: '12px' }}>Email *</label>
+                  <label className="block mb-1" style={{ fontSize: '14px' }}>Email *</label>
                   <input id="mobile-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                 </div>
 
                 <div>
                   <div className="flex items-center gap-1 mb-1">
-                    <label style={{ fontSize: '12px' }}>Téléphone mobile *</label>
+                    <label style={{ fontSize: '14px' }}>Téléphone mobile *</label>
                     <div className="relative">
                       <button
                         type="button"
@@ -743,24 +743,24 @@ export default function InscriptionPage() {
                         </clipPath>
                       </defs>
                     </svg>
-                    <span className="font-medium underline" style={{ fontSize: '12px' }}>Garantie Sérénité</span>
+                    <span className="font-medium underline" style={{ fontSize: '14px' }}>Garantie Sérénité</span>
                   </div>
                   <label className="flex items-start gap-1.5 cursor-pointer mb-1.5">
                     <input type="checkbox" checked={garantieSerenite} onChange={(e) => setGarantieSerenite(e.target.checked)} className="mt-0.5" />
-                    <span style={{ fontSize: '11px' }}>Je souscris à la Garantie Sérénité: +57€ TTC (supplement facturé en plus du stage)</span>
+                    <span style={{ fontSize: '13px' }}>Je souscris à la Garantie Sérénité: +57€ TTC (supplement facturé en plus du stage)</span>
                   </label>
                   <div className="flex items-center justify-center gap-2 cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="22" viewBox="0 0 25 22" fill="none" style={{ width: '25px', height: '25px' }}>
                       <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    <div className="font-medium" style={{ fontSize: '11px' }}>Voir le détail de la garantie</div>
+                    <div className="font-medium" style={{ fontSize: '13px' }}>Voir le détail de la garantie</div>
                   </div>
                 </div>
 
                 {/* CGV */}
                 <label id="mobile-cgv" className="flex items-start gap-1.5 cursor-pointer" style={{ marginTop: '24px' }}>
                   <input type="checkbox" checked={cgvAccepted} onChange={(e) => setCgvAccepted(e.target.checked)} className="mt-0.5" />
-                  <span style={{ fontSize: '11px' }}>J'accepte les <a href="#" className="text-blue-600 underline">conditions générales de vente</a></span>
+                  <span style={{ fontSize: '13px' }}>J'accepte les <a href="#" className="text-blue-600 underline">conditions générales de vente</a></span>
                 </label>
 
                 {/* Submit Button */}
