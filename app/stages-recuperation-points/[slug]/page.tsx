@@ -1199,7 +1199,7 @@ export default function StagesResultsPage() {
               {visibleStages.map((stage) => (
                 <article
                   key={stage.id}
-                  className="flex flex-col w-full p-3 mb-3 rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
+                  className="flex flex-col w-full p-3 mb-[7px] rounded-[10px] border border-[#BBB] bg-white shadow-[0_4px_10px_0_rgba(0,0,0,0.15)] mx-auto"
                 >
                   {/* Mobile Layout */}
                   <div className="flex w-full">
