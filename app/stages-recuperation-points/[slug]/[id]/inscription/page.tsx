@@ -630,13 +630,13 @@ export default function InscriptionPage() {
         </div>
 
         {/* Grey separator line below stage card */}
-        <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '20px', marginBottom: '20px' }} />
+        <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '20px', marginBottom: '36px' }} />
 
         {/* Form Section */}
         <div id="mobile-form-section" className="px-3 py-0">
           {!formValidated ? (
             <>
-              <h2 className="font-medium mb-1" style={{ fontSize: '14px' }}>Étape 1/2 : coordonnées personnelles</h2>
+              <h2 className="font-medium mb-1" style={{ fontSize: '18px' }}>Étape 1/2 : coordonnées personnelles</h2>
               <p className="italic text-gray-600 mb-3" style={{ fontSize: '11px' }}>• Tous les champs sont obligatoires</p>
 
               {/* Form fields */}
@@ -731,7 +731,7 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* Garantie Sérénité */}
-                <div className="bg-gray-100 rounded-lg p-2.5">
+                <div className="bg-gray-100 rounded-lg p-2.5" style={{ marginTop: '24px' }}>
                   <div className="flex items-center gap-1.5 mb-1.5">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 25 25" fill="none">
                       <g clipPath="url(#clip0_122_55)">
@@ -758,13 +758,13 @@ export default function InscriptionPage() {
                 </div>
 
                 {/* CGV */}
-                <label id="mobile-cgv" className="flex items-start gap-1.5 cursor-pointer">
+                <label id="mobile-cgv" className="flex items-start gap-1.5 cursor-pointer" style={{ marginTop: '24px' }}>
                   <input type="checkbox" checked={cgvAccepted} onChange={(e) => setCgvAccepted(e.target.checked)} className="mt-0.5" />
                   <span style={{ fontSize: '11px' }}>J'accepte les <a href="#" className="text-blue-600 underline">conditions générales de vente</a></span>
                 </label>
 
                 {/* Submit Button */}
-                <div className="flex justify-center">
+                <div className="flex justify-center" style={{ marginTop: '36px' }}>
                   <button
                     id="mobile-validate-form-button"
                     onClick={handleValidateForm}
