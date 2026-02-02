@@ -1496,10 +1496,10 @@ export default function InscriptionPage() {
                   color: '#4E4E4E',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
-                  fontSize: '15px',
+                  fontSize: '12.5px',
                   fontStyle: 'italic',
                   fontWeight: '400',
-                  lineHeight: '22px',
+                  lineHeight: '18px',
                   margin: '0 auto 16px auto'
                 }}>
                   Choisissez une autre date pour votre stage. Les informations déjà saisies sont conservées
@@ -1510,30 +1510,22 @@ export default function InscriptionPage() {
                   <div style={{
                     display: 'flex',
                     width: '323px',
-                    height: '63px',
                     padding: '0 5px',
                     justifyContent: 'center',
                     alignItems: 'center',
                     flexShrink: 0,
-                    borderRadius: '10px',
-                    background: '#F5F5F5',
-                    margin: '0 auto 16px auto'
+                    margin: '0 auto 12px auto'
                   }}>
                     <p style={{
-                      display: 'flex',
-                      width: '335px',
-                      height: '49px',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      flexShrink: 0,
                       color: '#000',
                       textAlign: 'center',
                       fontFamily: 'Poppins',
-                      fontSize: '17px',
+                      fontSize: '13px',
                       fontStyle: 'normal',
                       fontWeight: '500',
-                      lineHeight: '28px',
-                      margin: 0
+                      lineHeight: '20px',
+                      margin: 0,
+                      whiteSpace: 'nowrap'
                     }}>
                       Stage actuel : {formatDate(stage.date_start, stage.date_end)} - {stage.prix}€
                     </p>
@@ -1560,14 +1552,14 @@ export default function InscriptionPage() {
                   textDecorationThickness: 'auto',
                   textUnderlineOffset: 'auto',
                   textUnderlinePosition: 'from-font',
-                  margin: '24px auto 8px auto'
+                  margin: '12px auto 8px auto'
                 }}>
                   Liste des stages :
                 </p>
               </div>
 
               {/* Scrollable stage list */}
-              <div className="flex-1 overflow-y-auto" style={{ marginBottom: '16px' }}>
+              <div className="flex-1 overflow-y-auto" style={{ marginBottom: '16px', paddingTop: '4px' }}>
                 {loadingStages ? (
                   <p style={{ textAlign: 'center', color: '#666', fontFamily: 'Poppins', fontSize: '13px' }}>Chargement...</p>
                 ) : (
@@ -1743,28 +1735,20 @@ export default function InscriptionPage() {
               </div>
 
               {/* Fermer button */}
-              <div className="pt-4 flex justify-center">
+              <div className="pt-2 pb-2 flex justify-center">
                 <button
                   onClick={() => setIsDatePopupOpen(false)}
                   style={{
-                    display: 'flex',
-                    height: '44px',
-                    padding: '7px 15px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '20px',
-                    flexShrink: 0,
-                    borderRadius: '12px',
-                    background: '#E0E0E0',
+                    background: 'none',
+                    border: 'none',
                     color: '#000',
                     fontFamily: 'Poppins',
                     fontSize: '15px',
-                    fontStyle: 'normal',
-                    fontWeight: '300',
+                    fontWeight: 400,
                     lineHeight: 'normal',
-                    letterSpacing: '1.05px',
-                    border: 'none',
-                    cursor: 'pointer'
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    padding: 0
                   }}
                 >
                   Fermer
