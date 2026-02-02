@@ -911,6 +911,11 @@ export default function InscriptionPage() {
           )}
         </div>
 
+        {/* Grey separator line between form and payment */}
+        {paymentBlockVisible && (
+          <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '36px', marginBottom: '36px' }} />
+        )}
+
         {/* Payment Section */}
         {paymentBlockVisible && (
           <div id="mobile-payment-section" className="px-3 py-3">
@@ -1043,7 +1048,7 @@ export default function InscriptionPage() {
               </p>
 
               {/* Grey separator line below payment text */}
-              <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginBottom: '16px' }} />
+              <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '36px', marginBottom: '36px' }} />
             </div>
           </div>
         )}
