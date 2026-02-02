@@ -1520,10 +1520,10 @@ export default function InscriptionPage() {
                       color: '#000',
                       textAlign: 'center',
                       fontFamily: 'Poppins',
-                      fontSize: '13px',
+                      fontSize: '15px',
                       fontStyle: 'normal',
                       fontWeight: '500',
-                      lineHeight: '20px',
+                      lineHeight: '22px',
                       margin: 0,
                       whiteSpace: 'nowrap'
                     }}>
@@ -1735,7 +1735,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Fermer button */}
-              <div className="py-1 flex justify-center">
+              <div style={{ paddingTop: '2px', paddingBottom: '2px', display: 'flex', justifyContent: 'center' }}>
                 <button
                   onClick={() => setIsDatePopupOpen(false)}
                   style={{
