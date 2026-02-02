@@ -848,31 +848,31 @@ export default function InscriptionPage() {
                   <p className="italic mb-3" style={{ fontSize: '11px' }}>• Tous les champs sont obligatoires</p>
                   <div className="space-y-3">
                     <div>
-                      <label className="block mb-1" style={{ fontSize: '12px' }}>Civilité *</label>
+                      <label className="block mb-1" style={{ fontSize: '14px' }}>Civilité *</label>
                       <select value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }}>
                         <option value="Monsieur">Monsieur</option>
                         <option value="Madame">Madame</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block mb-1" style={{ fontSize: '12px' }}>Nom *</label>
+                      <label className="block mb-1" style={{ fontSize: '14px' }}>Nom *</label>
                       <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Nom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
                     <div>
-                      <label className="block mb-1" style={{ fontSize: '12px' }}>Prénom *</label>
+                      <label className="block mb-1" style={{ fontSize: '14px' }}>Prénom *</label>
                       <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} placeholder="Prénom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
                     <div>
-                      <label className="block mb-1" style={{ fontSize: '12px' }}>Email *</label>
+                      <label className="block mb-1" style={{ fontSize: '14px' }}>Email *</label>
                       <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
                     <div>
-                      <label className="block mb-1" style={{ fontSize: '12px' }}>Téléphone mobile *</label>
+                      <label className="block mb-1" style={{ fontSize: '14px' }}>Téléphone mobile *</label>
                       <input type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="Téléphone" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
 
                     {/* Garantie Sérénité */}
-                    <div className="bg-gray-100 rounded-lg p-2.5">
+                    <div className="bg-gray-100 rounded-lg p-2.5" style={{ marginTop: '24px' }}>
                       <div className="flex items-center gap-1.5 mb-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px' }}>
                           <path d="M12.5 22.9167C12.5 22.9167 20.8333 18.75 20.8333 12.5V5.20833L12.5 2.08333L4.16667 5.20833V12.5C4.16667 18.75 12.5 22.9167 12.5 22.9167Z" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
@@ -881,26 +881,28 @@ export default function InscriptionPage() {
                       </div>
                       <label className="flex items-start gap-1.5 cursor-pointer mb-1.5">
                         <input type="checkbox" checked={garantieSerenite} onChange={(e) => setGarantieSerenite(e.target.checked)} className="mt-0.5" />
-                        <span style={{ fontSize: '11px' }}>Je souscris à la Garantie Sérénité: +57€ TTC (supplement facturé en plus du stage)</span>
+                        <span style={{ fontSize: '13px' }}>Je souscris à la Garantie Sérénité: +57€ TTC (supplement facturé en plus du stage)</span>
                       </label>
                       <div className="flex items-center justify-center gap-2 cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="22" viewBox="0 0 25 22" fill="none" style={{ width: '25px', height: '25px' }}>
                           <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
-                        <div className="font-medium" style={{ fontSize: '11px' }}>Voir le détail de la garantie</div>
+                        <div className="font-medium" style={{ fontSize: '13px' }}>Voir le détail de la garantie</div>
                       </div>
                     </div>
 
                     {/* CGV - Pre-checked */}
-                    <label className="flex items-start gap-1.5 cursor-pointer">
+                    <label className="flex items-start gap-1.5 cursor-pointer" style={{ marginTop: '24px' }}>
                       <input type="checkbox" checked={true} onChange={(e) => setCgvAccepted(e.target.checked)} className="mt-0.5" />
-                      <span style={{ fontSize: '11px' }}>J'accepte <a href="#" className="text-blue-600 underline">les conditions générales de vente</a></span>
+                      <span style={{ fontSize: '13px' }}>J'accepte <a href="#" className="text-blue-600 underline">les conditions générales de vente</a></span>
                     </label>
 
                     {/* Buttons - Stacked vertically */}
-                    <div className="space-y-2">
-                      <button onClick={handleAnnulerClick} className="w-full bg-gray-300 py-2 rounded-full" style={{ fontSize: '12px' }}>Annuler</button>
-                      <button onClick={handleReturnToPayment} className="w-full bg-green-600 text-white py-2 rounded-full" style={{ fontSize: '12px' }}>Valider le formulaire et repasser au paiement</button>
+                    <div className="space-y-2" style={{ marginTop: '36px' }}>
+                      <div className="flex justify-center">
+                        <button onClick={handleAnnulerClick} style={{ background: 'none', border: 'none', color: '#000', fontFamily: 'Poppins', fontSize: '14px', fontWeight: 400, textDecoration: 'underline', cursor: 'pointer', padding: 0 }}>Annuler</button>
+                      </div>
+                      <button onClick={handleReturnToPayment} className="w-full bg-green-600 text-white py-2 rounded-full" style={{ fontSize: '14.4px' }}>Valider le formulaire et repasser au paiement</button>
                     </div>
                   </div>
                 </>
