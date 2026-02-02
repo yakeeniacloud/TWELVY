@@ -4046,10 +4046,10 @@ export default function InscriptionPage() {
                   color: '#4E4E4E',
                   textAlign: 'center',
                   fontFamily: 'Poppins',
-                  fontSize: '12.5px',
+                  fontSize: '15px',
                   fontStyle: 'italic',
                   fontWeight: 400,
-                  lineHeight: '18px',
+                  lineHeight: '22px',
                   margin: '15px auto 20px auto'
                 }}
               >
@@ -4062,11 +4062,14 @@ export default function InscriptionPage() {
                   style={{
                     display: 'flex',
                     width: '389px',
+                    height: '39px',
                     padding: '0 5px',
                     justifyContent: 'center',
                     alignItems: 'center',
                     flexShrink: 0,
-                    margin: '0 auto 12px auto'
+                    borderRadius: '10px',
+                    background: '#F5F5F5',
+                    margin: '0 auto 20px auto'
                   }}
                 >
                   <p
@@ -4074,11 +4077,10 @@ export default function InscriptionPage() {
                       color: '#000',
                       textAlign: 'center',
                       fontFamily: 'Poppins',
-                      fontSize: '13px',
+                      fontSize: '16px',
                       fontWeight: 400,
-                      lineHeight: '20px',
-                      margin: 0,
-                      whiteSpace: 'nowrap'
+                      lineHeight: '28px',
+                      margin: 0
                     }}
                   >
                     Stage actuel : {formatDate(stage.date_start, stage.date_end)} - {stage.prix}€
@@ -4101,7 +4103,7 @@ export default function InscriptionPage() {
                   fontWeight: 400,
                   lineHeight: '22px',
                   textDecoration: 'underline',
-                  margin: '15px 0 6px -28px'
+                  margin: '40px 0 6px -28px'
                 }}
               >
                 Liste des stages :
@@ -4115,7 +4117,6 @@ export default function InscriptionPage() {
                 overflowY: 'auto',
                 paddingLeft: '5px',
                 paddingRight: '5px',
-                paddingTop: '8px',
                 position: 'relative',
                 maskImage: 'linear-gradient(to bottom, black calc(100% - 140px), transparent 100%)',
                 WebkitMaskImage: 'linear-gradient(to bottom, black calc(100% - 140px), transparent 100%)'
@@ -4257,20 +4258,26 @@ export default function InscriptionPage() {
             </div>
 
             {/* Fermer Button at Bottom */}
-            <div style={{ padding: '12px 35px 15px 35px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+            <div style={{ padding: '20px 35px 30px 35px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
               <button
                 onClick={() => setIsDatePopupOpen(false)}
                 style={{
-                  background: 'none',
+                  display: 'inline-flex',
+                  height: '44px',
+                  padding: '7px 15px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '20px',
+                  borderRadius: '12px',
+                  background: '#E0E0E0',
                   border: 'none',
                   color: '#000',
                   fontFamily: 'Poppins',
                   fontSize: '15px',
-                  fontWeight: 400,
+                  fontWeight: 300,
                   lineHeight: 'normal',
-                  textDecoration: 'underline',
-                  cursor: 'pointer',
-                  padding: 0
+                  letterSpacing: '1.05px',
+                  cursor: 'pointer'
                 }}
               >
                 Fermer
