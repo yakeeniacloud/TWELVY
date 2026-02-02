@@ -4,7 +4,7 @@
 
 **TWELVY** is a production-ready driving license points recovery course booking platform, live at **www.twelvy.net**.
 
-### Current Status (January 2025)
+### Current Status (February 2025)
 - **Performance**: Desktop 100, Mobile 96 (PageSpeed Insights)
 - **Production URL**: https://www.twelvy.net
 - **Headless CMS**: https://headless.twelvy.net (WordPress)
@@ -282,6 +282,185 @@ CREATE TABLE stage_bookings (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 ```
+
+#### Mobile Fiche Formulaire (February 2025 Update)
+
+**File**: `app/stages-recuperation-points/[slug]/[id]/inscription/page.tsx`
+
+**Purpose**: Optimized mobile view for the inscription/booking form with enhanced UX
+
+**Mobile Stage Card** (id="mobile-stage-card"):
+- Grey widget with "Stage du [DATE]" (17px, centered, nowrap)
+- Widget dimensions: 337px × 38px with 8px padding and 8px border-radius
+- Background: #EFEFEF
+- "+ 4 points en 48h" badge (15px font)
+- Price display: 21px font, centered
+- "Places disponibles" in green (#15803d), 14px font
+- Grey separator line: 218px width, 1px height, #D9D9D9
+
+**Icons and Details Row**:
+- "Changer de date" link with calendar icon (14px text)
+- Address with location icon (14px text)
+- Time display with clock icon (14px text)
+- French flag icon: 20×15px
+
+**Agrément Section**:
+- Prefecture agreement number (12px text)
+- Spacing: 16px margin-top to benefits box
+
+**Benefits Box**:
+- Width: 363px, centered
+- Icons: 28×28px (remboursement, paiement, satisfaction)
+- Text: 14px font size
+- Grey separator line: 363px width, centered
+- Spacing: 16px margin-bottom after separator
+
+**Form Section** (id="mobile-form-section"):
+- "Étape 1/2" header: 18px font, centered
+- Form labels: 14px font size
+- Civilité select: white background (#FFFFFF)
+- Field spacing: standard Tailwind gaps
+- Garantie Sérénité checkbox content: 14px
+- CGV checkbox text: 14px
+- Green submit button: reduced size with 14px text
+- Grey separator below button: 363px width, 16px margins
+
+**Form Summary (Confirmed State)**:
+- Name/Email/Tel display: 16px font
+- "Modifier" button: 16px text, centered
+- Grey separator: 363px width, 16px vertical margins
+
+**Payment Section** (id="mobile-payment-section"):
+- "Étape 2/2" header: 18px font, centered
+- Card input labels: 14px font
+- Card icons (Visa, Mastercard, etc.): h-8 (32px height)
+- Grey price summary box content: 14px font
+- "Après avoir cliqué" text with grey separator below
+- "Payer" button: green gradient, centered
+
+**Informations Pratiques Section**:
+- Tab buttons: increased by 10%
+- Tab content text: 14px
+- "Pour en savoir plus" link: 14px
+- Grey separator: 363px width
+
+**Questions Fréquentes (FAQ)**:
+- Section headings: centered text
+- Question/answer text: 14px font
+- Expandable accordion style
+
+**Key Styling Patterns**:
+```typescript
+// Grey widget for stage date
+<div style={{
+  display: 'flex',
+  width: '337px',
+  height: '38px',
+  padding: '8px 20px',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: '8px',
+  background: '#EFEFEF'
+}}>
+
+// Separator lines
+<div style={{
+  width: '363px',
+  height: '1px',
+  background: '#D9D9D9',
+  marginTop: '16px',
+  marginBottom: '16px'
+}} />
+
+// Benefits box icons
+<img src="/icon.svg" alt="Icon" style={{ width: '28px', height: '28px' }} />
+```
+
+#### Mobile "Changer de Date" Popup Optimization (February 2025)
+
+**File**: `app/stages-recuperation-points/[slug]/[id]/inscription/page.tsx`
+
+**Purpose**: Optimized mobile date selection popup to maximize visible courses without scrolling
+
+**Key Optimizations**:
+
+1. **Top Section Space Reduction**:
+   - "Choisissez une autre date..." text: Reduced from 15px to 12.5px (~17% reduction)
+   - LineHeight: 22px → 18px
+   - Current stage date: Removed grey background (#F5F5F5), reduced font 17px → 15px
+   - Added `whiteSpace: 'nowrap'` to force single line display
+   - Spacing reduction: date to "Liste des stages" (24px → 12px), added 4px padding-top to list
+
+2. **Stage Cards Styling** (matching ville page mobile cards):
+   - City names: Capitalize format (e.g., "Marseille" not "MARSEILLE")
+   - Price: Reduced from 20px to 17px
+   - Green button: Width 109px → 93px, font 15px → 12.5px, padding 7px → 6px
+   - Card height: Reduced from 106px to 95px (~10% reduction)
+   - Selected stage background: Changed from #F2DDDD to #F5EBE0 (light beige)
+   - Selected stage border: Changed from #BC4747 to #BBB (grey)
+
+3. **Bottom Container Optimization**:
+   - "Fermer" button: Replaced grey button with underlined black text (centered)
+   - Container padding: Reduced to 2px top/bottom (minimal spacing)
+
+**Result**: Maximum courses visible without scrolling, matches ville page card styling
+
+#### Mobile "Modifier" Form Matching (February 2025)
+
+**File**: `app/stages-recuperation-points/[slug]/[id]/inscription/page.tsx`
+
+**Purpose**: Ensure Modifier form matches original form styling when reopened
+
+**When Modifier form reopens after validation, all styling matches initial form**:
+
+**Font Sizes**:
+- Field labels: 14px (Civilité, Nom, Prénom, Email, Téléphone mobile)
+- Garantie Sérénité checkbox text: 13px
+- Garantie Sérénité detail link: 13px
+- CGV text: 13px
+- Green button text: 14.4px (+20% from 12px)
+
+**Spacing**:
+- Téléphone → Garantie Sérénité: 24px marginTop
+- Garantie Sérénité → CGV: 24px marginTop
+- CGV → Buttons container: 36px marginTop
+
+**Buttons**:
+- "Annuler": Underlined black text (centered), no grey button background
+- "Valider le formulaire et repasser au paiement": Green background, 14.4px font
+
+**Consistency**: Modifier form now perfectly matches initial form appearance
+
+#### Mobile Section Spacing Standardization (February 2025)
+
+**File**: `app/stages-recuperation-points/[slug]/[id]/inscription/page.tsx`
+
+**Purpose**: Consistent spacing with centered grey separator lines between all major sections
+
+**Standard Spacing Pattern**:
+```typescript
+<div className="mx-auto" style={{
+  width: '363px',
+  height: '1px',
+  background: '#D9D9D9',
+  marginTop: '36px',
+  marginBottom: '36px'
+}} />
+```
+
+**Applied to Three Locations**:
+
+1. **Stage Details → Étape 1/2 Form**:
+   - Grey line with 36px above/below (reference spacing)
+
+2. **Form/Green Button → Étape 2/2 Payment**:
+   - Grey line with 36px above/below (NEW - added Feb 2025)
+   - Only visible when `paymentBlockVisible` is true
+
+3. **Payment Section → Informations Pratiques**:
+   - Grey line with 36px above/below (UPDATED from 16px)
+
+**Result**: All major sections have consistent, balanced spacing with perfectly centered grey separator lines
 
 ---
 
@@ -1949,6 +2128,6 @@ git reset HEAD~1
 
 ---
 
-**Last Updated**: January 2025
+**Last Updated**: February 2025
 **Version**: 2.0
 **Status**: Production Ready ✓
