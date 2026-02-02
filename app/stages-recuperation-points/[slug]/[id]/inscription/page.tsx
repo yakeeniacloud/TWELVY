@@ -1570,12 +1570,12 @@ export default function InscriptionPage() {
                         key={stageItem.id}
                         style={{
                           width: '369px',
-                          height: '106px',
+                          height: '95px',
                           padding: '6px 0',
                           flexShrink: 0,
                           borderRadius: '10px',
-                          border: isCurrentStage ? '1px solid #BC4747' : '1px solid #BBB',
-                          background: isCurrentStage ? '#F2DDDD' : '#FFF',
+                          border: isCurrentStage ? '1px solid #BBB' : '1px solid #BBB',
+                          background: isCurrentStage ? '#F5EBE0' : '#FFF',
                           boxShadow: '0 4px 10px 0 rgba(0, 0, 0, 0.15)',
                           position: 'relative',
                           marginBottom: '12px',
@@ -1638,7 +1638,7 @@ export default function InscriptionPage() {
                               lineHeight: '18px',
                               margin: 0
                             }}>
-                              {stageItem.site.ville}
+                              {stageItem.site.ville.charAt(0).toUpperCase() + stageItem.site.ville.slice(1).toLowerCase()}
                             </p>
                             {/* Address */}
                             <p style={{
@@ -1687,10 +1687,10 @@ export default function InscriptionPage() {
                             color: 'rgba(6, 6, 6, 0.86)',
                             textAlign: 'center',
                             fontFamily: 'Poppins',
-                            fontSize: '20px',
+                            fontSize: '17px',
                             fontStyle: 'normal',
                             fontWeight: 400,
-                            lineHeight: '35px'
+                            lineHeight: '30px'
                           }}>
                             {stageItem.prix}€
                           </div>
@@ -1701,27 +1701,27 @@ export default function InscriptionPage() {
                               onClick={() => handleStageSelect(stageItem)}
                               style={{
                                 display: 'flex',
-                                width: '109px',
-                                padding: '7px 0',
+                                width: '93px',
+                                padding: '6px 0',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                borderRadius: '12px',
+                                borderRadius: '10px',
                                 background: '#41A334',
                                 border: 'none',
                                 cursor: 'pointer'
                               }}
                             >
                               <span style={{
-                                width: '110px',
+                                width: '91px',
                                 flexShrink: 0,
                                 color: '#FFF',
                                 textAlign: 'center',
                                 fontFamily: 'Poppins',
-                                fontSize: '15px',
+                                fontSize: '12.5px',
                                 fontStyle: 'normal',
                                 fontWeight: '400',
-                                lineHeight: '18px',
-                                letterSpacing: '0.3px'
+                                lineHeight: '15px',
+                                letterSpacing: '0.25px'
                               }}>
                                 Choisir cette date
                               </span>
