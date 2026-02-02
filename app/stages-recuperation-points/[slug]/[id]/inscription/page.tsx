@@ -1735,7 +1735,7 @@ export default function InscriptionPage() {
               </div>
 
               {/* Fermer button */}
-              <div className="pt-2 pb-2 flex justify-center">
+              <div className="py-1 flex justify-center">
                 <button
                   onClick={() => setIsDatePopupOpen(false)}
                   style={{
