@@ -2857,419 +2857,6 @@ export default function InscriptionPage() {
               </div>
             )}
 
-            {/* Informations pratiques section - shown by default */}
-            <div>
-              {/* Spacing and separator line */}
-              <div style={{ marginTop: '40px' }}>
-                <div
-                  style={{
-                    width: '680px',
-                    height: '1px',
-                    background: '#DEDDDD'
-                  }}
-                />
-              </div>
-
-              {/* Informations pratiques section */}
-              <div style={{ marginTop: '40px' }}>
-                {/* Title */}
-                <h2
-                  style={{
-                    color: '#000',
-                    fontFamily: 'Poppins',
-                    fontSize: '20px',
-                    fontStyle: 'normal',
-                    fontWeight: 500,
-                    lineHeight: '25px',
-                    marginBottom: '10px'
-                  }}
-                >
-                  Informations pratiques sur votre stage
-                </h2>
-
-                {/* Tab widget */}
-                <div
-                  style={{
-                    display: 'flex',
-                    width: '638px',
-                    height: '43px',
-                    padding: '2px 5px',
-                    alignItems: 'center',
-                    gap: '11px',
-                    borderRadius: '10px',
-                    border: '1px solid #C5C5C5',
-                    background: '#DEDDDD'
-                  }}
-                >
-                  {/* Tab 1: Le prix du stage comprend */}
-                  <button
-                    onClick={() => setActiveTab('prix')}
-                    style={{
-                      flex: 1,
-                      height: '39px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderRadius: '8px',
-                      background: activeTab === 'prix' ? '#FFFFFF' : 'transparent',
-                      border: 'none',
-                      cursor: 'pointer',
-                      color: '#000',
-                      textAlign: 'center',
-                      fontFamily: 'Poppins',
-                      fontSize: '14px',
-                      fontStyle: 'normal',
-                      fontWeight: 500,
-                      lineHeight: 'normal',
-                      letterSpacing: '0.98px',
-                      transition: 'background 0.2s',
-                      whiteSpace: 'nowrap',
-                      padding: '0 15px',
-                      marginLeft: '-5px'
-                    }}
-                  >
-                    Le prix du stage comprend
-                  </button>
-
-                  {/* Tab 2: Programme */}
-                  <button
-                    onClick={() => setActiveTab('programme')}
-                    style={{
-                      flex: 1,
-                      height: '39px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderRadius: '8px',
-                      background: activeTab === 'programme' ? '#FFFFFF' : 'transparent',
-                      border: 'none',
-                      cursor: 'pointer',
-                      color: '#000',
-                      textAlign: 'center',
-                      fontFamily: 'Poppins',
-                      fontSize: '14px',
-                      fontStyle: 'normal',
-                      fontWeight: 500,
-                      lineHeight: 'normal',
-                      letterSpacing: '0.98px',
-                      transition: 'background 0.2s',
-                      whiteSpace: 'nowrap',
-                      padding: '0 15px'
-                    }}
-                  >
-                    Programme
-                  </button>
-
-                  {/* Tab 3: Agrément */}
-                  <button
-                    onClick={() => setActiveTab('agrement')}
-                    style={{
-                      flex: 1,
-                      height: '39px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      borderRadius: '8px',
-                      background: activeTab === 'agrement' ? '#FFFFFF' : 'transparent',
-                      border: 'none',
-                      cursor: 'pointer',
-                      color: '#000',
-                      textAlign: 'center',
-                      fontFamily: 'Poppins',
-                      fontSize: '14px',
-                      fontStyle: 'normal',
-                      fontWeight: 500,
-                      lineHeight: 'normal',
-                      letterSpacing: '0.98px',
-                      transition: 'background 0.2s',
-                      whiteSpace: 'nowrap',
-                      padding: '0 15px',
-                      marginRight: '-5px'
-                    }}
-                  >
-                    Agrément
-                  </button>
-                </div>
-
-                {/* Tab Content Box */}
-                <div
-                  style={{
-                    display: 'flex',
-                    width: '638px',
-                    height: '177px',
-                    padding: '11px 24px 8px 24px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: '20px',
-                    border: '1px solid #B2B2B2',
-                    background: '#FFF',
-                    marginTop: '5px'
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      width: '590px',
-                      height: '158px',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      color: '#000',
-                      fontFamily: 'Poppins',
-                      fontSize: '14px',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      lineHeight: '25px',
-                      letterSpacing: '0.98px'
-                    }}
-                  >
-                    {activeTab === 'prix' && (
-                      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                        <li>• 14 heures de formation</li>
-                        <li>• L'attestation de stage remise le deuxième jour</li>
-                        <li>• La récupération automatique de 4 points</li>
-                        <li>• Le traitement de votre dossier administratif en préfecture</li>
-                        <li>• En cas d'empêchement, le transfert sur un autre stage de notre réseau</li>
-                      </ul>
-                    )}
-                    {activeTab === 'programme' && (
-                      <div>
-                        <p>Programme détaillé du stage de récupération de points</p>
-                      </div>
-                    )}
-                    {activeTab === 'agrement' && (
-                      <div>
-                        <p>Informations sur l'agrément préfectoral</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Questions fréquentes */}
-            <div style={{ marginTop: '40px' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  width: '692px',
-                  minHeight: '402px',
-                  padding: '30px 20px',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '0',
-                  background: '#F6F6F6'
-                }}
-              >
-                {/* Title: Questions Fréquentes - on one line */}
-                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
-                  {/* Questions */}
-                  <span
-                    style={{
-                      color: 'rgba(6, 6, 6, 0.86)',
-                      textAlign: 'center',
-                      WebkitTextStrokeWidth: '1px',
-                      WebkitTextStrokeColor: '#000',
-                      fontFamily: 'Poppins',
-                      fontSize: '20px',
-                      fontStyle: 'normal',
-                      fontWeight: 250,
-                      lineHeight: '35px'
-                    }}
-                  >
-                    Questions
-                  </span>
-
-                  {/* Fréquentes */}
-                  <span
-                    style={{
-                      color: 'rgba(6, 6, 6, 0.86)',
-                      textAlign: 'center',
-                      WebkitTextStrokeWidth: '1px',
-                      WebkitTextStrokeColor: 'rgba(188, 71, 71, 0.73)',
-                      fontFamily: 'Poppins',
-                      fontSize: '20px',
-                      fontStyle: 'normal',
-                      fontWeight: 275,
-                      lineHeight: '35px'
-                    }}
-                  >
-                    Fréquentes
-                  </span>
-                </div>
-
-                {/* Subtitle */}
-                <div
-                  style={{
-                    color: '#000',
-                    textAlign: 'center',
-                    fontFamily: 'Poppins',
-                    fontSize: '15px',
-                    fontStyle: 'normal',
-                    fontWeight: 400,
-                    lineHeight: '20px',
-                    marginTop: '15px',
-                    marginBottom: '25px',
-                    width: '100%'
-                  }}
-                >
-                  Réponses aux questions que se posent le plus souvent les conducteurs
-                </div>
-
-                {/* Question 1 with arrow */}
-                <div style={{ width: '100%' }}>
-                  <div
-                    onClick={() => setOpenFaqIndex(openFaqIndex === 0 ? null : 0)}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      cursor: 'pointer',
-                      gap: '10px'
-                    }}
-                  >
-                    <div
-                      style={{
-                        flex: 1,
-                        color: '#060606',
-                        textAlign: 'left',
-                        fontFamily: 'Poppins',
-                        fontSize: '15px',
-                        fontStyle: 'normal',
-                        fontWeight: 400,
-                        lineHeight: '35px',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis'
-                      }}
-                    >
-                      A quel moment mes 4 points sont il crédités sur mon permis après un stage
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === 0 ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
-                      <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  {openFaqIndex === 0 && (
-                    <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
-                      Réponse à la question - Texte placeholder pour la réponse détaillée concernant le crédit des points sur le permis de conduire.
-                    </div>
-                  )}
-                </div>
-
-                {/* Line 1 */}
-                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
-
-                {/* Question 2 with arrow */}
-                <div style={{ width: '100%' }}>
-                  <div
-                    onClick={() => setOpenFaqIndex(openFaqIndex === 1 ? null : 1)}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      cursor: 'pointer',
-                      gap: '10px'
-                    }}
-                  >
-                    <div
-                      style={{
-                        flex: 1,
-                        color: '#060606',
-                        textAlign: 'left',
-                        fontFamily: 'Poppins',
-                        fontSize: '15px',
-                        fontStyle: 'normal',
-                        fontWeight: 400,
-                        lineHeight: '35px',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis'
-                      }}
-                    >
-                      Puis-je faire plusieurs stages de récupération de points dans la même année
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === 1 ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
-                      <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  {openFaqIndex === 1 && (
-                    <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
-                      Réponse à la question - Texte placeholder pour la réponse concernant la possibilité de faire plusieurs stages.
-                    </div>
-                  )}
-                </div>
-
-                {/* Line 2 */}
-                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
-
-                {/* Question 3 with arrow */}
-                <div style={{ width: '100%' }}>
-                  <div
-                    onClick={() => setOpenFaqIndex(openFaqIndex === 2 ? null : 2)}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      cursor: 'pointer',
-                      gap: '10px'
-                    }}
-                  >
-                    <div
-                      style={{
-                        flex: 1,
-                        color: '#060606',
-                        textAlign: 'left',
-                        fontFamily: 'Poppins',
-                        fontSize: '15px',
-                        fontStyle: 'normal',
-                        fontWeight: 400,
-                        lineHeight: '35px',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis'
-                      }}
-                    >
-                      Comment sont notifiées les infractions au code de la route
-                    </div>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === 2 ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
-                      <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  {openFaqIndex === 2 && (
-                    <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
-                      Réponse à la question - Texte placeholder pour la réponse concernant les notifications d'infractions.
-                    </div>
-                  )}
-                </div>
-
-                {/* Show more link */}
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                    color: '#000',
-                    textAlign: 'center',
-                    fontFamily: 'Poppins',
-                    fontSize: '15px',
-                    fontStyle: 'normal',
-                    fontWeight: 500,
-                    lineHeight: 'normal',
-                    letterSpacing: '1.05px',
-                    textDecoration: 'underline',
-                    cursor: 'pointer',
-                    marginTop: '30px'
-                  }}
-                >
-                  Afficher plus de questions
-                </div>
-              </div>
-            </div>
-
             {/* Separator Line and Payment Section - Only shown when currentStep === 2 */}
             {currentStep === 2 && (
               <>
@@ -3697,6 +3284,419 @@ export default function InscriptionPage() {
             </div>
               </>
             )}
+
+            {/* Informations pratiques section - always visible */}
+            <div>
+              {/* Spacing and separator line */}
+              <div style={{ marginTop: '40px' }}>
+                <div
+                  style={{
+                    width: '680px',
+                    height: '1px',
+                    background: '#DEDDDD'
+                  }}
+                />
+              </div>
+
+              {/* Informations pratiques section */}
+              <div style={{ marginTop: '40px' }}>
+                {/* Title */}
+                <h2
+                  style={{
+                    color: '#000',
+                    fontFamily: 'Poppins',
+                    fontSize: '20px',
+                    fontStyle: 'normal',
+                    fontWeight: 500,
+                    lineHeight: '25px',
+                    marginBottom: '10px'
+                  }}
+                >
+                  Informations pratiques sur votre stage
+                </h2>
+
+                {/* Tab widget */}
+                <div
+                  style={{
+                    display: 'flex',
+                    width: '638px',
+                    height: '43px',
+                    padding: '2px 5px',
+                    alignItems: 'center',
+                    gap: '11px',
+                    borderRadius: '10px',
+                    border: '1px solid #C5C5C5',
+                    background: '#DEDDDD'
+                  }}
+                >
+                  {/* Tab 1: Le prix du stage comprend */}
+                  <button
+                    onClick={() => setActiveTab('prix')}
+                    style={{
+                      flex: 1,
+                      height: '39px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderRadius: '8px',
+                      background: activeTab === 'prix' ? '#FFFFFF' : 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: '#000',
+                      textAlign: 'center',
+                      fontFamily: 'Poppins',
+                      fontSize: '14px',
+                      fontStyle: 'normal',
+                      fontWeight: 500,
+                      lineHeight: 'normal',
+                      letterSpacing: '0.98px',
+                      transition: 'background 0.2s',
+                      whiteSpace: 'nowrap',
+                      padding: '0 15px',
+                      marginLeft: '-5px'
+                    }}
+                  >
+                    Le prix du stage comprend
+                  </button>
+
+                  {/* Tab 2: Programme */}
+                  <button
+                    onClick={() => setActiveTab('programme')}
+                    style={{
+                      flex: 1,
+                      height: '39px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderRadius: '8px',
+                      background: activeTab === 'programme' ? '#FFFFFF' : 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: '#000',
+                      textAlign: 'center',
+                      fontFamily: 'Poppins',
+                      fontSize: '14px',
+                      fontStyle: 'normal',
+                      fontWeight: 500,
+                      lineHeight: 'normal',
+                      letterSpacing: '0.98px',
+                      transition: 'background 0.2s',
+                      whiteSpace: 'nowrap',
+                      padding: '0 15px'
+                    }}
+                  >
+                    Programme
+                  </button>
+
+                  {/* Tab 3: Agrément */}
+                  <button
+                    onClick={() => setActiveTab('agrement')}
+                    style={{
+                      flex: 1,
+                      height: '39px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      borderRadius: '8px',
+                      background: activeTab === 'agrement' ? '#FFFFFF' : 'transparent',
+                      border: 'none',
+                      cursor: 'pointer',
+                      color: '#000',
+                      textAlign: 'center',
+                      fontFamily: 'Poppins',
+                      fontSize: '14px',
+                      fontStyle: 'normal',
+                      fontWeight: 500,
+                      lineHeight: 'normal',
+                      letterSpacing: '0.98px',
+                      transition: 'background 0.2s',
+                      whiteSpace: 'nowrap',
+                      padding: '0 15px',
+                      marginRight: '-5px'
+                    }}
+                  >
+                    Agrément
+                  </button>
+                </div>
+
+                {/* Tab Content Box */}
+                <div
+                  style={{
+                    display: 'flex',
+                    width: '638px',
+                    height: '177px',
+                    padding: '11px 24px 8px 24px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: '20px',
+                    border: '1px solid #B2B2B2',
+                    background: '#FFF',
+                    marginTop: '5px'
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: '590px',
+                      height: '158px',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      color: '#000',
+                      fontFamily: 'Poppins',
+                      fontSize: '14px',
+                      fontStyle: 'normal',
+                      fontWeight: 400,
+                      lineHeight: '25px',
+                      letterSpacing: '0.98px'
+                    }}
+                  >
+                    {activeTab === 'prix' && (
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                        <li>• 14 heures de formation</li>
+                        <li>• L'attestation de stage remise le deuxième jour</li>
+                        <li>• La récupération automatique de 4 points</li>
+                        <li>• Le traitement de votre dossier administratif en préfecture</li>
+                        <li>• En cas d'empêchement, le transfert sur un autre stage de notre réseau</li>
+                      </ul>
+                    )}
+                    {activeTab === 'programme' && (
+                      <div>
+                        <p>Programme détaillé du stage de récupération de points</p>
+                      </div>
+                    )}
+                    {activeTab === 'agrement' && (
+                      <div>
+                        <p>Informations sur l'agrément préfectoral</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Questions fréquentes */}
+            <div style={{ marginTop: '40px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  width: '692px',
+                  minHeight: '402px',
+                  padding: '30px 20px',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '0',
+                  background: '#F6F6F6'
+                }}
+              >
+                {/* Title: Questions Fréquentes - on one line */}
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                  {/* Questions */}
+                  <span
+                    style={{
+                      color: 'rgba(6, 6, 6, 0.86)',
+                      textAlign: 'center',
+                      WebkitTextStrokeWidth: '1px',
+                      WebkitTextStrokeColor: '#000',
+                      fontFamily: 'Poppins',
+                      fontSize: '20px',
+                      fontStyle: 'normal',
+                      fontWeight: 250,
+                      lineHeight: '35px'
+                    }}
+                  >
+                    Questions
+                  </span>
+
+                  {/* Fréquentes */}
+                  <span
+                    style={{
+                      color: 'rgba(6, 6, 6, 0.86)',
+                      textAlign: 'center',
+                      WebkitTextStrokeWidth: '1px',
+                      WebkitTextStrokeColor: 'rgba(188, 71, 71, 0.73)',
+                      fontFamily: 'Poppins',
+                      fontSize: '20px',
+                      fontStyle: 'normal',
+                      fontWeight: 275,
+                      lineHeight: '35px'
+                    }}
+                  >
+                    Fréquentes
+                  </span>
+                </div>
+
+                {/* Subtitle */}
+                <div
+                  style={{
+                    color: '#000',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 400,
+                    lineHeight: '20px',
+                    marginTop: '15px',
+                    marginBottom: '25px',
+                    width: '100%'
+                  }}
+                >
+                  Réponses aux questions que se posent le plus souvent les conducteurs
+                </div>
+
+                {/* Question 1 with arrow */}
+                <div style={{ width: '100%' }}>
+                  <div
+                    onClick={() => setOpenFaqIndex(openFaqIndex === 0 ? null : 0)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      gap: '10px'
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: 1,
+                        color: '#060606',
+                        textAlign: 'left',
+                        fontFamily: 'Poppins',
+                        fontSize: '15px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '35px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                    >
+                      A quel moment mes 4 points sont il crédités sur mon permis après un stage
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === 0 ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                      <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  {openFaqIndex === 0 && (
+                    <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
+                      Réponse à la question - Texte placeholder pour la réponse détaillée concernant le crédit des points sur le permis de conduire.
+                    </div>
+                  )}
+                </div>
+
+                {/* Line 1 */}
+                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
+
+                {/* Question 2 with arrow */}
+                <div style={{ width: '100%' }}>
+                  <div
+                    onClick={() => setOpenFaqIndex(openFaqIndex === 1 ? null : 1)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      gap: '10px'
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: 1,
+                        color: '#060606',
+                        textAlign: 'left',
+                        fontFamily: 'Poppins',
+                        fontSize: '15px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '35px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                    >
+                      Puis-je faire plusieurs stages de récupération de points dans la même année
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === 1 ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                      <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  {openFaqIndex === 1 && (
+                    <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
+                      Réponse à la question - Texte placeholder pour la réponse concernant la possibilité de faire plusieurs stages.
+                    </div>
+                  )}
+                </div>
+
+                {/* Line 2 */}
+                <div style={{ width: '100%', height: '1px', background: '#D0D0D0', marginTop: '15px', marginBottom: '15px' }} />
+
+                {/* Question 3 with arrow */}
+                <div style={{ width: '100%' }}>
+                  <div
+                    onClick={() => setOpenFaqIndex(openFaqIndex === 2 ? null : 2)}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      gap: '10px'
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: 1,
+                        color: '#060606',
+                        textAlign: 'left',
+                        fontFamily: 'Poppins',
+                        fontSize: '15px',
+                        fontStyle: 'normal',
+                        fontWeight: 400,
+                        lineHeight: '35px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                    >
+                      Comment sont notifiées les infractions au code de la route
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ width: '25px', height: '25px', flexShrink: 0, transform: openFaqIndex === 2 ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+                      <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  {openFaqIndex === 2 && (
+                    <div style={{ padding: '15px 0', color: '#666', fontSize: '14px', lineHeight: '22px', textAlign: 'left' }}>
+                      Réponse à la question - Texte placeholder pour la réponse concernant les notifications d'infractions.
+                    </div>
+                  )}
+                </div>
+
+                {/* Show more link */}
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                    color: '#000',
+                    textAlign: 'center',
+                    fontFamily: 'Poppins',
+                    fontSize: '15px',
+                    fontStyle: 'normal',
+                    fontWeight: 500,
+                    lineHeight: 'normal',
+                    letterSpacing: '1.05px',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    marginTop: '30px'
+                  }}
+                >
+                  Afficher plus de questions
+                </div>
+              </div>
+            </div>
           </div>
           {/* End Left Column */}
 
