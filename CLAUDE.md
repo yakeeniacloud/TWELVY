@@ -462,6 +462,67 @@ CREATE TABLE stage_bookings (
 
 **Result**: All major sections have consistent, balanced spacing with perfectly centered grey separator lines
 
+#### Desktop Form Page Visibility (February 2025)
+
+**File**: `app/stages-recuperation-points/[slug]/[id]/inscription/page.tsx`
+
+**Purpose**: Fix initial page load visibility for desktop inscription form - "Informations pratiques" and FAQ sections should be visible immediately, not hidden until payment step
+
+**Problem (Before Fix)**:
+- When landing on desktop form page, only the form was visible
+- "Informations pratiques sur votre stage" section was hidden
+- "Questions fréquentes" FAQ section was hidden
+- Both sections were incorrectly wrapped inside `{currentStep === 2 && (` conditional
+- Users could only see these sections after submitting the form
+
+**Solution (After Fix)**:
+- Moved "Informations pratiques" section outside `currentStep === 2` conditional
+- Moved "Questions fréquentes" section outside `currentStep === 2` conditional
+- Both sections now appear immediately when user lands on the page (Step 1)
+- Sections remain visible after form submission (Step 2)
+- Only the payment section (credit card form) is hidden until form submission
+
+**Code Structure**:
+```typescript
+// Step 1 vs Step 2 ternary (form vs summary)
+{currentStep === 1 ? (
+  <form>...</form>
+) : (
+  <div>Vos coordonnées summary + Modifier button</div>
+)}
+
+// Informations pratiques - ALWAYS VISIBLE
+<div>
+  <h2>Informations pratiques sur votre stage</h2>
+  <div>Tabs: Le prix du stage comprend | Programme | Agrément</div>
+</div>
+
+// Questions fréquentes - ALWAYS VISIBLE
+<div>
+  <h2>Questions Fréquentes</h2>
+  <div>FAQ accordion with 3 questions</div>
+</div>
+
+// Payment section - ONLY VISIBLE when currentStep === 2
+{currentStep === 2 && (
+  <>
+    <div>Separator line</div>
+    <div>Étape 2/2 - paiement sécurisé</div>
+    <form>Credit card fields...</form>
+  </>
+)}
+```
+
+**Visibility Logic**:
+| Section | currentStep === 1 (Initial) | currentStep === 2 (After submit) |
+|---------|----------------------------|----------------------------------|
+| Form | ✅ Visible | ❌ Hidden (shows summary instead) |
+| Informations pratiques | ✅ Visible | ✅ Visible |
+| Questions fréquentes | ✅ Visible | ✅ Visible |
+| Payment section | ❌ Hidden | ✅ Visible |
+
+**Result**: Users now see helpful information about the stage and FAQs while filling out the form, improving UX and reducing confusion
+
 ---
 
 ### 6. Booking Confirmation Page
