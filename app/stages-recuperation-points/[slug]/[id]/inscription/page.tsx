@@ -2696,24 +2696,19 @@ export default function InscriptionPage() {
                           marginBottom: '10px'
                         }}
                       >
-                        La Garantie Sérénité vous permet de bénéficier des avantages suivants :
+                        <strong>Avec Garantie Sérénité :</strong> en cas de force majeure (maladie, hospitalisation ou décès d&apos;un proche) sur présentation de justificatifs, recevez un avoir égal au montant du stage initialement réglé pour réserver une nouvelle date (pas de remboursement possible)
                       </p>
-                      <ul
+                      <p
                         style={{
                           color: '#333',
                           fontFamily: 'Poppins',
                           fontSize: '13px',
                           fontWeight: 400,
-                          lineHeight: '22px',
-                          paddingLeft: '20px',
-                          listStyleType: 'disc'
+                          lineHeight: '20px'
                         }}
                       >
-                        <li>Annulation sans frais jusqu&apos;à 24h avant le stage</li>
-                        <li>Report gratuit et illimité de votre stage</li>
-                        <li>Remboursement intégral en cas d&apos;empêchement justifié</li>
-                        <li>Assistance téléphonique prioritaire</li>
-                      </ul>
+                        <strong>Sans Garantie Sérénité :</strong> aucun report ni remboursement, même en cas de force majeure, après le délai de rétractation de 14 jours (qui prend fin, selon votre date d&apos;inscription, au plus tard à 18h00 la veille du stage)
+                      </p>
                     </div>
                   )}
                 </div>
@@ -2752,7 +2747,7 @@ export default function InscriptionPage() {
               <div style={{ marginLeft: '110px' }}>
                 {/* Annuler link - only shown when editing after first submission */}
                 {hasFormBeenSubmittedOnce && (
-                  <div style={{ marginBottom: '12px' }}>
+                  <div style={{ marginBottom: '12px', width: '432px', textAlign: 'center' }}>
                     <button
                       type="button"
                       onClick={() => {
@@ -2801,7 +2796,7 @@ export default function InscriptionPage() {
                     cursor: 'pointer'
                   }}
                 >
-                  {hasFormBeenSubmittedOnce ? 'Validez le formulaire et repassez au paiement' : 'Valider le formulaire et passer au paiement'}
+                  {hasFormBeenSubmittedOnce ? 'Valider le formulaire et repasser au paiement' : 'Valider le formulaire et passer au paiement'}
                 </button>
               </div>
             </form>
