@@ -88,6 +88,8 @@ export default function InscriptionPage() {
 
   // Desktop stepper state
   const [currentStep, setCurrentStep] = useState(1)
+  const [hasFormBeenSubmittedOnce, setHasFormBeenSubmittedOnce] = useState(false)
+  const [isDesktopFormEditing, setIsDesktopFormEditing] = useState(false)
 
   // Garantie Sérénité accordion state
   const [isGarantieDetailOpen, setIsGarantieDetailOpen] = useState(false)
@@ -2746,13 +2748,40 @@ export default function InscriptionPage() {
                 )}
               </div>
 
-              {/* Submit Button */}
+              {/* Submit Button - with optional Annuler link when editing */}
               <div style={{ marginLeft: '110px' }}>
+                {/* Annuler link - only shown when editing after first submission */}
+                {hasFormBeenSubmittedOnce && (
+                  <div style={{ marginBottom: '12px' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCurrentStep(2)
+                        setIsDesktopFormEditing(false)
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#000',
+                        fontFamily: 'Poppins',
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                        padding: 0
+                      }}
+                    >
+                      Annuler
+                    </button>
+                  </div>
+                )}
                 <button
                   type="button"
                   onClick={() => {
                     if (validateForm()) {
                       setCurrentStep(2)
+                      setHasFormBeenSubmittedOnce(true)
+                      setIsDesktopFormEditing(false)
                       // Scroll to payment section
                       document.getElementById('payment-section')?.scrollIntoView({ behavior: 'smooth' })
                     }
@@ -2772,21 +2801,14 @@ export default function InscriptionPage() {
                     cursor: 'pointer'
                   }}
                 >
-                  Valider le formulaire et passer au paiement
+                  {hasFormBeenSubmittedOnce ? 'Validez le formulaire et repassez au paiement' : 'Valider le formulaire et passer au paiement'}
                 </button>
               </div>
             </form>
               </>
             ) : (
               /* Summary section when form is validated (currentStep === 2) - matches mobile design */
-              <div
-                style={{
-                  padding: '20px',
-                  background: '#F5F5F5',
-                  borderRadius: '10px',
-                  marginBottom: '28px'
-                }}
-              >
+              <div style={{ marginBottom: '28px' }}>
                 {/* Title with green tick */}
                 <div className="flex items-center gap-2" style={{ marginBottom: '16px' }}>
                   <h2
@@ -2822,7 +2844,10 @@ export default function InscriptionPage() {
                 <div style={{ marginTop: '20px' }}>
                   <button
                     type="button"
-                    onClick={() => setCurrentStep(1)}
+                    onClick={() => {
+                      setCurrentStep(1)
+                      setIsDesktopFormEditing(true)
+                    }}
                     style={{
                       display: 'flex',
                       width: '196px',
@@ -2845,8 +2870,8 @@ export default function InscriptionPage() {
               </div>
             )}
 
-            {/* Separator Line and Payment Section - Only shown when currentStep === 2 */}
-            {currentStep === 2 && (
+            {/* Separator Line and Payment Section - Shown once form has been submitted at least once */}
+            {hasFormBeenSubmittedOnce && (
               <>
                 <div style={{ marginTop: '60px', marginBottom: '60px' }}>
                   <div style={{ width: '672px', height: '1px', background: '#D9D9D9' }} />
@@ -3204,6 +3229,7 @@ export default function InscriptionPage() {
                 {/* Payment Button */}
                 <button
                   type="submit"
+                  disabled={isDesktopFormEditing}
                   style={{
                     display: 'flex',
                     width: '203px',
@@ -3214,9 +3240,9 @@ export default function InscriptionPage() {
                     gap: '5px',
                     flexShrink: 0,
                     borderRadius: '30px',
-                    background: '#41A334',
+                    background: isDesktopFormEditing ? '#9CA3AF' : '#41A334',
                     border: 'none',
-                    cursor: 'pointer',
+                    cursor: isDesktopFormEditing ? 'not-allowed' : 'pointer',
                     marginTop: '20px',
                     marginLeft: '64px'
                   }}
