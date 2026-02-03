@@ -4176,7 +4176,7 @@ export default function InscriptionPage() {
                           </svg>
                         </div>
                         <div className="flex flex-col justify-center gap-0">
-                          <p className="flex-shrink-0 text-[rgba(0,0,0,0.98)] text-[15px] font-normal leading-[15px]" style={{ fontFamily: 'Poppins' }}>{stageItem.site.ville}</p>
+                          <p className="flex-shrink-0 text-[rgba(0,0,0,0.98)] text-[15px] font-normal leading-[15px]" style={{ fontFamily: 'Poppins' }}>{stageItem.site.ville.charAt(0).toUpperCase() + stageItem.site.ville.slice(1).toLowerCase()}</p>
                           <p className="flex-shrink-0 text-[rgba(6,6,6,0.56)] text-[12px] font-normal leading-[12px] mt-3" style={{ fontFamily: 'Poppins' }}>{removeStreetNumber(stageItem.site.adresse)}</p>
                         </div>
                       </div>
