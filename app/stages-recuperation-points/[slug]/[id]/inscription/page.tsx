@@ -220,25 +220,25 @@ export default function InscriptionPage() {
 
     // Validate nom
     if (!nom.trim()) {
-      newErrors.nom = 'Veuillez entrer votre nom'
+      newErrors.nom = 'Veuillez renseigner un nom de famille valide'
       if (!firstErrorId) firstErrorId = 'desktop-nom'
     }
 
     // Validate prénom
     if (!prenom.trim()) {
-      newErrors.prenom = 'Veuillez entrer votre prénom'
+      newErrors.prenom = 'Veuillez renseigner un prénom valide'
       if (!firstErrorId) firstErrorId = 'desktop-prenom'
     }
 
     // Validate email
     if (!email.trim()) {
-      newErrors.email = 'Veuillez entrer votre email'
+      newErrors.email = 'Veuillez entrer une adresse email valide'
       if (!firstErrorId) firstErrorId = 'desktop-email'
     }
 
     // Validate telephone
     if (!telephone.trim()) {
-      newErrors.telephone = 'Veuillez entrer un numéro de téléphone'
+      newErrors.telephone = 'Veuillez entrer un numéro de téléphone mobile valide'
       if (!firstErrorId) firstErrorId = 'desktop-telephone'
     }
 
@@ -2778,14 +2778,19 @@ export default function InscriptionPage() {
             </form>
               </>
             ) : (
-              /* Summary section when form is validated (currentStep === 2) */
-              <div style={{ marginBottom: '28px' }}>
-                <div className="flex items-center justify-between" style={{ marginBottom: '20px' }}>
+              /* Summary section when form is validated (currentStep === 2) - matches mobile design */
+              <div
+                style={{
+                  padding: '20px',
+                  background: '#F5F5F5',
+                  borderRadius: '10px',
+                  marginBottom: '28px'
+                }}
+              >
+                {/* Title with green tick */}
+                <div className="flex items-center gap-2" style={{ marginBottom: '16px' }}>
                   <h2
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
                       color: '#000',
                       fontFamily: 'Poppins',
                       fontSize: '18px',
@@ -2793,66 +2798,49 @@ export default function InscriptionPage() {
                       lineHeight: '25px'
                     }}
                   >
-                    Vos coordonnées
+                    Étape 1/2 : coordonnées personnelles renseignées
                   </h2>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className="flex-shrink-0">
+                    <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="#41A334" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+
+                {/* Info displayed like mobile */}
+                <div
+                  style={{
+                    fontFamily: 'Poppins',
+                    fontSize: '16px',
+                    color: '#374151'
+                  }}
+                >
+                  <p style={{ marginBottom: '4px' }}>{prenom} {nom}</p>
+                  <p style={{ marginBottom: '4px' }}>Mail: {email}</p>
+                  <p>Tel: {telephone}</p>
+                </div>
+
+                {/* Modifier button at bottom left */}
+                <div style={{ marginTop: '20px' }}>
                   <button
                     type="button"
                     onClick={() => setCurrentStep(1)}
                     style={{
                       display: 'flex',
+                      width: '196px',
+                      height: '34px',
+                      padding: '10px',
+                      justifyContent: 'center',
                       alignItems: 'center',
-                      gap: '6px',
-                      padding: '8px 16px',
-                      borderRadius: '20px',
-                      border: '1px solid #000',
-                      background: '#fff',
-                      cursor: 'pointer',
+                      gap: '10px',
+                      borderRadius: '12px',
+                      background: '#E1E1E1',
                       fontFamily: 'Poppins',
-                      fontSize: '14px',
-                      fontWeight: 500
+                      fontSize: '16px',
+                      cursor: 'pointer',
+                      border: 'none'
                     }}
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M11.334 2.00001C11.5091 1.82491 11.7169 1.68602 11.9457 1.59126C12.1745 1.4965 12.4197 1.44775 12.6673 1.44775C12.915 1.44775 13.1601 1.4965 13.389 1.59126C13.6178 1.68602 13.8256 1.82491 14.0007 2.00001C14.1758 2.17511 14.3147 2.38291 14.4094 2.61175C14.5042 2.84058 14.5529 3.08576 14.5529 3.33335C14.5529 3.58094 14.5042 3.82612 14.4094 4.05495C14.3147 4.28378 14.1758 4.49159 14.0007 4.66668L5.00065 13.6667L1.33398 14.6667L2.33398 11L11.334 2.00001Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
                     Modifier
                   </button>
-                </div>
-
-                {/* Summary Grid */}
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '150px 1fr',
-                    gap: '12px 20px',
-                    padding: '20px',
-                    background: '#F9F9F9',
-                    borderRadius: '10px',
-                    fontFamily: 'Poppins',
-                    fontSize: '14px'
-                  }}
-                >
-                  <span style={{ color: '#666' }}>Civilité</span>
-                  <span style={{ color: '#000', fontWeight: 500 }}>{civilite}</span>
-
-                  <span style={{ color: '#666' }}>Nom</span>
-                  <span style={{ color: '#000', fontWeight: 500 }}>{nom}</span>
-
-                  <span style={{ color: '#666' }}>Prénom</span>
-                  <span style={{ color: '#000', fontWeight: 500 }}>{prenom}</span>
-
-                  <span style={{ color: '#666' }}>Email</span>
-                  <span style={{ color: '#000', fontWeight: 500 }}>{email}</span>
-
-                  <span style={{ color: '#666' }}>Téléphone</span>
-                  <span style={{ color: '#000', fontWeight: 500 }}>{telephone}</span>
-
-                  {garantieSerenite && (
-                    <>
-                      <span style={{ color: '#666' }}>Garantie Sérénité</span>
-                      <span style={{ color: '#41A334', fontWeight: 500 }}>Oui (+57€)</span>
-                    </>
-                  )}
                 </div>
               </div>
             )}
