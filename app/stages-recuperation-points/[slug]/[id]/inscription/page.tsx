@@ -3693,7 +3693,8 @@ export default function InscriptionPage() {
                 >
                   Après avoir cliqué sur "Payer", votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédtiatement par email votre convocation au stage.
                 </div>
-
+              </div>
+            </div>
               </>
             )}
           </div>
