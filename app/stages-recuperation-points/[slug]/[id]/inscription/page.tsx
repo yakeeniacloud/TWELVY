@@ -1325,7 +1325,7 @@ export default function InscriptionPage() {
             <div key={index} className="mb-2">
               <div
                 onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                className="flex justify-between items-center cursor-pointer py-1.5"
+                className="flex justify-between items-start cursor-pointer py-1.5"
               >
                 <p className="flex-1" style={{ fontSize: '13px' }}>A quel moment mes 4 points sont il crédités sur mon permis après un stage</p>
                 <svg
@@ -3750,7 +3750,7 @@ export default function InscriptionPage() {
                       width: '100%',
                       display: 'flex',
                       justifyContent: 'space-between',
-                      alignItems: 'center',
+                      alignItems: 'flex-start',
                       cursor: 'pointer',
                       gap: '10px'
                     }}
@@ -3794,7 +3794,7 @@ export default function InscriptionPage() {
                       width: '100%',
                       display: 'flex',
                       justifyContent: 'space-between',
-                      alignItems: 'center',
+                      alignItems: 'flex-start',
                       cursor: 'pointer',
                       gap: '10px'
                     }}
@@ -3838,7 +3838,7 @@ export default function InscriptionPage() {
                       width: '100%',
                       display: 'flex',
                       justifyContent: 'space-between',
-                      alignItems: 'center',
+                      alignItems: 'flex-start',
                       cursor: 'pointer',
                       gap: '10px'
                     }}
