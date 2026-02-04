@@ -85,6 +85,7 @@ export default function InscriptionPage() {
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
   const [isPayerButtonDisabled, setIsPayerButtonDisabled] = useState(false)
   const [showPhoneTooltip, setShowPhoneTooltip] = useState(false)
+  const [isMobileGarantieDetailOpen, setIsMobileGarantieDetailOpen] = useState(false)
 
   // Desktop stepper state
   const [currentStep, setCurrentStep] = useState(1)
@@ -396,26 +397,45 @@ export default function InscriptionPage() {
 
   // Mobile functions
   const handleValidateForm = () => {
-    // Check if all required fields are filled
-    if (!civilite || !nom || !prenom || !email || !telephone || !cgvAccepted) {
-      // Find the first missing field and scroll to it (no popup)
-      let firstMissingFieldId: string | null = null
-      if (!civilite) firstMissingFieldId = 'mobile-civilite'
-      else if (!nom) firstMissingFieldId = 'mobile-nom'
-      else if (!prenom) firstMissingFieldId = 'mobile-prenom'
-      else if (!email) firstMissingFieldId = 'mobile-email'
-      else if (!telephone) firstMissingFieldId = 'mobile-telephone'
-      else if (!cgvAccepted) firstMissingFieldId = 'mobile-cgv'
+    // Validate all fields and set error messages
+    const newErrors: typeof errors = {}
+    let firstMissingFieldId: string | null = null
 
-      // Scroll to the first missing field (without focusing/selecting it)
+    if (!civilite) {
+      newErrors.civilite = 'Veuillez sélectionner une civilité'
+      if (!firstMissingFieldId) firstMissingFieldId = 'mobile-civilite'
+    }
+    if (!nom.trim()) {
+      newErrors.nom = 'Veuillez renseigner un nom de famille valide'
+      if (!firstMissingFieldId) firstMissingFieldId = 'mobile-nom'
+    }
+    if (!prenom.trim()) {
+      newErrors.prenom = 'Veuillez renseigner un prénom valide'
+      if (!firstMissingFieldId) firstMissingFieldId = 'mobile-prenom'
+    }
+    if (!email.trim()) {
+      newErrors.email = 'Veuillez entrer une adresse email valide'
+      if (!firstMissingFieldId) firstMissingFieldId = 'mobile-email'
+    }
+    if (!telephone.trim()) {
+      newErrors.telephone = 'Veuillez entrer un numéro de téléphone mobile valide'
+      if (!firstMissingFieldId) firstMissingFieldId = 'mobile-telephone'
+    }
+    if (!cgvAccepted) {
+      newErrors.cgv = 'Veuillez accepter les conditions générales de vente'
+      if (!firstMissingFieldId) firstMissingFieldId = 'mobile-cgv'
+    }
+
+    setErrors(newErrors)
+
+    // If there are errors, scroll to the first one
+    if (Object.keys(newErrors).length > 0) {
       if (firstMissingFieldId) {
         const element = document.getElementById(firstMissingFieldId)
         if (element) {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }
       }
-
-      // Keep payment block CLOSED
       return
     }
 
@@ -645,26 +665,100 @@ export default function InscriptionPage() {
               <div className="space-y-3">
                 <div>
                   <label className="block mb-1" style={{ fontSize: '14px' }}>Civilité *</label>
-                  <select id="mobile-civilite" value={civilite} onChange={(e) => setCivilite(e.target.value)} className="w-full border border-black rounded-lg px-2 py-1.5 bg-white" style={{ fontSize: '12px' }}>
+                  <select
+                    id="mobile-civilite"
+                    value={civilite}
+                    onChange={(e) => {
+                      setCivilite(e.target.value)
+                      if (errors.civilite) setErrors(prev => ({ ...prev, civilite: undefined }))
+                    }}
+                    className="w-full rounded-lg px-2 py-1.5 bg-white"
+                    style={{
+                      fontSize: '12px',
+                      border: errors.civilite ? '2px solid #DC2626' : '1px solid #000'
+                    }}
+                  >
                     <option value="">Sélectionner</option>
                     <option value="Monsieur">Monsieur</option>
                     <option value="Madame">Madame</option>
                   </select>
+                  {errors.civilite && (
+                    <p style={{ color: '#DC2626', fontSize: '12px', marginTop: '4px', fontFamily: 'Poppins' }}>
+                      {errors.civilite}
+                    </p>
+                  )}
                 </div>
 
                 <div>
                   <label className="block mb-1" style={{ fontSize: '14px' }}>Nom *</label>
-                  <input id="mobile-nom" type="text" value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Nom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                  <input
+                    id="mobile-nom"
+                    type="text"
+                    value={nom}
+                    onChange={(e) => {
+                      setNom(e.target.value)
+                      if (errors.nom) setErrors(prev => ({ ...prev, nom: undefined }))
+                    }}
+                    placeholder="Nom"
+                    className="w-full rounded-lg px-2 py-1.5"
+                    style={{
+                      fontSize: '12px',
+                      border: errors.nom ? '2px solid #DC2626' : '1px solid #000'
+                    }}
+                  />
+                  {errors.nom && (
+                    <p style={{ color: '#DC2626', fontSize: '12px', marginTop: '4px', fontFamily: 'Poppins' }}>
+                      {errors.nom}
+                    </p>
+                  )}
                 </div>
 
                 <div>
                   <label className="block mb-1" style={{ fontSize: '14px' }}>Prénom *</label>
-                  <input id="mobile-prenom" type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} placeholder="Prénom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                  <input
+                    id="mobile-prenom"
+                    type="text"
+                    value={prenom}
+                    onChange={(e) => {
+                      setPrenom(e.target.value)
+                      if (errors.prenom) setErrors(prev => ({ ...prev, prenom: undefined }))
+                    }}
+                    placeholder="Prénom"
+                    className="w-full rounded-lg px-2 py-1.5"
+                    style={{
+                      fontSize: '12px',
+                      border: errors.prenom ? '2px solid #DC2626' : '1px solid #000'
+                    }}
+                  />
+                  {errors.prenom && (
+                    <p style={{ color: '#DC2626', fontSize: '12px', marginTop: '4px', fontFamily: 'Poppins' }}>
+                      {errors.prenom}
+                    </p>
+                  )}
                 </div>
 
                 <div>
                   <label className="block mb-1" style={{ fontSize: '14px' }}>Email *</label>
-                  <input id="mobile-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                  <input
+                    id="mobile-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value)
+                      if (errors.email) setErrors(prev => ({ ...prev, email: undefined }))
+                    }}
+                    placeholder="Email"
+                    className="w-full rounded-lg px-2 py-1.5"
+                    style={{
+                      fontSize: '12px',
+                      border: errors.email ? '2px solid #DC2626' : '1px solid #000'
+                    }}
+                  />
+                  {errors.email && (
+                    <p style={{ color: '#DC2626', fontSize: '12px', marginTop: '4px', fontFamily: 'Poppins' }}>
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -729,7 +823,26 @@ export default function InscriptionPage() {
                     </div>
                   </div>
 
-                  <input id="mobile-telephone" type="tel" value={telephone} onChange={(e) => setTelephone(e.target.value)} placeholder="Téléphone" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                  <input
+                    id="mobile-telephone"
+                    type="tel"
+                    value={telephone}
+                    onChange={(e) => {
+                      setTelephone(e.target.value)
+                      if (errors.telephone) setErrors(prev => ({ ...prev, telephone: undefined }))
+                    }}
+                    placeholder="Téléphone"
+                    className="w-full rounded-lg px-2 py-1.5"
+                    style={{
+                      fontSize: '12px',
+                      border: errors.telephone ? '2px solid #DC2626' : '1px solid #000'
+                    }}
+                  />
+                  {errors.telephone && (
+                    <p style={{ color: '#DC2626', fontSize: '12px', marginTop: '4px', fontFamily: 'Poppins' }}>
+                      {errors.telephone}
+                    </p>
+                  )}
                 </div>
 
                 {/* Garantie Sérénité */}
@@ -751,12 +864,65 @@ export default function InscriptionPage() {
                     <input type="checkbox" checked={garantieSerenite} onChange={(e) => setGarantieSerenite(e.target.checked)} className="mt-0.5" />
                     <span style={{ fontSize: '13px' }}>Je souscris à la Garantie Sérénité: +57€ TTC (supplement facturé en plus du stage)</span>
                   </label>
-                  <div className="flex items-center justify-center gap-2 cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="22" viewBox="0 0 25 22" fill="none" style={{ width: '25px', height: '25px' }}>
+                  <div
+                    className="flex items-center justify-center gap-2 cursor-pointer"
+                    onClick={() => setIsMobileGarantieDetailOpen(!isMobileGarantieDetailOpen)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="25"
+                      height="22"
+                      viewBox="0 0 25 22"
+                      fill="none"
+                      style={{
+                        width: '25px',
+                        height: '25px',
+                        transform: isMobileGarantieDetailOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                        transition: 'transform 0.2s'
+                      }}
+                    >
                       <path d="M6.25 9.375L12.5 15.625L18.75 9.375" stroke="#1E1E1E" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    <div className="font-medium" style={{ fontSize: '13px' }}>Voir le détail de la garantie</div>
+                    <div className="font-medium" style={{ fontSize: '13px' }}>
+                      {isMobileGarantieDetailOpen ? 'Masquer le détail' : 'Voir le détail de la garantie'}
+                    </div>
                   </div>
+
+                  {/* Accordion content */}
+                  {isMobileGarantieDetailOpen && (
+                    <div
+                      style={{
+                        marginTop: '10px',
+                        padding: '12px',
+                        background: '#fff',
+                        borderRadius: '8px'
+                      }}
+                    >
+                      <p
+                        style={{
+                          color: '#333',
+                          fontFamily: 'Poppins',
+                          fontSize: '12px',
+                          fontWeight: 400,
+                          lineHeight: '18px',
+                          marginBottom: '10px'
+                        }}
+                      >
+                        <strong>Avec Garantie Sérénité :</strong> en cas de force majeure (maladie, hospitalisation ou décès d&apos;un proche) sur présentation de justificatifs, recevez un avoir égal au montant du stage initialement réglé pour réserver une nouvelle date (pas de remboursement possible)
+                      </p>
+                      <p
+                        style={{
+                          color: '#333',
+                          fontFamily: 'Poppins',
+                          fontSize: '12px',
+                          fontWeight: 400,
+                          lineHeight: '18px'
+                        }}
+                      >
+                        <strong>Sans Garantie Sérénité :</strong> aucun report ni remboursement, même en cas de force majeure, après le délai de rétractation de 14 jours (qui prend fin, selon votre date d&apos;inscription, au plus tard à 18h00 la veille du stage)
+                      </p>
+                    </div>
+                  )}
                 </div>
 
                 {/* CGV */}
