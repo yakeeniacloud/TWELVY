@@ -217,37 +217,39 @@ export default function InscriptionPage() {
 
     // Validate civilité
     if (!civilite) {
-      newErrors.civilite = 'Veuillez sélectionner une civilité'
+      newErrors.civilite = 'Veuillez sélectionner votre civilité'
       if (!firstErrorId) firstErrorId = 'desktop-civilite'
     }
 
-    // Validate nom
-    if (!nom.trim()) {
-      newErrors.nom = 'Veuillez renseigner un nom de famille valide'
+    // Validate nom (max 22 characters)
+    if (!nom.trim() || nom.trim().length > 22) {
+      newErrors.nom = 'Veuillez renseigner votre nom de famille (22 caractères maximum)'
       if (!firstErrorId) firstErrorId = 'desktop-nom'
     }
 
-    // Validate prénom
-    if (!prenom.trim()) {
-      newErrors.prenom = 'Veuillez renseigner un prénom valide'
+    // Validate prénom (max 22 characters)
+    if (!prenom.trim() || prenom.trim().length > 22) {
+      newErrors.prenom = 'Veuillez renseigner votre prénom (22 caractères maximum)'
       if (!firstErrorId) firstErrorId = 'desktop-prenom'
     }
 
-    // Validate email
-    if (!email.trim()) {
-      newErrors.email = 'Veuillez entrer une adresse email valide'
+    // Validate email (must contain @ and look like a valid email)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!email.trim() || !emailRegex.test(email.trim())) {
+      newErrors.email = 'Veuillez renseigner votre adresse email'
       if (!firstErrorId) firstErrorId = 'desktop-email'
     }
 
-    // Validate telephone
-    if (!telephone.trim()) {
-      newErrors.telephone = 'Veuillez entrer un numéro de téléphone mobile valide'
+    // Validate telephone (must be exactly 10 digits)
+    const phoneDigits = telephone.replace(/\D/g, '')
+    if (!telephone.trim() || phoneDigits.length !== 10) {
+      newErrors.telephone = 'Veuillez renseigner un numéro de téléphone mobile valide (Exemple: 0600000000)'
       if (!firstErrorId) firstErrorId = 'desktop-telephone'
     }
 
     // Validate CGV
     if (!cgvAccepted) {
-      newErrors.cgv = 'Veuillez accepter les conditions générales de vente'
+      newErrors.cgv = 'Vous devez accepter les conditions générales'
       if (!firstErrorId) firstErrorId = 'desktop-cgv'
     }
 
@@ -402,27 +404,31 @@ export default function InscriptionPage() {
     let firstMissingFieldId: string | null = null
 
     if (!civilite) {
-      newErrors.civilite = 'Veuillez sélectionner une civilité'
+      newErrors.civilite = 'Veuillez sélectionner votre civilité'
       if (!firstMissingFieldId) firstMissingFieldId = 'mobile-civilite'
     }
-    if (!nom.trim()) {
-      newErrors.nom = 'Veuillez renseigner un nom de famille valide'
+    if (!nom.trim() || nom.trim().length > 22) {
+      newErrors.nom = 'Veuillez renseigner votre nom de famille (22 caractères maximum)'
       if (!firstMissingFieldId) firstMissingFieldId = 'mobile-nom'
     }
-    if (!prenom.trim()) {
-      newErrors.prenom = 'Veuillez renseigner un prénom valide'
+    if (!prenom.trim() || prenom.trim().length > 22) {
+      newErrors.prenom = 'Veuillez renseigner votre prénom (22 caractères maximum)'
       if (!firstMissingFieldId) firstMissingFieldId = 'mobile-prenom'
     }
-    if (!email.trim()) {
-      newErrors.email = 'Veuillez entrer une adresse email valide'
+    // Validate email (must contain @ and look like a valid email)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!email.trim() || !emailRegex.test(email.trim())) {
+      newErrors.email = 'Veuillez renseigner votre adresse email'
       if (!firstMissingFieldId) firstMissingFieldId = 'mobile-email'
     }
-    if (!telephone.trim()) {
-      newErrors.telephone = 'Veuillez entrer un numéro de téléphone mobile valide'
+    // Validate telephone (must be exactly 10 digits)
+    const phoneDigits = telephone.replace(/\D/g, '')
+    if (!telephone.trim() || phoneDigits.length !== 10) {
+      newErrors.telephone = 'Veuillez renseigner un numéro de téléphone mobile valide (Exemple: 0600000000)'
       if (!firstMissingFieldId) firstMissingFieldId = 'mobile-telephone'
     }
     if (!cgvAccepted) {
-      newErrors.cgv = 'Veuillez accepter les conditions générales de vente'
+      newErrors.cgv = 'Vous devez accepter les conditions générales'
       if (!firstMissingFieldId) firstMissingFieldId = 'mobile-cgv'
     }
 
@@ -695,6 +701,7 @@ export default function InscriptionPage() {
                     id="mobile-nom"
                     type="text"
                     value={nom}
+                    maxLength={22}
                     onChange={(e) => {
                       setNom(e.target.value)
                       if (errors.nom) setErrors(prev => ({ ...prev, nom: undefined }))
@@ -719,6 +726,7 @@ export default function InscriptionPage() {
                     id="mobile-prenom"
                     type="text"
                     value={prenom}
+                    maxLength={22}
                     onChange={(e) => {
                       setPrenom(e.target.value)
                       if (errors.prenom) setErrors(prev => ({ ...prev, prenom: undefined }))
@@ -1024,11 +1032,11 @@ export default function InscriptionPage() {
                     </div>
                     <div>
                       <label className="block mb-1" style={{ fontSize: '14px' }}>Nom *</label>
-                      <input type="text" value={nom} onChange={(e) => setNom(e.target.value)} placeholder="Nom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                      <input type="text" value={nom} maxLength={22} onChange={(e) => setNom(e.target.value)} placeholder="Nom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
                     <div>
                       <label className="block mb-1" style={{ fontSize: '14px' }}>Prénom *</label>
-                      <input type="text" value={prenom} onChange={(e) => setPrenom(e.target.value)} placeholder="Prénom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
+                      <input type="text" value={prenom} maxLength={22} onChange={(e) => setPrenom(e.target.value)} placeholder="Prénom" className="w-full border border-black rounded-lg px-2 py-1.5" style={{ fontSize: '12px' }} />
                     </div>
                     <div>
                       <label className="block mb-1" style={{ fontSize: '14px' }}>Email *</label>
@@ -2496,6 +2504,7 @@ export default function InscriptionPage() {
                     id="desktop-nom"
                     type="text"
                     value={nom}
+                    maxLength={22}
                     onChange={(e) => {
                       setNom(e.target.value)
                       if (errors.nom) setErrors(prev => ({ ...prev, nom: undefined }))
@@ -2544,6 +2553,7 @@ export default function InscriptionPage() {
                     id="desktop-prenom"
                     type="text"
                     value={prenom}
+                    maxLength={22}
                     onChange={(e) => {
                       setPrenom(e.target.value)
                       if (errors.prenom) setErrors(prev => ({ ...prev, prenom: undefined }))
