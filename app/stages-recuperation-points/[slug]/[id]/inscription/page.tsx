@@ -935,9 +935,22 @@ export default function InscriptionPage() {
 
                 {/* CGV */}
                 <label id="mobile-cgv" className="flex items-start gap-1.5 cursor-pointer" style={{ marginTop: '24px' }}>
-                  <input type="checkbox" checked={cgvAccepted} onChange={(e) => setCgvAccepted(e.target.checked)} className="mt-0.5" />
-                  <span style={{ fontSize: '13px' }}>J'accepte les <a href="#" className="text-blue-600 underline">conditions générales de vente</a></span>
+                  <input
+                    type="checkbox"
+                    checked={cgvAccepted}
+                    onChange={(e) => {
+                      setCgvAccepted(e.target.checked)
+                      if (errors.cgv) setErrors(prev => ({ ...prev, cgv: undefined }))
+                    }}
+                    className="mt-0.5"
+                  />
+                  <span style={{ fontSize: '13px', color: errors.cgv ? '#DC2626' : undefined }}>J'accepte les <a href="#" className="text-blue-600 underline">conditions générales de vente</a></span>
                 </label>
+                {errors.cgv && (
+                  <p style={{ color: '#DC2626', fontSize: '12px', marginTop: '4px', marginLeft: '20px', fontFamily: 'Poppins' }}>
+                    {errors.cgv}
+                  </p>
+                )}
 
                 {/* Submit Button */}
                 <div className="flex justify-center" style={{ marginTop: '36px' }}>
