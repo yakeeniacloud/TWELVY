@@ -1,0 +1,12 @@
+<?php
+
+    define('BOOST_NB_INSCRITS_MIN', 10);
+    define('BOOST_DELAI_AVANT_STAGE_MIN', 1);
+    define('BOOST_DELAI_AVANT_STAGE_MAX', 7);
+    define('BOOST_PERIODE_AFFICHAGE_BOOST_POSSIBLE', 30);
+    define('BOOST_NB_PLACES_MAX', 4);
+
+    define('REVERSEMENT_DIFF_PREMIUM', 10);
+    define('REVERSEMENT_DIFF_BOOST', 20);
+
+?>

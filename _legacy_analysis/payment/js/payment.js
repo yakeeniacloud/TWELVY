@@ -1,0 +1,591 @@
+var Payment = {
+	upsellOrderDumpLoad: async function () {
+		this.displayLoaderAndTempMessage();
+
+		var upsellAvailable = await this.checkUpsellAvailableToPay(
+			cardNumber,
+			cardCvv,
+			cardExpiry
+		);
+
+		var response = await this.manualValidateUpsellPayment(session_id);
+
+		window.location.href = response.page_redirection;
+		return false;
+
+		var useAmount = (amount * 100).toFixed(0);
+
+		var form = document.createElement("form");
+		form.method = "POST";
+		form.action = url;
+		form.style = "display:none";
+
+		var IdMerchant = document.createElement("input");
+		IdMerchant.value = MerchandId;
+		IdMerchant.name = "IdMerchant";
+		form.appendChild(IdMerchant);
+
+		var IdSessionEl = document.createElement("input");
+		IdSessionEl.value = IdSession;
+		IdSessionEl.name = "IdSession";
+		form.appendChild(IdSessionEl);
+
+		var Currency = document.createElement("input");
+		Currency.value = "978";
+		Currency.name = "Currency";
+		form.appendChild(Currency);
+
+		var Amount = document.createElement("input");
+		Amount.value = useAmount;
+		Amount.name = "Amount";
+		form.appendChild(Amount);
+
+		var CCNumber = document.createElement("input");
+		CCNumber.value = cardNumber;
+		CCNumber.name = "CCNumber";
+		form.appendChild(CCNumber);
+
+		var CCExpDate = document.createElement("input");
+		CCExpDate.value = cardExpiry;
+		CCExpDate.name = "CCExpDate";
+		form.appendChild(CCExpDate);
+
+		var CVVCode = document.createElement("input");
+		CVVCode.value = cardCvv;
+		CVVCode.name = "CVVCode";
+		form.appendChild(CVVCode);
+
+		var URLRetour = document.createElement("input");
+		URLRetour.value = urlRetour;
+		URLRetour.name = "URLRetour";
+		form.appendChild(URLRetour);
+
+		var URLHttpDirect = document.createElement("input");
+		URLHttpDirect.value = urlRedirect;
+		URLHttpDirect.name = "URLHttpDirect";
+		form.appendChild(URLHttpDirect);
+
+		document.body.appendChild(form);
+		form.submit();
+	},
+
+	setTotalAmount: function () {
+		var total = parseFloat(0);
+		$('select[id^="upsell_"]').each(function () {
+			if ($(this).val() == 1)
+				total =
+					parseFloat(total) +
+					parseFloat($("#" + $(this).attr("id")).attr("data_prix"));
+		});
+		$("#prix_total").html(total.toFixed(2) + " &#128;");
+		$("#prix_total").attr("data_total", total);
+	},
+
+	compteArebours: function (version, prix_remise, prix_normal) {
+		var liftoffTime = new Date();
+		liftoffTime.setHours(liftoffTime.getHours() + 10);
+		if (version == 1)
+			$("#noDays").countdown({
+				until: liftoffTime,
+				layout: "{hn}h {mn}min {sn}sec",
+			});
+		else
+			$("#noDays").countdown({
+				until: liftoffTime,
+				layout:
+					'<div class="compte_div">Plus que <span class="compte2_div">{hn}h {mn}min {sn}sec</span> pour profiter de ce prix: <span class="compte2_div">' +
+					prix_remise +
+					" €</span> au lieu de " +
+					prix_normal +
+					" € </div>",
+			});
+	},
+
+	displayGaeDiv: function () {
+		var isValidForm = false;
+		$('select[id^="upsell_"]').each(function () {
+			$(this).css("background-color", "#FFFFFF");
+			if ($(this).val() == 1) {
+				isValidForm = true;
+			}
+		});
+		if (isValidForm == false) {
+			$('select[id^="upsell_"]').each(function () {
+				$(this).css("background-color", "#FACBD5");
+			});
+			return false;
+		}
+		$("#cd_valider_div").hide();
+		var x = $("#paiement_gae_div").show().position();
+		window.scrollTo(x.left, x.top);
+	},
+
+	displayFormPaiement() {
+		$("#cd_valider_div").hide();
+		var x = $("#paiement_gae_div").show().position();
+	},
+
+	paymentWithCard: async function (event) {
+		event.preventDefault();
+		document.getElementById("rowError").style.display = "none";
+		var cardNumber = document
+			.getElementById("cardNumber")
+			.value.replace(/\s/g, "");
+		var expiration =
+			document.getElementById("month_expiration").value +
+			document.getElementById("year_expiration").value;
+		var cardCVC = document.getElementById("cardCVC").value;
+
+		var isOrderBump = 0;
+		if (document.getElementById("add_order_bump_upsell")) {
+			isOrderBump = document.getElementById("add_order_bump_upsell").checked
+				? 1
+				: 0;
+		}
+
+		if (isNaN(cardNumber) || cardNumber.length != 16) {
+			swal("Saisie erronée", "Numéro de carte non valide", "error");
+			return;
+		} else if (isNaN(cardCVC) || cardCVC.length != 3) {
+			swal("Saisie erronée", "Code de sécurité non valide", "error");
+			return;
+		}
+
+		document.getElementById("loading-overlay").style.display = "block";
+
+		var stageAvailable = await this.checkStageAvailable(
+			stageId,
+			studentId,
+			expiration,
+			cardNumber,
+			cardCVC,
+			isOrderBump
+		);
+
+		if (!stageAvailable.isAvailable) {
+			swal(
+				"Stage indisponible",
+				"Ce Stage ne possède plus de place disponible",
+				"error"
+			);
+			window.location.href = URL_FERERENCE;
+			return;
+		}
+
+		if (stageAvailable.isAlreadyPay) {
+			window.location.href = HOST + stageAvailable.redirectToUpsell;
+			return;
+		}
+
+		// Ajout pour le controle du prix du stage
+		var stageVerifPrice = await this.checkStagePrice(stageId, studentId);
+
+		if (stageVerifPrice.changed) {
+			document.getElementById("loading-overlay").style.display = "none";
+
+			swal({
+				title: "Le prix du stage a évolué",
+				html: "Le prix du stage a évolué depuis le début de votre inscription.<br><br>Veuillez recharger la page pour actualiser le prix du stage.",
+				type: "error",
+				confirmButtonColor: "#DB0000",
+				confirmButtonText: "Ok",
+			}).then(function () {
+				window.location.href = URL_FERERENCE;
+			});
+
+			return;
+		}
+
+		var useAmount = (amount * 100).toFixed(0);
+
+		var form = document.createElement("form");
+		form.method = "POST";
+		form.action = url;
+
+		var IdMerchant = document.createElement("input");
+		IdMerchant.value = MerchandId;
+		IdMerchant.name = "IdMerchant";
+		form.appendChild(IdMerchant);
+
+		var IdSessionEl = document.createElement("input");
+		IdSessionEl.value = IdSession;
+		IdSessionEl.name = "IdSession";
+		form.appendChild(IdSessionEl);
+
+		var Currency = document.createElement("input");
+		Currency.value = "978";
+		Currency.name = "Currency";
+		form.appendChild(Currency);
+
+		var Amount = document.createElement("input");
+		Amount.value = useAmount;
+		Amount.name = "Amount";
+		form.appendChild(Amount);
+
+		var CCNumber = document.createElement("input");
+		CCNumber.value = cardNumber;
+		CCNumber.name = "CCNumber";
+		form.appendChild(CCNumber);
+
+		var CCExpDate = document.createElement("input");
+		CCExpDate.value = expiration;
+		CCExpDate.name = "CCExpDate";
+		form.appendChild(CCExpDate);
+
+		var CVVCode = document.createElement("input");
+		CVVCode.value = cardCVC;
+		CVVCode.name = "CVVCode";
+		form.appendChild(CVVCode);
+
+		var URLRetour = document.createElement("input");
+		URLRetour.value = urlRetour;
+		URLRetour.name = "URLRetour";
+		form.appendChild(URLRetour);
+
+		var URLHttpDirect = document.createElement("input");
+		URLHttpDirect.value = urlRedirect;
+		URLHttpDirect.name = "URLHttpDirect";
+		form.appendChild(URLHttpDirect);
+
+		// New fields 3DSV2
+
+		var iAddress1 = document.createElement("input");
+		iAddress1.value = Address1.substring(0, 49);
+		iAddress1.name = "Address1";
+		form.appendChild(iAddress1);
+
+		var iCity = document.createElement("input");
+		iCity.value = City;
+		iCity.name = "City";
+		form.appendChild(iCity);
+
+		var iCountryCode = document.createElement("input");
+		iCountryCode.value = CountryCode;
+		iCountryCode.name = "CountryCode";
+		form.appendChild(iCountryCode);
+
+		var iEmailPorteur = document.createElement("input");
+		iEmailPorteur.value = EmailPorteur;
+		iEmailPorteur.name = "EmailPorteur";
+		form.appendChild(iEmailPorteur);
+
+		var iFirstName = document.createElement("input");
+		iFirstName.value = FirstName;
+		iFirstName.name = "FirstName";
+		form.appendChild(iFirstName);
+
+		var iLastName = document.createElement("input");
+		iLastName.value = LastName;
+		iLastName.name = "LastName";
+		form.appendChild(iLastName);
+
+		var iTotalQuantity = document.createElement("input");
+		iTotalQuantity.value = TotalQuantity;
+		iTotalQuantity.name = "TotalQuantity";
+		form.appendChild(iTotalQuantity);
+
+		var iZipCode = document.createElement("input");
+		iZipCode.value = ZipCode;
+		iZipCode.name = "ZipCode";
+		form.appendChild(iZipCode);
+
+		var iNumTelephone = document.createElement("input");
+		iNumTelephone.value = NumTelephone;
+		iNumTelephone.name = "NumTelephone";
+		form.appendChild(iNumTelephone);
+
+		await tracking.addTracking("process_payment_init");
+
+		document.body.appendChild(form);
+		form.submit();
+	},
+
+	paymentOnClick: async function (event) {
+		event.preventDefault();
+		$("#btn_reserver").attr("disabled", true);
+		$("#error_div").hide();
+		this.displayLoaderAndTempMessage();
+
+		var upsellAvailable = await this.checkUpsellAvailableToPay(
+			cardNumber,
+			cardCvv,
+			cardExpiry
+		);
+
+		if (upsellAvailable.isAlreadyPay) {
+			window.location.href = HOST + upsellAvailable.redirectToNextUpsell;
+			return false;
+		}
+
+		var useAmount = (amount * 100).toFixed(0);
+
+		if (upsellType == "twelvy_app" || upsellType == "alerte_point") {
+			var response = await this.manualValidateUpsellPayment(session_id);
+			window.location.href = response.page_redirection;
+			return false;
+		}
+
+		var form = document.createElement("form");
+		form.method = "POST";
+		form.action = url;
+		form.style = "display:none";
+
+		var IdMerchant = document.createElement("input");
+		IdMerchant.value = MerchandId;
+		IdMerchant.name = "IdMerchant";
+		form.appendChild(IdMerchant);
+
+		var IdSessionEl = document.createElement("input");
+		IdSessionEl.value = IdSession;
+		IdSessionEl.name = "IdSession";
+		form.appendChild(IdSessionEl);
+
+		var Currency = document.createElement("input");
+		Currency.value = "978";
+		Currency.name = "Currency";
+		form.appendChild(Currency);
+
+		var Amount = document.createElement("input");
+		Amount.value = useAmount;
+		Amount.name = "Amount";
+		form.appendChild(Amount);
+
+		var CCNumber = document.createElement("input");
+		CCNumber.value = cardNumber;
+		CCNumber.name = "CCNumber";
+		form.appendChild(CCNumber);
+
+		var CCExpDate = document.createElement("input");
+		CCExpDate.value = cardExpiry;
+		CCExpDate.name = "CCExpDate";
+		form.appendChild(CCExpDate);
+
+		var CVVCode = document.createElement("input");
+		CVVCode.value = cardCvv;
+		CVVCode.name = "CVVCode";
+		form.appendChild(CVVCode);
+
+		var URLRetour = document.createElement("input");
+		URLRetour.value = urlRetour;
+		URLRetour.name = "URLRetour";
+		form.appendChild(URLRetour);
+
+		var URLHttpDirect = document.createElement("input");
+		URLHttpDirect.value = urlRedirect;
+		URLHttpDirect.name = "URLHttpDirect";
+		form.appendChild(URLHttpDirect);
+
+		// New fields 3DSV2
+
+		var iAddress1 = document.createElement("input");
+		iAddress1.value = Address1.substring(0, 49);
+		iAddress1.name = "Address1";
+		form.appendChild(iAddress1);
+
+		var iCity = document.createElement("input");
+		iCity.value = City;
+		iCity.name = "City";
+		form.appendChild(iCity);
+
+		var iCountryCode = document.createElement("input");
+		iCountryCode.value = CountryCode;
+		iCountryCode.name = "CountryCode";
+		form.appendChild(iCountryCode);
+
+		var iEmailPorteur = document.createElement("input");
+		iEmailPorteur.value = EmailPorteur;
+		iEmailPorteur.name = "EmailPorteur";
+		form.appendChild(iEmailPorteur);
+
+		var iFirstName = document.createElement("input");
+		iFirstName.value = FirstName;
+		iFirstName.name = "FirstName";
+		form.appendChild(iFirstName);
+
+		var iLastName = document.createElement("input");
+		iLastName.value = LastName;
+		iLastName.name = "LastName";
+		form.appendChild(iLastName);
+
+		var iTotalQuantity = document.createElement("input");
+		iTotalQuantity.value = TotalQuantity;
+		iTotalQuantity.name = "TotalQuantity";
+		form.appendChild(iTotalQuantity);
+
+		var iZipCode = document.createElement("input");
+		iZipCode.value = ZipCode;
+		iZipCode.name = "ZipCode";
+		form.appendChild(iZipCode);
+
+		var iNumTelephone = document.createElement("input");
+		iNumTelephone.value = NumTelephone;
+		iNumTelephone.name = "NumTelephone";
+		form.appendChild(iNumTelephone);
+
+		await tracking.addTracking("process_payment_init");
+
+		document.body.appendChild(form);
+		form.submit();
+	},
+
+	setBackgroundColorToFieldPayment: function () {
+		$("#cb_numero").css("background-color", "#FFFFFF");
+		$("#cb_code").css("background-color", "#FFFFFF");
+		$("#cb_mois").css("background-color", "#FFFFFF");
+		$("#cb_annee").css("background-color", "#FFFFFF");
+	},
+
+	isValidFormField: async function () {
+		var isValidForm = true;
+
+		if (
+			$("#cb_numero").val().length == 0 ||
+			$("#cb_numero").val().length != 16
+		) {
+			$("#cb_numero").css("background-color", "#FACBD5");
+			isValidForm = false;
+		}
+
+		if ($("#cb_code").val().length == 0 || $("#cb_code").val().length != 3) {
+			$("#cb_code").css("background-color", "#FACBD5");
+			isValidForm = false;
+		}
+
+		if ($("#cb_mois").val() == "-") {
+			$("#cb_mois").css("background-color", "#FACBD5");
+			isValidForm = false;
+		} else {
+			var d = new Date();
+			var n = d.getMonth() + 1;
+			var a = d.getFullYear().toString().substring(2);
+			if ($("#cb_annee").val() == a && $("#cb_mois").val() < n) {
+				$("#cb_mois").css("background-color", "#FACBD5");
+				isValidForm = false;
+			}
+		}
+
+		if ($("#cb_annee").val() == "-") {
+			$("#cb_annee").css("background-color", "#FACBD5");
+			isValidForm = false;
+		} else {
+			var d = new Date();
+			var a = d.getFullYear().toString().substring(2);
+			if ($("#cb_annee").val() < a) {
+				$("#cb_annee").css("background-color", "#FACBD5");
+				isValidForm = false;
+			}
+		}
+		return isValidForm;
+	},
+
+	displayLoaderAndTempMessage: function () {
+		$("#go_2_div").hide();
+		$("#go_div").hide();
+		$("#error_div").show();
+		$("#error_msg_div").css("color", "#000000");
+		$("#error_msg_div").html(
+			'<img src="/assets/img/bx_loader.gif" /><br>Vous allez être redirigé vers la plateforme de paiement sécurisé du Crédit Agricole dans quelques instants pour valider votre paiement...'
+		);
+	},
+
+	checkStageAvailable: async function (
+		stageId,
+		studentId,
+		expiration,
+		cardNumber,
+		cardCVC,
+		isOrderBump
+	) {
+		let formData = new FormData();
+		formData.append("stageId", stageId);
+		formData.append("studentId", studentId);
+		formData.append("cardExpiry", expiration);
+		formData.append("cardNumber", cardNumber);
+		formData.append("cardCVC", cardCVC);
+		formData.append("isOrderBump", isOrderBump);
+
+		return fetch(HOST + "/src/payment/ajax/ajax_stage_payment_available.php", {
+			method: "POST",
+			headers: {},
+			body: formData,
+		})
+			.then(function (res) {
+				if (res.ok) {
+					return res.json();
+				}
+			})
+			.catch(function (err) {
+				console.log(err);
+			});
+	},
+
+	checkUpsellAvailableToPay: async function (cardNumber, cardCVC, expiration) {
+		let formData = new FormData();
+		formData.append("cardNumber", cardNumber);
+		formData.append("cardExpiry", expiration);
+		formData.append("cardCVC", cardCVC);
+		formData.append("email", email);
+		formData.append("upsellId", upsellId);
+		formData.append("studentId", studentId);
+		formData.append("stageId", stageId);
+		formData.append("amount", amount);
+		formData.append("funnelId", funnelId);
+
+		return fetch(HOST + "/src/payment/ajax/available_upsell_and_order.php", {
+			method: "POST",
+			headers: {},
+			body: formData,
+		})
+			.then(function (res) {
+				if (res.ok) {
+					return res.json();
+				}
+			})
+			.catch(function (err) {
+				console.log(err);
+			});
+	},
+
+	manualValidateUpsellPayment: async function (session_id) {
+		let formData = new FormData();
+		formData.append("session_id", session_id);
+		return fetch(
+			HOST + "/src/payment/ajax/manual_validate_upsell_payment.php",
+			{
+				method: "POST",
+				headers: {},
+				body: formData,
+			}
+		)
+			.then(function (res) {
+				if (res.ok) {
+					return res.json();
+				}
+			})
+			.catch(function (err) {
+				console.log(err);
+			});
+	},
+	/* Fonction qui permets de checker si il y a une différence
+	 * entre les prix du stage actuel et au début du process de l'inscription du stagiaire
+	 */
+	checkStagePrice: async function (stageId, studentId) {
+		let formData = new FormData();
+		formData.append("stageId", stageId);
+		formData.append("studentId", studentId);
+
+		return fetch(HOST + "/src/payment/ajax/ajax_stage_check_price.php", {
+			method: "POST",
+			headers: {},
+			body: formData,
+		})
+			.then(function (res) {
+				if (res.ok) {
+					return res.json();
+				}
+			})
+			.catch(function (err) {
+				console.log(err);
+			});
+	},
+};
