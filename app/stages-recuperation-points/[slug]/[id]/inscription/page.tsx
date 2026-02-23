@@ -3412,7 +3412,8 @@ export default function InscriptionPage() {
 
                 {/* Payment Button */}
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleSubmit}
                   disabled={isDesktopFormEditing}
                   style={{
                     display: 'flex',
