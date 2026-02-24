@@ -1655,7 +1655,7 @@ export default function Home() {
                 <a href="/aide-et-contact" style={{ fontFamily: 'var(--font-poppins)', fontSize: '15px', color: '#333', textDecoration: 'none', padding: '8px 0', borderBottom: '1px solid #E0E0E0' }}>Aide et contact</a>
                 <a href="/conditions-generales" style={{ fontFamily: 'var(--font-poppins)', fontSize: '15px', color: '#333', textDecoration: 'none', padding: '8px 0', borderBottom: '1px solid #E0E0E0' }}>Conditions générales de vente</a>
                 <a href="/mentions-legales" style={{ fontFamily: 'var(--font-poppins)', fontSize: '15px', color: '#333', textDecoration: 'none', padding: '8px 0', borderBottom: '1px solid #E0E0E0' }}>Mentions légales</a>
-                <a href="/espace-client" style={{ fontFamily: 'var(--font-poppins)', fontSize: '15px', color: '#333', textDecoration: 'none', padding: '8px 0' }}>Espace Client</a>
+                <a href="https://psp-copie.twelvy.net/es/" style={{ fontFamily: 'var(--font-poppins)', fontSize: '15px', color: '#333', textDecoration: 'none', padding: '8px 0' }}>Espace Client</a>
               </nav>
             </div>
           </div>
@@ -2519,7 +2519,7 @@ export default function Home() {
             <a href="/mentions-legales" className="text-white text-xs hover:underline">
               Mentions légales
             </a>
-            <a href="/espace-client" className="text-white text-xs hover:underline">
+            <a href="https://psp-copie.twelvy.net/es/" className="text-white text-xs hover:underline">
               Espace Client
             </a>
           </div>
@@ -2537,7 +2537,7 @@ export default function Home() {
             <a href="/mentions-legales" className="text-white text-xs hover:underline">
               Mentions légales
             </a>
-            <a href="/espace-client" className="text-white text-xs hover:underline">
+            <a href="https://psp-copie.twelvy.net/es/" className="text-white text-xs hover:underline">
               Espace Client
             </a>
           </div>

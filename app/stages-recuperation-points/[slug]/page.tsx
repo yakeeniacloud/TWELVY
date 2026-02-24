@@ -546,8 +546,8 @@ export default function StagesResultsPage() {
                   </Link>
                 </li>
                 <li className="pt-4 border-t border-gray-600">
-                  <Link
-                    href="/espace-client"
+                  <a
+                    href="https://psp-copie.twelvy.net/es/"
                     className="text-white text-sm hover:text-gray-200 flex items-center gap-2 py-2"
                     onClick={() => setShowMobileMenu(false)}
                   >
@@ -555,7 +555,7 @@ export default function StagesResultsPage() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                     Espace Client
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </nav>
@@ -1957,7 +1957,7 @@ export default function StagesResultsPage() {
               { text: 'Aide et contact', href: '/aide-et-contact' },
               { text: 'Conditions générales de vente', href: '/conditions-generales' },
               { text: 'Mentions légales', href: '/mentions-legales' },
-              { text: 'Espace Client', href: '/espace-client' },
+              { text: 'Espace Client', href: 'https://psp-copie.twelvy.net/es/' },
             ].map((link, index) => (
               <Link
                 key={index}
