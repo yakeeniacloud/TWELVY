@@ -100,16 +100,7 @@ export default function WordPressPage() {
 
         {/* Page Content from WordPress */}
         <div
-          className="prose prose-lg max-w-none text-gray-700
-            prose-headings:text-gray-900
-            prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-8 prose-h2:mb-4
-            prose-h3:text-xl prose-h3:font-semibold prose-h3:mt-6 prose-h3:mb-3
-            prose-p:mb-4
-            prose-a:text-blue-600 prose-a:hover:text-blue-800 prose-a:underline
-            prose-ul:list-disc prose-ul:ml-6 prose-ul:mb-4
-            prose-ol:list-decimal prose-ol:ml-6 prose-ol:mb-4
-            prose-li:mb-2
-            prose-strong:font-semibold prose-strong:text-gray-900"
+          className="wp-content max-w-none text-gray-700"
           dangerouslySetInnerHTML={{ __html: content.content }}
         />
       </div>
