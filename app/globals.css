@@ -22,29 +22,34 @@ body {
 
 /* WordPress article content styles (migrated from prostagespermis.fr) */
 
-/* Alert boxes */
+/* DEBUG: visible red border to confirm CSS is loading */
+.wp-content {
+  border: 3px solid red !important;
+}
+
+/* Alert boxes - !important to override Tailwind resets */
 .wp-content .cararra_sunset_orange {
-  background-color: #f2f1ef;
-  border-left: 4px solid #f64747;
-  padding: 15px 20px;
-  margin: 15px 0;
-  line-height: 1.6em;
+  background-color: #f2f1ef !important;
+  border-left: 4px solid #f64747 !important;
+  padding: 15px 20px !important;
+  margin: 15px 0 !important;
+  line-height: 1.6em !important;
 }
 
 .wp-content .cararra_blue {
-  background-color: #f2f1ef;
-  border-left: 4px solid #3498db;
-  padding: 15px 20px;
-  margin: 15px 0;
-  line-height: 1.6em;
+  background-color: #f2f1ef !important;
+  border-left: 4px solid #3498db !important;
+  padding: 15px 20px !important;
+  margin: 15px 0 !important;
+  line-height: 1.6em !important;
 }
 
 .wp-content .cararra_green {
-  background-color: #f2f1ef;
-  border-left: 4px solid #2ecc71;
-  padding: 15px 20px;
-  margin: 15px 0;
-  line-height: 1.6em;
+  background-color: #f2f1ef !important;
+  border-left: 4px solid #2ecc71 !important;
+  padding: 15px 20px !important;
+  margin: 15px 0 !important;
+  line-height: 1.6em !important;
 }
 
 /* Typography */
