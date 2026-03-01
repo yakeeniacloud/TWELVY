@@ -22,12 +22,7 @@ body {
 
 /* WordPress article content styles (migrated from prostagespermis.fr) */
 
-/* DEBUG: visible red border to confirm CSS is loading */
-.wp-content {
-  border: 3px solid red !important;
-}
-
-/* Alert boxes - !important to override Tailwind resets */
+/* Alert boxes */
 .wp-content .cararra_sunset_orange {
   background-color: #f2f1ef !important;
   border-left: 4px solid #f64747 !important;
@@ -52,19 +47,29 @@ body {
   line-height: 1.6em !important;
 }
 
+.wp-content .cararra_lynch {
+  background-color: #f2f1ef !important;
+  border-left: 4px solid #6c7a89 !important;
+  padding: 15px 20px !important;
+  margin: 15px 0 !important;
+  line-height: 1.6em !important;
+  color: #6c7a89 !important;
+}
+
 /* Typography */
 .wp-content h2 {
-  font-size: 1.4em;
-  font-weight: 700;
-  margin-top: 32px;
-  margin-bottom: 16px;
+  font-size: 1.4em !important;
+  font-weight: 700 !important;
+  margin-top: 32px !important;
+  margin-bottom: 16px !important;
+  color: #3498db !important;
 }
 
 .wp-content h3 {
-  font-size: 1.15em;
-  font-weight: 600;
-  margin-top: 24px;
-  margin-bottom: 12px;
+  font-size: 1.15em !important;
+  font-weight: 600 !important;
+  margin-top: 24px !important;
+  margin-bottom: 12px !important;
 }
 
 .wp-content p {
@@ -73,29 +78,80 @@ body {
   color: #434a54;
 }
 
-.wp-content ul {
+.wp-content ul, .wp-content ol {
   list-style-type: disc;
   margin-left: 24px;
   margin-bottom: 16px;
 }
 
-.wp-content ul li {
+.wp-content ol {
+  list-style-type: decimal;
+}
+
+.wp-content ul li, .wp-content ol li {
   margin-bottom: 6px;
   line-height: 1.7;
   color: #434a54;
 }
 
 .wp-content a {
+  color: #3498db;
   text-decoration: underline;
 }
 
+/* Table of contents */
+.wp-content .wp-toc {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  padding: 16px 24px;
+  margin-bottom: 24px;
+}
+
+.wp-content .wp-toc ul {
+  margin-bottom: 0;
+}
+
+/* Data tables */
 .wp-content table {
   width: 100%;
   border-collapse: collapse;
-  margin: 8px 0;
+  margin: 16px 0;
+}
+
+.wp-content table th {
+  background-color: #3498db;
+  color: #ffffff;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  border: 1px solid #2980b9;
 }
 
 .wp-content table td {
   padding: 8px 12px;
   vertical-align: middle;
+  border: 1px solid #dee2e6;
+}
+
+.wp-content table tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+/* Blockquotes */
+.wp-content blockquote {
+  border-left: 4px solid #6c7a89;
+  background-color: #f2f1ef;
+  padding: 15px 20px;
+  margin: 15px 0;
+  font-style: italic;
+  color: #6c7a89;
+}
+
+/* Images */
+.wp-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 12px 0;
 }

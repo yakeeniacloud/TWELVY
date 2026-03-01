@@ -1,109 +1,132 @@
-'use client'
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import WordPressPageContent from './WordPressPageContent'
 
-import { useParams } from 'next/navigation'
-import Link from 'next/link'
-import { useWordPressContent } from '@/lib/useWordPressContent'
-import { useWordPressMenu } from '@/lib/useWordPressMenu'
+const WP_HEADERS = {
+  'Accept': 'application/json',
+  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+}
 
-export default function WordPressPage() {
-  const params = useParams()
-  const slug = params.slug as string
+interface WPPage {
+  id: number
+  title: { rendered: string }
+  content: { rendered: string }
+  excerpt: { rendered: string }
+  slug: string
+  parent: number
+}
 
-  const { content, loading } = useWordPressContent(slug)
-  const { menu } = useWordPressMenu()
-
-  // Find if this page is a parent page with children
-  const parentPage = menu.find(item => item.slug === slug)
-  const hasChildren = parentPage && parentPage.children.length > 0
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white">
-        <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="text-center text-gray-500">
-            Chargement de la page...
-          </div>
-        </div>
-      </div>
+async function getPageBySlug(slug: string): Promise<WPPage | null> {
+  try {
+    const response = await fetch(
+      `https://headless.twelvy.net/wp-json/wp/v2/pages?slug=${slug}`,
+      { headers: WP_HEADERS, next: { revalidate: 30 } }
     )
+    if (!response.ok) return null
+    const pages = await response.json()
+    if (!Array.isArray(pages) || pages.length === 0) return null
+    return pages[0]
+  } catch {
+    return null
+  }
+}
+
+async function getMenuStructure() {
+  try {
+    const response = await fetch(
+      'https://headless.twelvy.net/wp-json/wp/v2/pages?per_page=100&status=publish&orderby=menu_order&order=asc',
+      { headers: WP_HEADERS, next: { revalidate: 30 } }
+    )
+    if (!response.ok) return []
+    const pages = await response.json()
+
+    const filteredPages = pages.filter((page: { slug: string; parent: number }) => {
+      if (page.slug === 'homepage') return false
+      if (page.parent !== 0) return true
+      const isCityStagesPage = page.slug.match(/^stages-[a-z]+-\d+/)
+        || (page.slug.startsWith('stages-') && page.slug.split('-').length === 2)
+      return !isCityStagesPage
+    })
+
+    const parentPages = filteredPages.filter((p: { parent: number }) => p.parent === 0)
+    return parentPages.map((parent: { id: number; title: { rendered: string }; slug: string }) => ({
+      id: parent.id,
+      title: parent.title.rendered,
+      slug: parent.slug,
+      children: filteredPages
+        .filter((child: { parent: number }) => child.parent === parent.id)
+        .map((child: { id: number; title: { rendered: string }; slug: string }) => ({
+          id: child.id,
+          title: child.title.rendered,
+          slug: child.slug,
+        })),
+    }))
+  } catch {
+    return []
+  }
+}
+
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()
+}
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
+  const { slug } = await params
+  const page = await getPageBySlug(slug)
+
+  if (!page) {
+    return { title: 'Page non trouvée - Twelvy' }
   }
 
-  if (!content) {
-    return (
-      <div className="min-h-screen bg-white">
-        <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Page non trouvée</h1>
-            <p className="text-gray-600">
-              La page que vous recherchez n'existe pas ou a été déplacée.
-            </p>
-          </div>
-        </div>
-      </div>
-    )
+  const title = stripHtml(page.title.rendered)
+
+  // Use excerpt if meaningful, otherwise generate from content
+  let description = ''
+  if (page.excerpt?.rendered) {
+    description = stripHtml(page.excerpt.rendered)
+  }
+  if (!description || description.length < 20) {
+    description = stripHtml(page.content.rendered).substring(0, 160) + '...'
+  }
+  // Cap description length for SEO
+  if (description.length > 160) {
+    description = description.substring(0, 157) + '...'
   }
 
-  // Parent page with children - show list of child pages
-  if (hasChildren && parentPage) {
-    return (
-      <div className="min-h-screen bg-white">
-        <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-          {/* Page Title */}
-          <h1 className="text-4xl font-bold text-gray-900 mb-8 border-b-2 border-red-500 pb-4">
-            {parentPage.title}
-          </h1>
+  return {
+    title: `${title} - Twelvy`,
+    description,
+    openGraph: {
+      title: `${title} - Twelvy`,
+      description,
+      type: 'article',
+      url: `https://www.twelvy.net/${slug}`,
+      siteName: 'Twelvy',
+    },
+  }
+}
 
-          {/* Parent Page Content (if any) */}
-          {content && content.content && (
-            <div
-              className="prose prose-lg max-w-none text-gray-700 mb-12"
-              dangerouslySetInnerHTML={{ __html: content.content }}
-            />
-          )}
+export default async function WordPressPage(
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const { slug } = await params
+  const [page, menu] = await Promise.all([
+    getPageBySlug(slug),
+    getMenuStructure(),
+  ])
 
-          {/* Children List */}
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Articles dans cette catégorie</h2>
-            <div className="grid gap-6 md:grid-cols-2">
-              {parentPage.children.map((child) => (
-                <Link
-                  key={child.id}
-                  href={`/${child.slug}`}
-                  className="block bg-white border-2 border-gray-200 rounded-lg p-6 hover:border-red-500 hover:shadow-lg transition-all group"
-                >
-                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-red-600 mb-2">
-                    {child.title}
-                  </h3>
-                  <div className="flex items-center text-sm text-blue-600 group-hover:text-blue-800">
-                    Lire l'article
-                    <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+  if (!page) {
+    notFound()
   }
 
-  // Regular page (no children) - show normal content
-  return (
-    <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
-        {/* Page Title */}
-        <h1 className="text-4xl font-bold text-gray-900 mb-8 border-b-2 border-red-500 pb-4">
-          {content.title}
-        </h1>
+  const content = {
+    id: page.id,
+    title: stripHtml(page.title.rendered),
+    content: page.content.rendered,
+    slug: page.slug,
+  }
 
-        {/* Page Content from WordPress */}
-        <div
-          className="wp-content max-w-none text-gray-700"
-          dangerouslySetInnerHTML={{ __html: content.content }}
-        />
-      </div>
-    </div>
-  )
+  return <WordPressPageContent content={content} menu={menu} slug={slug} />
 }
