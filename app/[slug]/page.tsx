@@ -49,25 +49,49 @@ async function getMenuStructure() {
     })
 
     const parentPages = filteredPages.filter((p: { parent: number }) => p.parent === 0)
-    return parentPages.map((parent: { id: number; title: { rendered: string }; slug: string }) => ({
-      id: parent.id,
-      title: parent.title.rendered,
-      slug: parent.slug,
-      children: filteredPages
-        .filter((child: { parent: number }) => child.parent === parent.id)
-        .map((child: { id: number; title: { rendered: string }; slug: string }) => ({
-          id: child.id,
-          title: child.title.rendered,
-          slug: child.slug,
-        })),
-    }))
+    return parentPages
+      .map((parent: { id: number; title: { rendered: string }; slug: string }) => ({
+        id: parent.id,
+        title: decodeEntities(parent.title.rendered),
+        slug: parent.slug,
+        children: filteredPages
+          .filter((child: { parent: number }) => child.parent === parent.id)
+          .map((child: { id: number; title: { rendered: string }; slug: string }) => ({
+            id: child.id,
+            title: decodeEntities(child.title.rendered),
+            slug: child.slug,
+          })),
+      }))
+      // Only include parent pages that have children (navigation categories)
+      .filter(item => item.children.length > 0)
   } catch {
     return []
   }
 }
 
+function decodeEntities(text: string): string {
+  const entities: Record<string, string> = {
+    '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"',
+    '&apos;': "'", '&nbsp;': ' ', '&laquo;': '«', '&raquo;': '»',
+    '&ndash;': '–', '&mdash;': '—', '&rsquo;': '\u2019', '&lsquo;': '\u2018',
+    '&rdquo;': '\u201D', '&ldquo;': '\u201C', '&hellip;': '…',
+    '&eacute;': 'é', '&egrave;': 'è', '&ecirc;': 'ê', '&euml;': 'ë',
+    '&agrave;': 'à', '&acirc;': 'â', '&ocirc;': 'ô', '&ugrave;': 'ù',
+    '&ucirc;': 'û', '&ccedil;': 'ç', '&iuml;': 'ï', '&icirc;': 'î',
+  }
+  let result = text
+  for (const [entity, char] of Object.entries(entities)) {
+    result = result.split(entity).join(char)
+  }
+  // Decode numeric entities (&#8217; &#8211; etc.)
+  result = result.replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+  // Decode hex entities (&#x2019; etc.)
+  result = result.replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)))
+  return result
+}
+
 function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim()
+  return decodeEntities(html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim())
 }
 
 export async function generateMetadata(

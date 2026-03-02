@@ -11,9 +11,28 @@ interface WordPressPage {
   link: string
 }
 
+function decodeEntities(text: string): string {
+  let result = text
+  // Decode numeric entities (&#8217; &#8211; etc.)
+  result = result.replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+  // Decode hex entities (&#x2019; etc.)
+  result = result.replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)))
+  // Decode named entities
+  const entities: Record<string, string> = {
+    '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"',
+    '&apos;': "'", '&nbsp;': ' ', '&ndash;': '–', '&mdash;': '—',
+    '&rsquo;': '\u2019', '&lsquo;': '\u2018', '&hellip;': '…',
+    '&eacute;': 'é', '&egrave;': 'è', '&ecirc;': 'ê', '&agrave;': 'à',
+    '&acirc;': 'â', '&ocirc;': 'ô', '&ugrave;': 'ù', '&ccedil;': 'ç',
+  }
+  for (const [entity, char] of Object.entries(entities)) {
+    result = result.split(entity).join(char)
+  }
+  return result
+}
+
 export async function GET() {
   try {
-    // Fetch all published pages from WordPress
     const response = await fetch(
       'https://headless.twelvy.net/wp-json/wp/v2/pages?per_page=100&status=publish&orderby=menu_order&order=asc',
       {
@@ -21,7 +40,7 @@ export async function GET() {
           'Accept': 'application/json',
           'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         },
-        next: { revalidate: 30 }, // Cache for 30 seconds
+        next: { revalidate: 30 },
       }
     )
 
@@ -34,51 +53,41 @@ export async function GET() {
 
     const pages: WordPressPage[] = await response.json()
 
-    console.log('📄 Raw WordPress pages:', pages.map(p => ({ id: p.id, title: p.title.rendered, parent: p.parent })))
-
     // Filter out homepage and stages-CITY pages (e.g., stages-marseille, stages-paris)
     // But KEEP child pages with parent set (even if they start with "stages-")
     const filteredPages = pages.filter(page => {
       if (page.slug === 'homepage') return false
-
-      // KEEP all pages that have a parent (child pages)
       if (page.parent !== 0) return true
-
-      // For parent pages (parent = 0), filter out city-specific stage pages
-      // Pattern: stages-{city} or stages-{city}-{postalcode}
-      const isCityStagesPage = page.slug.match(/^stages-[a-z]+-\d+/)  // stages-paris-75001
-        || (page.slug.startsWith('stages-') && page.slug.split('-').length === 2)  // stages-marseille, stages-paris, stages-toulon
-
+      const isCityStagesPage = page.slug.match(/^stages-[a-z]+-\d+/)
+        || (page.slug.startsWith('stages-') && page.slug.split('-').length === 2)
       return !isCityStagesPage
     })
-
-    console.log('🔍 Filtered pages:', filteredPages.map(p => ({ id: p.id, title: p.title.rendered, parent: p.parent })))
 
     // Build hierarchical menu structure
     const parentPages = filteredPages.filter(p => p.parent === 0)
     const childPages = filteredPages.filter(p => p.parent !== 0)
 
-    const menuStructure = parentPages.map(parent => {
-      const children = childPages
-        .filter(child => child.parent === parent.id)
-        .map(child => ({
-          id: child.id,
-          title: child.title.rendered,
-          slug: child.slug,
-        }))
-        .sort((a, b) => a.id - b.id)
+    const menuStructure = parentPages
+      .map(parent => {
+        const children = childPages
+          .filter(child => child.parent === parent.id)
+          .map(child => ({
+            id: child.id,
+            title: decodeEntities(child.title.rendered),
+            slug: child.slug,
+          }))
+          .sort((a, b) => a.id - b.id)
 
-      console.log(`👨‍👧 Parent "${parent.title.rendered}" (ID: ${parent.id}) has ${children.length} children:`, children)
-
-      return {
-        id: parent.id,
-        title: parent.title.rendered,
-        slug: parent.slug,
-        children,
-      }
-    })
-
-    console.log('✅ Final menu structure:', JSON.stringify(menuStructure, null, 2))
+        return {
+          id: parent.id,
+          title: decodeEntities(parent.title.rendered),
+          slug: parent.slug,
+          children,
+        }
+      })
+      // Only show parent pages that have children (navigation categories)
+      // Standalone articles (parent=0, no children) are accessible via /[slug] but not in the menu
+      .filter(item => item.children.length > 0)
 
     return NextResponse.json({
       menu: menuStructure,
@@ -86,7 +95,6 @@ export async function GET() {
     })
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error)
-    console.error('Error fetching WordPress menu:', errorMsg)
     return NextResponse.json(
       { error: 'Failed to fetch menu', details: errorMsg },
       { status: 500 }
