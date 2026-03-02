@@ -73,8 +73,8 @@ function decodeEntities(text: string): string {
   const entities: Record<string, string> = {
     '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"',
     '&apos;': "'", '&nbsp;': ' ', '&laquo;': '«', '&raquo;': '»',
-    '&ndash;': '–', '&mdash;': '—', '&rsquo;': '\u2019', '&lsquo;': '\u2018',
-    '&rdquo;': '\u201D', '&ldquo;': '\u201C', '&hellip;': '…',
+    '&ndash;': '–', '&mdash;': '—', '&rsquo;': "'", '&lsquo;': "'",
+    '&rdquo;': '"', '&ldquo;': '"', '&hellip;': '…',
     '&eacute;': 'é', '&egrave;': 'è', '&ecirc;': 'ê', '&euml;': 'ë',
     '&agrave;': 'à', '&acirc;': 'â', '&ocirc;': 'ô', '&ugrave;': 'ù',
     '&ucirc;': 'û', '&ccedil;': 'ç', '&iuml;': 'ï', '&icirc;': 'î',
@@ -84,9 +84,20 @@ function decodeEntities(text: string): string {
     result = result.split(entity).join(char)
   }
   // Decode numeric entities (&#8217; &#8211; etc.)
-  result = result.replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+  result = result.replace(/&#(\d+);/g, (_, code) => {
+    const c = parseInt(code, 10)
+    // Normalize smart quotes to plain ASCII
+    if (c === 8216 || c === 8217) return "'"
+    if (c === 8220 || c === 8221) return '"'
+    return String.fromCharCode(c)
+  })
   // Decode hex entities (&#x2019; etc.)
-  result = result.replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)))
+  result = result.replace(/&#x([0-9a-fA-F]+);/g, (_, code) => {
+    const c = parseInt(code, 16)
+    if (c === 0x2018 || c === 0x2019) return "'"
+    if (c === 0x201C || c === 0x201D) return '"'
+    return String.fromCharCode(c)
+  })
   return result
 }
 

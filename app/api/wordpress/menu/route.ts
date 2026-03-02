@@ -14,14 +14,24 @@ interface WordPressPage {
 function decodeEntities(text: string): string {
   let result = text
   // Decode numeric entities (&#8217; &#8211; etc.)
-  result = result.replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+  result = result.replace(/&#(\d+);/g, (_, code) => {
+    const c = parseInt(code, 10)
+    if (c === 8216 || c === 8217) return "'"
+    if (c === 8220 || c === 8221) return '"'
+    return String.fromCharCode(c)
+  })
   // Decode hex entities (&#x2019; etc.)
-  result = result.replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)))
+  result = result.replace(/&#x([0-9a-fA-F]+);/g, (_, code) => {
+    const c = parseInt(code, 16)
+    if (c === 0x2018 || c === 0x2019) return "'"
+    if (c === 0x201C || c === 0x201D) return '"'
+    return String.fromCharCode(c)
+  })
   // Decode named entities
   const entities: Record<string, string> = {
     '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"',
     '&apos;': "'", '&nbsp;': ' ', '&ndash;': '–', '&mdash;': '—',
-    '&rsquo;': '\u2019', '&lsquo;': '\u2018', '&hellip;': '…',
+    '&rsquo;': "'", '&lsquo;': "'", '&hellip;': '…',
     '&eacute;': 'é', '&egrave;': 'è', '&ecirc;': 'ê', '&agrave;': 'à',
     '&acirc;': 'â', '&ocirc;': 'ô', '&ugrave;': 'ù', '&ccedil;': 'ç',
   }
