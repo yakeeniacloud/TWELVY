@@ -1,0 +1,683 @@
+{
+  "stages-recuperation-de-points-pas-cher": {
+    "psp_slug": "stage-recuperation-points",
+    "wp_id": 36,
+    "meta_title": "Stage recuperation de points pas cher",
+    "meta_desc": "Trouvez un stage de récupération de points pas cher partout en France. Réservez votre stage de sensibilisation à la sécurité routière au meilleur prix, et sans mauvaise surprise !",
+    "meta_keywords": "recuperation point permis"
+  },
+  "permis-probatoire": {
+    "psp_slug": "permis-probatoire",
+    "wp_id": 110,
+    "meta_title": "Permis probatoire - Alcool, durée, remboursement amende...",
+    "meta_desc": "Pour tout savoir sur le permis probatoire, la durée, la récupération de points, les stages obligatoires et le remboursement de l'amende... ",
+    "meta_keywords": "stage permis probatoire remboursement amende",
+    "faq": [
+      {
+        "q": "« J’ai le permis B depuis plus de 3 ans et je vais passer le permis moto, suis-je en période probatoire ? »",
+        "a": "La période probatoire ne s’applique qu’à la suite du premier permis que vous passez. Donc pas de période probatoire pour votre permis moto !"
+      },
+      {
+        "q": "« Je n’ai jamais reçu la lettre 48N, comment faire ? »",
+        "a": "Si vous avez perdu la lettre 48n ou si vous l’avez perdu procurez-vous un relevé intégral d’informations (adressez-vous à votre préfecture). En effet vous avez besoin de la lettre 48N pour effectuer le stage ainsi que pour demander le remboursement de l’amende."
+      }
+    ]
+  },
+  "questions-frequentes": {
+    "psp_slug": "faq-autres-questions",
+    "wp_id": 77,
+    "meta_title": "Foire aux questions sur le permis à points",
+    "meta_desc": "Questions les plus fréquentes sur le système du permis à points",
+    "meta_keywords": "foire aux questions fréquentes"
+  },
+  "les-conditions-dinscription": {
+    "psp_slug": "conditions_inscription",
+    "wp_id": 47,
+    "meta_title": "Les conditions d'inscription à un stage pour récupérer des points",
+    "meta_desc": "Toutes les conditions requises pour participer à un stage de récupération de points de permis de conduire",
+    "meta_keywords": "conditions stage permis a points, stage tous les ans"
+  },
+  "stage-rattrapage-points": {
+    "psp_slug": "stage-rattrapage-points",
+    "wp_id": 159,
+    "meta_title": "Stage de rattrapage de points de permis - Rattraper point permis conduire",
+    "meta_desc": "Vous souhaitez faire augmenter rapidement votre capital de points de permis ? Avec un stage de rattrapage de point, c'est facile !",
+    "meta_keywords": "",
+    "faq": [
+      {
+        "q": "Peut-on faire un stage sans rattraper de points ?",
+        "a": "Le stage peut être imposé sans permettre de rattraper des points dans les cas suivants : décision du procureur (cf. composition pénale ou alternative aux poursuites pénales) et décision du juge (cf. peine complémentaire)."
+      },
+      {
+        "q": "Je suis en permis probatoire depuis 2 ans. J’ai reçu la lettre 48N suite à un excès de vitesse contrôlé par un radar automatique. Sachant que j’ai effectué un stage de récupération de points de manière volontaire, il y a quelques semaines, suis-je obligé d’en refaire un ?",
+        "a": "Oui, ce stage vous est imposé par la préfecture alors que l’autre était volontaire. Toutefois, sachez qu’il ne vous permettra de récupérer aucun point et que vous ne disposez que d’un délai de 4 mois pour l’effectuer. A défaut, vous risquez une nouvelle amende de 135 € et une suspension de permis pouvant aller jusqu’à 3 ans."
+      }
+    ]
+  },
+  "stage-de-recuperation-de-points": {
+    "psp_slug": "stage-recuperation-de-points",
+    "wp_id": 44,
+    "meta_title": "Tout sur les stages de récupération de points : prix, programme, inscription...",
+    "meta_desc": "Listes des stages de récupération de points. Récupérez 4 points de permis en 2 jours.",
+    "meta_keywords": "stages recuperation points prix programme inscription",
+    "faq": [
+      {
+        "q": "« Peut-on faire un stage sans rattraper de points ? »",
+        "a": "Le stage peut être imposé et ne pas permettre de rattraper des points dans les 2 cas suivants :\r\n> C'est une décision du procureur : stage de composition pénale ou alternative aux poursuites pénales.\r\n> C'est une décision du juge : stage en peine complémentaire."
+      }
+    ]
+  },
+  "stage-de-sensibilisation-a-la-securite-routiere": {
+    "psp_slug": "stage-sensibilisation-securite-routiere",
+    "wp_id": 45,
+    "meta_title": "Stage de sensibilisation à la sécurité routière",
+    "meta_desc": "Listes des stages de sensibilisation à la sécurité routière. Récupérez 4 points de permis en 2 jours.",
+    "meta_keywords": "stage sensibilisation securite routiere",
+    "faq": [
+      {
+        "q": "« Peut-on faire un stage sans récupérer de points ? »",
+        "a": "Le stage peut être imposé sans permettre de rattraper des points permis s'il provient d'une décision du procureur (cf. composition pénale ou alternative aux poursuites pénales) ou d'une décision du juge (cf. peine complémentaire)."
+      }
+    ]
+  },
+  "stage-de-permis-de-conduire": {
+    "psp_slug": "stage-permis-conduire",
+    "wp_id": 43,
+    "meta_title": "Stage permis de conduire",
+    "meta_desc": "stage pour permis de conduire",
+    "meta_keywords": "stage permis conduire"
+  },
+  "programme-du-stage": {
+    "psp_slug": "programme-dun-stage-de-recuperation-de-points",
+    "wp_id": 48,
+    "meta_title": "Programme d'un stage de récupération de points de permis de conduire",
+    "meta_desc": "Programme d'un stage de récupération de points permis : déroulement des deux journées de formation et objectifs de cette sensibilisation à la sécurité routière.",
+    "meta_keywords": "prgramme, contenu, formation",
+    "faq": [
+      {
+        "q": "Je dois aller chercher mes enfants à 16h30, puis-je partir plus tôt ?",
+        "a": "Non, vous devez assister à la totalité du programme du stage, faute de quoi le centre organisateur pourrait ne pas valider votre stage et ne pas vous délivrer d'attestation. Il en est de même pour l'horaire d'arrivée le matin, les formateurs peuvent vous refuser l'accès à la formation si vous arrivez ne serait-ce que 10 minutes en retard. Il vaut donc mieux éviter de jouer à ce jeu là !"
+      },
+      {
+        "q": "Le programme est-il le différent pour les jeunes conducteurs ?",
+        "a": "Non, quelle que soit votre situation, le programme d'un stage de sensibilisation à la sécurité routière est le même. Il n'existe pas de programme spécifique pour les jeunes conducteurs en permis probatoire."
+      }
+    ]
+  },
+  "agrements-du-stage": {
+    "psp_slug": "agrements",
+    "wp_id": 49,
+    "meta_title": "Centres agréés par les préfectures françaises pour récupération de points de permis",
+    "meta_desc": "Les stages proposés par notre centrale de réservation sont organisés par des centres agréés par les préfectures françaises.",
+    "meta_keywords": ""
+  },
+  "linfraction": {
+    "psp_slug": "infraction-amende-pv",
+    "wp_id": 78,
+    "meta_title": "Infraction, amendes - Portable, exces de vitesse, alcool - Retrait de points permis",
+    "meta_desc": "Amendes, PV, retrait de points ... suite a une infraction au code de la route: que risquez vous ?",
+    "meta_keywords": "amende, pv, portable au volant, telephoner en conduisant, alcool, vitesse, radar, points retirés"
+  },
+  "lettre-48n": {
+    "psp_slug": "lettre-48N",
+    "wp_id": 85,
+    "meta_title": "La lettre 48N : stage permis à points obligatoire pour permis probatoire",
+    "meta_desc": "Lettre 48N et stage obligatoire en permis probatoire : tout ce qu'il faut savoir ! Réserver un stage de sensibilisation à la sécurité routière pour permis probatoire.",
+    "meta_keywords": "recuperation point permis",
+    "faq": [
+      {
+        "q": "« J'ai perdu ma lettre, que faire ? »",
+        "a": "Rendez-vous à la préfecture et demandez un duplicata de la lettre 48 n ou du relevé intégral d’information mentionnant l’envoi du courrier. Au moment de réserver votre stage, spécifiez qu’il s’agit d’une inscription suite à la réception de la lettre 48N, votre stage sera alors enregistré."
+      },
+      {
+        "q": "« Est-il possible de recevoir 2 fois la lettre 48N ? »",
+        "a": "Oui, vous avez 2 ans de permis et donc 10 points sur votre permis et vous commettez une infraction à 3 points et une à 4 points, vous devrez effectuer 2 stages mais vous ne pourrez récupérer que 4 points (cf. la règle d’1 stage pas an pour récupérer des points)."
+      },
+      {
+        "q": "« J'ai dépassé le délai de 4 mois pour effectuer mon stage que faire ? »",
+        "a": "Réservez vite un stage, vos points peuvent encore être récupérés. Par contre, vous ne pouvez plus demander le remboursement de l’amende, il est trop tard !"
+      }
+    ]
+  },
+  "non-port-ceinture-de-securite": {
+    "psp_slug": "non-port-ceinture-securite",
+    "wp_id": 59,
+    "meta_title": "Non port de la ceinture de sécurité",
+    "meta_desc": "Montant de l'amende 'non port de la ceinture' ? Nombre de points de retrait ? Comment contester l'infraction ?",
+    "meta_keywords": "ceinture sécurité infraction"
+  },
+  "les-points-de-permis": {
+    "psp_slug": "permis-a-points",
+    "wp_id": 79,
+    "meta_title": "Permis a point",
+    "meta_desc": "Tout sur le permis à points ! Fonctionnement du permis à point : connaître son solde de points, retrait de points et récupération des points de permis.",
+    "meta_keywords": "",
+    "faq": [
+      {
+        "q": "Mardi dernier je me suis fait flasher à un feu rouge, et je viens de recevoir la contravention. Il me semble que je vais perdre des points, comment les récupérer ?",
+        "a": "Vous allez effectivement perdre 4 points. Si vous n'êtes pas en période probatoire et si cette infraction est la première que vous commettez, votre permis à points comptera 8 points sur douze. Pour les récupérer, deux solutions : attendre patiemment que s'écoulent trois années sans infraction ou alors réserver une place pour une session de stage permis à point. Si votre voiture vous est indispensable et que vous l'utilisez souvent, il est conseillé de suivre un stage, car rappelons-le, vous n'avez la possibilité de récupérer des points par le biais d'une formation que tous les ans."
+      },
+      {
+        "q": "Mon grand-père a 91 ans, il a obtenu son permis en 1948. Est-il soumis à la règle du permis à points ?",
+        "a": "Peu importe l'âge de votre aïeul, dans la mesure où il a un permis de conduire valide de la République Française, celui-ci est soumis aux lois du permis à point. Il doit effectivement faire attention à ne pas perdre la totalité de ses points, faute de quoi il serait dans l'obligation de repasser le permis ce qui risque d'être compliqué à son âge, la réglementation ayant quelque peu changée ! Mieux vaut donc être prudent sur la route et pourquoi pas assister à un stage de sensibilisation. Aucun examen ne vient en sanctionner la validité, il pourra donc récupérer 4 points comme tout un chacun."
+      }
+    ]
+  },
+  "bareme-de-retrait-de-points": {
+    "psp_slug": "bareme-retrait-points",
+    "wp_id": 75,
+    "meta_title": "Retrait point - perte de points de permis - nombre de points retirés",
+    "meta_desc": "Barème de retrait de points et amendes suite à une infraction du code de la route.",
+    "meta_keywords": "nombre de point retiré, combien de points retiré"
+  },
+  "permis-etranger": {
+    "psp_slug": "permis-etranger",
+    "wp_id": 124,
+    "meta_title": "Changement de permis de conduire - Permis de conduire etranger",
+    "meta_desc": "Circuler avec un permis de conduire étranger en France. Comment effectuer un changement de permis de conduire pour obtenir un permis français ? Peut-on perdre des points avec un permis étranger ?",
+    "meta_keywords": "",
+    "faq": [
+      {
+        "q": "Je suis marocain et je viens d'emménager en France il y a un mois. Puis-je circuler avec mon permis étranger en France ou dois-je effectuer un changement permis de conduire étranger ?",
+        "a": "Si votre résidence principale (plus de 6 mois, 185 jours) est en France, vous avez un an pour procéder à l'échange permis de conduire étranger pour un permis de conduire français auprès de la préfecture de votre département. Avant le premier anniversaire de votre installation en France, vous pouvez conduire avec un permis étranger librement sur les routes françaises.\r\nSi votre résidence principale reste le Maroc, vous n'avez pas à effectuer d'échange permis étranger."
+      },
+      {
+        "q": "Je suis de nationalité russe et installé en France depuis 1 an et demi, puis-je toujours conduire avec mon permis de conduire étranger en France ou dois-je procéder à l'échange permis de conduire étranger ?",
+        "a": "Malheureusement pour vous, vous avez dépassé le délai légal d'échange permis de conduire étranger pour un permis de conduire français. Vous n'êtes plus en règle si vous conduisez toujours avec votre permis de conduire étranger en France.\r\nSi vous voulez continuer à conduire en France, vous devez repasser le permis de conduire, toutes les épreuves, théoriques (code de la route) et pratiques (examen de conduite) pour obtenir un nouveau permis de conduire français. Pensez à la solution du permis de conduire en candidat libre."
+      },
+      {
+        "q": "Je suis anglais et vais effectuer ma thèse en France, je viens à partir du mois prochain pour une durée de 3 ans, dois-je effectuer le changement permis de conduire étranger pour un permis de conduire français ?",
+        "a": "En tant qu'étudiant vous disposez d'un statut particulier sur les routes françaises. Vous n'avez pas à procéder à l'échange de votre permis pour un permis français, vous pouvez conduire avec un permis étranger en France librement, sans limite de temps, durant la totalité de vos études sur le sol français. Le statut étudiant est déterminé par le type de visa détenu ou éventuellement un certificat de scolarité."
+      }
+    ]
+  },
+  "permis-de-conduire-candidat-libre": {
+    "psp_slug": "permis-de-conduire-candidat-libre",
+    "wp_id": 125,
+    "meta_title": "Permis de conduire candidat libre",
+    "meta_desc": "Quelles sont les obligations pour passer le permis de conduire en candidat libre ? Toute la procédure à suivre !",
+    "meta_keywords": "prgramme, contenu, formation",
+    "faq": [
+      {
+        "q": "Suite à un solde de points nul, mon permis a été invalidé et j'ai reçu la lettre 48 SI. Je ne dois repasser que le code de la route, puis-je le passer en candidat libre ?",
+        "a": "Oui, suite à l'invalidation de votre permis de conduire, vous pouvez tout à fait passer le code de la route en candidat libre. N'oubliez pas que vous devez également effectuer un test psychotechnique pour permis auprès d'un centre agrée par l'état et une visite médicale."
+      },
+      {
+        "q": "Aucun membre de ma famille n'est disponible pour être l'accompagnateur de ma formation au permis de conduire en candidat libre. Des amis peuvent ils être accompagnateur ou est ce que cette personne doit être obligatoirement un membre de ma famille ?",
+        "a": "Rien ne spécifie dans la réglementation française que l'accompagnateur de la formation au permis de conduire en candidat libre doit être un membre de la famille du candidat. Un ami, s'il répond aux obligations précitées, peut tout à fait vous accompagner dans cette formation."
+      },
+      {
+        "q": "Je suis étudiant et n'ai pas beaucoup d'argent, cependant j'ai besoin du permis de conduire. Je souhaite le passer en candidat libre, mon père veut être l'accompagnateur de ma formation, mais son permis a été suspendu pour alcool au volant il y a six ans. Peut-il m'accompagner dans la formation du permis de conduire en candidat libre ?",
+        "a": "Oui, votre père peut être l'accompagnateur de votre formation. L'accompagnateur doit être titulaire du permis de conduire de catégorie B et ne pas avoir fait l'objet de suspension ou d'annulation de permis durant les 5 dernières années. Si la suspension de permis de votre père était il y a 6 ans, c'est donc légalement possible."
+      }
+    ]
+  },
+  "lettre-48si": {
+    "psp_slug": "lettre-48S",
+    "wp_id": 87,
+    "meta_title": "Lettre 48SI",
+    "meta_desc": "Tout sur la lettre 48SI. Participer à un stage de récupération de points avec un solde nul. Les astuces pour sauver son permis !",
+    "meta_keywords": "",
+    "faq": [
+      {
+        "q": "« J’ai déménagé, comment faire ? »",
+        "a": "Il est possible que la lettre ait été envoyée à votre ancienne adresse puis retournée en préfecture (NPAI : N'habite Pas à l’Adresse Indiquée). Dans ce cas votre permis est toujours valide. Veillez à consulter votre solde de points rapidement."
+      },
+      {
+        "q": "« Quels risques si je roule malgré l’invalidation de mon permis ? »",
+        "a": "C'est un délit pénal, vous encourez 2 ans d’emprisonnement et 4500€ d’amende (maximum) ainsi que la confiscation de votre véhicule."
+      },
+      {
+        "q": "« Ma voiture est mon outil de travail, comment faire ? »",
+        "a": "Déposez un référé suspension (= recours rapide) pour mettre en attente la décision d’invalidation en attendant la réponse du recours déposé devant le tribunal (env. 15 jours). Vous pouvez obtenir l’autorisation de conduire en attendant la décision du recours contentieux (voir plus haut).Pour déposer le référé suspension, 2 conditions :\r\n> Vous êtes dans une situation d’urgence.\r\n> Il existe de sérieux doute quant à la décision d’invalidation de votre permis."
+      }
+    ]
+  },
+  "lettre-48m": {
+    "psp_slug": "lettre-48M",
+    "wp_id": 86,
+    "meta_title": "La lettre 48M",
+    "meta_desc": "Réception d'une lettre recommandée 48M. Stage de sensibilisation à la sécurité routière",
+    "meta_keywords": "48M"
+  },
+  "les-sanctions-liees-a-lalcool": {
+    "psp_slug": "sanctions-alcool",
+    "wp_id": 89,
+    "meta_title": "Alcool : amendes, PV, contraventions et retraits de points",
+    "meta_desc": "Conduire en état d'ébriété: que risque t'on ?",
+    "meta_keywords": "alcool permis"
+  },
+  "les-risques-lies-a-lalcool": {
+    "psp_slug": "dangers-alcool",
+    "wp_id": 88,
+    "meta_title": "Les dangers, risques et effets de l'alcool au volant",
+    "meta_desc": "Les risques de conduire avec un taux d'alcool supérieur au taux légal autorisé",
+    "meta_keywords": "dangers alcool volant"
+  },
+  "temoignages-de-stagiaires": {
+    "psp_slug": "temoignages-stagiaires",
+    "wp_id": 53,
+    "meta_title": "Avis ProStagesPermis : témoignage des stagiaires !",
+    "meta_desc": "Témoignages de stagiaires ayant assisté à un stage de récupération de points avec ProStagesPermis : laformation, la salle, les formateurs. ",
+    "meta_keywords": "avis prostagespermis"
+  },
+  "radars-automatiques": {
+    "psp_slug": "radars",
+    "wp_id": 60,
+    "meta_title": "Flashé par un radar automatique. Les nouveaux radars aux feux rouges.",
+    "meta_desc": "Les nouveaux radars aux feux rouges. Pour quand et que risque t'on ?",
+    "meta_keywords": "radars feu rouge"
+  },
+  "radar-feu-rouge": {
+    "psp_slug": "radar-feu-rouge",
+    "wp_id": 67,
+    "meta_title": "Radar feu rouge",
+    "meta_desc": "Vous avez été flashé par un radar feu rouge ou feu orange ? Que risquez-vous et comment contester l'amende ?",
+    "meta_keywords": "annulation permis, permis annulé"
+  },
+  "stage-composition-penale": {
+    "psp_slug": "composition-penale",
+    "wp_id": 40,
+    "meta_title": "Composition pénale",
+    "meta_desc": "Composition pénale",
+    "meta_keywords": "stage composition penale"
+  },
+  "stage-peine-complementaire": {
+    "psp_slug": "peine-complementaire",
+    "wp_id": 39,
+    "meta_title": "Stage peine complémentaire",
+    "meta_desc": "Qu'est ce que la peine complémentaire ?",
+    "meta_keywords": "stage peine complementaire"
+  },
+  "stage-alternative-poursuite": {
+    "psp_slug": "alternative-poursuite",
+    "wp_id": 41,
+    "meta_title": "Stage alternative à la poursuite",
+    "meta_desc": "L'alternative à la poursuite dans le cadre du permis à points",
+    "meta_keywords": "alternative poursuite permis"
+  },
+  "conseils": {
+    "psp_slug": "conseils",
+    "wp_id": 136,
+    "meta_title": "Conseils en cas d'infraction: PV, amendes et contraventions",
+    "meta_desc": "Infraction au code de la route et verbalisation: ce qu'il faut faire ou ne pas faire...",
+    "meta_keywords": ""
+  },
+  "conduite-sans-permis": {
+    "psp_slug": "conduite-sans-permis",
+    "wp_id": 137,
+    "meta_title": "Conduire sans permis : risques et sanctions",
+    "meta_desc": "Conduire en suspension de permis, conduire avec un permis annulé ou invalidé ou sans l'avoir jamais obtenu ? Quels risques pour conduite sans permis ??",
+    "meta_keywords": ""
+  },
+  "suspension-de-permis-et-retrait-de-permis": {
+    "psp_slug": "suspension-de-permis-et-retrait-de-permis",
+    "wp_id": 138,
+    "meta_title": "Suspension de permis ",
+    "meta_desc": "Suspension de permis de conduire, peut-on faire un stage de récupération de points pendant la période de suspension ?",
+    "meta_keywords": "",
+    "faq": [
+      {
+        "q": "« Suspension judiciaire et administrative, c’est possible ? »",
+        "a": "La suspension peut être aménagée lorsque il n’existe pas d’autres moyens de transports (ex. chauffeur de taxi). Le conducteur peut ainsi demander un aménagement de la peine, un sursis ou un raccourcissement. Pour que le tribunal délivre un permis blanc, de sérieux doutes doivent être avancés quant à la légalité de la décision ayant prononcé la suspension et l’infraction commise ne doit pas être liée à l’alcoolémie."
+      },
+      {
+        "q": "« Je vais perdre 6 points de permis suite à une conduite en état d'ivresse, mon solde est à 4 points et mon permis suspendu, que faire ? »",
+        "a": "N’attendez pas et faites un stage pour récupérer 4 points. Présentez votre notification de suspension au moment de votre inscription au stage.\r\n! Vous pouvez être dans l’obligation d’effectuer un stage à titre de peine complémentaire. Il doit généralement être effectué dans les 6 mois à compter de la notification de la suspension."
+      }
+    ]
+  },
+  "retrait-de-permis": {
+    "psp_slug": "retrait-de-permis",
+    "wp_id": 139,
+    "meta_title": "Retrait - Permis de conduire ",
+    "meta_desc": "Quels sont les cas de retrait de permis ? Comment récupérer vos points et dans quels cas devez-vous effectuer un stage de récupération de points ?",
+    "meta_keywords": "retrait permis conduire probatoire"
+  },
+  "comment-sinscrire-a-un-stage": {
+    "psp_slug": "inscrire-stage",
+    "wp_id": 51,
+    "meta_title": "Inscription à un stage : dates, prix, chèque, carte bleue (CB)",
+    "meta_desc": "Comment choisir et s'inscrire à un stage de sensibilisation à la sécurite routière",
+    "meta_keywords": ""
+  },
+  "annulation-permis": {
+    "psp_slug": "annulation-permis",
+    "wp_id": 140,
+    "meta_title": "Annulation de permis",
+    "meta_desc": "Vous êtes sous le coup d'une annulation de permis ? Vous devez repasser votre permis... Nous vous expliquons les démarches à accomplir pour récupérer votre titre ! ",
+    "meta_keywords": "annulation permis, permis annulé"
+  },
+  "repasser-permis": {
+    "psp_slug": "repasser-permis",
+    "wp_id": 141,
+    "meta_title": "Repasser son permis de conduire",
+    "meta_desc": "Repasser les épreuves du permis de conduire suite à une annulation du permis",
+    "meta_keywords": "repasser code conduite permis auto ecole"
+  },
+  "types-de-stages-permis": {
+    "psp_slug": "types-stage",
+    "wp_id": 46,
+    "meta_title": "Types et cas de stages point permis - Volontaire, probatoire, penale, poursuite, complementaire",
+    "meta_desc": "les différents types de stages de récupération de points.",
+    "meta_keywords": "type, cas, stage"
+  },
+  "legalite": {
+    "psp_slug": "legalite",
+    "wp_id": 143,
+    "meta_title": "La légalité du permis à points",
+    "meta_desc": "Connaitre la loi vis à vis du permis de conduire",
+    "meta_keywords": "legalite"
+  },
+  "articles-securite-routiere": {
+    "psp_slug": "articles-securite-routiere",
+    "wp_id": 144,
+    "meta_title": "Sécurité routière: les lois, réformes et actualité sur le permis a points",
+    "meta_desc": "Articles sur la sécurité routière, les réformes, les nouvelles lois sur le permis à points",
+    "meta_keywords": ""
+  },
+  "tests-psychotechniques": {
+    "psp_slug": "tests-psychotechniques",
+    "wp_id": 145,
+    "meta_title": "Examens et tests psychotechniques pour permis annulé. Visite médicale annulation permis de conduire",
+    "meta_desc": "Les tests et examens psychotechniques en cas d\\'annulation du permis de conduire",
+    "meta_keywords": "test psychotechnique"
+  },
+  "conduite-accompagnee": {
+    "psp_slug": "conduite-accompagnee",
+    "wp_id": 146,
+    "meta_title": "Conduite accompagnée - permis ACC",
+    "meta_desc": "Conduite accompagnée ACC",
+    "meta_keywords": ""
+  },
+  "nombre-de-points-permis": {
+    "psp_slug": "nombre-de-points-permis",
+    "wp_id": 147,
+    "meta_title": "Nombre de points permis : connaitre son solde de points",
+    "meta_desc": "Combien vous reste-t-il de points sur votre permis de conduire ? Comment connaître son solde de points ? ",
+    "meta_keywords": ""
+  },
+  "loi-permis-a-points-2011": {
+    "psp_slug": "loi-permis-a-points-2011",
+    "wp_id": 148,
+    "meta_title": "Nouvelle loi permis à points",
+    "meta_desc": "Tout sur la loi 2011 du permis à points: récupérez 4 points tous les ans",
+    "meta_keywords": ""
+  },
+  "dif-cpf": {
+    "psp_slug": "dif-stage-permis",
+    "wp_id": 50,
+    "meta_title": "CPF - Stage de récupétion de points de permis - Compte personnel de formation",
+    "meta_desc": "Les stages de récupérations de points de permis ne sont pas elligibles au CPF (compte personnel de formation)",
+    "meta_keywords": "CPF, Compte personnel de formation"
+  },
+  "stage-permis-probatoire": {
+    "psp_slug": "stage-permis-probatoire",
+    "wp_id": 38,
+    "meta_title": "Stage permis probatoire - Jeune conducteur",
+    "meta_desc": "Tout savoir sur le permis probatoire et les stages de récupération de points obligatoires",
+    "meta_keywords": "stage permis probatoire remboursement amende jeune conducteur"
+  },
+  "stages-volontaires": {
+    "psp_slug": "stages-volontaires",
+    "wp_id": 42,
+    "meta_title": "Stages volontaires - Récupération de points",
+    "meta_desc": "Quels sont les stages volontaires pour récupérer ses points de permis ? Toutes les modalités et astuces !",
+    "meta_keywords": ""
+  },
+  "avocat-permis-de-conduire": {
+    "psp_slug": "avocat-permis-de-conduire",
+    "wp_id": 149,
+    "meta_title": "Avocat permis de conduire",
+    "meta_desc": "Vous hésitez à faire appel à un avocat du permis de conduire ? Retrouvez les tarifs et les modalités d’un avocat pour le retrait de permis.",
+    "meta_keywords": "",
+    "faq": [
+      {
+        "q": "Suite à un très grand excès de vitesse en période probatoire, mon permis a été retiré pour deux mois puis j’ai perdu 6 points, sans que je ne puisse faire un stage de récupération de points, ce qui a conduit à l’invalidation de mon permis. Je voudrais faire appel à un avocat du permis pour récupérer le droit de conduire et ainsi ne pas perdre mon travail. Pensez-vous que c’est une bonne idée ?",
+        "a": "En effet, pour ce genre de procédure, assez compliquée, le recours à un avocat du permis de conduire peut-être très utile, cependant, cela ne garantie pas la récupération de votre droit de conduire. Avant tout, soyez bien sûr de ne pas avoir dépassé le délai de recours qui est de 10 jours suivant le jugement. L’avocat pour le retrait de permis va tenter de débusquer des failles dans votre dossier afin de lever l’invalidation de votre permis mais rien n’est encore gagné."
+      },
+      {
+        "q": "J’ai reçu une amende pour excès de vitesse alors que ce n’est pas ma voiture qui a été prise en photo, quelqu’un a copié mes plaques ! Je refuse de payer pour une infraction que je n’ai pas commise et perdre trois points à cause de quelqu’un d’autre. Pensez-vous que le recours à un avocat du permis soit indispensable pour régler cette histoire ?",
+        "a": "Non, le recours à un avocat du permis de conduire n’est pas obligatoire dans ce cas de figure. Vous pouvez vous-même prouver votre innocence. Si le modèle de la voiture est le même que la vôtre, réunissez tous les documents prouvant que vous n’étiez pas sur le lieu de l’infraction à ce moment-là ainsi que la contravention, et rendez-vous au commissariat afin de porter plainte pour usurpation de plaque. Si le modèle de la voiture flashée est différent, prenez seulement la carte grise du véhicule ainsi que la contravention et demandez à l’agent de police, ou de gendarmerie, la procédure à suivre pour contester un P.V.."
+      }
+    ]
+  },
+  "amende-feu-rouge": {
+    "psp_slug": "amende-feu-rouge",
+    "wp_id": 150,
+    "meta_title": "Amende feu rouge",
+    "meta_desc": "Quel est le montant de l’amende feu rouge ? Combien de points sont retirés ? Et pour l’amende feu orange ? Comment contester un PV de dépassement de feu ?",
+    "meta_keywords": "",
+    "faq": [
+      {
+        "q": "L’autre jour, je suis passé au feu orange. Quelques secondes après avoir dépassé le feu, un agent de police m’a arrêté et m’a verbalisé pour cela. A-t-il réellement le droit faire ça ?",
+        "a": "Oui. Contrairement à ce que tout le monde croît, il est obligatoire de s’arrêter au feu orange. Il n’y a que lorsque l’automobiliste ne peut stopper son véhicule dans des conditions de sécurité suffisantes que cela est toléré. L’agent de police n’a pas dû juger que votre infraction s’inscrivait dans ce cas de figure particulier. Vous allez donc recevoir une amende de 35 € mais ne subir aucun retrait de points."
+      },
+      {
+        "q": "J’ai été flashé par un radar feu rouge alors que j’avançais au-delà de la limite pour laisser passer une ambulance. Je trouve cela injuste de devoir payer une amende feu rouge de 135 € et subir un retrait de 4 points, alors que je n’y suis pour rien. Comment puis-je faire pour obtenir gain de cause ?",
+        "a": "En théorie, les photos de l’appareil automatique sont analysées par des agents du CACIR pour ne pas créer d’injustices, dans des cas de figure tels que le vôtre. Si vous recevez malgré tout l’amende feu rouge, n’hésitez pas à leur écrire pour expliquer votre situation, en n’oubliant pas de leur demander les clichés. Vous obtiendrez sans aucun doute gain de cause."
+      }
+    ]
+  },
+  "amende-exces-de-vitesse": {
+    "psp_slug": "amende-exces-de-vitesse",
+    "wp_id": 151,
+    "meta_title": "Amende excès de vitesse",
+    "meta_desc": "Quel est le montant de l’amende et combien de points perd-t-on en cas d’excès de vitesse ? Comment contester un PV pour excès de vitesse ?",
+    "meta_keywords": "",
+    "faq": [
+      {
+        "q": "J’ai été flashé en ville par un radar automatique. Mon compteur affichait 75 km/h. Savez-vous quelles sont les sanctions encourues pour ce type d’amendes pour excès de vitesse ?",
+        "a": "En réalité, avec la marge de tolérance, vous avez été flashé à 70 km/h, ce qui signifie que vous avez commis un dépassement de 20 km/h de la vitesse autorisée, puisqu’en agglomération la limitation est à 50 km/h. Vous allez donc perdre 2 points et devoir payer une amende de 4e classe de 135 €."
+      },
+      {
+        "q": "Suite au contrôle d’un radar mobile, j’ai reçu un avis de contravention pour un excès de vitesse de 30 km/h. Le PV a été rédigé à la main, est raturé et me semble incomplet. Face à ce manque de soin de la part des forces de l’ordre, ne peut-il pas être considéré comme nul ?",
+        "a": "En tous cas, vous avez potentiellement la possibilité de le contester. Vous devez vérifier si toutes les cases obligatoires sont remplies : lieu de l’infraction, marque, modèle précis, numéro d’homologation et la date de la dernière révision du radar. Vérifier également que toutes les autres informations soient correctes. Si un seul de ces éléments est manquant ou inexact, vous pouvez contester votre PV et échapper aux sanctions de votre amende pour excès de vitesse."
+      }
+    ]
+  },
+  "alcool-au-volant": {
+    "psp_slug": "alcool-au-volant",
+    "wp_id": 58,
+    "meta_title": "Alcool au volant",
+    "meta_desc": "Que risque-t-on en cas de contrôle positif à l’alcool au volant ? Quelles sont les sanctions (perte de points, amende, retrait de permis) ?",
+    "meta_keywords": ""
+  },
+  "amende-forfaitaire-majoree": {
+    "psp_slug": "amende-forfaitaire-majoree",
+    "wp_id": 76,
+    "meta_title": "Amende forfaitaire majorée",
+    "meta_desc": "Dans quels cas reçoit-on une amende forfaitaire majorée ? Que faire si on ne la reçoit pas ? Comment obtenir une remise gracieuse de majoration ?",
+    "meta_keywords": "",
+    "faq": [
+      {
+        "q": "« J’ai reçu une amende de 135 € pour excès de vitesse. Il me reste 3 jours pour la régler. Qu’est-ce que je risque si j’attends 7 jours, c’est à dire l’arrivée de mon salaire, pour m’en acquitter ? »",
+        "a": "Vous risquez de recevoir une amende forfaitaire majorée d’un montant très élevé : 375 €. Nous vous conseillons donc de payer votre amende sans plus tarder. Si vous faites un chèque, celui-ci ne sera pas encaissé immédiatement. Vous aurez donc reçu votre salaire avant que l’argent ne soit prélevé. Sachez également que votre retrait de points restera identique."
+      },
+      {
+        "q": "« J’ai reçu il y a quelques jours une amende forfaitaire majorée pour un stationnement interdit, alors que je n’ai jamais eu le 1er PV entre les mains. Aujourd’hui, je dois payer un montant double car que je n’étais pas au courant de mon infraction. Comment puis-je contester ? »",
+        "a": "Il est possible que l’amende ait été déposée sur votre pare-brise et qu’elle se soit envolée, ou que quelqu’un l’ait prise, ou encore que La Poste l’ait égarée. Mais vous ne pouvez pas le prouver. Toutefois, vous pouvez rédiger et envoyer une lettre de demande de remise gracieuse de l’amende forfaitaire majorée, au comptable du Trésor Public dont vous dépendez, en expliquant votre situation. Vous pourrez ainsi obtenir une remise minimale de 20 %."
+      }
+    ]
+  },
+  "stationnement-interdit": {
+    "psp_slug": "stationnement-interdit",
+    "wp_id": 54,
+    "meta_title": "Stationnement interdit",
+    "meta_desc": "Quels sont les différents types de stationnements interdits ? Quelles sont les diverses sanctions encourues pour stationnement interdit ?",
+    "meta_keywords": ""
+  },
+  "radar-fixe": {
+    "psp_slug": "radar-fixe",
+    "wp_id": 65,
+    "meta_title": "Radar fixe",
+    "meta_desc": "Qu’est ce qu’un radar automatique ? Comment fonctionnent les radars fixes ? Comment les repérer ?",
+    "meta_keywords": ""
+  },
+  "telephone-au-volant": {
+    "psp_slug": "telephone-au-volant",
+    "wp_id": 57,
+    "meta_title": "Telephone au volant",
+    "meta_desc": "Quelle est le montant de l’amende pour téléphone au volant ? Combien de points sont retirés ? Comment téléphoner en conduisant sans être sanctionné ?",
+    "meta_keywords": "",
+    "faq": [
+      {
+        "q": "Combien de points pour le tépéhone au volant ?",
+        "a": "3 points et 90 euros d'amende."
+      },
+      {
+        "q": "Perd t-on des points en cas d'utilisation d'un kit oreilleille ?",
+        "a": "Oui, vous perdez 3 points de permis."
+      },
+      {
+        "q": "Peut-on utiliser le haut parleur en conduisant ?",
+        "a": "Non, l'usage du téléphone au volant est strictement interdit."
+      }
+    ]
+  },
+  "permis-international": {
+    "psp_slug": "permis-international",
+    "wp_id": 157,
+    "meta_title": "Permis international",
+    "meta_desc": "Comment obtenir un permis de conduire international ? Où se renseigner et à quel prix ? Combien de temps ce permis est-il valide ? ",
+    "meta_keywords": "",
+    "faq": [
+      {
+        "q": "Je fais mes études au Canada depuis 1 an et je souhaiterais faire une demande de permis international. Comment faire ?",
+        "a": "Malheureusement, il n’est pas possible de faire une demande de permis de conduire international si vous vous trouvez à l’étranger. Vous devez attendre de rentrer en France pour pouvoir faire les démarches auprès de votre préfecture. Pour gagner du temps, renseignez-vous auprès du chef-lieu de votre région de la procédure à suivre pour faire une demande de permis international et rassemblez les documents nécessaires afin que le jour venu, le document puisse être fait le plus rapidement possible."
+      },
+      {
+        "q": "Ma famille et moi partons faire le tour de l’Afrique pendant les vacances. Est-il possible que nous conduisions pendant notre voyage ?",
+        "a": "Avant de partir, renseignez-vous auprès du ministère des affaires étrangères ou bien auprès des ambassades des différents pays que vous visitez afin de connaitre les législations en vigueur. Certains peuvent accepter que vous conduisiez seulement avec le permis français pour une durée limitée. D’autres peuvent demander un permis international et certains encore peuvent ne pas reconnaître le document."
+      }
+    ]
+  },
+  "delit-fuite": {
+    "psp_slug": "delit-fuite",
+    "wp_id": 158,
+    "meta_title": "Delit de fuite\t",
+    "meta_desc": "Que faire en cas de délit de fuite ? Vers qui se tourner ? Quelles sanctions encoure le fuyard ? ",
+    "meta_keywords": "",
+    "faq": [
+      {
+        "q": "Je viens de commettre un délit de fuite mais la victime ne semble pas amochée. Quel retrait de points est ce que je risque ?",
+        "a": "Les sanctions d’un délit de fuite, même si la victime n’est pas blessée, sont bien plus sévères qu’un simple retrait de points. Vous encourrez une amende pouvant atteindre 75 000 €, une suspension de permis et jusqu’à 3 ans de prison. Si la victime semble en bonne santé, il n’est pas dit que son état ne se dégradera pas par la suite. En cas de graves blessures ou de décès, les sanctions pour un délit de fuite sont doublées !"
+      },
+      {
+        "q": "Je viens d’avoir un accident car l’automobiliste d’en face ne m’a pas cédé la priorité. Même si les voitures sont abîmées, nous n’avons rien. Puisque c’est l’autre conducteur le coupable, je ne veux pas perdre de temps à remplir un constat, est-ce possible ?",
+        "a": "Si vous partez, suite à un accident dont vous n’êtes pas responsable, vous commettez un refus d’obtempérer. Il est obligatoire de remplir un constat et de se faire connaitre dans une telle situation car vous ne connaissez pas les dégâts que votre organisme a pu subir. De plus, pour pouvoir espérer la prise en charge des réparations de votre automobile, le constat est obligatoire. Allons, prenez le temps de remplir ce constat car la peine maximale d’un refus d’obtempérer est la suspension de permis, 3 750 € d’amende et 3 mois de prison."
+      }
+    ]
+  },
+  "exces-de-vitesse": {
+    "psp_slug": "exces-de-vitesse",
+    "wp_id": 55,
+    "meta_title": "Excès de vitesse - Amendes excès de vitesse",
+    "meta_desc": "Limitations de vitesse, montant des amendes excès de vitesse... Combien de points vont vous être retirés ? C'est simple !",
+    "meta_keywords": ""
+  },
+  "stage-de-recuperation-de-points-pas-cher": {
+    "psp_slug": "prix-stage-sensibilisation",
+    "wp_id": 84,
+    "meta_title": "Prix stage récupération de points",
+    "meta_desc": "Prix d'un stage pour récupérer des points sur votre permis. Consultez nos promotions sur nos stages permis à points. Règlement par chèque.",
+    "meta_keywords": "prix, inscription, promotion, confirmation, récupération points permis, récupérer points, stage permis, permis à points, paiement sécurisé, crédit agricole, CB, carte bancaire, chèque, cas d'abscence"
+  },
+  "infractions": {
+    "psp_slug": "infractions-et-amendes",
+    "wp_id": 74,
+    "meta_title": "Amende suite à une infraction",
+    "meta_desc": "J’ai été flashé, quel sera le montant de mon amende ? Je viens d’être verbalisé, j’ai reçu une contravention, quand dois-je la payer ? Comment bénéficier du tarif minoré ?",
+    "meta_keywords": "prix, inscription, promotion, confirmation, récupération points permis, récupérer points, stage permis, permis à points, paiement sécurisé, crédit agricole, CB, carte bancaire, chèque, cas d'abscence"
+  },
+  "recuperer-ses-points": {
+    "psp_slug": "recuperation-points",
+    "wp_id": 83,
+    "meta_title": "Récupération de points de permis - Récupérer point permis conduire",
+    "meta_desc": "Vous souhaitez augmenter rapidement votre capital de points de permis ? Récupérez vos points avez un stage, c'est facile !",
+    "meta_keywords": ""
+  },
+  "dans-quels-cas-faire-un-stage": {
+    "psp_slug": "a-quel-moment-faire-un-stage",
+    "wp_id": 95,
+    "meta_title": "A quel moment faire un stage ?",
+    "meta_desc": "Quel est le bon moment pour suivre un stage ?",
+    "meta_keywords": ""
+  },
+  "combien-de-temps-pour-recuperer-ses-points": {
+    "psp_slug": "au-bout-de-combien-de-temps-je-recupere-mes-points",
+    "wp_id": 94,
+    "meta_title": "Au bout de combien de temps je récupère mes points ?",
+    "meta_desc": "Quand mes points sont-il crédités après la stage ? Quand sont-ils visibles sur mon relevé d'information ?",
+    "meta_keywords": "temps récupération 4 points crédité"
+  },
+  "consulter-ses-points": {
+    "psp_slug": "consulter-points",
+    "wp_id": 81,
+    "meta_title": "Consulter ses points permis - Consultation des points du permis",
+    "meta_desc": "Vous souhaitez consulter vos points de permis ? Tout pour la consultation du solde de points, en ligne ou directement à la préfecture c'est facile !",
+    "meta_keywords": ""
+  },
+  "payer-son-amende": {
+    "psp_slug": "payer-amende",
+    "wp_id": 82,
+    "meta_title": "Payer une amende - Paiement amende",
+    "meta_desc": "Vous souhaitez savoir comment payer votre amende. Paiement en ligne ou par courrier, c'est simple!",
+    "meta_keywords": ""
+  },
+  "sens-interdit": {
+    "psp_slug": "sens-interdit",
+    "wp_id": 63,
+    "meta_title": "Sens interdit - Amende sens interdit",
+    "meta_desc": "Montant de l'amende sens interdit ? Nombre de points retirés ? Comment contester l'infraction ?",
+    "meta_keywords": "amende sens interdit"
+  },
+  "refus-de-priorite": {
+    "psp_slug": "refus-de-priorite",
+    "wp_id": 56,
+    "meta_title": "Refus de priorité - Amende refus de priorité",
+    "meta_desc": "Quel est le montant d'une amende pour refus de priorité ou une priorité grillée ? Combien de points de retrait ? Comment contester ?",
+    "meta_keywords": "refus priorité grillé à droite"
+  },
+  "non-respect-du-stop": {
+    "psp_slug": "non-respect-d-un-stop",
+    "wp_id": 62,
+    "meta_title": "Non-respect d’un stop",
+    "meta_desc": "Combien coûte un stop grillé ? Montant de l'amende, nombre de points retirés...? Tous les moyens de contester l'infraction. ",
+    "meta_keywords": "non respect stop grillé"
+  },
+  "feu-rouge-et-feu-orange": {
+    "psp_slug": "feu-rouge",
+    "wp_id": 61,
+    "meta_title": "Feu rouge",
+    "meta_desc": "Quel est le montant de l'amende 'feu rouge' ? Comment la contester et comment récupérer vos points ? Toutes les réponses !",
+    "meta_keywords": "griller feu rouge amende ",
+    "faq": [
+      {
+        "q": "« J’ai grillé un feu rouge pour laisser passer une ambulance, qu’est-ce que je risque ? »",
+        "a": "Vous devez laisser passer la police, les ambulances, les pompiers, le SAMU. Dans le cas contraire vous pouvez être verbalisé."
+      }
+    ]
+  },
+  "distance-de-securite": {
+    "psp_slug": "distance-de-securite",
+    "wp_id": 64,
+    "meta_title": "Distance de sécurité : calcul, amende...",
+    "meta_desc": "Comment calculer les distances de sécurité ? Que risquez-vous en cas de non respect des distances de sécurité ? Toutes les réponses !",
+    "meta_keywords": "distance distances sécurité calcul amende"
+  },
+  "stages-obligatoires": {
+    "psp_slug": "stages-obligatoires",
+    "wp_id": 37,
+    "meta_title": "Stages obligatoires - Récupération de points",
+    "meta_desc": "Quels sont les stages obligatoires pour récupérer ses points de permis ? Toutes les modalités et astuces !",
+    "meta_keywords": ""
+  },
+  "guide-conserver-permis": {
+    "psp_slug": "guide-conserver-permis",
+    "wp_id": 172,
+    "meta_title": "Guide pour conserver son permis",
+    "meta_desc": "Vous commettez régulièrement des infractions sur la route et vous souhaitez récupérer vos points de permis ? Découvrez notre guide complet pour retrouver un permis à 12 points et la sérénité au volant. ",
+    "meta_keywords": "sans_menu_sans_lien"
+  }
+}

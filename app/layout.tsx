@@ -22,8 +22,30 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "TWELVY - Points Recovery Courses",
-  description: "Professional driving license points recovery courses",
+  title: {
+    default: "Stage récupération de points pas cher - Twelvy",
+    template: "%s - Twelvy",
+  },
+  description: "Trouvez un stage de récupération de points pas cher partout en France. Réservez votre stage de sensibilisation à la sécurité routière au meilleur prix.",
+  metadataBase: new URL('https://www.twelvy.net'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'fr_FR',
+    url: 'https://www.twelvy.net',
+    siteName: 'Twelvy',
+    title: 'Stage récupération de points pas cher - Twelvy',
+    description: 'Trouvez un stage de récupération de points pas cher partout en France. Réservez votre stage de sensibilisation à la sécurité routière au meilleur prix.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

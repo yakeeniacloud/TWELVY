@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import WordPressPageContent from './WordPressPageContent'
+import seoData from '@/lib/seo-data.json'
 
 const WP_HEADERS = {
   'Accept': 'application/json',
@@ -115,24 +116,41 @@ export async function generateMetadata(
     return { title: 'Page non trouvée - Twelvy' }
   }
 
-  const title = stripHtml(page.title.rendered)
+  // Use SEO data from SQL dump if available, otherwise fall back to WordPress content
+  const seoEntry = (seoData as Record<string, { meta_title?: string; meta_desc?: string; meta_keywords?: string }>)[slug]
 
-  // Use excerpt if meaningful, otherwise generate from content
-  let description = ''
-  if (page.excerpt?.rendered) {
-    description = stripHtml(page.excerpt.rendered)
+  let title = ''
+  if (seoEntry?.meta_title) {
+    title = seoEntry.meta_title
+  } else {
+    title = stripHtml(page.title.rendered)
   }
-  if (!description || description.length < 20) {
-    description = stripHtml(page.content.rendered).substring(0, 160) + '...'
+
+  let description = ''
+  if (seoEntry?.meta_desc) {
+    description = seoEntry.meta_desc
+  } else {
+    if (page.excerpt?.rendered) {
+      description = stripHtml(page.excerpt.rendered)
+    }
+    if (!description || description.length < 20) {
+      description = stripHtml(page.content.rendered).substring(0, 160) + '...'
+    }
   }
   // Cap description length for SEO
   if (description.length > 160) {
     description = description.substring(0, 157) + '...'
   }
 
+  const keywords = seoEntry?.meta_keywords || undefined
+
   return {
-    title: `${title} - Twelvy`,
+    title,
     description,
+    keywords,
+    alternates: {
+      canonical: `https://www.twelvy.net/${slug}`,
+    },
     openGraph: {
       title: `${title} - Twelvy`,
       description,
@@ -156,6 +174,10 @@ export default async function WordPressPage(
     notFound()
   }
 
+  // Use SEO title if available
+  const seoEntryPage = (seoData as Record<string, { meta_title?: string; faq?: { q: string; a: string }[] }>)[slug]
+  const pageTitle = seoEntryPage?.meta_title || stripHtml(page.title.rendered)
+
   const content = {
     id: page.id,
     title: stripHtml(page.title.rendered),
@@ -163,5 +185,71 @@ export default async function WordPressPage(
     slug: page.slug,
   }
 
-  return <WordPressPageContent content={content} menu={menu} slug={slug} />
+  // Build JSON-LD structured data
+  const jsonLd: Record<string, unknown> = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: pageTitle,
+    url: `https://www.twelvy.net/${slug}`,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Twelvy',
+      url: 'https://www.twelvy.net',
+    },
+  }
+
+  // Build BreadcrumbList
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Accueil',
+        item: 'https://www.twelvy.net',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: pageTitle,
+        item: `https://www.twelvy.net/${slug}`,
+      },
+    ],
+  }
+
+  // Build FAQ JSON-LD if FAQ data available
+  const faqItems = seoEntryPage?.faq
+  const faqJsonLd = faqItems && faqItems.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map(item => ({
+      '@type': 'Question',
+      name: item.q.replace(/^[«»"\s]+|[«»"\s]+$/g, ''),
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a,
+      },
+    })),
+  } : null
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+      <WordPressPageContent content={content} menu={menu} slug={slug} />
+    </>
+  )
 }
