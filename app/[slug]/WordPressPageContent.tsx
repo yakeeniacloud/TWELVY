@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+// Link is used in the parent page view (child grid)
 
 interface MenuItem {
   id: number
@@ -74,19 +75,6 @@ export default function WordPressPageContent({ content, menu, slug }: Props) {
     )
   }
 
-  // Find related articles: sibling pages under the same parent category
-  const relatedArticles: { title: string; slug: string }[] = []
-  for (const parent of menu) {
-    const isChild = parent.children.some(c => c.slug === slug)
-    if (isChild) {
-      for (const child of parent.children) {
-        if (child.slug !== slug && relatedArticles.length < 4) {
-          relatedArticles.push({ title: child.title, slug: child.slug })
-        }
-      }
-    }
-  }
-
   // Regular page (no children) - show normal content
   return (
     <div className="min-h-screen bg-white">
@@ -99,31 +87,6 @@ export default function WordPressPageContent({ content, menu, slug }: Props) {
           className="wp-content max-w-none"
           dangerouslySetInnerHTML={{ __html: content.content }}
         />
-
-        {relatedArticles.length > 0 && (
-          <div className="mt-16 pt-8 border-t border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Articles similaires</h2>
-            <div className="grid gap-4 md:grid-cols-2">
-              {relatedArticles.map((article) => (
-                <Link
-                  key={article.slug}
-                  href={`/${article.slug}`}
-                  className="block bg-gray-50 border border-gray-200 rounded-lg p-4 hover:border-red-500 hover:bg-white hover:shadow transition-all group"
-                >
-                  <h3 className="text-base font-medium text-gray-900 group-hover:text-red-600">
-                    {article.title}
-                  </h3>
-                  <span className="text-sm text-blue-600 mt-1 inline-flex items-center">
-                    Lire l&apos;article
-                    <svg className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )
