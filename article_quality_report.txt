@@ -1,0 +1,43 @@
+ARTICLE QUALITY AUDIT REPORT
+=================================================================
+
+Total pages checked: 93
+Clean: 85
+With issues: 8
+
+PROBLEMS:
+-----------------------------------------------------------------
+
+[54] stationnement-interdit
+  https://www.twelvy.net/stationnement-interdit
+  - MISMATCHED <tbody>: 0 open vs 1 close
+  - MISMATCHED <tr>: 5 open vs 6 close
+  - MISMATCHED <td>: 17 open vs 18 close
+
+[31] services
+  https://www.twelvy.net/services
+  - SHORT_CONTENT: only 49 chars of text
+
+[30] le-retrait-de-points
+  https://www.twelvy.net/le-retrait-de-points
+  - SHORT_CONTENT: only 59 chars of text
+
+[29] les-contraventions
+  https://www.twelvy.net/les-contraventions
+  - SHORT_CONTENT: only 61 chars of text
+
+[19] stages-toulon
+  https://www.twelvy.net/stages-toulon
+  - SHORT_CONTENT: only 74 chars of text
+
+[12] les-stages-permis-a-points
+  https://www.twelvy.net/les-stages-permis-a-points
+  - SHORT_CONTENT: only 29 chars of text
+
+[9] stages-paris
+  https://www.twelvy.net/stages-paris
+  - SHORT_CONTENT: only 26 chars of text
+
+[6] stages-marseille
+  https://www.twelvy.net/stages-marseille
+  - SHORT_CONTENT: only 41 chars of text

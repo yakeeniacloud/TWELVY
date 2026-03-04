@@ -1,0 +1,13 @@
+BMP IMAGES COMPREHENSIVE SCAN REPORT
+=================================================================
+
+Pages scanned: 93
+
+RELATIVE IMAGE PATHS:
+  [149] avocat-permis-de-conduire
+    iframe_avocat.php
+  [77] questions-frequentes
+    //s7.addthis.com/js/300/addthis_widget.js#pubid=ra-54aaadfb41cca814
+  [52] toutes-les-questions
+    //s7.addthis.com/js/300/addthis_widget.js#pubid=ra-54aaadfb41cca814
+
