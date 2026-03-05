@@ -2522,6 +2522,9 @@ export default function Home() {
             <a href="https://psp-copie.twelvy.net/es/" className="text-white text-xs hover:underline">
               Espace Client
             </a>
+            <a href="https://psp-copie.twelvy.net/ep/" className="text-white text-xs hover:underline">
+              Espace Partenaire
+            </a>
           </div>
           {/* Mobile: vertical stacked layout */}
           <div className="md:hidden flex flex-col items-center gap-3 mb-4">
@@ -2540,8 +2543,11 @@ export default function Home() {
             <a href="https://psp-copie.twelvy.net/es/" className="text-white text-xs hover:underline">
               Espace Client
             </a>
+            <a href="https://psp-copie.twelvy.net/ep/" className="text-white text-xs hover:underline">
+              Espace Partenaire
+            </a>
           </div>
-          <p className="text-center text-white text-xs">2025©ProStagesPermis</p>
+          <p className="text-center text-white text-xs">{new Date().getFullYear()}©ProStagesPermis</p>
         </div>
       </footer>
     </div>

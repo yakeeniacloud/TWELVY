@@ -1,11 +1,11 @@
 TWELVY BROKEN LINKS REPORT
 ============================================================
 
-Pages in sitemap: 93
-Links/images checked: 220
-Total broken: 36
+Pages in sitemap: 97
+Links/images checked: 217
+Total broken: 28
 
-BROKEN LINKS (36):
+BROKEN LINKS (28):
   [TIMEOUT/ERROR] http://cessionvehicule.fr/
     → found on: https://www.twelvy.net/questions-frequentes
     → found on: https://www.twelvy.net/toutes-les-questions
@@ -63,33 +63,14 @@ BROKEN LINKS (36):
   [404] http://www.psychotestspermis.fr/suspension-de-permis
     → found on: https://www.twelvy.net/rattraper-des-points
     → found on: https://www.twelvy.net/recuperer-ses-points
-  [TIMEOUT/ERROR] http://www.securite-routiere.gouv.fr/
-    → found on: https://www.twelvy.net/non-port-ceinture-de-securite
   [TIMEOUT/ERROR] http://www2.securiteroutiere.gouv.fr/data/radars/index
     → found on: https://www.twelvy.net/radar-automatique
     → found on: https://www.twelvy.net/radars-automatiques
-  [404] https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTe2UmQ10MYzrI0sDr92eiviNub2Gwfy4yhTjLUmcoEP5PeDdVWyQ
-    → found on: https://www.twelvy.net/sens-interdit
   [401] https://psp-copie.twelvy.net/es/
     → found on: https://www.twelvy.net
     → found on: https://www.twelvy.net/agrements-du-stage
-    → found on: https://www.twelvy.net/alcool-au-volant
-  [TIMEOUT/ERROR] https://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-54aaadfb41cca814
-    → found on: https://www.twelvy.net/questions-frequentes
-    → found on: https://www.twelvy.net/toutes-les-questions
+    → found on: https://www.twelvy.net/aide-et-contact
   [TIMEOUT/ERROR] https://tele7.interieur.gouv.fr/telepoints/identification.do
     → found on: https://www.twelvy.net/nombre-de-points-permis
   [TIMEOUT/ERROR] https://www.formulaires.modernisation.gouv.fr/gf/cerfa_14866.do
     → found on: https://www.twelvy.net/permis-de-conduire-candidat-libre
-  [404] https://www.twelvy.net/aide-et-contact
-    → found on: https://www.twelvy.net
-    → found on: https://www.twelvy.net/agrements-du-stage
-    → found on: https://www.twelvy.net/alcool-au-volant
-  [404] https://www.twelvy.net/conditions-generales
-    → found on: https://www.twelvy.net
-  [404] https://www.twelvy.net/iframe_avocat.php
-    → found on: https://www.twelvy.net/avocat-permis-de-conduire
-  [404] https://www.twelvy.net/mentions-legales
-    → found on: https://www.twelvy.net
-  [404] https://www.twelvy.net/qui-sommes-nous
-    → found on: https://www.twelvy.net

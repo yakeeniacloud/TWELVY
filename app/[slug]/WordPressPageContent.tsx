@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-// Link is used in the parent page view (child grid)
+import CitySearchBar from '@/components/stages/CitySearchBar'
 
 interface MenuItem {
   id: number
@@ -27,6 +27,37 @@ interface Props {
   slug: string
 }
 
+function SearchBanner() {
+  return (
+    <div className="bg-[#2b85c9] py-6">
+      <div className="mx-auto max-w-2xl px-4 flex justify-center">
+        <CitySearchBar
+          placeholder="Entrez votre ville ou code postal pour trouver un stage"
+          variant="small"
+        />
+      </div>
+    </div>
+  )
+}
+
+function PageFooter() {
+  return (
+    <footer className="bg-[#343435] py-6 mt-12">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex flex-wrap items-center justify-center gap-6 mb-3">
+          <a href="/qui-sommes-nous" className="text-white text-xs hover:underline">Qui sommes-nous</a>
+          <a href="/aide-et-contact" className="text-white text-xs hover:underline">Aide et contact</a>
+          <a href="/conditions-generales" className="text-white text-xs hover:underline">Conditions générales de vente</a>
+          <a href="/mentions-legales" className="text-white text-xs hover:underline">Mentions légales</a>
+          <a href="https://psp-copie.twelvy.net/es/" className="text-white text-xs hover:underline">Espace Client</a>
+          <a href="https://psp-copie.twelvy.net/ep/" className="text-white text-xs hover:underline">Espace Partenaire</a>
+        </div>
+        <p className="text-center text-white text-xs">{new Date().getFullYear()}©ProStagesPermis</p>
+      </div>
+    </footer>
+  )
+}
+
 export default function WordPressPageContent({ content, menu, slug }: Props) {
   // Find if this page is a parent page with children
   const parentPage = menu.find(item => item.slug === slug)
@@ -36,6 +67,7 @@ export default function WordPressPageContent({ content, menu, slug }: Props) {
   if (hasChildren && parentPage) {
     return (
       <div className="min-h-screen bg-white">
+        <SearchBanner />
         <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-8 border-b-2 border-red-500 pb-4">
             {parentPage.title}
@@ -71,6 +103,7 @@ export default function WordPressPageContent({ content, menu, slug }: Props) {
             </div>
           </div>
         </div>
+        <PageFooter />
       </div>
     )
   }
@@ -78,6 +111,7 @@ export default function WordPressPageContent({ content, menu, slug }: Props) {
   // Regular page (no children) - show normal content
   return (
     <div className="min-h-screen bg-white">
+      <SearchBanner />
       <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold text-gray-900 mb-8 border-b-2 border-red-500 pb-4">
           {content.title}
@@ -88,6 +122,7 @@ export default function WordPressPageContent({ content, menu, slug }: Props) {
           dangerouslySetInnerHTML={{ __html: content.content }}
         />
       </div>
+      <PageFooter />
     </div>
   )
 }

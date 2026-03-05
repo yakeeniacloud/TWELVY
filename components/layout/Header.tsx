@@ -13,10 +13,11 @@ const decodeHtmlEntities = (text: string): string => {
   return textarea.value
 }
 
-// Format menu item to lowercase (like "qui sommes nous")
+// Format menu item: capitalize first letter only (like "Les stages permis à points")
 const formatMenuItem = (text: string): string => {
   const decoded = decodeHtmlEntities(text)
-  return decoded.toLowerCase()
+  const lower = decoded.toLowerCase()
+  return lower.charAt(0).toUpperCase() + lower.slice(1)
 }
 
 export default function Header() {
@@ -57,18 +58,6 @@ export default function Header() {
 
   const toggleMenu = (menuId: number) => {
     setOpenMenuId(openMenuId === menuId ? null : menuId)
-  }
-
-  // Split children into columns (max 4 columns)
-  const getMenuColumns = (children: any[]) => {
-    if (children.length === 0) return []
-
-    const columns: any[][] = [[], [], [], []]
-    children.forEach((child, index) => {
-      columns[index % 4].push(child)
-    })
-
-    return columns.filter(col => col.length > 0)
   }
 
   return (
@@ -157,10 +146,15 @@ export default function Header() {
             ))}
           </div>
 
-          {/* Right side - Aide et contact */}
-          <Link href="/aide-et-contact" className="text-white hover:text-gray-200 transition-colors" style={{ fontSize: '11px' }}>
-            aide et contact
-          </Link>
+          {/* Right side - Qui sommes-nous + Aide et contact */}
+          <div className="flex items-center gap-4">
+            <Link href="/qui-sommes-nous" className="text-white hover:text-gray-200 transition-colors" style={{ fontSize: '11px' }}>
+              Qui sommes-nous
+            </Link>
+            <Link href="/aide-et-contact" className="text-white hover:text-gray-200 transition-colors" style={{ fontSize: '11px' }}>
+              Aide et contact
+            </Link>
+          </div>
         </div>
       </nav>
     </header>
