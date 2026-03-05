@@ -217,13 +217,12 @@ export default function CitySearchBar({
           <div
             className="flex items-center gap-3.5"
             style={{
-              width: '283px',
-              height: '36px',
+              width: '100%',
+              height: '44px',
               padding: '1px 20px',
               borderRadius: '20px',
-              border: '1px solid #989898',
+              border: '1px solid #000',
               background: '#FFF',
-              flexShrink: 0
             }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" className="flex-shrink-0">

@@ -29,12 +29,14 @@ interface Props {
 
 function SearchBanner() {
   return (
-    <div className="bg-[#2b85c9] py-6">
-      <div className="mx-auto max-w-2xl px-4 flex justify-center">
-        <CitySearchBar
-          placeholder="Entrez votre ville ou code postal pour trouver un stage"
-          variant="small"
-        />
+    <div className="py-6 border-b border-gray-200">
+      <div className="mx-auto px-4 flex justify-center">
+        <div style={{ width: '460px' }}>
+          <CitySearchBar
+            placeholder="Entrez votre ville ou code postal pour trouver un stage"
+            variant="filter"
+          />
+        </div>
       </div>
     </div>
   )
