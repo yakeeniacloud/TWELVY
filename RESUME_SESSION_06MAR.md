@@ -109,7 +109,7 @@ Correction du menu déroulant : les articles s'affichent désormais en grille ho
 ## 3/ Prochaines étapes
 
 D'après `MIGRATION.md` :
-- **Priorité 2 (débrief) — ✅ FAIT** : Vérifications de fin d'étape 6 complétées (voir Étape 4 ci-dessous). Il reste à l'utilisateur de faire la vérif manuelle C (10 pages en navigateur) et de corriger les 4 pages WP avec contenu placeholder.
+- **Priorité 2 (débrief) — ✅ COMPLÈTE** : Vérifications de fin d'étape 6 terminées à 100%. A (crawl auto) ✅, B (SSR SEO) ✅ + 3 bugs corrigés, C (vérif manuelle utilisateur) ✅ toutes pages OK, D (robots.txt + sitemap) ✅. Reste : corriger les 4 pages WP avec contenu placeholder (action WordPress admin).
 - **Priorité 3** : Mise en place des redirections 301 (prépare le DNS cutover) ← PROCHAINE ÉTAPE
 - **Étape 7** (MIGRATION.md) : Tests des parcours critiques sur psp-copie.twelvy.net
 - **Étape 8** : Intégration Up2Pay (paiement)
@@ -198,7 +198,15 @@ Dans `migrate_articles.py`, les mises à jour de pages WP utilisent `?_method=PU
 
 ---
 
-## 4bis/ Étape 4 — Priorité 2 : Vérifications de fin d'étape 6
+## 4bis/ Étape 4 — Priorité 2 : Vérifications de fin d'étape 6 ✅ COMPLÈTE
+
+**Contexte** : Conformément au débrief, avant de passer aux redirections 301 (Priorité 3) et à l'étape 7, une "check de fin d'étape 6" est requise. Elle comporte 4 sous-tâches : crawl auto (A), vérif SSR SEO (B), vérif manuelle (C), robots.txt + sitemap (D).
+
+**Qui fait quoi** :
+- A, B, D → automatisé par Claude (curl, scripts bash, Python)
+- C → vérification manuelle par l'utilisateur en navigateur Chrome
+
+**Résultat global** : ✅ TOUTES LES SOUS-TÂCHES VALIDÉES
 
 ### A) Crawl automatique (sitemap.xml → 183 URLs)
 
@@ -231,13 +239,23 @@ Pages vérifiées via `curl` + extraction des balises HEAD :
 
 ---
 
-### C) Vérification manuelle (à faire par l'utilisateur)
+### C) Vérification manuelle (faite par l'utilisateur — résultat OK)
 
-**Liste des 10 pages à vérifier dans Chrome** (voir section "Ce que tu dois coller dans Chrome" ci-dessous) :
-1. Tableaux lisibles, images OK, pas d'images cassées
-2. Liens internes principaux fonctionnels
-3. Search bar répond dans la bannière en haut des articles
-4. Footer visible et liens cliquables
+**Pages vérifiées en navigateur Chrome** :
+1. `https://www.twelvy.net/` → ✅
+2. `https://www.twelvy.net/stage-de-recuperation-de-points` → ✅
+3. `https://www.twelvy.net/exces-de-vitesse` → ✅
+4. `https://www.twelvy.net/alcool-au-volant` → ✅
+5. `https://www.twelvy.net/les-stages-permis-a-points` → ✅
+6. `https://www.twelvy.net/stages-recuperation-points/paris` → ✅
+7. `https://www.twelvy.net/stages-recuperation-points/marseille` → ✅
+8. `https://www.twelvy.net/blog` → ✅
+9. `https://www.twelvy.net/blog/les-5-verites-sur-les-stages-permis-a-points` → ✅
+10. `https://www.twelvy.net/suspension-de-permis-et-retrait-de-permis` → ✅
+
+**Résultat** : Toutes les pages passent — tableaux lisibles, images OK, search bar présente et fonctionnelle, footer visible, liens internes OK. Aucun problème visuel signalé.
+
+**Conclusion vérif C** : ✅ VALIDÉE — Priorité 2 complète à 100%.
 
 ---
 
@@ -264,7 +282,7 @@ Pages vérifiées via `curl` + extraction des balises HEAD :
 - `8d8bd14` — Blog migration : 70 articles + routes /blog et /blog/[slug]
 - `e604e7c` — SEO fixes : sitemap blog + og:locale pages blog
 - `0f20156` — RESUME_SESSION_06MAR créé
-- **[prochain]** — SEO verif étape 6 : og:locale [slug], seo-data.json trailing whitespace
+- `1608d37` — SEO verif étape 6 : og:locale [slug], seo-data.json trailing whitespace + RESUME update
 
 ---
 
@@ -277,4 +295,21 @@ Pages vérifiées via `curl` + extraction des balises HEAD :
 - Log de migration : `migrate_blog_log.json` (gitignored, local uniquement)
 - Commit menu fix : `f839a79`
 - Commit blog migration : `8d8bd14`
-- Commit SEO fixes : `e604e7c`
+- Commit SEO fixes blog : `e604e7c`
+- Commit RESUME initial : `0f20156`
+- Commit SEO verif étape 6 : `1608d37`
+
+---
+
+## 6/ Actions WordPress restantes (non bloquantes)
+
+Ces corrections sont à faire dans WordPress admin (`headless.twelvy.net/wp-admin` → Pages) avant ou après le DNS cutover — elles n'impactent pas la migration technique mais impactent l'apparence dans les SERPs Google.
+
+| URL | Problème titre | Problème extrait (meta description) | Action |
+|-----|---------------|--------------------------------------|--------|
+| `/les-stages-permis-a-points` | OK | "essai content de la categorie" | Corriger l'extrait WP |
+| `/stages-paris` | "Stages-Paris" (tiret, casse) | "essai contenu stages paris" | Corriger titre + extrait |
+| `/stages-marseille` | "Stages-Marseille" (tiret, casse) | "essai n1 du contenu marseille fin de page" | Corriger titre + extrait |
+| `/stages-toulon` | "Stages-toulon" (minuscule) | "Essai content toulon apres implementation..." | Corriger titre + extrait |
+
+**Comment corriger** : WP Admin → Pages → chercher la page → "Modifier" → changer le titre ET remplir le champ "Extrait" avec une description SEO pertinente (150-160 caractères) → Mettre à jour.
