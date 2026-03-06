@@ -1952,21 +1952,11 @@ export default function StagesResultsPage() {
       <footer className="bg-[#343435] py-6 mt-16 md:mt-32">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6 mb-3">
-            {[
-              { text: 'Qui sommes-nous', href: '/qui-sommes-nous' },
-              { text: 'Aide et contact', href: '/aide-et-contact' },
-              { text: 'Conditions générales de vente', href: '/conditions-generales' },
-              { text: 'Mentions légales', href: '/mentions-legales' },
-              { text: 'Espace Client', href: 'https://psp-copie.twelvy.net/es/' },
-            ].map((link, index) => (
-              <Link
-                key={index}
-                href={link.href}
-                className="text-white text-xs hover:underline"
-              >
-                {link.text}
-              </Link>
-            ))}
+            <Link href="/qui-sommes-nous" className="text-white text-xs hover:underline">Qui sommes-nous</Link>
+            <a href="https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">Aide et contact</a>
+            <a href="https://www.prostagespermis.fr/CGV_PROSTAGESPERMIS-STAGIAIRES.pdf" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">Conditions générales de vente</a>
+            <Link href="/mentions-legales" className="text-white text-xs hover:underline">Mentions légales</Link>
+            <Link href="https://psp-copie.twelvy.net/es/" className="text-white text-xs hover:underline">Espace Client</Link>
           </div>
           <p className="text-center text-white text-xs">2025©ProStagesPermis</p>
         </div>

@@ -2510,10 +2510,10 @@ export default function Home() {
             <a href="/qui-sommes-nous" className="text-white text-xs hover:underline">
               Qui sommes-nous
             </a>
-            <a href="/aide-et-contact" className="text-white text-xs hover:underline">
+            <a href="https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">
               Aide et contact
             </a>
-            <a href="/conditions-generales" className="text-white text-xs hover:underline">
+            <a href="https://www.prostagespermis.fr/CGV_PROSTAGESPERMIS-STAGIAIRES.pdf" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">
               Conditions générales de vente
             </a>
             <a href="/mentions-legales" className="text-white text-xs hover:underline">
@@ -2531,10 +2531,10 @@ export default function Home() {
             <a href="/qui-sommes-nous" className="text-white text-xs hover:underline">
               Qui sommes-nous
             </a>
-            <a href="/aide-et-contact" className="text-white text-xs hover:underline">
+            <a href="https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">
               Aide et contact
             </a>
-            <a href="/conditions-generales" className="text-white text-xs hover:underline">
+            <a href="https://www.prostagespermis.fr/CGV_PROSTAGESPERMIS-STAGIAIRES.pdf" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">
               Conditions générales de vente
             </a>
             <a href="/mentions-legales" className="text-white text-xs hover:underline">

@@ -166,8 +166,8 @@ export default async function BlogPostPage(
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex flex-wrap items-center justify-center gap-6 mb-3">
               <a href="/qui-sommes-nous" className="text-white text-xs hover:underline">Qui sommes-nous</a>
-              <a href="/aide-et-contact" className="text-white text-xs hover:underline">Aide et contact</a>
-              <a href="/conditions-generales" className="text-white text-xs hover:underline">Conditions générales de vente</a>
+              <a href="https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">Aide et contact</a>
+              <a href="https://www.prostagespermis.fr/CGV_PROSTAGESPERMIS-STAGIAIRES.pdf" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">Conditions générales de vente</a>
               <a href="/mentions-legales" className="text-white text-xs hover:underline">Mentions légales</a>
               <a href="https://psp-copie.twelvy.net/es/" className="text-white text-xs hover:underline">Espace Client</a>
               <a href="https://psp-copie.twelvy.net/ep/" className="text-white text-xs hover:underline">Espace Partenaire</a>

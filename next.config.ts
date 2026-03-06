@@ -19,6 +19,17 @@ const nextConfig: NextConfig = {
         destination: '/bareme-de-retrait-de-points',
         permanent: true,
       },
+      // Footer link redirections
+      {
+        source: '/conditions-generales',
+        destination: 'https://www.prostagespermis.fr/CGV_PROSTAGESPERMIS-STAGIAIRES.pdf',
+        permanent: false,
+      },
+      {
+        source: '/aide-et-contact',
+        destination: 'https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/',
+        permanent: false,
+      },
     ]
   },
 };
