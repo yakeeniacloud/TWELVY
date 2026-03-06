@@ -10,7 +10,7 @@
     "psp_slug": "permis-probatoire",
     "wp_id": 110,
     "meta_title": "Permis probatoire - Alcool, durée, remboursement amende...",
-    "meta_desc": "Pour tout savoir sur le permis probatoire, la durée, la récupération de points, les stages obligatoires et le remboursement de l'amende... ",
+    "meta_desc": "Pour tout savoir sur le permis probatoire, la durée, la récupération de points, les stages obligatoires et le remboursement de l'amende...",
     "meta_keywords": "stage permis probatoire remboursement amende",
     "faq": [
       {
@@ -258,7 +258,7 @@
     "psp_slug": "temoignages-stagiaires",
     "wp_id": 53,
     "meta_title": "Avis ProStagesPermis : témoignage des stagiaires !",
-    "meta_desc": "Témoignages de stagiaires ayant assisté à un stage de récupération de points avec ProStagesPermis : laformation, la salle, les formateurs. ",
+    "meta_desc": "Témoignages de stagiaires ayant assisté à un stage de récupération de points avec ProStagesPermis : laformation, la salle, les formateurs.",
     "meta_keywords": "avis prostagespermis"
   },
   "radars-automatiques": {
@@ -313,7 +313,7 @@
   "suspension-de-permis-et-retrait-de-permis": {
     "psp_slug": "suspension-de-permis-et-retrait-de-permis",
     "wp_id": 138,
-    "meta_title": "Suspension de permis ",
+    "meta_title": "Suspension de permis",
     "meta_desc": "Suspension de permis de conduire, peut-on faire un stage de récupération de points pendant la période de suspension ?",
     "meta_keywords": "",
     "faq": [
@@ -330,7 +330,7 @@
   "retrait-de-permis": {
     "psp_slug": "retrait-de-permis",
     "wp_id": 139,
-    "meta_title": "Retrait - Permis de conduire ",
+    "meta_title": "Retrait - Permis de conduire",
     "meta_desc": "Quels sont les cas de retrait de permis ? Comment récupérer vos points et dans quels cas devez-vous effectuer un stage de récupération de points ?",
     "meta_keywords": "retrait permis conduire probatoire"
   },
@@ -345,7 +345,7 @@
     "psp_slug": "annulation-permis",
     "wp_id": 140,
     "meta_title": "Annulation de permis",
-    "meta_desc": "Vous êtes sous le coup d'une annulation de permis ? Vous devez repasser votre permis... Nous vous expliquons les démarches à accomplir pour récupérer votre titre ! ",
+    "meta_desc": "Vous êtes sous le coup d'une annulation de permis ? Vous devez repasser votre permis... Nous vous expliquons les démarches à accomplir pour récupérer votre titre !",
     "meta_keywords": "annulation permis, permis annulé"
   },
   "repasser-permis": {
@@ -394,7 +394,7 @@
     "psp_slug": "nombre-de-points-permis",
     "wp_id": 147,
     "meta_title": "Nombre de points permis : connaitre son solde de points",
-    "meta_desc": "Combien vous reste-t-il de points sur votre permis de conduire ? Comment connaître son solde de points ? ",
+    "meta_desc": "Combien vous reste-t-il de points sur votre permis de conduire ? Comment connaître son solde de points ?",
     "meta_keywords": ""
   },
   "loi-permis-a-points-2011": {
@@ -539,7 +539,7 @@
     "psp_slug": "permis-international",
     "wp_id": 157,
     "meta_title": "Permis international",
-    "meta_desc": "Comment obtenir un permis de conduire international ? Où se renseigner et à quel prix ? Combien de temps ce permis est-il valide ? ",
+    "meta_desc": "Comment obtenir un permis de conduire international ? Où se renseigner et à quel prix ? Combien de temps ce permis est-il valide ?",
     "meta_keywords": "",
     "faq": [
       {
@@ -555,8 +555,8 @@
   "delit-fuite": {
     "psp_slug": "delit-fuite",
     "wp_id": 158,
-    "meta_title": "Delit de fuite\t",
-    "meta_desc": "Que faire en cas de délit de fuite ? Vers qui se tourner ? Quelles sanctions encoure le fuyard ? ",
+    "meta_title": "Delit de fuite",
+    "meta_desc": "Que faire en cas de délit de fuite ? Vers qui se tourner ? Quelles sanctions encoure le fuyard ?",
     "meta_keywords": "",
     "faq": [
       {
@@ -643,7 +643,7 @@
     "psp_slug": "non-respect-d-un-stop",
     "wp_id": 62,
     "meta_title": "Non-respect d’un stop",
-    "meta_desc": "Combien coûte un stop grillé ? Montant de l'amende, nombre de points retirés...? Tous les moyens de contester l'infraction. ",
+    "meta_desc": "Combien coûte un stop grillé ? Montant de l'amende, nombre de points retirés...? Tous les moyens de contester l'infraction.",
     "meta_keywords": "non respect stop grillé"
   },
   "feu-rouge-et-feu-orange": {
@@ -651,7 +651,7 @@
     "wp_id": 61,
     "meta_title": "Feu rouge",
     "meta_desc": "Quel est le montant de l'amende 'feu rouge' ? Comment la contester et comment récupérer vos points ? Toutes les réponses !",
-    "meta_keywords": "griller feu rouge amende ",
+    "meta_keywords": "griller feu rouge amende",
     "faq": [
       {
         "q": "« J’ai grillé un feu rouge pour laisser passer une ambulance, qu’est-ce que je risque ? »",
@@ -677,7 +677,7 @@
     "psp_slug": "guide-conserver-permis",
     "wp_id": 172,
     "meta_title": "Guide pour conserver son permis",
-    "meta_desc": "Vous commettez régulièrement des infractions sur la route et vous souhaitez récupérer vos points de permis ? Découvrez notre guide complet pour retrouver un permis à 12 points et la sérénité au volant. ",
+    "meta_desc": "Vous commettez régulièrement des infractions sur la route et vous souhaitez récupérer vos points de permis ? Découvrez notre guide complet pour retrouver un permis à 12 points et la sérénité au volant.",
     "meta_keywords": "sans_menu_sans_lien"
   }
 }

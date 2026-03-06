@@ -157,6 +157,7 @@ export async function generateMetadata(
       type: 'article',
       url: `https://www.twelvy.net/${slug}`,
       siteName: 'Twelvy',
+      locale: 'fr_FR',
     },
   }
 }

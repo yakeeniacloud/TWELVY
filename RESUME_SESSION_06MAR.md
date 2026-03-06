@@ -102,15 +102,15 @@ Après création des routes blog, audit SEO complet déclenché par la question 
 
 ## 2/ Résumé du travail effectué (5 lignes)
 
-Correction du menu déroulant : les articles s'affichent désormais en grille horizontale 3 colonnes au lieu d'une liste verticale qui débordait hors de l'écran. Migration complète des 70 articles de `blog.prostagespermis.fr` vers `headless.twelvy.net` via un script Python utilisant l'API REST WordPress. Création des routes Next.js `/blog` (listing) et `/blog/[slug]` (article individuel) avec search banner, footer, SEO metadata et JSON-LD. Audit SEO post-migration avec deux correctifs : ajout des 71 URLs blog dans le sitemap (critique) et ajout de `og:locale fr_FR` sur les pages blog (mineur). Le tout correspond au plan établi dans le débrief du 06 mars 2026.
+Correction du menu déroulant : les articles s'affichent désormais en grille horizontale 3 colonnes au lieu d'une liste verticale qui débordait hors de l'écran. Migration complète des 70 articles de `blog.prostagespermis.fr` vers `headless.twelvy.net` via un script Python utilisant l'API REST WordPress. Création des routes Next.js `/blog` (listing) et `/blog/[slug]` (article individuel) avec search banner, footer, SEO metadata et JSON-LD. Audit SEO post-migration avec deux correctifs : ajout des 71 URLs blog dans le sitemap (critique) et ajout de `og:locale fr_FR` sur les pages blog (mineur). Vérifications de fin d'étape 6 (Priorité 2) : crawl automatique de 183 URLs (182 OK, 1 transitoire), audit SSR SEO sur 10 pages, 3 bugs corrigés en code (`og:locale` sur les pages article, espaces et tabulation dans seo-data.json), 4 pages WordPress avec contenus placeholder identifiées (à corriger par l'utilisateur).
 
 ---
 
 ## 3/ Prochaines étapes
 
 D'après `MIGRATION.md` :
-- **Priorité 2 (débrief)** : Vérifications de fin d'étape 6 (audit crawl, vérif SSR SEO, vérif manuelle, robots.txt + sitemap.xml)
-- **Priorité 3** : Mise en place des redirections 301 (prépare le DNS cutover)
+- **Priorité 2 (débrief) — ✅ FAIT** : Vérifications de fin d'étape 6 complétées (voir Étape 4 ci-dessous). Il reste à l'utilisateur de faire la vérif manuelle C (10 pages en navigateur) et de corriger les 4 pages WP avec contenu placeholder.
+- **Priorité 3** : Mise en place des redirections 301 (prépare le DNS cutover) ← PROCHAINE ÉTAPE
 - **Étape 7** (MIGRATION.md) : Tests des parcours critiques sur psp-copie.twelvy.net
 - **Étape 8** : Intégration Up2Pay (paiement)
 
@@ -151,6 +151,120 @@ Dans `migrate_articles.py`, les mises à jour de pages WP utilisent `?_method=PU
 **Impact** : Google ne pouvait pas indexer les pages `/blog/[slug]` de façon fiable sans entrée dans le sitemap. La page `/blog` elle-même était aussi absente.
 
 **Solution** : Ajout d'un troisième bloc de fetch dans `sitemap.ts` ciblant l'endpoint `/wp-json/wp/v2/posts` avec `_fields=slug,modified`. La page listing `/blog` + les 70 slugs individuels sont maintenant inclus (71 URLs supplémentaires).
+
+### Problème 6 — og:locale manquant sur toutes les pages article `[slug]`
+
+**Symptôme** : Audit SSR SEO révèle que `og:locale` est absent du HTML brut sur toutes les pages article (`/stage-de-recuperation-de-points`, `/exces-de-vitesse`, etc.)
+
+**Cause** : `app/[slug]/page.tsx` définit son propre objet `openGraph` dans `generateMetadata` mais sans `locale: 'fr_FR'`. Next.js remplace entièrement l'openGraph du root layout (pas de merge profond), donc la locale du root layout disparaît. Le problème est identique à ce qui avait été corrigé sur les pages blog lors de l'audit SEO post-migration.
+
+**Fix** : Ajout de `locale: 'fr_FR'` dans l'objet `openGraph` de `generateMetadata` dans `app/[slug]/page.tsx` (ligne 160).
+
+**Commit** : inclus dans `SEO_fixes_verif_etape6`
+
+---
+
+### Problème 7 — Espaces et tabulation parasites dans seo-data.json
+
+**Symptôme** : `/suspension-de-permis-et-retrait-de-permis` → titre affiché "Suspension de permis  - Twelvy" (double espace). `/delit-fuite` → tabulation dans le meta_title.
+
+**Cause** : Les valeurs de `meta_title` et `meta_desc` dans `lib/seo-data.json` contenaient des espaces finaux et une tabulation, importées telles quelles depuis la base PSP originale.
+
+**Fix** : Script Python qui strip toutes les valeurs de `meta_title`, `meta_desc`, `meta_keywords` dans seo-data.json. 10 valeurs corrigées au total :
+- `suspension-de-permis` : `"Suspension de permis "` → `"Suspension de permis"`
+- `retrait-de-permis` : `"Retrait - Permis de conduire "` → `"Retrait - Permis de conduire"`
+- `delit-fuite` : `"Delit de fuite\t"` → `"Delit de fuite"` (tabulation supprimée)
+- 7 autres meta_desc avec espace final : permis-probatoire, temoignages-de-stagiaires, annulation-permis, nombre-de-points-permis, permis-international, non-respect-du-stop, guide-conserver-permis, feu-rouge-et-feu-orange
+
+**Commit** : inclus dans `SEO_fixes_verif_etape6`
+
+---
+
+### Problème 8 — Contenus placeholder WordPress sur 4 pages indexées
+
+**Symptôme** : Pages dans le sitemap avec descriptions de test visibles dans les SERPs Google.
+
+**Pages concernées** (à corriger dans WordPress admin `headless.twelvy.net/wp-admin`) :
+| Page | Titre actuel | Description actuelle |
+|------|-------------|---------------------|
+| `/les-stages-permis-a-points` | Les stages permis à points | "essai content de la categorie" |
+| `/stages-paris` | Stages-Paris | "essai contenu stages paris" |
+| `/stages-marseille` | Stages-Marseille | "essai n1 du contenu marseille fin de page" |
+| `/stages-toulon` | Stages-toulon | "Essai content toulon apres implementation des pages et des sous categories" |
+
+**Impact** : Ces descriptions placeholder apparaissent dans les SERPs Google → mauvaise impression + perte de clics.
+
+**Solution** : L'utilisateur doit aller dans WordPress admin → Pages → modifier chaque page → corriger le titre (supprimer le tiret, corriger la casse) et l'extrait (mettre une vraie description SEO).
+
+---
+
+## 4bis/ Étape 4 — Priorité 2 : Vérifications de fin d'étape 6
+
+### A) Crawl automatique (sitemap.xml → 183 URLs)
+
+**Résultat** : 182 ✅ / 1 ❌
+
+**Seule erreur** : `https://www.twelvy.net/permis-de-conduire-candidat-libre` — status 000 (timeout curl lors du crawl initial). **Retry immédiat → 200** → erreur transitoire réseau, pas de problème réel.
+
+**Conclusion** : 0 page en 4xx ou 5xx. Tous les articles, toutes les pages blog, toutes les villes répondent correctement.
+
+---
+
+### B) Vérification SSR SEO (10 pages, HTML brut)
+
+Pages vérifiées via `curl` + extraction des balises HEAD :
+
+| Page | title | meta desc | canonical | robots | h1 | og:locale |
+|------|-------|-----------|-----------|--------|-----|-----------|
+| `/stage-de-recuperation-de-points` | ✅ | ✅ | ✅ | index,follow | ✅ | ❌ → CORRIGÉ |
+| `/exces-de-vitesse` | ✅ | ✅ | ✅ | index,follow | ✅ | ❌ → CORRIGÉ |
+| `/les-stages-permis-a-points` | ✅ | ⚠️ placeholder | ✅ | index,follow | ✅ | ❌ → CORRIGÉ |
+| `/alcool-au-volant` | ✅ | ✅ | ✅ | index,follow | ✅ | ❌ → CORRIGÉ |
+| `/suspension-de-permis-et-retrait-de-permis` | ⚠️ double espace → CORRIGÉ | ✅ | ✅ | index,follow | ✅ | ❌ → CORRIGÉ |
+| `/stages-paris` | ⚠️ "Stages-Paris" | ⚠️ placeholder | ✅ | index,follow | ⚠️ | ❌ → CORRIGÉ |
+| `/stages-marseille` | ⚠️ "Stages-Marseille" | ⚠️ placeholder | ✅ | index,follow | ⚠️ | ❌ → CORRIGÉ |
+| `/stages-toulon` | ⚠️ "Stages-toulon" | ⚠️ placeholder | ✅ | index,follow | ⚠️ | ❌ → CORRIGÉ |
+| `/blog` | ✅ | ✅ | ✅ | index,follow | ✅ | ✅ (déjà corrigé) |
+| `/blog/les-5-verites-...` | ✅ | ✅ | ✅ | index,follow | ✅ | ✅ (déjà corrigé) |
+
+**Légende** : ✅ Correct · ⚠️ Problème · ❌ Absent · → CORRIGÉ = corrigé en code
+
+---
+
+### C) Vérification manuelle (à faire par l'utilisateur)
+
+**Liste des 10 pages à vérifier dans Chrome** (voir section "Ce que tu dois coller dans Chrome" ci-dessous) :
+1. Tableaux lisibles, images OK, pas d'images cassées
+2. Liens internes principaux fonctionnels
+3. Search bar répond dans la bannière en haut des articles
+4. Footer visible et liens cliquables
+
+---
+
+### D) robots.txt + sitemap.xml
+
+**robots.txt** (`https://www.twelvy.net/robots.txt`) : ✅
+- Allow: / → toutes pages publiques accessibles
+- Disallow: /api/ → correct (API interne)
+- Disallow: /_next/ → correct (assets Next.js)
+- Disallow: /stages-recuperation-points/*/* → correct (pages de réservation transientes, non-indexables)
+- Pas d'URLs de test ou staging bloquées/exposées
+
+**sitemap.xml** (`https://www.twelvy.net/sitemap.xml`) : ✅
+- 183 URLs au total
+- Structure : homepage + ~100 articles WP + /blog (listing) + 70 /blog/[slug] + 3 villes
+- Aucune URL de test ou psp-copie en prod
+- Aucun doublon détecté
+
+---
+
+### Commits de la session
+
+- `f839a79` — Menu fix : dropdown grille 3 colonnes
+- `8d8bd14` — Blog migration : 70 articles + routes /blog et /blog/[slug]
+- `e604e7c` — SEO fixes : sitemap blog + og:locale pages blog
+- `0f20156` — RESUME_SESSION_06MAR créé
+- **[prochain]** — SEO verif étape 6 : og:locale [slug], seo-data.json trailing whitespace
 
 ---
 
