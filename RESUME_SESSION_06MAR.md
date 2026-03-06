@@ -71,9 +71,38 @@ Deux nouvelles pages créées :
 
 ---
 
+### Étape 3 — Audit SEO des pages blog + correctifs
+
+Après création des routes blog, audit SEO complet déclenché par la question "est-ce qu'on est bons en SEO ?".
+
+**Ce qui a été vérifié** :
+- `robots.txt` : `/blog` autorisé ✅
+- Canonicals : présents sur `/blog` et `/blog/[slug]` ✅
+- Balises `<title>` + `<meta description>` : présentes via metadata/generateMetadata ✅
+- H1 : présent sur les deux pages ✅
+- `html lang="fr"` : défini dans le root layout ✅
+- JSON-LD Article : présent sur `/blog/[slug]` ✅
+
+**Problèmes trouvés et corrigés** :
+
+**Problème critique — Sitemap manquant pour le blog** :
+- `app/sitemap.ts` fetchait les pages WordPress (`/pages`) et les villes, mais jamais les posts WordPress (`/posts`)
+- Résultat : les 70 URLs `/blog/[slug]` et la page `/blog` étaient invisibles dans le sitemap
+- Google ne pouvait pas les découvrir automatiquement
+- **Fix** : ajout d'un bloc de fetch des WP posts dans `sitemap.ts` → 71 nouvelles entrées (1 listing + 70 posts) avec `priority: 0.6-0.7` et `changeFrequency: 'monthly'`
+
+**Problème mineur — `og:locale` manquant sur les pages blog** :
+- Quand une page enfant définit son propre objet `openGraph`, Next.js remplace complètement l'openGraph du layout parent (pas de merge profond)
+- Le root layout définit `locale: 'fr_FR'` dans son openGraph, mais les pages blog définissant leur propre openGraph le perdaient
+- **Fix** : ajout de `locale: 'fr_FR'` dans l'objet openGraph de `app/blog/page.tsx` et `app/blog/[slug]/page.tsx`
+
+**Commit SEO** : `e604e7c`
+
+---
+
 ## 2/ Résumé du travail effectué (5 lignes)
 
-Correction du menu déroulant : les articles s'affichent désormais en grille horizontale 3 colonnes au lieu d'une liste verticale qui débordait hors de l'écran. Migration complète des 70 articles de `blog.prostagespermis.fr` vers `headless.twelvy.net` via un script Python utilisant l'API REST WordPress. Création des routes Next.js `/blog` (listing) et `/blog/[slug]` (article individuel) avec search banner, footer, SEO metadata et JSON-LD. Le tout correspond au plan établi dans le débrief du 06 mars 2026.
+Correction du menu déroulant : les articles s'affichent désormais en grille horizontale 3 colonnes au lieu d'une liste verticale qui débordait hors de l'écran. Migration complète des 70 articles de `blog.prostagespermis.fr` vers `headless.twelvy.net` via un script Python utilisant l'API REST WordPress. Création des routes Next.js `/blog` (listing) et `/blog/[slug]` (article individuel) avec search banner, footer, SEO metadata et JSON-LD. Audit SEO post-migration avec deux correctifs : ajout des 71 URLs blog dans le sitemap (critique) et ajout de `og:locale fr_FR` sur les pages blog (mineur). Le tout correspond au plan établi dans le débrief du 06 mars 2026.
 
 ---
 
@@ -115,6 +144,14 @@ D'après `MIGRATION.md` :
 
 Dans `migrate_articles.py`, les mises à jour de pages WP utilisent `?_method=PUT` comme contournement d'une limitation OVH (certains hébergements bloquent les requêtes PUT). J'ai appliqué le même pattern dans `migrate_blog.py` par précaution. Aucune erreur de mise à jour n'a eu lieu (tous les posts étaient nouveaux : 70 créés, 0 mis à jour).
 
+### Problème 5 — Sitemap blog manquant (découvert à l'audit SEO)
+
+**Symptôme** : En auditant le SEO post-migration, constat que `sitemap.ts` ne fetchait que les WP pages et les villes — les 70 posts de blog n'y figuraient pas.
+
+**Impact** : Google ne pouvait pas indexer les pages `/blog/[slug]` de façon fiable sans entrée dans le sitemap. La page `/blog` elle-même était aussi absente.
+
+**Solution** : Ajout d'un troisième bloc de fetch dans `sitemap.ts` ciblant l'endpoint `/wp-json/wp/v2/posts` avec `_fields=slug,modified`. La page listing `/blog` + les 70 slugs individuels sont maintenant inclus (71 URLs supplémentaires).
+
 ---
 
 ## 5/ Informations techniques
@@ -123,5 +160,7 @@ Dans `migrate_articles.py`, les mises à jour de pages WP utilisent `?_method=PU
 - Endpoint source : `https://blog.prostagespermis.fr/wp-json/wp/v2/posts`
 - Endpoint cible : `https://headless.twelvy.net/wp-json/wp/v2/posts`
 - Script de migration : `migrate_blog.py`
-- Log de migration : `migrate_blog_log.json`
+- Log de migration : `migrate_blog_log.json` (gitignored, local uniquement)
 - Commit menu fix : `f839a79`
+- Commit blog migration : `8d8bd14`
+- Commit SEO fixes : `e604e7c`
