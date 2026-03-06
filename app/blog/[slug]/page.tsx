@@ -84,6 +84,7 @@ export async function generateMetadata(
       type: 'article',
       url: `https://www.twelvy.net/blog/${slug}`,
       siteName: 'Twelvy',
+      locale: 'fr_FR',
     },
   }
 }

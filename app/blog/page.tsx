@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://www.twelvy.net/blog',
     siteName: 'Twelvy',
+    locale: 'fr_FR',
   },
 }
 
