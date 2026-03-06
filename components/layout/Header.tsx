@@ -115,14 +115,14 @@ export default function Header() {
 
                     {/* Dropdown Menu */}
                     {openMenuId === item.id && (
-                      <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 shadow-lg z-50 min-w-[200px] rounded">
+                      <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 shadow-lg z-50 rounded" style={{ minWidth: '520px' }}>
                         <div className="border-t-2 border-red-500" />
-                        <div className="p-4">
+                        <div className="p-5 grid grid-cols-3 gap-x-6 gap-y-1">
                           {item.children.map((child) => (
                             <Link
                               key={child.id}
                               href={`/${child.slug}`}
-                              className="block py-2 text-sm text-gray-700 hover:text-red-600 transition-colors"
+                              className="block py-1.5 text-sm text-gray-700 hover:text-red-600 transition-colors"
                               onClick={() => setOpenMenuId(null)}
                             >
                               {decodeHtmlEntities(child.title)}
