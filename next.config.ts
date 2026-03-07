@@ -19,6 +19,22 @@ const nextConfig: NextConfig = {
         destination: '/bareme-de-retrait-de-points',
         permanent: true,
       },
+      // Old PSP city URLs found in blog post content (crawl P3 - 07 Mar)
+      {
+        source: '/recuperation-points-LYON-7EME-69007-69.html',
+        destination: '/stages-recuperation-points/lyon',
+        permanent: true,
+      },
+      {
+        source: '/recuperation-points-TOULON-83000-83.html',
+        destination: '/stages-recuperation-points/toulon',
+        permanent: true,
+      },
+      {
+        source: '/recuperation-points-NICE-06000-06.html',
+        destination: '/stages-recuperation-points/nice',
+        permanent: true,
+      },
       // Footer link redirections
       {
         source: '/conditions-generales',
