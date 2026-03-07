@@ -1955,7 +1955,7 @@ export default function StagesResultsPage() {
         <div className="bg-gray-50 border-t border-gray-200 py-8 px-4 mt-8">
           <div className="mx-auto max-w-3xl">
             <div
-              className="prose prose-sm max-w-none text-gray-700"
+              className="wp-content max-w-none"
               dangerouslySetInnerHTML={{ __html: cityContent.content }}
             />
           </div>
