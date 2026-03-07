@@ -1,8 +1,2 @@
 User-agent: *
-Allow: /
-Disallow: /api/
-Disallow: /_next/
-# Individual stage detail pages and booking flow (transient, not indexable)
-Disallow: /stages-recuperation-points/*/*
-
-Sitemap: https://www.twelvy.net/sitemap.xml
+Disallow: /
