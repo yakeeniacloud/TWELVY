@@ -8,6 +8,7 @@ import StageDetailsModal from '@/components/stages/StageDetailsModal'
 import { removeStreetNumber } from '@/lib/formatAddress'
 import { useCities } from '@/hooks/useCities'
 import { CITY_POSTAL_MAP } from '@/lib/city-postal-map'
+import { useWordPressContent } from '@/lib/useWordPressContent'
 
 // French department names map
 const DEPARTMENT_NAMES: { [key: string]: string } = {
@@ -95,6 +96,7 @@ export default function StagesResultsPage() {
   const [showDesktopSuggestions, setShowDesktopSuggestions] = useState(false)
   const [desktopSelectedIndex, setDesktopSelectedIndex] = useState(-1)
   const { cities: allCities } = useCities()
+  const { content: cityContent } = useWordPressContent(`stages-${city.toLowerCase()}`)
   const desktopSearchRef = useRef<HTMLInputElement>(null)
   const desktopSuggestionsRef = useRef<HTMLDivElement>(null)
 
@@ -1947,6 +1949,18 @@ export default function StagesResultsPage() {
           </section>
         )}
       </main>
+
+      {/* City-Specific WordPress Content Below Courses */}
+      {cityContent && (
+        <div className="bg-gray-50 border-t border-gray-200 py-8 px-4 mt-8">
+          <div className="mx-auto max-w-3xl">
+            <div
+              className="prose prose-sm max-w-none text-gray-700"
+              dangerouslySetInnerHTML={{ __html: cityContent.content }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="bg-[#343435] py-6 mt-16 md:mt-32">
