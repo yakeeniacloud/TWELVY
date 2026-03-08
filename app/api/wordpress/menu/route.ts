@@ -41,27 +41,32 @@ function decodeEntities(text: string): string {
   return result
 }
 
+const WP_HEADERS = {
+  'Accept': 'application/json',
+  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+}
+
+async function fetchAllPages(): Promise<WordPressPage[]> {
+  const all: WordPressPage[] = []
+  let page = 1
+  while (true) {
+    const response = await fetch(
+      `https://headless.twelvy.net/wp-json/wp/v2/pages?per_page=100&page=${page}&status=publish&orderby=menu_order&order=asc`,
+      { headers: WP_HEADERS, next: { revalidate: 30 } }
+    )
+    if (!response.ok) break
+    const batch: WordPressPage[] = await response.json()
+    if (!batch || batch.length === 0) break
+    all.push(...batch)
+    if (batch.length < 100) break
+    page++
+  }
+  return all
+}
+
 export async function GET() {
   try {
-    const response = await fetch(
-      'https://headless.twelvy.net/wp-json/wp/v2/pages?per_page=100&status=publish&orderby=menu_order&order=asc',
-      {
-        headers: {
-          'Accept': 'application/json',
-          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        },
-        next: { revalidate: 30 },
-      }
-    )
-
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: 'Failed to fetch pages from WordPress' },
-        { status: response.status }
-      )
-    }
-
-    const pages: WordPressPage[] = await response.json()
+    const pages = await fetchAllPages()
 
     // Filter out homepage and stages-CITY pages (e.g., stages-marseille, stages-paris)
     // But KEEP child pages with parent set (even if they start with "stages-")
