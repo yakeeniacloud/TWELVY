@@ -387,7 +387,7 @@
     "psp_slug": "conduite-accompagnee",
     "wp_id": 146,
     "meta_title": "Conduite accompagnée - permis ACC",
-    "meta_desc": "Conduite accompagnée ACC",
+    "meta_desc": "Tout savoir sur la conduite accompagnée (AAC) : conditions, âge minimum, durée, avantages et déroulement de l'apprentissage anticipé de la conduite en France.",
     "meta_keywords": ""
   },
   "nombre-de-points-permis": {
@@ -679,5 +679,12 @@
     "meta_title": "Guide pour conserver son permis",
     "meta_desc": "Vous commettez régulièrement des infractions sur la route et vous souhaitez récupérer vos points de permis ? Découvrez notre guide complet pour retrouver un permis à 12 points et la sérénité au volant.",
     "meta_keywords": "sans_menu_sans_lien"
+  },
+  "rattraper-des-points": {
+    "psp_slug": "rattrapage-points",
+    "wp_id": 72,
+    "meta_title": "Rattrapage de points de permis - Rattraper point permis conduire",
+    "meta_desc": "Vous souhaitez faire augmenter rapidement votre capital de points de permis ? Rattrapez vos points avez un stage, c'est facile !",
+    "meta_keywords": ""
   }
 }
