@@ -643,12 +643,38 @@ Fix local existant (24 → 159 chars) sera inclus dans le prochain push de seo-d
 
 ---
 
+---
+
+## Audits complémentaires — Sitemap + Liens externes
+
+### Audit Sitemap ⚠️ 2 bugs trouvés et corrigés
+
+**Bug 1 : 23 pages WordPress manquantes du sitemap**
+- `app/sitemap.ts` faisait `per_page=100` sans pagination → 123 pages publiées, seules les 100 premières incluses
+- **Fix** : Ajout d'une boucle paginée (pages 1-3) pour récupérer toutes les pages WP
+
+**Bug 2 : 0 pages villes dans le sitemap**
+- Le sitemap utilisait `headless.twelvy.net/wp-json/wp/v2/stages-cities` → endpoint inexistant (404)
+- Les villes viennent en réalité de `api.twelvy.net/cities.php` (PHP API, 2 299 villes)
+- **Fix** : Changé l'endpoint vers `api.twelvy.net/cities.php` avec support du format `{name, postal}`
+
+**Résultat** : Le sitemap passera de ~171 URLs à ~2 470+ URLs (99 pages + 23 récupérées + 70 blog + 2 299 villes + homepage + /blog)
+
+### Audit liens externes actif=0 — 3 liens cassés corrigés
+
+| Page | Lien cassé | Action |
+|------|-----------|--------|
+| ID 862 `formulaire-de-requete-en-exoneration` | `police-territoriale.fr/.../exoneration.pdf` (domaine racheté → site de recettes) | Lien supprimé, texte conservé |
+| ID 873 `comment-contester-une-amende-en-ligne` | `antai.gouv.fr/.../formulairedecontestationenligne` (404) | Remplacé par `antai.gouv.fr` |
+| ID 872 `pas-de-reponse-a-ma-contestation-amende` | `antai.gouv.fr/.../contact` (404) | Remplacé par `antai.gouv.fr` |
+
+---
+
 ## Tâches restantes
 
 | Tâche | Statut |
 |-------|--------|
 | P1: ~160 images à migrer avant DNS cutover (blog + article) | Non commencé |
-| Page 80 (le-retrait-de-points-2) : décider du sort du contenu 14K chars | À discuter |
 | 3 fichiers .docx à héberger (templates lettres contestation) | Non commencé |
 | P4 futur : améliorer 26 descriptions SEO courtes | Backlog SEO |
 | redirects.csv → activer dans next.config.ts (jour J DNS) | PRÊT |

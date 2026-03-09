@@ -13,32 +13,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 1.0,
   })
 
-  // Fetch all WordPress pages for article URLs
+  // Fetch all WordPress pages for article URLs (paginated — WP caps at 100/page)
   try {
-    const response = await fetch(
-      'https://headless.twelvy.net/wp-json/wp/v2/pages?per_page=100&status=publish',
-      {
-        headers: {
-          'Accept': 'application/json',
-          'User-Agent': 'Mozilla/5.0 (compatible; TwelvyBot/1.0)',
-        },
-        next: { revalidate: 3600 },
-      }
-    )
+    const allPages: any[] = []
+    for (let page = 1; page <= 3; page++) {
+      const response = await fetch(
+        `https://headless.twelvy.net/wp-json/wp/v2/pages?per_page=100&page=${page}&status=publish`,
+        {
+          headers: {
+            'Accept': 'application/json',
+            'User-Agent': 'Mozilla/5.0 (compatible; TwelvyBot/1.0)',
+          },
+          next: { revalidate: 3600 },
+        }
+      )
 
-    if (response.ok) {
+      if (!response.ok) break
       const pages = await response.json()
+      if (pages.length === 0) break
+      allPages.push(...pages)
+    }
 
-      for (const page of pages) {
-        if (page.slug === 'homepage') continue
+    for (const page of allPages) {
+      if (page.slug === 'homepage') continue
 
-        entries.push({
-          url: `${SITE_URL}/${page.slug}`,
-          lastModified: new Date(page.modified),
-          changeFrequency: 'weekly',
-          priority: page.parent === 0 ? 0.8 : 0.7,
-        })
-      }
+      entries.push({
+        url: `${SITE_URL}/${page.slug}`,
+        lastModified: new Date(page.modified),
+        changeFrequency: 'weekly',
+        priority: page.parent === 0 ? 0.8 : 0.7,
+      })
     }
   } catch {
     // Silently fail — sitemap still returns homepage
@@ -82,14 +86,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Silently fail
   }
 
-  // Fetch cities for stage listing pages
+  // Fetch cities for stage listing pages from PHP API
   try {
     const response = await fetch(
-      'https://headless.twelvy.net/wp-json/wp/v2/stages-cities',
+      'https://api.twelvy.net/cities.php',
       {
         headers: {
-          'Accept': 'application/json',
-          'User-Agent': 'Mozilla/5.0 (compatible; TwelvyBot/1.0)',
+          'Content-Type': 'application/json',
         },
         next: { revalidate: 3600 },
       }
@@ -97,10 +100,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     if (response.ok) {
       const data = await response.json()
-      const cities: string[] = data.cities || data || []
+      const cities = data.cities || []
 
       for (const city of cities) {
-        const slug = city.toLowerCase().replace(/\s+/g, '-')
+        const name = typeof city === 'object' ? city.name : city
+        const slug = name.toLowerCase().replace(/\s+/g, '-')
         entries.push({
           url: `${SITE_URL}/stages-recuperation-points/${slug}`,
           lastModified: new Date(),
