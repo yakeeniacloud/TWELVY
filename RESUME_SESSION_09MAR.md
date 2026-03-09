@@ -277,13 +277,42 @@ Toujours vérifier les mappings contre le fichier source `nav2.php` de PSP, pas 
 
 ---
 
+## T1 — Témoignages de stagiaires ✅ (laissé tel quel)
+
+Décision : laisser en parent=29 (LES CONTRAVENTIONS) uniquement. LE RETRAIT a 19/20 items — acceptable.
+
+---
+
+## T2 — Dropdown SERVICES ✅ (reporté)
+
+Le dropdown SERVICES contient des services spécifiques (formulaires clients, vérifications) qui ne seront pas implémentés sur Twelvy pour le moment. Pas de modifications à faire.
+
+---
+
+## T3 — Pages WP dupliquées ✅ (nettoyé)
+
+Deux pages avec contenu identique (17 649 caractères) :
+- **ID=36** : `stages-recuperation-de-points-pas-cher` (parent=12, LES STAGES)
+- **ID=84** : `stage-de-recuperation-de-points-pas-cher` (parent=30, LE RETRAIT DE POINTS)
+
+Parent=12 avait déjà un article similaire (ID=44 `stage-de-recuperation-de-points`), donc ID=36 était redondant.
+
+**Action** : ID=36 → `status: draft` + `parent: 0` (supprimé de la nav). ID=84 conservé.
+
+Note : DELETE et PUT bloqués par Apache OVH (403 Forbidden). Utilisé POST pour mettre en draft.
+
+---
+
 ## Tâches restantes
 
-| # | Tâche | Statut |
-|---|-------|--------|
-| T1 | Témoignages de stagiaires — décider parent final | En attente |
-| T2 | Dropdown SERVICES — vérifier et aligner sur PSP | Non commencé |
-| T3 | Supprimer pages WP dupliquées (ID=36, ID=84) | Non commencé |
+Toutes les tâches de cette session sont terminées.
+
+| Tâche | Statut |
+|-------|--------|
+| Blog migration (5 articles blog.prostagespermis.fr) | Non commencé |
+| 146 blog images → migrer vers headless.twelvy.net | Non commencé |
+| redirects.csv → activer dans next.config.ts (jour J DNS) | PRÊT |
+| DNS cutover prostagespermis.fr → Twelvy | Non commencé |
 
 ---
 
