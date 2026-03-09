@@ -138,11 +138,11 @@ ancienne_url,nouvelle_url,type,statut
 /p-annulation-et-remboursement,/comment-sinscrire-a-un-stage,301,PRÊT
 /p-suivre-mon-inscription,/comment-sinscrire-a-un-stage,301,PRÊT
 /p-modifier-la-date-de-mon-stage,/comment-sinscrire-a-un-stage,301,PRÊT
-/p-contacter-le-service-client,/aide-et-contact,301,PRÊT
+/p-contacter-le-service-client,https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/,301,PRÊT
 /p-faq,/questions-frequentes,301,PRÊT
 /p-faq4,/questions-frequentes,301,PRÊT
 /p-meilleur-prix,/satisfait-ou-rembourse,301,PRÊT
-/p-aide,/aide-et-contact,301,PRÊT
+/p-aide,https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/,301,PRÊT
 /p-comment-telecharger-mes-documents,/comment-sinscrire-a-un-stage,301,PRÊT
 
 # ── Pages Part 2C (actif=0, slug identique sur Twelvy — wildcard suffit) ──
@@ -271,7 +271,7 @@ ancienne_url,nouvelle_url,type,statut
 # CATÉGORIE 5 : Pages blog mineures (2)
 # =============================================
 /avis-2,/temoignages-de-stagiaires,301,PRÊT
-/contactez-nous,/aide-et-contact,301,PRÊT
+/contactez-nous,https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/,301,PRÊT
 
 # =============================================
 # CATÉGORIE 6 : Redirections internes Twelvy (2)
@@ -299,4 +299,15 @@ ancienne_url,nouvelle_url,type,statut
 # Cat 4 : 5 entrées blog + 1 wildcard (/infos-:slug → /blog/:slug)
 # Cat 5 : 2 pages blog mineures
 # Cat 6 : 2 redirections internes
+# Cat 7 : 5 liens internes cassés dans contenu WP (Wave 3 audit - 09 Mar)
 # TOTAL couvert : ~200+ redirections
+
+# =============================================
+# CATÉGORIE 7 : Liens internes cassés dans contenu WP
+# =============================================
+# Trouvés par audit Wave 3 Phase 4 — ces URLs apparaissent comme href dans le contenu des articles/posts WP
+/comment-contester-une-amende,/contester-mon-amende,301,LIVE
+/contester-une-amende,/contester-mon-amende,301,LIVE
+/stages-recuperation-de-points-pas-cher,/stage-de-recuperation-de-points-pas-cher,301,LIVE
+/index.php,/,301,PRÊT
+/01-4518638-tolerance-zero-au-volant-grogne-chez-les-jeunes.php,/blog/alcool-au-volant-tolerance-zero-chez-les-jeunes,301,PRÊT

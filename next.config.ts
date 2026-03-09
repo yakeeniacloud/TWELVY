@@ -77,6 +77,22 @@ const nextConfig: NextConfig = {
         destination: '/consulter-ses-points',
         permanent: true,
       },
+      // Broken internal links in WP article content (Wave 3 audit - 09 Mar)
+      {
+        source: '/comment-contester-une-amende',
+        destination: '/contester-mon-amende',
+        permanent: true,
+      },
+      {
+        source: '/contester-une-amende',
+        destination: '/contester-mon-amende',
+        permanent: true,
+      },
+      {
+        source: '/stages-recuperation-de-points-pas-cher',
+        destination: '/stage-de-recuperation-de-points-pas-cher',
+        permanent: true,
+      },
       // Footer link redirections
       {
         source: '/conditions-generales',
