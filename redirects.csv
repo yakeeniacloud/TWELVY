@@ -1,0 +1,302 @@
+# REDIRECTS.CSV — Fichier unique de redirections PSP → Twelvy
+# Usage : à implémenter dans next.config.ts le jour du basculement de domaine
+# Format : ancienne_url,nouvelle_url,type,statut
+# type : 301 (permanent) pour toutes les redirections SEO
+# statut : LIVE = déjà dans next.config.ts, PRÊT = à ajouter le jour J
+#
+# Mis à jour le 08 Mars 2026
+# Source vérifiée : PSP_ARTICLES_GROUND_TRUTH.md + headless.twelvy.net WP (124 pages confirmées)
+
+# =============================================
+# CATÉGORIE 1 : Pages PHP → Pages Twelvy (48)
+# =============================================
+# Ancien format prostagespermis.fr : /slug.php
+# Tous les slugs Twelvy vérifiés contre headless.twelvy.net/wp-json/wp/v2/pages
+ancienne_url,nouvelle_url,type,statut
+/agrements.php,/agrements-du-stage,301,LIVE
+/annulation-permis.php,/annulation-permis,301,PRÊT
+/bareme-retrait-points.php,/bareme-de-retrait-de-points,301,PRÊT
+/conduite-accompagnee.php,/conduite-accompagnee,301,PRÊT
+/conduite-sans-permis.php,/conduite-sans-permis,301,PRÊT
+/conseils.php,/conseils,301,PRÊT
+/dangers-alcool.php,/les-risques-lies-a-lalcool,301,PRÊT
+/faq.php,/questions-frequentes,301,PRÊT
+/infraction-amende-pv.php,/infractions,301,PRÊT
+/lettre-48M.php,/lettre-48m,301,PRÊT
+/lettre-48N.php,/lettre-48n,301,PRÊT
+/lettre-48S.php,/lettre-48si,301,PRÊT
+/nombre-de-points-permis.php,/nombre-de-points-permis,301,PRÊT
+# FIX: /permis-a-points.php → /les-stages-permis-a-points (pas /les-points-de-permis — voir PSP_ARTICLES_GROUND_TRUTH.md)
+/permis-a-points.php,/les-stages-permis-a-points,301,PRÊT
+/permis-etranger.php,/permis-etranger,301,PRÊT
+/permis-probatoire.php,/permis-probatoire,301,PRÊT
+/programme-dun-stage-de-recuperation-de-points.php,/programme-du-stage,301,PRÊT
+# FIX: /radars.php → /radar-automatique (singular, pas /radars-automatiques — voir PSP_ARTICLES_GROUND_TRUTH.md)
+/radars.php,/radar-automatique,301,PRÊT
+/rattrapage-points.php,/rattraper-des-points,301,PRÊT
+/sanctions-alcool.php,/les-sanctions-liees-a-lalcool,301,PRÊT
+/stage-permis-conduire.php,/stage-de-permis-de-conduire,301,PRÊT
+/stage-recuperation-points.php,/stage-de-recuperation-de-points,301,PRÊT
+/stage-sensibilisation-securite-routiere.php,/stage-de-sensibilisation-a-la-securite-routiere,301,PRÊT
+/suspension-de-permis-et-retrait-de-permis.php,/suspension-de-permis-et-retrait-de-permis,301,PRÊT
+/suspension-permis.php,/retrait-de-permis,301,PRÊT
+/temoignages-stagiaires.php,/temoignages-de-stagiaires,301,PRÊT
+/types-stage.php,/types-de-stages-permis,301,PRÊT
+/alternative-poursuite.php,/stage-alternative-poursuite,301,PRÊT
+/articles-securite-routiere.php,/articles-securite-routiere,301,PRÊT
+/carte-radars.php,/carte-radars,301,PRÊT
+/composition-penale.php,/stage-composition-penale,301,PRÊT
+/conditions_inscription.php,/les-conditions-dinscription,301,PRÊT
+/dif.php,/dif-cpf,301,PRÊT
+/inscrire-stage.php,/comment-sinscrire-a-un-stage,301,PRÊT
+/legalite.php,/legalite,301,PRÊT
+/loi2011.php,/loi-permis-a-points-2011,301,PRÊT
+# FIX: /comment-consulter-mon-solde-de-points est une page placeholder → redirige directement vers l'article cible
+/nombre-points-restant.php,/consulter-ses-points,301,PRÊT
+/paiement-amende.php,/paiement-amende,301,PRÊT
+/peine-complementaire.php,/stage-peine-complementaire,301,PRÊT
+/permis-de-conduire-candidat-libre.php,/permis-de-conduire-candidat-libre,301,PRÊT
+/programme.php,/programme-du-stage,301,PRÊT
+/radar-feu-rouge.php,/radar-feu-rouge,301,PRÊT
+/repasser-permis.php,/repasser-permis,301,PRÊT
+/solde-point.php,/solde-de-point,301,PRÊT
+/tests-psychotechniques.php,/tests-psychotechniques,301,PRÊT
+/qui-sommes-nous.php,/qui-sommes-nous,301,PRÊT
+/mentions-legales.php,/mentions-legales,301,PRÊT
+# Note: guide-affilies.php → pas d'équivalent Twelvy (programme affiliation non migré)
+# Note: aide_contact.php + contact.php → couvert Cat 6 (/aide-et-contact → khapeo.com)
+
+# =============================================
+# CATÉGORIE 2 : Pages /p- → Pages Twelvy
+# =============================================
+# Ancien format prostagespermis.fr : /p-slug (ex: /p-stationnement-interdit)
+# Nouveau format twelvy : /slug
+#
+# RÈGLE : les entrées EXPLICITES ci-dessous doivent être placées AVANT la règle wildcard
+# dans next.config.ts (Next.js évalue les redirections dans l'ordre)
+#
+# WILDCARD (à mettre EN DERNIER dans next.config.ts) :
+#   { source: '/p-:slug', destination: '/:slug', permanent: true }
+# Couvre ~35 pages articles dont le slug est identique sur PSP et Twelvy (✅ dans PSP_ARTICLES_GROUND_TRUTH.md)
+
+# ── Slugs qui ont CHANGÉ entre PSP et Twelvy (actif=1) ───────────────────
+# Pour chacun : wildcard donnerait le mauvais slug → explicite obligatoire
+/p-agrements,/agrements-du-stage,301,PRÊT
+/p-alternative-poursuite,/stage-alternative-poursuite,301,PRÊT
+/p-bareme-retrait-points,/bareme-de-retrait-de-points,301,PRÊT
+/p-composition-penale,/stage-composition-penale,301,PRÊT
+/p-conditions_inscription,/les-conditions-dinscription,301,PRÊT
+/p-consulter-points,/consulter-ses-points,301,PRÊT
+/p-dangers-alcool,/les-risques-lies-a-lalcool,301,PRÊT
+/p-feu-rouge,/feu-rouge-et-feu-orange,301,PRÊT
+/p-guide-conserver-permis,/recuperer-ses-points,301,PRÊT
+/p-infraction-amende-pv,/infractions,301,PRÊT
+# Lettres 48 : casse PSP (48M/48N/48S) ≠ casse Twelvy (48m/48n/48si)
+/p-lettre-48M,/lettre-48m,301,PRÊT
+/p-lettre-48N,/lettre-48n,301,PRÊT
+/p-lettre-48S,/lettre-48si,301,PRÊT
+/p-non-port-ceinture-securite,/non-port-ceinture-de-securite,301,PRÊT
+/p-non-respect-d-un-stop,/non-respect-du-stop,301,PRÊT
+/p-payer-amende,/paiement-amende,301,PRÊT
+/p-peine-complementaire,/stage-peine-complementaire,301,PRÊT
+/p-permis-a-points,/les-stages-permis-a-points,301,PRÊT
+/p-programme-dun-stage-de-recuperation-de-points,/programme-du-stage,301,PRÊT
+/p-radars,/radar-automatique,301,PRÊT
+/p-rattrapage-points,/rattraper-des-points,301,PRÊT
+/p-recuperation-points,/recuperer-ses-points,301,PRÊT
+/p-sanctions-alcool,/les-sanctions-liees-a-lalcool,301,PRÊT
+/p-stage-permis-conduire,/stage-de-permis-de-conduire,301,PRÊT
+/p-stage-recuperation-de-points,/stage-de-recuperation-de-points,301,PRÊT
+/p-stage-recuperation-points,/stage-de-recuperation-de-points,301,PRÊT
+/p-stage-sensibilisation-securite-routiere,/stage-de-sensibilisation-a-la-securite-routiere,301,PRÊT
+/p-temoignages-stagiaires,/temoignages-de-stagiaires,301,PRÊT
+/p-types-stage,/types-de-stages-permis,301,PRÊT
+
+# ── Slugs actif=0 dont le slug a changé sur Twelvy ───────────────────────
+/p-dif-stage-permis,/dif-cpf,301,PRÊT
+/p-contester-une-amende,/contester-mon-amende,301,PRÊT
+# FIX: /comment-contester-mon-amende est une page placeholder → redirige directement vers l'article cible
+/p-comment-contester-une-amende,/payer-son-amende,301,PRÊT
+
+# ── Pages Part 2B (FAQ/utilitaires PSP — pas migrées, redirigées vers le + proche) ──
+# NOTE ANCRE : Certaines pages PSP ne sont pas des articles autonomes — elles sont des ancres
+# (#section) vers un H2 dans un autre article. Ex: /p-retrait-de-permis#Dans quels cas...
+# Le fragment # n'est jamais envoyé au serveur → la redirection se fait sur le slug de base.
+# Sur Twelvy, Header.tsx redirige le clic nav directement vers /article#anchor-slugifié.
+# Les 8 pages placeholder WP restent publiées (nécessaires pour la nav dropdown) mais sont
+# inatteignables : next.config.ts 301 les redirige vers l'article cible.
+# FIX: /dans-quels-cas-faire-un-stage est une page placeholder → redirige directement vers l'article cible
+/p-a-quel-moment-faire-un-stage,/retrait-de-permis,301,PRÊT
+/p-a-quel-moment-sinscrire-a-un-stage,/comment-sinscrire-a-un-stage,301,PRÊT
+# FIX: /combien-de-temps-pour-recuperer-ses-points est une page placeholder → redirige directement vers l'article cible
+/p-au-bout-de-combien-de-temps-je-recupere-mes-points,/stage-de-sensibilisation-a-la-securite-routiere,301,PRÊT
+/p-comment-savoir-si-le-centre-est-agree,/agrements-du-stage,301,PRÊT
+/p-deroulement-et-programme-du-stage,/programme-du-stage,301,PRÊT
+/p-inscrire-stage,/comment-sinscrire-a-un-stage,301,PRÊT
+/p-quel-mode-de-paiement-choisir,/paiement-amende,301,PRÊT
+/p-mais-dou-viennent-les-stages,/les-stages-permis-a-points,301,PRÊT
+/p-annulation-et-remboursement,/comment-sinscrire-a-un-stage,301,PRÊT
+/p-suivre-mon-inscription,/comment-sinscrire-a-un-stage,301,PRÊT
+/p-modifier-la-date-de-mon-stage,/comment-sinscrire-a-un-stage,301,PRÊT
+/p-contacter-le-service-client,/aide-et-contact,301,PRÊT
+/p-faq,/questions-frequentes,301,PRÊT
+/p-faq4,/questions-frequentes,301,PRÊT
+/p-meilleur-prix,/satisfait-ou-rembourse,301,PRÊT
+/p-aide,/aide-et-contact,301,PRÊT
+/p-comment-telecharger-mes-documents,/comment-sinscrire-a-un-stage,301,PRÊT
+
+# ── Pages Part 2C (actif=0, slug identique sur Twelvy — wildcard suffit) ──
+# /p-qui-sommes-nous → /qui-sommes-nous ✅ wildcard OK
+# /p-mentions-legales → /mentions-legales ✅ wildcard OK
+
+# ── Exemples confirmés slug identique (wildcard couvre ces cas) ──────────
+# /p-stationnement-interdit → /stationnement-interdit ✅
+# /p-exces-de-vitesse → /exces-de-vitesse ✅
+# /p-alcool-au-volant → /alcool-au-volant ✅
+# /p-amende-exces-de-vitesse → /amende-exces-de-vitesse ✅
+# /p-amende-feu-rouge → /amende-feu-rouge ✅
+# /p-amende-forfaitaire-majoree → /amende-forfaitaire-majoree ✅
+# /p-annulation-permis → /annulation-permis ✅
+# /p-articles-securite-routiere → /articles-securite-routiere ✅
+# /p-avocat-permis-de-conduire → /avocat-permis-de-conduire ✅
+# /p-conduite-accompagnee → /conduite-accompagnee ✅
+# /p-conduite-sans-permis → /conduite-sans-permis ✅
+# /p-conseils → /conseils ✅
+# /p-delit-fuite → /delit-fuite ✅
+# /p-distance-de-securite → /distance-de-securite ✅
+# /p-legalite → /legalite ✅
+# /p-loi-permis-a-points-2011 → /loi-permis-a-points-2011 ✅
+# /p-nombre-de-points-permis → /nombre-de-points-permis ✅
+# /p-permis-de-conduire-candidat-libre → /permis-de-conduire-candidat-libre ✅
+# /p-permis-etranger → /permis-etranger ✅
+# /p-permis-international → /permis-international ✅
+# /p-permis-probatoire → /permis-probatoire ✅
+# /p-radar-feu-rouge → /radar-feu-rouge ✅
+# /p-radar-fixe → /radar-fixe ✅
+# /p-refus-de-priorite → /refus-de-priorite ✅
+# /p-repasser-permis → /repasser-permis ✅
+# /p-retrait-de-permis → /retrait-de-permis ✅
+# /p-sens-interdit → /sens-interdit ✅
+# /p-stage-permis-probatoire → /stage-permis-probatoire ✅
+# /p-stage-rattrapage-points → /stage-rattrapage-points ✅
+# /p-stages-obligatoires → /stages-obligatoires ✅
+# /p-stages-volontaires → /stages-volontaires ✅
+# /p-telephone-au-volant → /telephone-au-volant ✅
+# /p-tests-psychotechniques → /tests-psychotechniques ✅
+# WILDCARD (à placer EN DERNIER) : { source: '/p-:slug', destination: '/:slug', permanent: true }
+
+# ── Nouvelles pages actif=0 migrées le 08 Mars 2026 — slug identique PSP/Twelvy ──
+# wildcard couvre automatiquement (slug identique) :
+# /p-satisfait-ou-rembourse → /satisfait-ou-rembourse ✅ (WP 852)
+# /p-motifs-pour-contester-amende → /motifs-pour-contester-amende ✅ (WP 855)
+# /p-delai-pour-contester-amende → /delai-pour-contester-amende ✅ (WP 856)
+# /p-vice-de-forme-amende → /vice-de-forme-amende ✅ (WP 857)
+# /p-contester-amende-autre-conducteur → /contester-amende-autre-conducteur ✅ (WP 858)
+# /p-consigner-une-amende → /consigner-une-amende ✅ (WP 859)
+# /p-contester-un-pv-electronique → /contester-un-pv-electronique ✅ (WP 860)
+# /p-reponse-contestation-amende → /reponse-contestation-amende ✅ (WP 861)
+# /p-formulaire-de-requete-en-exoneration → /formulaire-de-requete-en-exoneration ✅ (WP 862)
+# /p-formulaire-de-requete-en-exoneration-cas-n1 → /formulaire-de-requete-en-exoneration-cas-n1 ✅ (WP 863)
+# /p-formulaire-de-requete-en-exoneration-cas-n2 → /formulaire-de-requete-en-exoneration-cas-n2 ✅ (WP 864)
+# /p-formulaire-de-requete-en-exoneration-cas-n3 → /formulaire-de-requete-en-exoneration-cas-n3 ✅ (WP 865)
+# /p-modele-de-lettre-contestation → /modele-de-lettre-contestation ✅ (WP 866)
+# /p-modele-de-lettre-contester-exces-de-vitesse → /modele-de-lettre-contester-exces-de-vitesse ✅ (WP 867)
+# /p-modele-de-lettre-contester-stationnement → /modele-de-lettre-contester-stationnement ✅ (WP 868)
+# /p-modele-de-lettre-feu-rouge → /modele-de-lettre-feu-rouge ✅ (WP 869)
+# /p-adresse-pour-contester-amende → /adresse-pour-contester-amende ✅ (WP 870)
+# /p-delai-de-reponse-a-ma-contestation → /delai-de-reponse-a-ma-contestation ✅ (WP 871)
+# /p-pas-de-reponse-a-ma-contestation-amende → /pas-de-reponse-a-ma-contestation-amende ✅ (WP 872)
+# /p-comment-contester-une-amende-en-ligne → /comment-contester-une-amende-en-ligne ✅ (WP 873)
+# /p-comment-contester-une-amende-par-courrier → /comment-contester-une-amende-par-courrier ✅ (WP 874)
+# /p-feu-rouge-point → /feu-rouge-point ✅ (WP 875)
+# /p-fonctionnement-radar-feu-rouge → /fonctionnement-radar-feu-rouge ✅ (WP 876)
+# /p-flash-radar-feu-rouge → /flash-radar-feu-rouge ✅ (WP 877)
+# /p-suspension-permis-feu-rouge → /suspension-permis-feu-rouge ✅ (WP 878)
+# /p-griller-feu-rouge-jeune-conducteur → /griller-feu-rouge-jeune-conducteur ✅ (WP 879)
+# /p-velo-feu-rouge → /velo-feu-rouge ✅ (WP 880)
+# /p-carte-radar-feu-rouge → /carte-radar-feu-rouge ✅ (WP 881)
+
+# =============================================
+# CATÉGORIE 3 : URLs ville HTML → Pages ville Twelvy (31)
+# =============================================
+# Ancien format : /recuperation-points-VILLE-CODEPOSTAL-DEPT.html
+# Nouveau format : /stages-recuperation-points/ville
+/recuperation-points-AIX-EN-PROVENCE-13090-13.html,/stages-recuperation-points/aix-en-provence,301,PRÊT
+/recuperation-points-AMIENS-80017-80.html,/stages-recuperation-points/amiens,301,PRÊT
+/recuperation-points-ANGERS-49000-49.html,/stages-recuperation-points/angers,301,PRÊT
+/recuperation-points-AVIGNON-84000-84.html,/stages-recuperation-points/avignon,301,PRÊT
+/recuperation-points-BALMA-31130-31.html,/stages-recuperation-points/balma,301,PRÊT
+/recuperation-points-BOULOGNE-BILLANCOURT-92100-92.html,/stages-recuperation-points/boulogne-billancourt,301,PRÊT
+/recuperation-points-BRON-69500-69.html,/stages-recuperation-points/bron,301,PRÊT
+/recuperation-points-CAEN-14000-14.html,/stages-recuperation-points/caen,301,PRÊT
+/recuperation-points-CALAIS-62100-62.html,/stages-recuperation-points/calais,301,PRÊT
+/recuperation-points-CHATEAU-THIERRY-02400-02.html,/stages-recuperation-points/chateau-thierry,301,PRÊT
+/recuperation-points-CLERMONT-FERRAND-63000-63.html,/stages-recuperation-points/clermont-ferrand,301,PRÊT
+/recuperation-points-DIEPPE-76200-76.html,/stages-recuperation-points/dieppe,301,PRÊT
+/recuperation-points-DREUX-28100-28.html,/stages-recuperation-points/dreux,301,PRÊT
+/recuperation-points-FLOIRAC-33270-33.html,/stages-recuperation-points/floirac,301,PRÊT
+/recuperation-points-LE-MANS-72100-72.html,/stages-recuperation-points/le-mans,301,PRÊT
+/recuperation-points-LIEVIN-62800-62.html,/stages-recuperation-points/lievin,301,PRÊT
+/recuperation-points-LYON-7EME-69007-69.html,/stages-recuperation-points/lyon,301,LIVE
+/recuperation-points-MARSEILLE-13001-13.html,/stages-recuperation-points/marseille,301,PRÊT
+/recuperation-points-MEAUX-77100-77.html,/stages-recuperation-points/meaux,301,PRÊT
+/recuperation-points-MULHOUSE-68100-68.html,/stages-recuperation-points/mulhouse,301,PRÊT
+/recuperation-points-NICE-06000-06.html,/stages-recuperation-points/nice,301,LIVE
+/recuperation-points-PARIS-12EME-75012-75.html,/stages-recuperation-points/paris,301,PRÊT
+/recuperation-points-PONTOISE-95000-95.html,/stages-recuperation-points/pontoise,301,PRÊT
+/recuperation-points-PONTOISE-95300-95.html,/stages-recuperation-points/pontoise,301,PRÊT
+/recuperation-points-REIMS-51100-51.html,/stages-recuperation-points/reims,301,PRÊT
+/recuperation-points-RENNES-35000-35.html,/stages-recuperation-points/rennes,301,PRÊT
+/recuperation-points-ROUBAIX-59100-59.html,/stages-recuperation-points/roubaix,301,PRÊT
+/recuperation-points-ROUEN-76000-76.html,/stages-recuperation-points/rouen,301,PRÊT
+/recuperation-points-STRASBOURG-67000-67.html,/stages-recuperation-points/strasbourg,301,PRÊT
+/recuperation-points-TOULON-83000-83.html,/stages-recuperation-points/toulon,301,LIVE
+/recuperation-points-VALENCIENNES-59300-59.html,/stages-recuperation-points/valenciennes,301,PRÊT
+
+# =============================================
+# CATÉGORIE 4 : Blog /infos- → /blog/ (WILDCARD — 70 posts)
+# =============================================
+# Ancien format : /infos-slug (sur prostagespermis.fr)
+# Nouveau format : /blog/slug (sur Twelvy)
+# ENTRÉES EXPLICITES ci-dessous AVANT le wildcard dans next.config.ts
+/infos-acheter-des-points-de-permis-ou-vendre-ses-points-de-permis-a-vos-risques-et-perils,/blog/les-risques-dacheter-ou-de-vendre-ses-points-de-permis,301,PRÊT
+/infos-impunite-pv-etranger,/blog/limpunite-des-pv-a-letranger-est-terminee,301,PRÊT
+/infos-nouveaux-radars,/blog/les-nouveaux-radars-rmng-et-dispositifs-traditionnels,301,PRÊT
+/infos-penurie-ethylotest-obligatoire-report-1er-mars-2013,/blog/ethylotest-4-mois-de-sursis,301,PRÊT
+/infos-voiture-a-hydrogene,/blog/la-voiture-a-hydrogene-point-sur-les-dernieres-avancees,301,PRÊT
+# WILDCARD (à placer APRÈS les 5 entrées ci-dessus dans next.config.ts) :
+# { source: '/infos-:slug', destination: '/blog/:slug', permanent: true }
+
+# =============================================
+# CATÉGORIE 5 : Pages blog mineures (2)
+# =============================================
+/avis-2,/temoignages-de-stagiaires,301,PRÊT
+/contactez-nous,/aide-et-contact,301,PRÊT
+
+# =============================================
+# CATÉGORIE 6 : Redirections internes Twelvy (2)
+# =============================================
+# Déjà dans next.config.ts — à conserver
+/conditions-generales,https://www.prostagespermis.fr/CGV_PROSTAGESPERMIS-STAGIAIRES.pdf,302,LIVE
+/aide-et-contact,https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/,302,LIVE
+
+# =============================================
+# CORRECTIONS APPLIQUÉES (vs version précédente)
+# =============================================
+# Cat 1: /permis-a-points.php → /les-stages-permis-a-points (était /les-points-de-permis — FAUX)
+# Cat 1: /radars.php → /radar-automatique (était /radars-automatiques — FAUX)
+# Cat 2: Ajout de 46 entrées explicites /p- (étaient absentes — wildcard seule insuffisante)
+#        → 29 slugs actif=1 changés pendant migration
+#        → 3 slugs actif=0 changés (dif-stage-permis, contester-une-amende, comment-contester-une-amende)
+#        → 17 pages Part 2B FAQ/utilitaires non migrées → redirigées vers équivalent Twelvy
+#
+# =============================================
+# TOTAL FINAL
+# =============================================
+# Cat 1 : 48 pages PHP — entrées individuelles
+# Cat 2 : 49 entrées /p- explicites + 1 wildcard (/p-:slug → /:slug) pour les ~33 slugs identiques
+# Cat 3 : 31 URLs ville HTML — entrées individuelles
+# Cat 4 : 5 entrées blog + 1 wildcard (/infos-:slug → /blog/:slug)
+# Cat 5 : 2 pages blog mineures
+# Cat 6 : 2 redirections internes
+# TOTAL couvert : ~200+ redirections

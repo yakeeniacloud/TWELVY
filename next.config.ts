@@ -64,7 +64,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/dans-quels-cas-faire-un-stage',
-        destination: '/le-retrait-de-points',
+        destination: '/retrait-de-permis',
         permanent: true,
       },
       {

@@ -28,7 +28,7 @@ const NAV_ANCHOR_LINKS: Record<string, string> = {
   'comment-contester-un-retrait': '/suspension-de-permis-et-retrait-de-permis#comment-contester-une-suspension-de-permis',
   'recuperer-des-points-sur-mon-permis-probatoire': '/recuperer-ses-points#comment-recuperer-des-points-sur-mon-permis-probatoire',
   'combien-de-temps-pour-recuperer-ses-points': '/stage-de-sensibilisation-a-la-securite-routiere#comment-recuperer-les-points-apres-le-stage-de-sensibilisation',
-  'dans-quels-cas-faire-un-stage': '/le-retrait-de-points#dans-quels-cas-faire-un-stage-de-sensibilisation',
+  'dans-quels-cas-faire-un-stage': '/retrait-de-permis#dans-quels-cas-faut-il-faire-un-stage-de-recuperation-de-points',
   'comment-contester-mon-amende': '/payer-son-amende#comment-contester-un-pv',
   'comment-consulter-mon-solde-de-points': '/consulter-ses-points',
 }
