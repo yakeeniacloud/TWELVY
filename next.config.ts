@@ -35,6 +35,48 @@ const nextConfig: NextConfig = {
         destination: '/stages-recuperation-points/nice',
         permanent: true,
       },
+      // Placeholder pages that are anchor sections within other articles
+      // (PSP nav items that link to #sections, not standalone pages)
+      {
+        source: '/comment-obtenir-mes-acces-telepoints',
+        destination: '/consulter-ses-points',
+        permanent: true,
+      },
+      {
+        source: '/obtenir-mes-acces-telepoints',
+        destination: '/consulter-ses-points',
+        permanent: true,
+      },
+      {
+        source: '/comment-contester-un-retrait',
+        destination: '/suspension-de-permis-et-retrait-de-permis',
+        permanent: true,
+      },
+      {
+        source: '/recuperer-des-points-sur-mon-permis-probatoire',
+        destination: '/recuperer-ses-points',
+        permanent: true,
+      },
+      {
+        source: '/combien-de-temps-pour-recuperer-ses-points',
+        destination: '/stage-de-sensibilisation-a-la-securite-routiere',
+        permanent: true,
+      },
+      {
+        source: '/dans-quels-cas-faire-un-stage',
+        destination: '/le-retrait-de-points',
+        permanent: true,
+      },
+      {
+        source: '/comment-contester-mon-amende',
+        destination: '/payer-son-amende',
+        permanent: true,
+      },
+      {
+        source: '/comment-consulter-mon-solde-de-points',
+        destination: '/consulter-ses-points',
+        permanent: true,
+      },
       // Footer link redirections
       {
         source: '/conditions-generales',

@@ -20,6 +20,24 @@ const formatMenuItem = (text: string): string => {
   return lower.charAt(0).toUpperCase() + lower.slice(1)
 }
 
+// Nav items that are anchors within other articles (not standalone pages)
+// These link directly to a section in the target article instead of a placeholder page
+const NAV_ANCHOR_LINKS: Record<string, string> = {
+  'comment-obtenir-mes-acces-telepoints': '/consulter-ses-points#comment-obtenir-ses-codes-d-acces-a-telepoints',
+  'obtenir-mes-acces-telepoints': '/consulter-ses-points#comment-obtenir-ses-codes-d-acces-a-telepoints',
+  'comment-contester-un-retrait': '/suspension-de-permis-et-retrait-de-permis#comment-contester-une-suspension-de-permis',
+  'recuperer-des-points-sur-mon-permis-probatoire': '/recuperer-ses-points#comment-recuperer-des-points-sur-mon-permis-probatoire',
+  'combien-de-temps-pour-recuperer-ses-points': '/stage-de-sensibilisation-a-la-securite-routiere#comment-recuperer-les-points-apres-le-stage-de-sensibilisation',
+  'dans-quels-cas-faire-un-stage': '/le-retrait-de-points#dans-quels-cas-faire-un-stage-de-sensibilisation',
+  'comment-contester-mon-amende': '/payer-son-amende#comment-contester-un-pv',
+  'comment-consulter-mon-solde-de-points': '/consulter-ses-points',
+}
+
+// Get the correct href for a nav child item (anchor link or normal page link)
+const getChildHref = (slug: string): string => {
+  return NAV_ANCHOR_LINKS[slug] || `/${slug}`
+}
+
 export default function Header() {
   const { menu, loading } = useWordPressMenu()
   const [openMenuId, setOpenMenuId] = useState<number | null>(null)
@@ -121,7 +139,7 @@ export default function Header() {
                           {item.children.map((child) => (
                             <Link
                               key={child.id}
-                              href={`/${child.slug}`}
+                              href={getChildHref(child.slug)}
                               className="block py-1.5 text-sm text-gray-700 hover:text-red-600 transition-colors"
                               onClick={() => setOpenMenuId(null)}
                             >
