@@ -38,6 +38,7 @@ function normalizeCityName(city: string): string {
 
 export function useCities() {
   const [cities, setCities] = useState<string[]>([])
+  const [cityPostalMap, setCityPostalMap] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -53,26 +54,32 @@ export function useCities() {
         const data = await response.json()
 
         // Handle both old format (string[]) and new format ({name, postal}[])
-        let cityNames: string[] = []
+        let cityEntries: CityWithPostal[] = []
         if (data.cities && data.cities.length > 0) {
           if (typeof data.cities[0] === 'object' && data.cities[0].name) {
-            // New format: {name, postal}[]
-            cityNames = (data.cities as CityWithPostal[]).map(c => c.name)
+            cityEntries = data.cities as CityWithPostal[]
           } else {
-            // Old format: string[]
-            cityNames = data.cities as string[]
+            // Old format: string[] — no postal codes available
+            cityEntries = (data.cities as string[]).map(name => ({ name, postal: '' }))
           }
         }
 
-        // Normalize and deduplicate cities
+        // Build postal map: normalized city name → first postal code seen
+        const postalMap: Record<string, string> = {}
         const normalizedSet = new Set<string>()
-        cityNames.forEach(city => {
-          const normalized = normalizeCityName(city)
+
+        cityEntries.forEach(entry => {
+          const normalized = normalizeCityName(entry.name)
           normalizedSet.add(normalized)
+          // Keep the first postal code for each normalized city
+          if (!postalMap[normalized] && entry.postal) {
+            postalMap[normalized] = entry.postal
+          }
         })
 
         const uniqueCities = Array.from(normalizedSet).sort()
         setCities(uniqueCities)
+        setCityPostalMap(postalMap)
       } catch (err) {
         const errorMsg = err instanceof Error ? err.message : 'Unknown error'
         console.error('Error fetching cities:', errorMsg)
@@ -86,5 +93,5 @@ export function useCities() {
     fetchCities()
   }, [])
 
-  return { cities, loading, error }
+  return { cities, cityPostalMap, loading, error }
 }

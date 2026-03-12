@@ -20,10 +20,23 @@ const formatCityDisplay = (city: string) => {
     .join('-')
 }
 
-// Get department code from city using postal map
-const getDeptCode = (city: string) => {
-  const postal = CITY_POSTAL_MAP[city.toUpperCase()]
-  return postal ? postal.substring(0, 2) : ''
+// Get department code from postal code
+// Handles: standard (75001→75), Corse (20000-20190→2A, 20200-20290→2B), DOM-TOM (97100→971)
+function getDeptFromPostal(postal: string): string {
+  if (!postal) return ''
+  const prefix2 = postal.substring(0, 2)
+  const prefix3 = postal.substring(0, 3)
+
+  // DOM-TOM: 971 (Guadeloupe), 972 (Martinique), 973 (Guyane), 974 (Réunion), 976 (Mayotte)
+  if (prefix2 === '97') return prefix3
+
+  // Corse: 20000-20190 → 2A (Corse-du-Sud), 20200-20290 → 2B (Haute-Corse)
+  if (prefix2 === '20') {
+    const num = parseInt(postal, 10)
+    return num < 20200 ? '2A' : '2B'
+  }
+
+  return prefix2
 }
 
 interface CitySearchBarProps {
@@ -43,7 +56,14 @@ export default function CitySearchBar({
   const inputRef = useRef<HTMLInputElement>(null)
   const suggestionsRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
-  const { cities } = useCities()
+  const { cities, cityPostalMap } = useCities()
+
+  // Get department code: try API postal map first, fall back to static map
+  const getDeptCode = (city: string) => {
+    const cityUpper = city.toUpperCase()
+    const postal = cityPostalMap[cityUpper] || CITY_POSTAL_MAP[cityUpper]
+    return postal ? getDeptFromPostal(postal) : ''
+  }
 
   // Filter cities based on query
   const filteredCities = query.length > 0
@@ -67,8 +87,8 @@ export default function CitySearchBar({
     if (cityToNavigate) {
       const cityUpper = cityToNavigate.toUpperCase()
 
-      // TRY POSTAL MAP FIRST for instant navigation
-      const postalFromMap = CITY_POSTAL_MAP[cityUpper]
+      // TRY POSTAL MAP FIRST for instant navigation (API map covers all cities, static map as fallback)
+      const postalFromMap = cityPostalMap[cityUpper] || CITY_POSTAL_MAP[cityUpper]
 
       if (postalFromMap) {
         // ⚡ INSTANT NAVIGATION - no API call needed!
