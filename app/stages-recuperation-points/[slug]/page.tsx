@@ -40,6 +40,20 @@ const DEPARTMENT_NAMES: { [key: string]: string } = {
   '973': 'Guyane', '974': 'La Réunion', '976': 'Mayotte'
 }
 
+// Get department code from postal code
+// Handles: standard (75001→75), Corse (20000-20190→2A, 20200-20290→2B), DOM-TOM (97100→971)
+function getDeptFromPostal(postal: string): string {
+  if (!postal) return ''
+  const prefix2 = postal.substring(0, 2)
+  const prefix3 = postal.substring(0, 3)
+  if (prefix2 === '97') return prefix3
+  if (prefix2 === '20') {
+    const num = parseInt(postal, 10)
+    return num < 20200 ? '2A' : '2B'
+  }
+  return prefix2
+}
+
 interface Stage {
   id: number
   id_site: number
@@ -95,7 +109,7 @@ export default function StagesResultsPage() {
   const [desktopSearchQuery, setDesktopSearchQuery] = useState('')
   const [showDesktopSuggestions, setShowDesktopSuggestions] = useState(false)
   const [desktopSelectedIndex, setDesktopSelectedIndex] = useState(-1)
-  const { cities: allCities } = useCities()
+  const { cities: allCities, cityPostalMap } = useCities()
   const { content: cityContent } = useWordPressContent(`stages-${city.toLowerCase()}`)
   const desktopSearchRef = useRef<HTMLInputElement>(null)
   const desktopSuggestionsRef = useRef<HTMLDivElement>(null)
@@ -434,7 +448,7 @@ export default function StagesResultsPage() {
                     : mobileSearchQuery
                   if (cityToSearch.trim()) {
                     const cityUpper = cityToSearch.toUpperCase()
-                    const postal = CITY_POSTAL_MAP[cityUpper] || '00000'
+                    const postal = cityPostalMap[cityUpper] || CITY_POSTAL_MAP[cityUpper] || '00000'
                     window.location.href = `/stages-recuperation-points/${cityUpper}-${postal}`
                   }
                 } else if (e.key === 'ArrowDown') {
@@ -466,7 +480,9 @@ export default function StagesResultsPage() {
                 style={{ maxHeight: '250px', overflowY: 'auto' }}
               >
                 {filteredCities.map((cityName, index) => {
-                  const deptCode = CITY_POSTAL_MAP[cityName.toUpperCase()]?.substring(0, 2) || ''
+                  const cityUpper = cityName.toUpperCase()
+                  const postal = cityPostalMap[cityUpper] || CITY_POSTAL_MAP[cityUpper] || ''
+                  const deptCode = postal ? getDeptFromPostal(postal) : ''
                   const displayName = cityName.split('-').map((word, i) => {
                     const lower = word.toLowerCase()
                     if (i > 0 && ['en', 'de', 'du', 'la', 'le', 'les', 'sur', 'sous'].includes(lower)) return lower
@@ -476,9 +492,8 @@ export default function StagesResultsPage() {
                     <button
                       key={cityName}
                       onClick={() => {
-                        const cityUpper = cityName.toUpperCase()
-                        const postal = CITY_POSTAL_MAP[cityUpper] || '00000'
-                        window.location.href = `/stages-recuperation-points/${cityUpper}-${postal}`
+                        const navPostal = postal || '00000'
+                        window.location.href = `/stages-recuperation-points/${cityUpper}-${navPostal}`
                       }}
                       className={`w-full text-left px-4 py-3 text-sm transition-colors ${
                         index === mobileSelectedIndex ? 'bg-blue-100 text-blue-900' : 'text-gray-700 hover:bg-gray-100'
@@ -812,7 +827,7 @@ export default function StagesResultsPage() {
                           : desktopSearchQuery
                         if (cityToSearch.trim()) {
                           const cityUpper = cityToSearch.toUpperCase()
-                          const postal = CITY_POSTAL_MAP[cityUpper] || '00000'
+                          const postal = cityPostalMap[cityUpper] || CITY_POSTAL_MAP[cityUpper] || '00000'
                           window.location.href = `/stages-recuperation-points/${cityUpper}-${postal}`
                         }
                       } else if (e.key === 'ArrowDown') {
@@ -847,7 +862,9 @@ export default function StagesResultsPage() {
                       style={{ width: '180px', maxHeight: '200px', overflowY: 'auto' }}
                     >
                       {filteredCities.map((cityName, index) => {
-                        const deptCode = CITY_POSTAL_MAP[cityName.toUpperCase()]?.substring(0, 2) || ''
+                        const cityUpper = cityName.toUpperCase()
+                        const postal = cityPostalMap[cityUpper] || CITY_POSTAL_MAP[cityUpper] || ''
+                        const deptCode = postal ? getDeptFromPostal(postal) : ''
                         const displayName = cityName.split('-').map((word, i) => {
                           const lower = word.toLowerCase()
                           if (i > 0 && ['en', 'de', 'du', 'la', 'le', 'les', 'sur', 'sous'].includes(lower)) return lower
@@ -857,9 +874,8 @@ export default function StagesResultsPage() {
                           <button
                             key={cityName}
                             onClick={() => {
-                              const cityUpper = cityName.toUpperCase()
-                              const postal = CITY_POSTAL_MAP[cityUpper] || '00000'
-                              window.location.href = `/stages-recuperation-points/${cityUpper}-${postal}`
+                              const navPostal = postal || '00000'
+                              window.location.href = `/stages-recuperation-points/${cityUpper}-${navPostal}`
                             }}
                             className={`w-full text-left px-3 py-2 text-xs transition-colors ${
                               index === desktopSelectedIndex ? 'bg-blue-100 text-blue-900' : 'text-gray-700 hover:bg-gray-100'
@@ -1970,9 +1986,10 @@ export default function StagesResultsPage() {
             <a href="https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">Aide et contact</a>
             <a href="https://www.prostagespermis.fr/CGV_PROSTAGESPERMIS-STAGIAIRES.pdf" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">Conditions générales de vente</a>
             <Link href="/mentions-legales" className="text-white text-xs hover:underline">Mentions légales</Link>
-            <Link href="https://psp-copie.twelvy.net/es/" className="text-white text-xs hover:underline">Espace Client</Link>
+            <a href="https://psp-copie.twelvy.net/es/" className="text-white text-xs hover:underline">Espace Client</a>
+            <a href="https://psp-copie.twelvy.net/ep/" className="text-white text-xs hover:underline">Espace Partenaire</a>
           </div>
-          <p className="text-center text-white text-xs">2025©ProStagesPermis</p>
+          <p className="text-center text-white text-xs">{new Date().getFullYear()}©ProStagesPermis</p>
         </div>
       </footer>
 
