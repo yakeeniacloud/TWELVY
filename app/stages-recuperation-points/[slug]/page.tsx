@@ -110,7 +110,7 @@ export default function StagesResultsPage() {
   const [showDesktopSuggestions, setShowDesktopSuggestions] = useState(false)
   const [desktopSelectedIndex, setDesktopSelectedIndex] = useState(-1)
   const { cities: allCities, cityPostalMap } = useCities()
-  const { content: cityContent } = useWordPressContent(`stages-${city.toLowerCase()}`)
+  const { content: cityContent, loading: cityContentLoading } = useWordPressContent(`stages-${city.toLowerCase()}`)
   const desktopSearchRef = useRef<HTMLInputElement>(null)
   const desktopSuggestionsRef = useRef<HTMLDivElement>(null)
 
@@ -1967,12 +1967,22 @@ export default function StagesResultsPage() {
       </main>
 
       {/* City-Specific WordPress Content Below Courses */}
-      {cityContent && (
+      {cityContent ? (
         <div className="bg-gray-50 border-t border-gray-200 py-8 px-4 mt-8">
           <div className="mx-auto max-w-3xl">
             <div
               className="wp-content max-w-none"
               dangerouslySetInnerHTML={{ __html: cityContent.content }}
+            />
+          </div>
+        </div>
+      ) : !cityContentLoading && (
+        <div className="bg-gray-50 border-t border-gray-200 py-8 px-4 mt-8">
+          <div className="mx-auto max-w-3xl flex justify-center">
+            <img
+              src="/images/salle-stage.jpg"
+              alt="Salle de formation stage de récupération de points"
+              className="rounded-lg max-w-full h-auto"
             />
           </div>
         </div>
