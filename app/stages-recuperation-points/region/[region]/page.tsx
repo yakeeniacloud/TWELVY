@@ -929,6 +929,17 @@ export default function StagesRegionPage() {
         )}
       </main>
 
+      {/* Image below courses */}
+      <div className="bg-gray-50 border-t border-gray-200 py-8 px-4 mt-8">
+        <div className="mx-auto max-w-3xl flex justify-center">
+          <img
+            src="/images/salle-stage.jpg"
+            alt="Salle de formation stage de récupération de points"
+            className="rounded-lg max-w-full h-auto"
+          />
+        </div>
+      </div>
+
       {/* Footer */}
       <footer className="bg-[#343435] py-6 mt-16 md:mt-32">
         <div className="max-w-7xl mx-auto px-4">
