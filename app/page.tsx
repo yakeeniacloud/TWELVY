@@ -3,11 +3,22 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { CITY_POSTAL_MAP } from '@/lib/city-postal-map'
+import { DEPARTEMENTS } from '@/lib/departements'
+import { REGIONS } from '@/lib/regions'
 
 // Type for city with postal code
 interface CityWithPostal {
   name: string
   postal: string
+}
+
+type HomeSuggestion =
+  | { type: 'city'; cityData: CityWithPostal }
+  | { type: 'dept'; slug: string; name: string; code: string }
+  | { type: 'region'; slug: string; name: string }
+
+function normalizeForSearch(s: string): string {
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 }
 
 // Format city name: MARSEILLE -> Marseille, AIX-EN-PROVENCE -> Aix-en-Provence
@@ -40,7 +51,7 @@ export default function Home() {
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
   const [allCities, setAllCities] = useState<CityWithPostal[]>([])
-  const [suggestions, setSuggestions] = useState<CityWithPostal[]>([])
+  const [suggestions, setSuggestions] = useState<HomeSuggestion[]>([])
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -112,15 +123,30 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Filter cities based on input
+  // Filter cities, depts and regions based on input
   const handleInputChange = (value: string) => {
     setSearchQuery(value)
-    if (value.length >= 2) {
-      const filtered = allCities
-        .filter(city => city.name.toLowerCase().includes(value.toLowerCase()))
-        .slice(0, 8)
-      setSuggestions(filtered)
-      setShowSuggestions(filtered.length > 0)
+    if (value.length >= 1) {
+      const normalizedQ = normalizeForSearch(value)
+      const filteredCities = value.length >= 2
+        ? allCities.filter(city => city.name.toLowerCase().includes(value.toLowerCase())).slice(0, 6)
+        : []
+      const filteredDepts = normalizedQ ? DEPARTEMENTS.filter(d =>
+        normalizeForSearch(d.name).startsWith(normalizedQ) ||
+        d.slug.startsWith(normalizedQ) ||
+        d.code.toLowerCase().startsWith(normalizedQ)
+      ).slice(0, 3) : []
+      const filteredRegions = normalizedQ ? REGIONS.filter(r =>
+        normalizeForSearch(r.name).startsWith(normalizedQ) ||
+        r.slug.startsWith(normalizedQ)
+      ).slice(0, 2) : []
+      const allSuggestions: HomeSuggestion[] = [
+        ...filteredCities.map(c => ({ type: 'city' as const, cityData: c })),
+        ...filteredDepts.map(d => ({ type: 'dept' as const, slug: d.slug, name: d.name, code: d.code })),
+        ...filteredRegions.map(r => ({ type: 'region' as const, slug: r.slug, name: r.name })),
+      ]
+      setSuggestions(allSuggestions)
+      setShowSuggestions(allSuggestions.length > 0)
     } else {
       setSuggestions([])
       setShowSuggestions(false)
@@ -185,6 +211,32 @@ export default function Home() {
       } catch {
         router.push(`/stages-recuperation-points/${cityUpper}-00000`)
       }
+    }
+  }
+
+  const renderSuggestionItem = (suggestion: HomeSuggestion, index: number) => {
+    const baseClass = 'w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer flex items-center justify-between'
+    if (suggestion.type === 'city') {
+      const deptCode = suggestion.cityData.postal ? getDeptCodeFromPostal(suggestion.cityData.postal) : getDeptCode(suggestion.cityData.name)
+      return (
+        <button key={index} type="button" onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); handleCitySelect(suggestion.cityData) }} className={baseClass} style={{ fontFamily: 'var(--font-poppins)' }}>
+          <span>{formatCityDisplay(suggestion.cityData.name)}{deptCode ? ` (${deptCode})` : ''}</span>
+        </button>
+      )
+    } else if (suggestion.type === 'dept') {
+      return (
+        <button key={`dept-${suggestion.slug}`} type="button" onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/stages-recuperation-points/departement/${suggestion.slug}`); setShowSuggestions(false); setSearchQuery('') }} className={baseClass} style={{ fontFamily: 'var(--font-poppins)' }}>
+          <span>{suggestion.name} ({suggestion.code})</span>
+          <span className="text-xs text-gray-400 ml-2 flex-shrink-0">Département</span>
+        </button>
+      )
+    } else {
+      return (
+        <button key={`region-${suggestion.slug}`} type="button" onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/stages-recuperation-points/region/${suggestion.slug}`); setShowSuggestions(false); setSearchQuery('') }} className={baseClass} style={{ fontFamily: 'var(--font-poppins)' }}>
+          <span>{suggestion.name}</span>
+          <span className="text-xs text-gray-400 ml-2 flex-shrink-0">Région</span>
+        </button>
+      )
     }
   }
 
@@ -290,25 +342,7 @@ export default function Home() {
               {/* Suggestions Dropdown - Outside the flex container */}
               {showSuggestions && suggestions.length > 0 && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-                  {suggestions.map((cityData, index) => {
-                    // Use postal from API data, fallback to static map
-                    const deptCode = cityData.postal ? getDeptCodeFromPostal(cityData.postal) : getDeptCode(cityData.name)
-                    return (
-                      <button
-                        key={index}
-                        type="button"
-                        onMouseDown={(e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          handleCitySelect(cityData)
-                        }}
-                        className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer"
-                        style={{ fontFamily: 'var(--font-poppins)' }}
-                      >
-                        {formatCityDisplay(cityData.name)}{deptCode ? ` (${deptCode})` : ''}
-                      </button>
-                    )
-                  })}
+                  {suggestions.map(renderSuggestionItem)}
                 </div>
               )}
             </div>
@@ -1557,24 +1591,7 @@ export default function Home() {
               {/* Sticky header suggestions dropdown */}
               {showSuggestions && suggestions.length > 0 && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto mx-4">
-                  {suggestions.map((cityData, index) => {
-                    const deptCode = cityData.postal ? getDeptCodeFromPostal(cityData.postal) : getDeptCode(cityData.name)
-                    return (
-                      <button
-                        key={index}
-                        type="button"
-                        onMouseDown={(e) => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          handleCitySelect(cityData)
-                        }}
-                        className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer"
-                        style={{ fontFamily: 'var(--font-poppins)' }}
-                      >
-                        {formatCityDisplay(cityData.name)}{deptCode ? ` (${deptCode})` : ''}
-                      </button>
-                    )
-                  })}
+                  {suggestions.map(renderSuggestionItem)}
                 </div>
               )}
             </div>
@@ -1725,25 +1742,7 @@ export default function Home() {
             </div>
             {showSuggestions && suggestions.length > 0 && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
-                {suggestions.map((cityData, index) => {
-                  // Use postal from API data, fallback to static map
-                  const deptCode = cityData.postal ? getDeptCodeFromPostal(cityData.postal) : getDeptCode(cityData.name)
-                  return (
-                    <button
-                      key={index}
-                      type="button"
-                      onMouseDown={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        handleCitySelect(cityData)
-                      }}
-                      className="w-full px-4 py-3 text-left hover:bg-gray-100 text-sm cursor-pointer"
-                      style={{ fontFamily: 'var(--font-poppins)' }}
-                    >
-                      {formatCityDisplay(cityData.name)}{deptCode ? ` (${deptCode})` : ''}
-                    </button>
-                  )
-                })}
+                {suggestions.map(renderSuggestionItem)}
               </div>
             )}
           </div>
