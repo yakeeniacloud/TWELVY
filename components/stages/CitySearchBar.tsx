@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useCities } from '@/hooks/useCities'
 import { CITY_POSTAL_MAP } from '@/lib/city-postal-map'
+import { DEPARTEMENTS } from '@/lib/departements'
+import { REGIONS } from '@/lib/regions'
 
 // Format city name: MARSEILLE -> Marseille, AIX-EN-PROVENCE -> Aix-en-Provence
 const formatCityDisplay = (city: string) => {
@@ -39,6 +41,16 @@ function getDeptFromPostal(postal: string): string {
   return prefix2
 }
 
+// Normalize string for accent-insensitive matching
+function normalizeForSearch(s: string): string {
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+}
+
+type Suggestion =
+  | { type: 'city'; city: string }
+  | { type: 'dept'; slug: string; name: string; code: string }
+  | { type: 'region'; slug: string; name: string }
+
 interface CitySearchBarProps {
   placeholder?: string
   variant?: 'large' | 'small' | 'sidebar' | 'filter'
@@ -65,12 +77,35 @@ export default function CitySearchBar({
     return postal ? getDeptFromPostal(postal) : ''
   }
 
-  // Filter cities based on query
+  // Filter cities based on query (max 6)
   const filteredCities = query.length > 0
     ? cities.filter((city) =>
         city.toLowerCase().startsWith(query.toLowerCase())
-      )
+      ).slice(0, 6)
     : []
+
+  // Filter depts and regions (accent-insensitive, max 3 + 2)
+  const normalizedQuery = query.length > 0 ? normalizeForSearch(query) : ''
+  const filteredDepts = normalizedQuery
+    ? DEPARTEMENTS.filter(d =>
+        normalizeForSearch(d.name).startsWith(normalizedQuery) ||
+        d.slug.startsWith(normalizedQuery) ||
+        d.code.toLowerCase().startsWith(normalizedQuery)
+      ).slice(0, 3)
+    : []
+  const filteredRegions = normalizedQuery
+    ? REGIONS.filter(r =>
+        normalizeForSearch(r.name).startsWith(normalizedQuery) ||
+        r.slug.startsWith(normalizedQuery)
+      ).slice(0, 2)
+    : []
+
+  // Combined suggestions for keyboard navigation
+  const allSuggestions: Suggestion[] = [
+    ...filteredCities.map(city => ({ type: 'city' as const, city })),
+    ...filteredDepts.map(d => ({ type: 'dept' as const, slug: d.slug, name: d.name, code: d.code })),
+    ...filteredRegions.map(r => ({ type: 'region' as const, slug: r.slug, name: r.name })),
+  ]
 
   const handleSearch = async (selectedCity?: string) => {
     const cityToSearch = selectedCity || query
@@ -178,18 +213,32 @@ export default function CitySearchBar({
     }
   }
 
+  const handleSuggestionClick = (suggestion: Suggestion) => {
+    if (suggestion.type === 'city') {
+      handleSearch(suggestion.city)
+    } else if (suggestion.type === 'dept') {
+      router.push(`/stages-recuperation-points/departement/${suggestion.slug}`)
+      setQuery('')
+      setShowSuggestions(false)
+    } else {
+      router.push(`/stages-recuperation-points/region/${suggestion.slug}`)
+      setQuery('')
+      setShowSuggestions(false)
+    }
+  }
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault()
-      if (selectedIndex >= 0 && selectedIndex < filteredCities.length) {
-        handleSearch(filteredCities[selectedIndex])
+      if (selectedIndex >= 0 && selectedIndex < allSuggestions.length) {
+        handleSuggestionClick(allSuggestions[selectedIndex])
       } else {
         handleSearch()
       }
     } else if (e.key === 'ArrowDown') {
       e.preventDefault()
       setSelectedIndex((prev) =>
-        prev < filteredCities.length - 1 ? prev + 1 : prev
+        prev < allSuggestions.length - 1 ? prev + 1 : prev
       )
     } else if (e.key === 'ArrowUp') {
       e.preventDefault()
@@ -321,7 +370,7 @@ export default function CitySearchBar({
         )}
 
         {/* Suggestions Dropdown */}
-        {showSuggestions && filteredCities.length > 0 && (
+        {showSuggestions && allSuggestions.length > 0 && (
           <div
             ref={suggestionsRef}
             className={`absolute top-full left-0 right-0 bg-white border border-gray-300 shadow-lg z-50 ${
@@ -329,21 +378,33 @@ export default function CitySearchBar({
             }`}
             style={{ maxHeight: '300px', overflowY: 'auto' }}
           >
-            {filteredCities.map((city, index) => {
-              const deptCode = getDeptCode(city)
-              return (
-                <button
-                  key={city}
-                  onClick={() => handleSearch(city)}
-                  className={`w-full text-left px-3 py-2 text-sm transition-colors ${
-                    index === selectedIndex
-                      ? 'bg-blue-100 text-blue-900'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`}
-                >
-                  {formatCityDisplay(city)}{deptCode ? ` (${deptCode})` : ''}
-                </button>
-              )
+            {allSuggestions.map((suggestion, index) => {
+              const isSelected = index === selectedIndex
+              const baseClass = `w-full text-left px-3 py-2 text-sm transition-colors flex items-center justify-between ${
+                isSelected ? 'bg-blue-100 text-blue-900' : 'text-gray-700 hover:bg-gray-100'
+              }`
+              if (suggestion.type === 'city') {
+                const deptCode = getDeptCode(suggestion.city)
+                return (
+                  <button key={`city-${suggestion.city}`} onClick={() => handleSuggestionClick(suggestion)} className={baseClass}>
+                    <span>{formatCityDisplay(suggestion.city)}{deptCode ? ` (${deptCode})` : ''}</span>
+                  </button>
+                )
+              } else if (suggestion.type === 'dept') {
+                return (
+                  <button key={`dept-${suggestion.slug}`} onClick={() => handleSuggestionClick(suggestion)} className={baseClass}>
+                    <span>{suggestion.name} ({suggestion.code})</span>
+                    <span className="text-xs text-gray-400 ml-2 flex-shrink-0">Département</span>
+                  </button>
+                )
+              } else {
+                return (
+                  <button key={`region-${suggestion.slug}`} onClick={() => handleSuggestionClick(suggestion)} className={baseClass}>
+                    <span>{suggestion.name}</span>
+                    <span className="text-xs text-gray-400 ml-2 flex-shrink-0">Région</span>
+                  </button>
+                )
+              }
             })}
           </div>
         )}
