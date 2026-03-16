@@ -8,7 +8,8 @@ import StageDetailsModal from '@/components/stages/StageDetailsModal'
 import { removeStreetNumber } from '@/lib/formatAddress'
 import { useCities } from '@/hooks/useCities'
 import { CITY_POSTAL_MAP } from '@/lib/city-postal-map'
-import { getDeptBySlug } from '@/lib/departements'
+import { getDeptBySlug, DEPARTEMENTS } from '@/lib/departements'
+import { REGIONS } from '@/lib/regions'
 
 function getDeptFromPostal(postal: string): string {
   if (!postal) return ''
@@ -20,6 +21,10 @@ function getDeptFromPostal(postal: string): string {
     return num < 20200 ? '2A' : '2B'
   }
   return prefix2
+}
+
+function normalizeForSearch(s: string): string {
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 }
 
 interface Stage {
@@ -318,22 +323,26 @@ export default function StagesDepartementPage() {
               onChange={(e) => { setMobileSearchQuery(e.target.value); setShowMobileSuggestions(true); setMobileSelectedIndex(-1) }}
               onFocus={() => setShowMobileSuggestions(true)}
               onKeyDown={(e) => {
-                const filteredCities = mobileSearchQuery.length > 0
-                  ? allCities.filter(c => c.toLowerCase().startsWith(mobileSearchQuery.toLowerCase())).slice(0, 8)
-                  : []
+                const normalizedQ = normalizeForSearch(mobileSearchQuery)
+                const fc = mobileSearchQuery.length > 0 ? allCities.filter(c => c.toLowerCase().startsWith(mobileSearchQuery.toLowerCase())).slice(0, 6) : []
+                const fd = normalizedQ ? DEPARTEMENTS.filter(d => normalizeForSearch(d.name).startsWith(normalizedQ) || d.slug.startsWith(normalizedQ) || d.code.toLowerCase().startsWith(normalizedQ)).slice(0, 3) : []
+                const fr = normalizedQ ? REGIONS.filter(r => normalizeForSearch(r.name).startsWith(normalizedQ) || r.slug.startsWith(normalizedQ)).slice(0, 2) : []
+                const all = [...fc.map(c => ({ type: 'city' as const, name: c })), ...fd.map(d => ({ type: 'dept' as const, slug: d.slug, name: d.name, code: d.code })), ...fr.map(r => ({ type: 'region' as const, slug: r.slug, name: r.name }))]
                 if (e.key === 'Enter') {
                   e.preventDefault()
-                  const cityToSearch = mobileSelectedIndex >= 0 && mobileSelectedIndex < filteredCities.length
-                    ? filteredCities[mobileSelectedIndex]
-                    : mobileSearchQuery
-                  if (cityToSearch.trim()) {
-                    const cityUpper = cityToSearch.toUpperCase()
+                  if (mobileSelectedIndex >= 0 && mobileSelectedIndex < all.length) {
+                    const s = all[mobileSelectedIndex]
+                    if (s.type === 'city') { const cu = s.name.toUpperCase(); const p = cityPostalMap[cu] || CITY_POSTAL_MAP[cu] || '00000'; window.location.href = `/stages-recuperation-points/${cu}-${p}` }
+                    else if (s.type === 'dept') { window.location.href = `/stages-recuperation-points/departement/${s.slug}` }
+                    else { window.location.href = `/stages-recuperation-points/region/${s.slug}` }
+                  } else if (mobileSearchQuery.trim()) {
+                    const cityUpper = mobileSearchQuery.toUpperCase()
                     const postal = cityPostalMap[cityUpper] || CITY_POSTAL_MAP[cityUpper] || '00000'
                     window.location.href = `/stages-recuperation-points/${cityUpper}-${postal}`
                   }
                 } else if (e.key === 'ArrowDown') {
                   e.preventDefault()
-                  setMobileSelectedIndex(prev => prev < filteredCities.length - 1 ? prev + 1 : prev)
+                  setMobileSelectedIndex(prev => prev < all.length - 1 ? prev + 1 : prev)
                 } else if (e.key === 'ArrowUp') {
                   e.preventDefault()
                   setMobileSelectedIndex(prev => prev > 0 ? prev - 1 : -1)
@@ -348,29 +357,46 @@ export default function StagesDepartementPage() {
             />
           </div>
           {showMobileSuggestions && mobileSearchQuery.length > 0 && (() => {
-            const filteredCities = allCities.filter(c => c.toLowerCase().startsWith(mobileSearchQuery.toLowerCase())).slice(0, 8)
-            if (filteredCities.length === 0) return null
+            const normalizedQ = normalizeForSearch(mobileSearchQuery)
+            const fc = allCities.filter(c => c.toLowerCase().startsWith(mobileSearchQuery.toLowerCase())).slice(0, 6)
+            const fd = normalizedQ ? DEPARTEMENTS.filter(d => normalizeForSearch(d.name).startsWith(normalizedQ) || d.slug.startsWith(normalizedQ) || d.code.toLowerCase().startsWith(normalizedQ)).slice(0, 3) : []
+            const fr = normalizedQ ? REGIONS.filter(r => normalizeForSearch(r.name).startsWith(normalizedQ) || r.slug.startsWith(normalizedQ)).slice(0, 2) : []
+            const all = [...fc.map(c => ({ type: 'city' as const, name: c })), ...fd.map(d => ({ type: 'dept' as const, slug: d.slug, name: d.name, code: d.code })), ...fr.map(r => ({ type: 'region' as const, slug: r.slug, name: r.name }))]
+            if (all.length === 0) return null
             return (
               <div ref={mobileSuggestionsRef} className="absolute left-4 right-4 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50" style={{ maxHeight: '250px', overflowY: 'auto' }}>
-                {filteredCities.map((cityName, index) => {
-                  const cityUpper = cityName.toUpperCase()
-                  const postal = cityPostalMap[cityUpper] || CITY_POSTAL_MAP[cityUpper] || ''
-                  const suggDeptCode = postal ? getDeptFromPostal(postal) : ''
-                  const displayName = cityName.split('-').map((word, i) => {
-                    const lower = word.toLowerCase()
-                    if (i > 0 && ['en', 'de', 'du', 'la', 'le', 'les', 'sur', 'sous'].includes(lower)) return lower
-                    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-                  }).join('-')
-                  return (
-                    <button key={cityName} onClick={() => {
-                      const navPostal = postal || '00000'
-                      window.location.href = `/stages-recuperation-points/${cityUpper}-${navPostal}`
-                    }}
-                      className={`w-full text-left px-4 py-3 text-sm transition-colors ${index === mobileSelectedIndex ? 'bg-blue-100 text-blue-900' : 'text-gray-700 hover:bg-gray-100'}`}
-                      style={{ fontFamily: 'var(--font-poppins)' }}>
-                      {displayName}{suggDeptCode ? ` (${suggDeptCode})` : ''}
-                    </button>
-                  )
+                {all.map((suggestion, index) => {
+                  const isSelected = index === mobileSelectedIndex
+                  const baseClass = `w-full text-left px-4 py-3 text-sm transition-colors flex items-center justify-between ${isSelected ? 'bg-blue-100 text-blue-900' : 'text-gray-700 hover:bg-gray-100'}`
+                  if (suggestion.type === 'city') {
+                    const cityUpper = suggestion.name.toUpperCase()
+                    const postal = cityPostalMap[cityUpper] || CITY_POSTAL_MAP[cityUpper] || ''
+                    const suggDeptCode = postal ? getDeptFromPostal(postal) : ''
+                    const displayName = suggestion.name.split('-').map((word, i) => {
+                      const lower = word.toLowerCase()
+                      if (i > 0 && ['en', 'de', 'du', 'la', 'le', 'les', 'sur', 'sous'].includes(lower)) return lower
+                      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                    }).join('-')
+                    return (
+                      <button key={`city-${suggestion.name}`} onClick={() => { window.location.href = `/stages-recuperation-points/${cityUpper}-${postal || '00000'}` }} className={baseClass} style={{ fontFamily: 'var(--font-poppins)' }}>
+                        <span>{displayName}{suggDeptCode ? ` (${suggDeptCode})` : ''}</span>
+                      </button>
+                    )
+                  } else if (suggestion.type === 'dept') {
+                    return (
+                      <button key={`dept-${suggestion.slug}`} onClick={() => { window.location.href = `/stages-recuperation-points/departement/${suggestion.slug}` }} className={baseClass} style={{ fontFamily: 'var(--font-poppins)' }}>
+                        <span>{suggestion.name} ({suggestion.code})</span>
+                        <span className="text-xs text-gray-400 ml-2 flex-shrink-0">Département</span>
+                      </button>
+                    )
+                  } else {
+                    return (
+                      <button key={`region-${suggestion.slug}`} onClick={() => { window.location.href = `/stages-recuperation-points/region/${suggestion.slug}` }} className={baseClass} style={{ fontFamily: 'var(--font-poppins)' }}>
+                        <span>{suggestion.name}</span>
+                        <span className="text-xs text-gray-400 ml-2 flex-shrink-0">Région</span>
+                      </button>
+                    )
+                  }
                 })}
               </div>
             )
@@ -481,22 +507,26 @@ export default function StagesDepartementPage() {
                     onChange={(e) => { setDesktopSearchQuery(e.target.value); setShowDesktopSuggestions(true); setDesktopSelectedIndex(-1) }}
                     onFocus={() => setShowDesktopSuggestions(true)}
                     onKeyDown={(e) => {
-                      const filteredCities = desktopSearchQuery.length > 0
-                        ? allCities.filter(c => c.toLowerCase().startsWith(desktopSearchQuery.toLowerCase())).slice(0, 8)
-                        : []
+                      const normalizedQ = normalizeForSearch(desktopSearchQuery)
+                      const fc = desktopSearchQuery.length > 0 ? allCities.filter(c => c.toLowerCase().startsWith(desktopSearchQuery.toLowerCase())).slice(0, 6) : []
+                      const fd = normalizedQ ? DEPARTEMENTS.filter(d => normalizeForSearch(d.name).startsWith(normalizedQ) || d.slug.startsWith(normalizedQ) || d.code.toLowerCase().startsWith(normalizedQ)).slice(0, 3) : []
+                      const fr = normalizedQ ? REGIONS.filter(r => normalizeForSearch(r.name).startsWith(normalizedQ) || r.slug.startsWith(normalizedQ)).slice(0, 2) : []
+                      const all = [...fc.map(c => ({ type: 'city' as const, name: c })), ...fd.map(d => ({ type: 'dept' as const, slug: d.slug, name: d.name, code: d.code })), ...fr.map(r => ({ type: 'region' as const, slug: r.slug, name: r.name }))]
                       if (e.key === 'Enter') {
                         e.preventDefault()
-                        const cityToSearch = desktopSelectedIndex >= 0 && desktopSelectedIndex < filteredCities.length
-                          ? filteredCities[desktopSelectedIndex]
-                          : desktopSearchQuery
-                        if (cityToSearch.trim()) {
-                          const cityUpper = cityToSearch.toUpperCase()
+                        if (desktopSelectedIndex >= 0 && desktopSelectedIndex < all.length) {
+                          const s = all[desktopSelectedIndex]
+                          if (s.type === 'city') { const cu = s.name.toUpperCase(); const p = cityPostalMap[cu] || CITY_POSTAL_MAP[cu] || '00000'; window.location.href = `/stages-recuperation-points/${cu}-${p}` }
+                          else if (s.type === 'dept') { window.location.href = `/stages-recuperation-points/departement/${s.slug}` }
+                          else { window.location.href = `/stages-recuperation-points/region/${s.slug}` }
+                        } else if (desktopSearchQuery.trim()) {
+                          const cityUpper = desktopSearchQuery.toUpperCase()
                           const postal = cityPostalMap[cityUpper] || CITY_POSTAL_MAP[cityUpper] || '00000'
                           window.location.href = `/stages-recuperation-points/${cityUpper}-${postal}`
                         }
                       } else if (e.key === 'ArrowDown') {
                         e.preventDefault()
-                        setDesktopSelectedIndex(prev => prev < filteredCities.length - 1 ? prev + 1 : prev)
+                        setDesktopSelectedIndex(prev => prev < all.length - 1 ? prev + 1 : prev)
                       } else if (e.key === 'ArrowUp') {
                         e.preventDefault()
                         setDesktopSelectedIndex(prev => prev > 0 ? prev - 1 : -1)
@@ -514,29 +544,46 @@ export default function StagesDepartementPage() {
                   </svg>
                 </div>
                 {showDesktopSuggestions && desktopSearchQuery.length > 0 && (() => {
-                  const filteredCities = allCities.filter(c => c.toLowerCase().startsWith(desktopSearchQuery.toLowerCase())).slice(0, 8)
-                  if (filteredCities.length === 0) return null
+                  const normalizedQ = normalizeForSearch(desktopSearchQuery)
+                  const fc = allCities.filter(c => c.toLowerCase().startsWith(desktopSearchQuery.toLowerCase())).slice(0, 6)
+                  const fd = normalizedQ ? DEPARTEMENTS.filter(d => normalizeForSearch(d.name).startsWith(normalizedQ) || d.slug.startsWith(normalizedQ) || d.code.toLowerCase().startsWith(normalizedQ)).slice(0, 3) : []
+                  const fr = normalizedQ ? REGIONS.filter(r => normalizeForSearch(r.name).startsWith(normalizedQ) || r.slug.startsWith(normalizedQ)).slice(0, 2) : []
+                  const all = [...fc.map(c => ({ type: 'city' as const, name: c })), ...fd.map(d => ({ type: 'dept' as const, slug: d.slug, name: d.name, code: d.code })), ...fr.map(r => ({ type: 'region' as const, slug: r.slug, name: r.name }))]
+                  if (all.length === 0) return null
                   return (
-                    <div ref={desktopSuggestionsRef} className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50" style={{ width: '180px', maxHeight: '200px', overflowY: 'auto' }}>
-                      {filteredCities.map((cityName, index) => {
-                        const cityUpper = cityName.toUpperCase()
-                        const postal = cityPostalMap[cityUpper] || CITY_POSTAL_MAP[cityUpper] || ''
-                        const suggDeptCode = postal ? getDeptFromPostal(postal) : ''
-                        const displayName = cityName.split('-').map((word, i) => {
-                          const lower = word.toLowerCase()
-                          if (i > 0 && ['en', 'de', 'du', 'la', 'le', 'les', 'sur', 'sous'].includes(lower)) return lower
-                          return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-                        }).join('-')
-                        return (
-                          <button key={cityName} onClick={() => {
-                            const navPostal = postal || '00000'
-                            window.location.href = `/stages-recuperation-points/${cityUpper}-${navPostal}`
-                          }}
-                            className={`w-full text-left px-3 py-2 text-xs transition-colors ${index === desktopSelectedIndex ? 'bg-blue-100 text-blue-900' : 'text-gray-700 hover:bg-gray-100'}`}
-                            style={{ fontFamily: 'var(--font-poppins)' }}>
-                            {displayName}{suggDeptCode ? ` (${suggDeptCode})` : ''}
-                          </button>
-                        )
+                    <div ref={desktopSuggestionsRef} className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50" style={{ width: '220px', maxHeight: '200px', overflowY: 'auto' }}>
+                      {all.map((suggestion, index) => {
+                        const isSelected = index === desktopSelectedIndex
+                        const baseClass = `w-full text-left px-3 py-2 text-xs transition-colors flex items-center justify-between ${isSelected ? 'bg-blue-100 text-blue-900' : 'text-gray-700 hover:bg-gray-100'}`
+                        if (suggestion.type === 'city') {
+                          const cityUpper = suggestion.name.toUpperCase()
+                          const postal = cityPostalMap[cityUpper] || CITY_POSTAL_MAP[cityUpper] || ''
+                          const suggDeptCode = postal ? getDeptFromPostal(postal) : ''
+                          const displayName = suggestion.name.split('-').map((word, i) => {
+                            const lower = word.toLowerCase()
+                            if (i > 0 && ['en', 'de', 'du', 'la', 'le', 'les', 'sur', 'sous'].includes(lower)) return lower
+                            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+                          }).join('-')
+                          return (
+                            <button key={`city-${suggestion.name}`} onClick={() => { window.location.href = `/stages-recuperation-points/${cityUpper}-${postal || '00000'}` }} className={baseClass} style={{ fontFamily: 'var(--font-poppins)' }}>
+                              <span>{displayName}{suggDeptCode ? ` (${suggDeptCode})` : ''}</span>
+                            </button>
+                          )
+                        } else if (suggestion.type === 'dept') {
+                          return (
+                            <button key={`dept-${suggestion.slug}`} onClick={() => { window.location.href = `/stages-recuperation-points/departement/${suggestion.slug}` }} className={baseClass} style={{ fontFamily: 'var(--font-poppins)' }}>
+                              <span>{suggestion.name} ({suggestion.code})</span>
+                              <span className="text-xs text-gray-400 ml-2 flex-shrink-0">Dép.</span>
+                            </button>
+                          )
+                        } else {
+                          return (
+                            <button key={`region-${suggestion.slug}`} onClick={() => { window.location.href = `/stages-recuperation-points/region/${suggestion.slug}` }} className={baseClass} style={{ fontFamily: 'var(--font-poppins)' }}>
+                              <span>{suggestion.name}</span>
+                              <span className="text-xs text-gray-400 ml-2 flex-shrink-0">Région</span>
+                            </button>
+                          )
+                        }
                       })}
                     </div>
                   )
