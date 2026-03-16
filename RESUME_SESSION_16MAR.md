@@ -247,7 +247,7 @@ Vérifié : `https://api.twelvy.net/stages-geo.php?dept_codes=13` retourne du JS
 |---------|-------------|
 | `app/page.tsx` | HomeSuggestion type, normalizeForSearch, imports DEPARTEMENTS + REGIONS, handleInputChange enrichi, renderSuggestionItem, 3 dropdowns simplifiés |
 
-**Commit** : voir commits suivants
+**Commit** : `5fa531f`
 
 ---
 
@@ -265,5 +265,9 @@ Vérifié : `https://api.twelvy.net/stages-geo.php?dept_codes=13` retourne du JS
 ---
 
 **Date** : 16 Mars 2026
-**Commits** : `c3d9be5` (fiches dept+région) · `1e13f1f` (fix barres inline) · `homepage fix commit`
+**Commits** :
+- `c3d9be5` — Fiches département et région (96 + 13 nouvelles pages)
+- `1e13f1f` — Fix barres de recherche inline (pages dept/région)
+- `5fa531f` — Fix barre de recherche homepage (3 dropdowns)
+
 **Auteur** : Yakeen + Claude
