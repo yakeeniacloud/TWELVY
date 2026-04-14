@@ -1,4 +1,6 @@
 import { MetadataRoute } from 'next'
+import { DEPARTEMENTS } from '@/lib/departements'
+import { REGIONS } from '@/lib/regions'
 
 const SITE_URL = 'https://www.twelvy.net'
 
@@ -115,6 +117,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   } catch {
     // Silently fail
+  }
+
+  // Department pages (96 métro + 5 DOM-TOM = 101 static entries)
+  for (const dept of DEPARTEMENTS) {
+    entries.push({
+      url: `${SITE_URL}/stages-recuperation-points/departement/${dept.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    })
+  }
+
+  // Region pages (13 métro + 5 overseas = 18 static entries)
+  for (const region of REGIONS) {
+    entries.push({
+      url: `${SITE_URL}/stages-recuperation-points/region/${region.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    })
   }
 
   return entries
