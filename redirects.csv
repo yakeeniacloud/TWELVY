@@ -16,15 +16,15 @@ ancienne_url,nouvelle_url,type,statut
 /agrements.php,/agrements-du-stage,301,LIVE
 /annulation-permis.php,/annulation-permis,301,PRÊT
 /bareme-retrait-points.php,/bareme-de-retrait-de-points,301,PRÊT
-/conduite-accompagnee.php,/conduite-accompagnee,301,PRÊT
+/conduite-accompagnee.php,/conduite-accompagnee,301,LIVE
 /conduite-sans-permis.php,/conduite-sans-permis,301,PRÊT
 /conseils.php,/conseils,301,PRÊT
 /dangers-alcool.php,/les-risques-lies-a-lalcool,301,PRÊT
-/faq.php,/questions-frequentes,301,PRÊT
+/faq.php,/questions-frequentes,301,LIVE
 /infraction-amende-pv.php,/infractions,301,PRÊT
 /lettre-48M.php,/lettre-48m,301,PRÊT
 /lettre-48N.php,/lettre-48n,301,PRÊT
-/lettre-48S.php,/lettre-48si,301,PRÊT
+/lettre-48S.php,/lettre-48si,301,LIVE
 /nombre-de-points-permis.php,/nombre-de-points-permis,301,PRÊT
 # FIX: /permis-a-points.php → /les-stages-permis-a-points (pas /les-points-de-permis — voir PSP_ARTICLES_GROUND_TRUTH.md)
 /permis-a-points.php,/les-stages-permis-a-points,301,PRÊT
@@ -44,7 +44,8 @@ ancienne_url,nouvelle_url,type,statut
 /types-stage.php,/types-de-stages-permis,301,PRÊT
 /alternative-poursuite.php,/stage-alternative-poursuite,301,PRÊT
 /articles-securite-routiere.php,/articles-securite-routiere,301,PRÊT
-/carte-radars.php,/carte-radars,301,PRÊT
+# FIX 14 Mar: /carte-radars was a stub (archived) → redirect to real article
+/carte-radars.php,/radars-automatiques,301,PRÊT
 /composition-penale.php,/stage-composition-penale,301,PRÊT
 /conditions_inscription.php,/les-conditions-dinscription,301,PRÊT
 /dif.php,/dif-cpf,301,PRÊT
@@ -53,13 +54,15 @@ ancienne_url,nouvelle_url,type,statut
 /loi2011.php,/loi-permis-a-points-2011,301,PRÊT
 # FIX: /comment-consulter-mon-solde-de-points est une page placeholder → redirige directement vers l'article cible
 /nombre-points-restant.php,/consulter-ses-points,301,PRÊT
-/paiement-amende.php,/paiement-amende,301,PRÊT
+# FIX 14 Mar: /paiement-amende was a stub (archived) → redirect to real article
+/paiement-amende.php,/payer-son-amende,301,PRÊT
 /peine-complementaire.php,/stage-peine-complementaire,301,PRÊT
 /permis-de-conduire-candidat-libre.php,/permis-de-conduire-candidat-libre,301,PRÊT
 /programme.php,/programme-du-stage,301,PRÊT
 /radar-feu-rouge.php,/radar-feu-rouge,301,PRÊT
 /repasser-permis.php,/repasser-permis,301,PRÊT
-/solde-point.php,/solde-de-point,301,PRÊT
+# FIX 14 Mar: /solde-de-point was a stub (archived) → redirect to real article
+/solde-point.php,/consulter-ses-points,301,PRÊT
 /tests-psychotechniques.php,/tests-psychotechniques,301,PRÊT
 /qui-sommes-nous.php,/qui-sommes-nous,301,PRÊT
 /mentions-legales.php,/mentions-legales,301,PRÊT
@@ -83,21 +86,22 @@ ancienne_url,nouvelle_url,type,statut
 # Pour chacun : wildcard donnerait le mauvais slug → explicite obligatoire
 /p-agrements,/agrements-du-stage,301,PRÊT
 /p-alternative-poursuite,/stage-alternative-poursuite,301,PRÊT
-/p-bareme-retrait-points,/bareme-de-retrait-de-points,301,PRÊT
+/p-bareme-retrait-points,/bareme-de-retrait-de-points,301,LIVE
 /p-composition-penale,/stage-composition-penale,301,PRÊT
 /p-conditions_inscription,/les-conditions-dinscription,301,PRÊT
 /p-consulter-points,/consulter-ses-points,301,PRÊT
-/p-dangers-alcool,/les-risques-lies-a-lalcool,301,PRÊT
+/p-dangers-alcool,/les-risques-lies-a-lalcool,301,LIVE
 /p-feu-rouge,/feu-rouge-et-feu-orange,301,PRÊT
 /p-guide-conserver-permis,/recuperer-ses-points,301,PRÊT
 /p-infraction-amende-pv,/infractions,301,PRÊT
 # Lettres 48 : casse PSP (48M/48N/48S) ≠ casse Twelvy (48m/48n/48si)
-/p-lettre-48M,/lettre-48m,301,PRÊT
+/p-lettre-48M,/lettre-48m,301,LIVE
 /p-lettre-48N,/lettre-48n,301,PRÊT
 /p-lettre-48S,/lettre-48si,301,PRÊT
 /p-non-port-ceinture-securite,/non-port-ceinture-de-securite,301,PRÊT
 /p-non-respect-d-un-stop,/non-respect-du-stop,301,PRÊT
-/p-payer-amende,/paiement-amende,301,PRÊT
+# FIX 14 Mar: /p-payer-amende → /payer-son-amende (was /paiement-amende — wrong page, different content)
+/p-payer-amende,/payer-son-amende,301,PRÊT
 /p-peine-complementaire,/stage-peine-complementaire,301,PRÊT
 /p-permis-a-points,/les-stages-permis-a-points,301,PRÊT
 /p-programme-dun-stage-de-recuperation-de-points,/programme-du-stage,301,PRÊT
@@ -115,8 +119,8 @@ ancienne_url,nouvelle_url,type,statut
 # ── Slugs actif=0 dont le slug a changé sur Twelvy ───────────────────────
 /p-dif-stage-permis,/dif-cpf,301,PRÊT
 /p-contester-une-amende,/contester-mon-amende,301,PRÊT
-# FIX: /comment-contester-mon-amende est une page placeholder → redirige directement vers l'article cible
-/p-comment-contester-une-amende,/payer-son-amende,301,PRÊT
+# FIX 14 Mar: /p-comment-contester-une-amende → /contester-mon-amende (was /payer-son-amende — contesting ≠ paying)
+/p-comment-contester-une-amende,/contester-mon-amende,301,PRÊT
 
 # ── Pages Part 2B (FAQ/utilitaires PSP — pas migrées, redirigées vers le + proche) ──
 # NOTE ANCRE : Certaines pages PSP ne sont pas des articles autonomes — elles sont des ancres
@@ -133,7 +137,8 @@ ancienne_url,nouvelle_url,type,statut
 /p-comment-savoir-si-le-centre-est-agree,/agrements-du-stage,301,PRÊT
 /p-deroulement-et-programme-du-stage,/programme-du-stage,301,PRÊT
 /p-inscrire-stage,/comment-sinscrire-a-un-stage,301,PRÊT
-/p-quel-mode-de-paiement-choisir,/paiement-amende,301,PRÊT
+# FIX 14 Mar: /paiement-amende archived → redirect to real article
+/p-quel-mode-de-paiement-choisir,/payer-son-amende,301,PRÊT
 /p-mais-dou-viennent-les-stages,/les-stages-permis-a-points,301,PRÊT
 /p-annulation-et-remboursement,/comment-sinscrire-a-un-stage,301,PRÊT
 /p-suivre-mon-inscription,/comment-sinscrire-a-un-stage,301,PRÊT
@@ -238,18 +243,18 @@ ancienne_url,nouvelle_url,type,statut
 /recuperation-points-LE-MANS-72100-72.html,/stages-recuperation-points/le-mans,301,PRÊT
 /recuperation-points-LIEVIN-62800-62.html,/stages-recuperation-points/lievin,301,PRÊT
 /recuperation-points-LYON-7EME-69007-69.html,/stages-recuperation-points/lyon,301,LIVE
-/recuperation-points-MARSEILLE-13001-13.html,/stages-recuperation-points/marseille,301,PRÊT
+/recuperation-points-MARSEILLE-13001-13.html,/stages-recuperation-points/marseille,301,LIVE
 /recuperation-points-MEAUX-77100-77.html,/stages-recuperation-points/meaux,301,PRÊT
 /recuperation-points-MULHOUSE-68100-68.html,/stages-recuperation-points/mulhouse,301,PRÊT
 /recuperation-points-NICE-06000-06.html,/stages-recuperation-points/nice,301,LIVE
-/recuperation-points-PARIS-12EME-75012-75.html,/stages-recuperation-points/paris,301,PRÊT
+/recuperation-points-PARIS-12EME-75012-75.html,/stages-recuperation-points/paris,301,LIVE
 /recuperation-points-PONTOISE-95000-95.html,/stages-recuperation-points/pontoise,301,PRÊT
 /recuperation-points-PONTOISE-95300-95.html,/stages-recuperation-points/pontoise,301,PRÊT
 /recuperation-points-REIMS-51100-51.html,/stages-recuperation-points/reims,301,PRÊT
 /recuperation-points-RENNES-35000-35.html,/stages-recuperation-points/rennes,301,PRÊT
 /recuperation-points-ROUBAIX-59100-59.html,/stages-recuperation-points/roubaix,301,PRÊT
 /recuperation-points-ROUEN-76000-76.html,/stages-recuperation-points/rouen,301,PRÊT
-/recuperation-points-STRASBOURG-67000-67.html,/stages-recuperation-points/strasbourg,301,PRÊT
+/recuperation-points-STRASBOURG-67000-67.html,/stages-recuperation-points/strasbourg,301,LIVE
 /recuperation-points-TOULON-83000-83.html,/stages-recuperation-points/toulon,301,LIVE
 /recuperation-points-VALENCIENNES-59300-59.html,/stages-recuperation-points/valenciennes,301,PRÊT
 
@@ -261,9 +266,9 @@ ancienne_url,nouvelle_url,type,statut
 # ENTRÉES EXPLICITES ci-dessous AVANT le wildcard dans next.config.ts
 /infos-acheter-des-points-de-permis-ou-vendre-ses-points-de-permis-a-vos-risques-et-perils,/blog/les-risques-dacheter-ou-de-vendre-ses-points-de-permis,301,PRÊT
 /infos-impunite-pv-etranger,/blog/limpunite-des-pv-a-letranger-est-terminee,301,PRÊT
-/infos-nouveaux-radars,/blog/les-nouveaux-radars-rmng-et-dispositifs-traditionnels,301,PRÊT
+/infos-nouveaux-radars,/blog/les-nouveaux-radars-rmng-et-dispositifs-traditionnels,301,LIVE
 /infos-penurie-ethylotest-obligatoire-report-1er-mars-2013,/blog/ethylotest-4-mois-de-sursis,301,PRÊT
-/infos-voiture-a-hydrogene,/blog/la-voiture-a-hydrogene-point-sur-les-dernieres-avancees,301,PRÊT
+/infos-voiture-a-hydrogene,/blog/la-voiture-a-hydrogene-point-sur-les-dernieres-avancees,301,LIVE
 # WILDCARD (à placer APRÈS les 5 entrées ci-dessus dans next.config.ts) :
 # { source: '/infos-:slug', destination: '/blog/:slug', permanent: true }
 
@@ -300,7 +305,9 @@ ancienne_url,nouvelle_url,type,statut
 # Cat 5 : 2 pages blog mineures
 # Cat 6 : 2 redirections internes
 # Cat 7 : 5 liens internes cassés dans contenu WP (Wave 3 audit - 09 Mar)
-# TOTAL couvert : ~200+ redirections
+# Cat 8 : 95 URLs département HTML PSP → fiches département Twelvy (ajout 16 Mar 2026)
+# NB : Aucune redirection région nécessaire — PSP n'avait PAS de pages région (vérifié par grep dans l'archive PSP)
+# TOTAL couvert : ~300+ redirections
 
 # =============================================
 # CATÉGORIE 7 : Liens internes cassés dans contenu WP
@@ -309,5 +316,117 @@ ancienne_url,nouvelle_url,type,statut
 /comment-contester-une-amende,/contester-mon-amende,301,LIVE
 /contester-une-amende,/contester-mon-amende,301,LIVE
 /stages-recuperation-de-points-pas-cher,/stage-de-recuperation-de-points-pas-cher,301,LIVE
-/index.php,/,301,PRÊT
+/index.php,/,301,LIVE
 /01-4518638-tolerance-zero-au-volant-grogne-chez-les-jeunes.php,/blog/alcool-au-volant-tolerance-zero-chez-les-jeunes,301,PRÊT
+
+# =============================================
+# CATÉGORIE 8 : URLs département HTML PSP → Fiches département Twelvy (95)
+# =============================================
+# Ajouté le 16 Mars 2026 — pages dept Twelvy créées (commit c3d9be5)
+# Ancien format PSP : /recuperer-points-{nom-concaténé-sans-tirets-sans-accents}.html
+# Nouveau format Twelvy : /stages-recuperation-points/departement/{slug}
+# Source vérifiée : /Volumes/Crucial X9/PROSTAGES/www_3/includes/liens_departements.php
+# 95 URLs toutes confirmées LIVE sur prostagespermis.fr (HTTP 200, check 16 Mar 2026)
+#
+# Note : 94 mappings 1:1 dept→dept + 1 cas spécial Corse → page région
+# Note : PSP avait 2 slugs avec fautes d'orthographe — on redirige vers le slug Twelvy CORRECT :
+#   - /recuperer-points-eureetloire.html → /eure-et-loir (PSP avait "loire" — incorrect, c'est "loir")
+#   - /recuperer-points-ileetvilaine.html → /ille-et-vilaine (PSP avait "ile" — incorrect, c'est "ille")
+/recuperer-points-ain.html,/stages-recuperation-points/departement/ain,301,PRÊT
+/recuperer-points-aisne.html,/stages-recuperation-points/departement/aisne,301,PRÊT
+/recuperer-points-allier.html,/stages-recuperation-points/departement/allier,301,PRÊT
+/recuperer-points-alpeshauteprovence.html,/stages-recuperation-points/departement/alpes-de-haute-provence,301,PRÊT
+/recuperer-points-alpesmaritimes.html,/stages-recuperation-points/departement/alpes-maritimes,301,PRÊT
+/recuperer-points-ardeche.html,/stages-recuperation-points/departement/ardeche,301,PRÊT
+/recuperer-points-ardennes.html,/stages-recuperation-points/departement/ardennes,301,PRÊT
+/recuperer-points-ariege.html,/stages-recuperation-points/departement/ariege,301,PRÊT
+/recuperer-points-aube.html,/stages-recuperation-points/departement/aube,301,PRÊT
+/recuperer-points-aude.html,/stages-recuperation-points/departement/aude,301,PRÊT
+/recuperer-points-aveyron.html,/stages-recuperation-points/departement/aveyron,301,PRÊT
+/recuperer-points-basrhin.html,/stages-recuperation-points/departement/bas-rhin,301,PRÊT
+/recuperer-points-bouchesdurhone.html,/stages-recuperation-points/departement/bouches-du-rhone,301,PRÊT
+/recuperer-points-calvados.html,/stages-recuperation-points/departement/calvados,301,PRÊT
+/recuperer-points-cantal.html,/stages-recuperation-points/departement/cantal,301,PRÊT
+/recuperer-points-charente.html,/stages-recuperation-points/departement/charente,301,PRÊT
+/recuperer-points-charentemaritime.html,/stages-recuperation-points/departement/charente-maritime,301,PRÊT
+/recuperer-points-cher.html,/stages-recuperation-points/departement/cher,301,PRÊT
+/recuperer-points-correze.html,/stages-recuperation-points/departement/correze,301,PRÊT
+# CAS SPÉCIAL : PSP avait 1 seule page "Corse" — Twelvy a 2A + 2B séparés — redirige vers page RÉGION Corse qui englobe les deux
+/recuperer-points-corse.html,/stages-recuperation-points/region/corse,301,PRÊT
+/recuperer-points-cotedor.html,/stages-recuperation-points/departement/cote-dor,301,PRÊT
+/recuperer-points-cotesdarmor.html,/stages-recuperation-points/departement/cotes-darmor,301,PRÊT
+/recuperer-points-creuse.html,/stages-recuperation-points/departement/creuse,301,PRÊT
+/recuperer-points-deuxsevres.html,/stages-recuperation-points/departement/deux-sevres,301,PRÊT
+/recuperer-points-dordogne.html,/stages-recuperation-points/departement/dordogne,301,PRÊT
+/recuperer-points-doubs.html,/stages-recuperation-points/departement/doubs,301,PRÊT
+/recuperer-points-drome.html,/stages-recuperation-points/departement/drome,301,PRÊT
+/recuperer-points-essonne.html,/stages-recuperation-points/departement/essonne,301,PRÊT
+/recuperer-points-eure.html,/stages-recuperation-points/departement/eure,301,PRÊT
+# FIX orthographe : PSP "eureetloire" (incorrect) → Twelvy "eure-et-loir" (correct)
+/recuperer-points-eureetloire.html,/stages-recuperation-points/departement/eure-et-loir,301,PRÊT
+/recuperer-points-finistere.html,/stages-recuperation-points/departement/finistere,301,PRÊT
+/recuperer-points-gard.html,/stages-recuperation-points/departement/gard,301,PRÊT
+/recuperer-points-gers.html,/stages-recuperation-points/departement/gers,301,PRÊT
+/recuperer-points-gironde.html,/stages-recuperation-points/departement/gironde,301,PRÊT
+/recuperer-points-hautegaronne.html,/stages-recuperation-points/departement/haute-garonne,301,PRÊT
+/recuperer-points-hauteloire.html,/stages-recuperation-points/departement/haute-loire,301,PRÊT
+/recuperer-points-hautemarne.html,/stages-recuperation-points/departement/haute-marne,301,PRÊT
+/recuperer-points-hautesalpes.html,/stages-recuperation-points/departement/hautes-alpes,301,PRÊT
+/recuperer-points-hautesaone.html,/stages-recuperation-points/departement/haute-saone,301,PRÊT
+/recuperer-points-hautesavoie.html,/stages-recuperation-points/departement/haute-savoie,301,PRÊT
+/recuperer-points-hautespyrenees.html,/stages-recuperation-points/departement/hautes-pyrenees,301,PRÊT
+/recuperer-points-hautevienne.html,/stages-recuperation-points/departement/haute-vienne,301,PRÊT
+/recuperer-points-hautrhin.html,/stages-recuperation-points/departement/haut-rhin,301,PRÊT
+/recuperer-points-hautsdeseine.html,/stages-recuperation-points/departement/hauts-de-seine,301,PRÊT
+/recuperer-points-herault.html,/stages-recuperation-points/departement/herault,301,PRÊT
+# FIX orthographe : PSP "ileetvilaine" (incorrect) → Twelvy "ille-et-vilaine" (correct)
+/recuperer-points-ileetvilaine.html,/stages-recuperation-points/departement/ille-et-vilaine,301,PRÊT
+/recuperer-points-indre.html,/stages-recuperation-points/departement/indre,301,PRÊT
+/recuperer-points-indreetloire.html,/stages-recuperation-points/departement/indre-et-loire,301,PRÊT
+/recuperer-points-isere.html,/stages-recuperation-points/departement/isere,301,PRÊT
+/recuperer-points-jura.html,/stages-recuperation-points/departement/jura,301,PRÊT
+/recuperer-points-landes.html,/stages-recuperation-points/departement/landes,301,PRÊT
+/recuperer-points-loire.html,/stages-recuperation-points/departement/loire,301,PRÊT
+/recuperer-points-loireatlantique.html,/stages-recuperation-points/departement/loire-atlantique,301,PRÊT
+/recuperer-points-loiret.html,/stages-recuperation-points/departement/loiret,301,PRÊT
+/recuperer-points-loiretcher.html,/stages-recuperation-points/departement/loir-et-cher,301,PRÊT
+/recuperer-points-lot.html,/stages-recuperation-points/departement/lot,301,PRÊT
+/recuperer-points-lotetgaronne.html,/stages-recuperation-points/departement/lot-et-garonne,301,PRÊT
+/recuperer-points-lozere.html,/stages-recuperation-points/departement/lozere,301,PRÊT
+/recuperer-points-maineetloire.html,/stages-recuperation-points/departement/maine-et-loire,301,PRÊT
+/recuperer-points-manche.html,/stages-recuperation-points/departement/manche,301,PRÊT
+/recuperer-points-marne.html,/stages-recuperation-points/departement/marne,301,PRÊT
+/recuperer-points-mayenne.html,/stages-recuperation-points/departement/mayenne,301,PRÊT
+/recuperer-points-meurtheetmoselle.html,/stages-recuperation-points/departement/meurthe-et-moselle,301,PRÊT
+/recuperer-points-meuse.html,/stages-recuperation-points/departement/meuse,301,PRÊT
+/recuperer-points-morbihan.html,/stages-recuperation-points/departement/morbihan,301,PRÊT
+/recuperer-points-moselle.html,/stages-recuperation-points/departement/moselle,301,PRÊT
+/recuperer-points-nievre.html,/stages-recuperation-points/departement/nievre,301,PRÊT
+/recuperer-points-nord.html,/stages-recuperation-points/departement/nord,301,PRÊT
+/recuperer-points-oise.html,/stages-recuperation-points/departement/oise,301,PRÊT
+/recuperer-points-orne.html,/stages-recuperation-points/departement/orne,301,PRÊT
+/recuperer-points-paris.html,/stages-recuperation-points/departement/paris,301,PRÊT
+/recuperer-points-pasdecalais.html,/stages-recuperation-points/departement/pas-de-calais,301,PRÊT
+/recuperer-points-puydedome.html,/stages-recuperation-points/departement/puy-de-dome,301,PRÊT
+/recuperer-points-pyreneesatlantiques.html,/stages-recuperation-points/departement/pyrenees-atlantiques,301,PRÊT
+/recuperer-points-pyreneesorientales.html,/stages-recuperation-points/departement/pyrenees-orientales,301,PRÊT
+/recuperer-points-rhone.html,/stages-recuperation-points/departement/rhone,301,PRÊT
+/recuperer-points-saoneetloire.html,/stages-recuperation-points/departement/saone-et-loire,301,PRÊT
+/recuperer-points-sarthe.html,/stages-recuperation-points/departement/sarthe,301,PRÊT
+/recuperer-points-savoie.html,/stages-recuperation-points/departement/savoie,301,PRÊT
+/recuperer-points-seineetmarne.html,/stages-recuperation-points/departement/seine-et-marne,301,PRÊT
+/recuperer-points-seinemaritime.html,/stages-recuperation-points/departement/seine-maritime,301,PRÊT
+/recuperer-points-seinesaintdenis.html,/stages-recuperation-points/departement/seine-saint-denis,301,PRÊT
+/recuperer-points-somme.html,/stages-recuperation-points/departement/somme,301,PRÊT
+/recuperer-points-tarn.html,/stages-recuperation-points/departement/tarn,301,PRÊT
+/recuperer-points-tarnetgaronne.html,/stages-recuperation-points/departement/tarn-et-garonne,301,PRÊT
+/recuperer-points-territoirebelfort.html,/stages-recuperation-points/departement/territoire-de-belfort,301,PRÊT
+/recuperer-points-valdemarne.html,/stages-recuperation-points/departement/val-de-marne,301,PRÊT
+/recuperer-points-valdoise.html,/stages-recuperation-points/departement/val-doise,301,PRÊT
+/recuperer-points-var.html,/stages-recuperation-points/departement/var,301,PRÊT
+/recuperer-points-vaucluse.html,/stages-recuperation-points/departement/vaucluse,301,PRÊT
+/recuperer-points-vendee.html,/stages-recuperation-points/departement/vendee,301,PRÊT
+/recuperer-points-vienne.html,/stages-recuperation-points/departement/vienne,301,PRÊT
+/recuperer-points-vosges.html,/stages-recuperation-points/departement/vosges,301,PRÊT
+/recuperer-points-yonne.html,/stages-recuperation-points/departement/yonne,301,PRÊT
+/recuperer-points-yvelines.html,/stages-recuperation-points/departement/yvelines,301,PRÊT
