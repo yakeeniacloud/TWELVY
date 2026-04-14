@@ -184,5 +184,114 @@ Aucun commit code aujourd'hui (recherche pure). Commits à venir :
 
 ---
 
+## 8. Q&A de clarification (fin de session)
+
+L'utilisateur a posé 5 questions essentielles pour vérifier sa compréhension. Réponses synthétiques en français ci-dessous (versions plus longues données dans le chat).
+
+### Q1 — Est-ce qu'on fait une approche différente de celle de PSP ?
+
+**Oui, légèrement différente. Confirmation Kader nécessaire.**
+
+Aujourd'hui, PSP utilise le mode **"Direct PPPS"** : la carte transite par le serveur PSP avant d'être envoyée à Up2Pay en backend.
+
+Le cahier des charges (page 14) dit explicitement : "On n'utilise pas le mode où tu héberges toi-même le formulaire CB". Donc Kader a explicitement choisi le mode **"iFrame hosted"** pour Twelvy : la carte est saisie directement sur une page Up2Pay embarquée. Twelvy ne voit jamais la carte.
+
+**Pourquoi changer ?** Parce que Next.js + Vercel manipulant des numéros de carte = cauchemar PCI-DSS (réglementation bancaire). L'iFrame élimine totalement ce problème.
+
+**Niveau de certitude** : 95 % sur la base du cahier. Le 5 % de doute = Kader pourrait vouloir dire "iFrame seulement pour le nouveau tunnel" ou "PPPS d'abord puis iFrame plus tard". À confirmer.
+
+### Q2 — Qu'est-ce que bridge.php et où est-ce qu'on l'héberge ?
+
+`bridge.php` = **un seul fichier PHP qu'on va écrire**. C'est un standardiste téléphonique :
+
+- Next.js (Vercel) ne peut pas parler directement à MySQL OVH (firewall, sécurité)
+- Next.js ne doit pas signer de clés HMAC (les clés doivent rester secrètes côté serveur)
+
+Donc `bridge.php` est le seul numéro de téléphone que Next.js appelle. Next.js dit "crée un prospect avec ces infos" → bridge écrit en MySQL → renvoie un ID. Ou "prépare un paiement pour l'ID 12345" → bridge signe les params HMAC → renvoie les params.
+
+**"Où l'héberger"** = sur quel serveur ce fichier PHP vit physiquement.
+
+**Bonne nouvelle** : `api.twelvy.net` existe déjà sur OVH (c'est là où vit `stages-geo.php`). Le bridge serait juste un nouveau fichier à `https://api.twelvy.net/bridge.php`. Aucune nouvelle infrastructure nécessaire.
+
+### Q3 — Qu'est-ce que l'URL IPN ?
+
+**IPN** = "Instant Payment Notification". URL sur **votre serveur** que Up2Pay appelle serveur-à-serveur après un paiement.
+
+**Pourquoi ça existe ?** Parce que le navigateur du client est non fiable. Le client peut fermer son onglet juste après avoir payé. Donc Up2Pay ne peut pas se fier au navigateur pour vous dire "paiement OK". À la place, le serveur Up2Pay appelle directement une URL sur votre serveur en HTTP POST avec le résultat. **C'est cet appel-là qui fait foi pour confirmer le paiement.**
+
+L'URL IPN qu'on créerait : `https://api.twelvy.net/ipn.php` — un nouveau script PHP qui reçoit la notification Up2Pay, vérifie la signature RSA, met à jour la BDD, envoie les emails.
+
+### Q4 — Up2Pay sera-t-il "déconnecté" de prostagespermis.fr ?
+
+**Non, absolument pas.** Le point le plus important à clarifier.
+
+Il y a **UN SEUL compte Up2Pay** (AM FORMATION, contrat 0966892.02). Ce compte est partagé. PSP ET Twelvy l'utilisent — il n'y a PAS deux comptes Up2Pay séparés.
+
+Il y a **UNE SEULE base MySQL** (la table `stagiaire` sur OVH). PSP ET Twelvy lisent et écrivent dessus. Mêmes données, mêmes règles métier, mêmes emails.
+
+Ce qui change : **quelle URL Up2Pay rappelle** après un paiement. Et c'est défini transaction par transaction. À chaque paiement initié, le site qui initie le paiement dit à Up2Pay "renvoie le résultat à CETTE URL". Donc :
+
+- Paiement initié sur PSP → indique à Up2Pay d'appeler le script PSP existant
+- Paiement initié sur Twelvy → indique à Up2Pay d'appeler le nouveau script IPN sur `api.twelvy.net`
+
+**Les deux peuvent coexister.** PSP continue de fonctionner exactement comme aujourd'hui. Twelvy a ses propres scripts. Le compte Up2Pay s'en moque — il appelle simplement l'URL que chaque transaction lui indique.
+
+### Q5 — Ça défait pas le but de la coexistence et migration instantanée ?
+
+**Non — voici le vrai scénario de migration.**
+
+```
+AUJOURD'HUI :
+  prostagespermis.fr (PSP PHP)   ──► écrit dans MySQL `stagiaire` ◄── rien d'autre
+  twelvy.net (Next.js)           ──► (pas encore de paiement)
+
+PÉRIODE DE TRANSITION (ce qu'on construit) :
+  prostagespermis.fr (PSP PHP)    ─┐
+                                    ├──► même MySQL `stagiaire`
+  twelvy.net + api.twelvy.net    ──┘    (les deux écrivent dessus)
+
+  Les deux sites prennent des paiements. Les deux fonctionnent.
+  Les deux alimentent la même BDD. Même compte Up2Pay. Même emails.
+  Zéro coordination nécessaire.
+
+JOUR DE BASCULE :
+  - On bascule le DNS de prostagespermis.fr vers Vercel (vos 95 redirects entrent en jeu)
+  - api.twelvy.net reste sur OVH (rien à toucher)
+  - Les 95 URLs PSP redirigent vers les équivalents Twelvy
+  - Les scripts PHP PSP existants peuvent rester actifs comme fallback quelques semaines
+  - La BDD n'a pas bougé du tout — zéro migration de données
+```
+
+La bascule est instantanée parce que **rien ne bouge réellement**. La BDD reste sur OVH. Le compte Up2Pay reste sur OVH. Seul le front-end (quel site sert l'utilisateur) change via DNS.
+
+Le bridge vivant sur `api.twelvy.net` est **mieux** que sur prostagespermis.fr parce que :
+- Pas affecté par le bascule DNS de prostagespermis.fr
+- Déjà installé
+- Sépare proprement "backend Twelvy" vs "ancien code PSP"
+
+### Synthèse en 1 paragraphe
+
+Les deux sites partagent le même compte Up2Pay et la même BDD MySQL. PSP continue de faire ce qu'il fait aujourd'hui, sans modification. On ajoute de nouveaux scripts PHP (`bridge.php`, `ipn.php`, `retour.php`) sur `api.twelvy.net` (qui existe déjà sur OVH). Le front Next.js de Twelvy appelle ces nouveaux scripts. Quand un utilisateur paie via Twelvy, Up2Pay rappelle notre nouveau script IPN (configuré transaction par transaction), qui écrit dans la même table `stagiaire` que PSP utilise. Le jour de la bascule, rien ne bouge dans le système de paiement — seul le DNS de prostagespermis.fr bascule vers Vercel. Tout le pipeline de paiement continue sans interruption.
+
+---
+
+## 9. Conclusion globale de la session
+
+Aucun code écrit aujourd'hui — c'était voulu et c'était la bonne décision. Le risque #1 sur ce chantier paiement est de coder trop vite sans avoir pleinement compris l'existant et l'architecture cible. La session du 15 avril a posé toutes les fondations :
+
+- ✅ Cahier des charges entièrement digéré (37 pages)
+- ✅ Code PSP existant cartographié (10+ fichiers PHP, file:line)
+- ✅ Documentation Up2Pay/Paybox synthétisée (`UP2PAY.md` 17 sections, ~25 KB)
+- ✅ 5 confusions principales de l'utilisateur clarifiées
+- ✅ 10 questions critiques formalisées pour Kader
+- ✅ Décision architecturale clé identifiée (Direct PPPS vs Hosted iFrame)
+
+Le projet est maintenant en **état "prêt pour validation Kader"**. Demain (ou la prochaine session) :
+1. Soumettre `UP2PAY.md` à Kader
+2. Obtenir réponses aux 10 questions
+3. Si validé → attaquer Étape 1 (audit table `stagiaire` via phpMyAdmin)
+
+---
+
 **Session 15 Avril 2026 — terminée.**
 **Prochaine étape** : valider `UP2PAY.md` avec Kader + obtenir réponses aux 10 questions critiques.
