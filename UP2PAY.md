@@ -1,0 +1,684 @@
+# UP2PAY.md — Master Reference for Twelvy Up2Pay Integration
+
+> **Status** : recherche initiale terminée le 15 avril 2026.
+> Aucun code écrit. Ce document est la **base de connaissances unique** pour l'étape 8 (intégration Up2Pay sur Twelvy).
+> **NE JAMAIS commit de secrets ici.** Les valeurs réelles des clés HMAC restent dans `config_secrets.php` (non versionné) côté OVH et dans Vercel env vars côté Next.js.
+
+---
+
+## 0. TL;DR — Ce qu'il faut savoir en 2 minutes
+
+- **Up2Pay = Paybox = E-Transactions** : trois noms pour le même produit. Crédit Agricole Mon Commerce le revend. Protocole inchangé depuis 15+ ans → docs Paybox/Verifone restent autoritatives.
+- **PSP utilise Up2Pay aujourd'hui** en **mode Direct API (PPPS)** : carte transite par le serveur PSP. C'est le code à reprendre.
+- **Cahier des charges Twelvy** prévoit le **mode Hosted iFrame (MYchoix)** : carte saisie sur page Up2Pay hébergée chez eux. ⚠️ **Décision à prendre avec Kader avant d'écrire la moindre ligne.**
+- **Architecture cible** : Next.js (UI) ↔ `bridge.php` sur OVH (HMAC + MySQL writes) ↔ Up2Pay ↔ scripts PHP retour/IPN existants (sur OVH).
+- **Règle d'or** : HMAC, MySQL et IPN restent **toujours côté PHP** (OVH). Next.js ne touche jamais à la BDD ni au HMAC.
+- **PHP 5.6 obligatoire** côté OVH (pas de syntaxe moderne).
+- **Idempotence IPN** non négociable : Up2Pay peut envoyer la même notif 2 fois → ne déclencher mails/MAJ qu'une seule fois par transaction.
+- **Tests obligatoires en mode TEST Up2Pay** (sandbox publique) avant tout vrai paiement.
+
+---
+
+## 1. Qu'est-ce que Up2Pay E-Transactions ?
+
+### Histoire des noms
+- **Paybox System** (années 1990-2010) — gateway développé par Paybox Services
+- **E-Transactions** — version white-labeled vendue par Crédit Agricole sur l'infra Paybox
+- **Up2Pay e-Transactions** — branding actuel (depuis ~2020) sous Crédit Agricole Mon Commerce
+- Verifone a racheté Paybox → la doc Verifone reste la référence technique
+
+### Type de gateway
+**Hosted Payment Page (HPP)** : le marchand construit un formulaire signé, le navigateur POST-redirige vers Up2Pay qui affiche la page de paiement. Avantage : la carte ne touche jamais le serveur marchand → **PCI-DSS hors scope**.
+
+Le résultat revient via **deux canaux** :
+1. **Browser redirect** (PBX_EFFECTUE / PBX_REFUSE / PBX_ANNULE) → UX seulement, **non fiable**
+2. **Server-to-server IPN** (PBX_REPONDRE_A) → **autoritatif**, signé en RSA, retry automatique
+
+### Règle absolue
+**Ne JAMAIS marquer une commande payée depuis la redirection navigateur**. Seul l'IPN signé fait foi.
+
+---
+
+## 2. ⚠️ Décision architecturale critique : 2 modes Up2Pay
+
+PSP actuel et le cahier des charges Twelvy ne sont **pas alignés**. Cette décision conditionne tout le reste.
+
+### Mode A — Direct API "PPPS" (mode actuel PSP)
+- Endpoint : `https://ppps.paybox.com/PPPS.php` (prod)
+- Le formulaire CB est **dans le code PSP** (page `/es/inscriptionv2_3ds.php`)
+- Le serveur PSP reçoit le numéro de carte → POST en cURL vers Up2Pay → reçoit `codereponse=00000` immédiatement → met à jour stagiaire
+- Avantage : flux synchrone, pas de redirect navigateur, contrôle total
+- Inconvénient : **le serveur PSP touche la carte** → PCI-DSS s'applique → audit obligatoire en théorie
+
+### Mode B — Hosted Page "MYchoix" (mode cahier des charges)
+- Endpoint : `https://tpeweb.up2pay.com/cgi/MYchoix_pagepaiement.cgi` (prod)
+- Le formulaire CB est **chez Up2Pay** (iFrame intégré ou redirect)
+- Le serveur Twelvy ne voit jamais la carte → **hors PCI-DSS**
+- Flux asynchrone : redirect navigateur + IPN serveur séparés → idempotence indispensable
+- Cahier des charges : **"On utilise le mode page de paiement hébergée intégrée (iFrame). Champs CB chez Up2Pay, pas dans notre code"**
+
+### Recommandation
+**Mode B (Hosted iFrame)** est ce que dit le cahier des charges et c'est aussi le standard moderne. C'est ce qu'utilisent Magento, WooCommerce, Prestashop côté Up2Pay. Le passage de A → B :
+- supprime la complexité PCI
+- nécessite de **réécrire** la couche paiement (le code PSP actuel ne sert plus que comme référence métier)
+- nécessite un **vrai script IPN robuste** (PSP n'en a pas vraiment, le retour est synchrone en mode A)
+
+**Action** : faire valider ce choix avec Kader avant d'écrire `bridge.php`.
+
+---
+
+## 3. Identifiants & credentials
+
+### Production (Société AM FORMATION)
+| Paramètre | Valeur | Source |
+|-----------|--------|--------|
+| Société | AM FORMATION | Cahier des charges p.1 |
+| Contrat | UP2PAY N°0966892.02 | Cahier des charges p.1 |
+| PBX_SITE | `0966892` | Cahier des charges + PSP `E_TransactionConfig.php` |
+| PBX_RANG | `02` (sur 2 chars dans le code PSP, doc dit `002` sur 3) | PSP `E_TransactionConfig.php` |
+| PBX_IDENTIFIANT | `651027368` | Cahier des charges + PSP `E_TransactionConfig.php` |
+| **PBX_HMAC PROD (clé)** | **DANS** `/Volumes/Crucial X9/PROSTAGES/www_2/src/payment/E_Transaction/E_TransactionConfig.php` | **NE JAMAIS commiter ici** |
+| URL de redirection (config back-office Up2Pay) | `https://www.prostagespermis.fr` | Cahier des charges p.1 |
+| Gateway URL (mode A actuel) | `https://ppps.paybox.com/PPPS.php` | PSP source |
+| Gateway URL (mode B futur) | `https://tpeweb.up2pay.com/cgi/MYchoix_pagepaiement.cgi` | Doc Up2Pay |
+
+> **Important** : la clé HMAC PROD est de la forme 128 caractères hexa (HMAC-SHA-512 64 bytes). Elle existe dans le code PSP mais doit migrer vers `config_secrets.php` non versionné dès qu'on touche à ce projet.
+
+### Test / Sandbox
+| Paramètre | Valeur PSP (héritée) | Valeur publique standard Verifone |
+|-----------|---------------------|-----------------------------------|
+| PBX_SITE | `1999887` | `1999888` |
+| PBX_RANG | `63` | `32` |
+| PBX_IDENTIFIANT | `222` | `110647233` |
+| PBX_HMAC TEST | `0123456789ABCDEF...` (clé dummy 128 chars répétée) | Idem |
+| Gateway URL (mode A) | `https://recette-ppps.e-transactions.fr/PPPS.php` | — |
+| Gateway URL (mode B) | `https://preprod-tpeweb.up2pay.com/cgi/MYchoix_pagepaiement.cgi` | — |
+
+> Le cahier des charges dit "CLÉ HMAC TEST : à demander à Kader". En pratique, on a déjà la clé test dans le code PSP, et la clé publique Verifone marche aussi pour les tests. **À confirmer avec Kader si on prend la clé Up2Pay back-office TEST de PSP, ou la clé publique Verifone**.
+
+### Cartes de test (sandbox)
+| PAN | Expiry | CVV | Résultat |
+|-----|--------|-----|----------|
+| `1111222233334444` | n'importe | `123` | Succès (`00000`) |
+| `1111222233335555` | n'importe | `123` | Refusée |
+| `4012001037141112` | n'importe | `123` | Déclenche challenge 3DS2 |
+| `5555555555554444` | n'importe | `123` | Mastercard succès |
+
+> Forçage de code : utiliser `PBX_ERRORCODETEST=00100` etc. pour forcer un code précis (ignoré en prod).
+
+---
+
+## 4. Le flux complet (mode B Hosted iFrame, cible Twelvy)
+
+```
+┌──────────┐  1. Step 1 Coordonnées soumis     ┌──────────────┐
+│  Buyer   │ ────────────────────────────────► │ Next.js      │
+└──────────┘                                   │ (Vercel)     │
+     ▲                                         └──────┬───────┘
+     │                                                │ 2. POST /api/bridge?action=create_or_update_prospect
+     │                                                │    header X-Api-Key
+     │                                                ▼
+     │                                         ┌──────────────┐
+     │                                         │ bridge.php   │ → INSERT/UPDATE stagiaire (statut "prospect")
+     │                                         │ (OVH PHP 5.6)│ → return {success, data.stagiaire_id}
+     │                                         └──────┬───────┘
+     │ 3. Step 2 CB visible + bouton "Payer"          │
+     │ ◄──────────────────────────────────────────────┘
+     │
+     │  4. Click "Payer"                       ┌──────────────┐
+     │ ──────────────────────────────────────► │ Next.js      │
+     │                                         └──────┬───────┘
+     │                                                │ 5. POST /api/bridge?action=prepare_payment&id=12345
+     │                                                ▼
+     │                                         ┌──────────────┐
+     │                                         │ bridge.php   │ → calc montant, prépare PBX_*, signe HMAC
+     │                                         │              │ → return {paymentFields: {PBX_SITE, PBX_TOTAL, ...}}
+     │                                         └──────┬───────┘
+     │                                                │
+     │ 6. Form auto-POST vers Up2Pay (vu navigateur)  │
+     │ ◄──────────────────────────────────────────────┘
+     │
+     │ 7. Saisie CB + 3DS2 sur page Up2Pay
+     ▼
+┌─────────────────────────────────────────┐
+│ Up2Pay tpeweb.up2pay.com                │
+│ - autorisation                          │
+│ - 3DS2 challenge                        │
+└──────┬──────────────────────────┬───────┘
+       │                          │
+   8a. Browser redirect       8b. IPN serveur (PBX_REPONDRE_A)
+       │                          │
+       ▼                          ▼
+┌──────────────┐          ┌──────────────────┐
+│ retour.php   │          │ ipn.php (OVH)    │
+│ (OVH)        │          │ - vérifie sig RSA│
+│ - lit URL    │          │ - check idempot. │
+│ - redirect   │          │ - UPDATE stagiair│
+│ vers Next.js │          │ - send emails    │
+└──────┬───────┘          └──────────────────┘
+       │
+       ▼
+┌──────────────────────────────────────────┐
+│ Next.js /confirmation?id=12345           │
+│ - polling get_stagiaire_status (2-3 sec) │
+│ - jusqu'à status="paye"                  │
+│ - affiche récap                          │
+└──────────────────────────────────────────┘
+```
+
+---
+
+## 5. Paramètres POST envoyés à Up2Pay (mode B)
+
+### Obligatoires
+| Champ | Format | Max | Description |
+|-------|--------|-----|-------------|
+| `PBX_SITE` | numérique 7 chars | 7 | Site marchand (`0966892`) |
+| `PBX_RANG` | numérique 2-3 chars | 3 | Rang (`02`) |
+| `PBX_IDENTIFIANT` | numérique | 9 | ID marchand (`651027368`) |
+| `PBX_TOTAL` | entier en CENTIMES | 10 | 219.00€ → `21900`. **JAMAIS de virgule** |
+| `PBX_DEVISE` | ISO-4217 numérique | 3 | `978` = EUR |
+| `PBX_CMD` | string | 250 | Référence commande unique (ex: `BK-2026-000123`) |
+| `PBX_PORTEUR` | email | 60 | Email du client |
+| `PBX_RETOUR` | template | 250 | `Mt:M;Ref:R;Auto:A;Erreur:E;Sign:K` (Sign:K obligatoire pour vérif IPN) |
+| `PBX_HASH` | string | — | `SHA512` |
+| `PBX_TIME` | ISO-8601 UTC | — | `gmdate('c')` — anti-replay |
+| `PBX_HMAC` | hex upper | 128 | Signature HMAC-SHA-512 |
+
+### URLs de retour (toutes optionnelles mais recommandées)
+| Champ | Quand appelé |
+|-------|-------------|
+| `PBX_EFFECTUE` | Browser redirect après succès |
+| `PBX_REFUSE` | Browser redirect après refus |
+| `PBX_ANNULE` | Browser redirect après annulation client |
+| `PBX_ATTENTE` | Browser redirect si en attente |
+| `PBX_REPONDRE_A` | **IPN** server-to-server. **C'est lui qui fait foi** |
+| `PBX_RUF1` | Méthode HTTP utilisée pour PBX_REPONDRE_A (`POST` recommandé) |
+
+### Optionnels mais recommandés (3DS2 / PSD2)
+- `PBX_BILLING` — bloc XML adresse acheteur (souvent requis pour 3DS2 frictionless)
+- `PBX_SHOPPINGCART` — `<shoppingcart><total><totalQuantity>1</totalQuantity></total></shoppingcart>`
+- `PBX_LANGUE` — `FRA`
+- `PBX_TYPEPAIEMENT` / `PBX_TYPECARTE` — forcer un moyen de paiement
+- `PBX_AUTOSEULE` — `O` = pré-autorisation seule (pas de capture)
+
+---
+
+## 6. Algorithme HMAC
+
+### Règles
+1. Concaténer **tous** les champs PBX_* qui seront POST, **dans le même ordre** que les `<input>` du form
+2. Format `KEY=VALUE&KEY=VALUE` — **pas d'URL encoding** dans la chaîne signée
+3. `PBX_HASH=SHA512` doit être présent dans la chaîne signée
+4. La clé HMAC est 128 chars hex → convertir en 64 bytes via `pack("H*", ...)`
+5. Résultat en **hex MAJUSCULE** dans `PBX_HMAC`
+
+### Exemple PHP 5.6 compatible
+```php
+<?php
+// Toujours côté PHP. JAMAIS côté Next.js.
+$hmacKey = '78f9db5d...'; // 128 hex chars depuis config_secrets.php
+
+$params = array(
+    'PBX_SITE'        => '0966892',
+    'PBX_RANG'        => '02',
+    'PBX_IDENTIFIANT' => '651027368',
+    'PBX_TOTAL'       => '21900',                        // 219,00 € en centimes
+    'PBX_DEVISE'      => '978',
+    'PBX_CMD'         => 'BK-2026-000123',
+    'PBX_PORTEUR'     => 'client@example.com',
+    'PBX_RETOUR'      => 'Mt:M;Ref:R;Auto:A;Erreur:E;Sign:K',
+    'PBX_HASH'        => 'SHA512',
+    'PBX_TIME'        => gmdate('c'),
+    'PBX_EFFECTUE'    => 'https://www.prostagespermis.fr/api/retour.php?status=ok',
+    'PBX_REFUSE'      => 'https://www.prostagespermis.fr/api/retour.php?status=refuse',
+    'PBX_ANNULE'      => 'https://www.prostagespermis.fr/api/retour.php?status=annule',
+    'PBX_REPONDRE_A'  => 'https://www.prostagespermis.fr/api/ipn.php',
+);
+
+// 1. Construire la chaîne signée dans l'ordre exact du formulaire
+$toSign = '';
+foreach ($params as $k => $v) {
+    $toSign .= ($toSign === '' ? '' : '&') . $k . '=' . $v;
+}
+
+// 2. Convertir hex → binaire
+$binKey = pack('H*', $hmacKey);
+
+// 3. HMAC-SHA-512 → hex majuscule
+$params['PBX_HMAC'] = strtoupper(hash_hmac('sha512', $toSign, $binKey));
+
+// 4. Renvoyer les params à Next.js (qui fera l'auto-submit)
+echo json_encode(array('success' => true, 'data' => array(
+    'paymentUrl' => 'https://tpeweb.up2pay.com/cgi/MYchoix_pagepaiement.cgi',
+    'paymentFields' => $params,
+)));
+```
+
+### Pièges classiques
+| Symptôme | Cause |
+|----------|-------|
+| Erreur `00001` "Identification problem" | Mauvais site/rang/identifiant OU HMAC mismatch OU mauvaise clé d'environnement |
+| HMAC valide localement mais rejeté | Ordre des champs dans `$toSign` différent de l'ordre des `<input>` |
+| HMAC mismatch avec accents | URL-encoding fait avant la signature (ne JAMAIS encoder avant de signer) |
+| Clé "ne marche pas" | Oubli du `pack("H*", ...)` (utiliser la clé en tant que string) |
+| `PBX_TOTAL` rejeté | Pas en centimes (virgule au lieu d'entier) |
+| `PBX_TIME` rejeté | Pas UTC ISO-8601 ou drift d'horloge serveur > 30 min |
+
+---
+
+## 7. IPN (PBX_REPONDRE_A) — handler PHP
+
+### Différences vs HMAC sortant
+- L'IPN est signée en **RSA-SHA1** (pas HMAC), avec la **clé privée Up2Pay**
+- On vérifie avec la **clé publique Up2Pay** : https://www1.paybox.com/wp-content/uploads/2014/03/pubkey.pem
+- La signature couvre **uniquement les champs demandés dans `PBX_RETOUR`**, dans cet ordre, URL-encoded comme reçus, **moins `Sign=`**
+
+### Handler PHP 5.6 type
+```php
+<?php
+// php/ipn_up2pay.php
+$pubKeyPath = __DIR__ . '/pubkey_up2pay.pem'; // téléchargée depuis paybox.com
+$pubKey     = openssl_pkey_get_public(file_get_contents($pubKeyPath));
+
+// 1. Lire la requête brute (préserve l'ordre)
+$raw = file_get_contents('php://input');
+parse_str($raw, $data);
+
+// 2. Extraire et décoder la signature
+if (empty($data['Sign'])) {
+    http_response_code(400);
+    error_log('[IPN] Sign manquant');
+    exit('missing sign');
+}
+$sig = base64_decode(urldecode($data['Sign']));
+
+// 3. Reconstruire le message signé (raw query string moins Sign=...)
+$msg = preg_replace('/(^|&)Sign=[^&]*/', '', $raw);
+$msg = ltrim($msg, '&');
+
+// 4. Vérifier la signature RSA-SHA1
+$ok = openssl_verify($msg, $sig, $pubKey, OPENSSL_ALGO_SHA1);
+if ($ok !== 1) {
+    http_response_code(403);
+    error_log('[IPN] Signature invalide pour ref=' . (isset($data['Ref']) ? $data['Ref'] : '?'));
+    exit('bad signature');
+}
+
+// 5. Extraire les données métier
+$ref     = $data['Ref'];     // PBX_CMD échoé
+$amount  = $data['Mt'];      // en centimes
+$auth    = isset($data['Auto']) ? $data['Auto'] : '';
+$erreur  = $data['Erreur'];  // "00000" = succès
+
+// 6. Charger le stagiaire
+$stagiaire = StagiaireRepository::findByReference($ref);
+if (!$stagiaire) {
+    http_response_code(404);
+    error_log('[IPN] Stagiaire introuvable pour ref=' . $ref);
+    exit('not found');
+}
+
+// 7. IDEMPOTENCE — règle non négociable
+if ($stagiaire['status'] === 'paye' && !empty($stagiaire['numtrans'])) {
+    error_log('[IPN] Déjà payé, no-op pour ref=' . $ref);
+    http_response_code(200);
+    exit('already paid');
+}
+
+// 8. Appliquer la mise à jour
+if ($erreur === '00000') {
+    StagiaireRepository::markPaid($stagiaire['id'], $amount, $auth, $data);
+    EmailService::sendStudentTicket($stagiaire);
+    EmailService::sendCenterNotification($stagiaire);
+    EmailService::sendAdminCopy($stagiaire);
+} else {
+    StagiaireRepository::markRefused($stagiaire['id'], $erreur, $data);
+    EmailService::sendStudentFailure($stagiaire, $erreur);
+}
+
+// 9. Répondre 200 — Up2Pay retry sinon (jusqu'à 24h)
+http_response_code(200);
+echo 'OK';
+```
+
+### Bonnes pratiques IPN
+- **Idempotence** : Up2Pay retry si non-2xx ou unreachable. La règle dans le code PSP existant est :
+  ```php
+  if ($status === 'inscrit' && $supprime === 0 && $numappel !== '' && $numtrans !== '') {
+      // déjà payé, on no-op
+  }
+  ```
+- **Réponse attendue** : HTTP 200 avec body court. Tout autre code = retries.
+- **Retries Up2Pay** : jusqu'à ~24h en cas d'échec, configurable via support.
+- **IPs source** (allow-list optionnel) : `194.2.122.158`, `194.2.122.190`, `195.25.7.166` + ranges Verifone actuels. La vérif RSA est la vraie sécurité, pas le filtrage IP.
+- **Timeout handler** : < 10 secondes. Si gros traitement → queue async.
+- **Ne JAMAIS faire confiance au browser redirect seul** (PBX_EFFECTUE) — un client peut fermer son onglet avant.
+
+---
+
+## 8. Architecture cible Twelvy (cahier des charges étape 3)
+
+### Rôles
+| Brique | Hébergement | Rôle |
+|--------|-------------|------|
+| **Next.js** | Vercel | UI uniquement (formulaire, récap, page success/error). Appelle `bridge.php`. Ne touche JAMAIS MySQL ni HMAC. |
+| **Bridge PHP** | OVH (PHP 5.6) | Passerelle Next.js ↔ MySQL/Up2Pay. Insère/met à jour `stagiaire`. Signe les params Up2Pay. Renvoie statuts à Next.js. Protégé par `X-Api-Key`. |
+| **Scripts retour + IPN PHP** | OVH (PHP 5.6) | Reçoivent les retours Up2Pay. Vérifient HMAC/RSA. Mettent à jour `stagiaire`. Envoient emails. Sont la **source de vérité du paiement**. |
+| **MySQL** | OVH | Table `stagiaire`. Modifiée uniquement par PHP (bridge + IPN), jamais par Next.js. |
+
+### Bridge.php — actions exposées
+| Action | Quand | Input | Output |
+|--------|-------|-------|--------|
+| `ping` | Test santé | — | `{success:true, data:{message:"pong"}}` |
+| `create_or_update_prospect` | Étape 7.1 (validation Step 1 Coordonnées) | nom, prénom, email, tel, stage_id, etc. | `{success, data:{stagiaire_id}}` |
+| `prepare_payment` | Étape 7.2 (clic "Payer") | `id_stagiaire` | `{success, data:{stagiaire_id, paymentUrl, paymentFields:{PBX_SITE, PBX_TOTAL, PBX_HMAC, ...}}}` |
+| `get_stagiaire_status` | Étape 8 (page confirmation/échec) | `id_stagiaire` | `{success, data:{status, errorCategory?, errorMessage?, stagiaire:{...recap}}}` |
+
+### Sécurité
+- Header `X-Api-Key: <BRIDGE_SECRET_TOKEN>` obligatoire sur chaque appel
+- Si manquant/incorrect → `{success:false, error:"unauthorized"}` + HTTP 403
+- Token = chaîne random 32-64 chars (UUID ou similaire)
+- Stocké en :
+  - **Vercel** : env var `BRIDGE_API_KEY`
+  - **OVH** : `config_secrets.php` (NON versionné, ignoré par Git)
+
+---
+
+## 9. Variables d'environnement à prévoir
+
+### Côté PHP (OVH) — `config_paiement.php` (versionné, structure)
+```
+UP2PAY_ENV ('test' | 'prod')
+
+// TEST
+UP2PAY_SITE_ID_TEST          = 1999887
+UP2PAY_RANG_TEST             = 63
+UP2PAY_IDENTIFIANT_TEST      = 222
+UP2PAY_KEY_VERSION_TEST      = (à confirmer back-office)
+UP2PAY_PAYMENT_URL_TEST      = https://preprod-tpeweb.up2pay.com/cgi/MYchoix_pagepaiement.cgi
+
+// PROD
+UP2PAY_SITE_ID_PROD          = 0966892
+UP2PAY_RANG_PROD             = 02
+UP2PAY_IDENTIFIANT_PROD      = 651027368
+UP2PAY_KEY_VERSION_PROD      = (à confirmer back-office)
+UP2PAY_PAYMENT_URL_PROD      = https://tpeweb.up2pay.com/cgi/MYchoix_pagepaiement.cgi
+
+// COMMUN
+UP2PAY_NORMAL_RETURN_URL     = https://www.prostagespermis.fr/api/retour.php
+UP2PAY_AUTOMATIC_RESPONSE_URL = https://www.prostagespermis.fr/api/ipn.php
+```
+
+### Côté PHP (OVH) — `config_secrets.php` (NON versionné, .gitignore)
+```
+UP2PAY_HMAC_KEY_TEST         = 0123456789ABCDEF... (128 hex)
+UP2PAY_HMAC_KEY_PROD         = 78f9db5d... (128 hex, déjà existante dans PSP)
+BRIDGE_SECRET_TOKEN          = (UUID à générer)
+```
+
+### Côté Next.js (Vercel) — env vars
+```
+BRIDGE_URL_DEV               = https://dev.prostagespermis.com/api/bridge.php
+BRIDGE_URL_PROD              = https://www.prostagespermis.fr/api/bridge.php
+BRIDGE_API_KEY               = (même valeur que BRIDGE_SECRET_TOKEN)
+```
+
+### Côté Next.js — `.env.local` (NON commité)
+```
+BRIDGE_URL=https://dev.prostagespermis.com/api/bridge.php
+BRIDGE_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+---
+
+## 10. Code PSP existant — cartographie complète (mode A actuel)
+
+Recherché par agent dans `/Volumes/Crucial X9/PROSTAGES/www_2/` et `www_3/`.
+
+### Configuration & gateway
+- `www_2/src/payment/E_Transaction/E_TransactionConfig.php` (lignes 11-74) — credentials + URLs + switch DEBUG
+- `www_2/src/payment/E_Transaction/E_TransactionConfig_2023.php` — variante 2023
+
+### HMAC + autorisation (mode Direct PPPS)
+- `www_2/src/payment/E_Transaction/E_TransactionPayment.php`
+  - lignes 143-199 : autorisation TYPE=00001 (signature HMAC + cURL POST)
+  - lignes 257-311 : confirmation débit TYPE=00002
+  - lignes 165-166 : `$binKey = pack("H*", $this->PBX_KEY); $hmac = strtoupper(hash_hmac('sha512', $msg, $binKey));`
+
+### Mapping codes erreur
+- `www_2/src/payment/E_Transaction/E_TransactionError.php` (lignes 5-83) — 50+ codes Up2Pay → message FR
+
+### Endpoints retour/validation
+- `www_2/src/payment/validate/validate_payment.php` (347 lignes — script principal)
+  - lignes 70-77 : retrouve session via `?d2305_{session_id}`
+  - lignes 129-150 : **idempotence check** (status='inscrit' && numappel/numtrans non vides)
+  - lignes 163-170 : appel `validateTransaction()`
+  - lignes 188-220 : handler échec (log + email échec + tracking erreur)
+  - lignes 222-333 : handler succès (SMS + emails + UPDATE 5 tables + redirect)
+- `www_2/src/payment/validate/validate_upsell_payment.php` — flux upsell
+- `www_2/src/payment/validate/validate_product_upsell_payment.php` — flux produit
+
+### Mise à jour BDD
+- `www_2/src/payment/services/UpdateStagePaymentData.php` — orchestrateur des 5 UPDATEs
+- `www_2/src/payment/repositories/PaymentRepository.php` — UPDATE `stagiaire` + `transaction`
+- Tables touchées :
+  1. `order_stage` — `is_paid = true`
+  2. `transaction` — `type_paiement='CB_OK'`, `autorisation`, `paiement_interne=1`
+  3. `stagiaire` — `status='inscrit'`, `numero_cb`, `numappel`, `numtrans`, `date_inscription`, `facture_num`, etc.
+  4. `archive_inscriptions` — INSERT audit
+  5. `stage` — `nb_places_allouees -= 1`, `nb_inscrits += 1`
+
+### Email
+- `www_2/src/payment/services/email/SendTicketPaymentEmail.php` — ticket paiement au stagiaire
+- `www_2/src/payment/services/email/SendPaymentSuccessEmail.php` — orchestre les 2 ci-dessous
+- `www_2/mails_v3/mail_inscription.php` — confirmation inscription stagiaire
+- `www_2/mails_v3/mail_inscription_centre.php` — alerte au centre partenaire (sauf member_id=837)
+- `www_2/mails_v3/mail_echec_paiement.php` — échec paiement avec lien retry
+- `www_2/src/payment/emails/SendAdminTransactionSuccessInError.php` — alerte anomalie (succès Up2Pay mais message d'erreur) → contact@prostagespermis.fr
+
+### Logs
+- `www_2/src/logging/LogPayment.php`
+  - `errorPaymentMessage()` → `/logs/e_transaction_error.log` + `/logs/paiements_erreurs.txt`
+  - `successPaymentMessage()` → `/logs/e_transaction_success.log` + `/logs/paiements_reussi.txt`
+
+### Tracking erreurs DB
+- `www_2/src/payment/repositories/TrackingUserPaymentErrorCode.php` — INSERT dans `tracking_payment_error_code`
+
+### Cron
+- `www_2/planificateur_tache/up2pay/cron_status_payment.php` — vérifie statut Up2Pay sur stagiaires récents (2 jours) avec hash auth `?hash=6e395m74ng`
+
+### Legacy / référence historique (mode B utilisé avant 2023)
+- `PSP 3/backup code cb/pbx_repondre_a.php` — **vrai script IPN historique** (mode hosted page) → **lecture obligatoire avant écriture du nouvel IPN**
+- `PSP 3/backup code cb/lien_cb.php` — préparation form Up2Pay historique
+
+---
+
+## 11. Plan d'intégration — 10 étapes du cahier des charges
+
+> Source : `Cahier des charges up2pay.pages` (37 pages). Document complet lu et digéré le 15 avril 2026.
+
+| Étape | Objectif | Livrable | Durée estimée |
+|-------|----------|----------|---------------|
+| **1** | Auditer table `stagiaire` | Doc texte 1 page : colonnes liées paiement + leur rôle métier | 1-2h |
+| **2** | Cartographier le flux paiement PHP actuel | Schéma texte du flux, fichier par fichier (déjà fait à 80% par agent — cf §10) | 30 min |
+| **3** | Designer architecture cible (Next.js + Bridge + Up2Pay) | Doc court : rôles + nouveau "film" + choix mode iFrame vs Direct | 1h |
+| **4** | Préparer config (TEST + PROD séparés) | `config_paiement.php` squelette + `config_secrets.php` (vide) + `.env.local` exemple | 1h |
+| **5** | Créer `bridge.php` sécurisé | Bridge avec router d'actions + ping + auth X-Api-Key + JSON standardisé | 2-3h |
+| **6** | Bétonner scripts retour + IPN PHP + mapping erreurs | IPN robuste avec idempotence + catégories d'erreurs UX | 4-6h |
+| **7** | Brancher formulaire Next.js (Coordonnées + CB) sur bridge | Step 1 + Step 2 fonctionnels en local | 4-6h |
+| **8** | Gérer retour paiement (success/échec) côté Next.js | Page `/confirmation` avec polling + page `/formulaire?result=error` | 3-4h |
+| **9** | Tests bout-en-bout en sandbox + comparaison side-by-side avec ancien tunnel | Checklist 4+ scénarios validés + diff caractère par caractère vs ancien stagiaire | 4-6h |
+| **10** | Bascule production + monitoring serré | Bascule PROD + 1-3 paiements pilote + plan rollback + monitoring premiers jours | 2-4h + 1 semaine surveillance |
+
+**Total estimé** : 25-40h de dev + 1 semaine monitoring.
+
+---
+
+## 12. Catégories d'erreurs UX (étape 6.6)
+
+Mapping codes Up2Pay → catégorie + message côté front. Source : `errors.csv` (76 codes mappés).
+
+| Catégorie | Codes Up2Pay typiques | Message UX |
+|-----------|----------------------|------------|
+| `erreur_saisie_carte` | 00114, 00007, 00020 | "Numéro/date/CVV erroné. Vérifiez vos infos bancaires." |
+| `refus_banque` | 00021, 00022, 00151 | "Votre banque n'a pas autorisé le paiement. Réessayez avec une autre carte." |
+| `probleme_3ds` | (codes 3DS spécifiques) | "Échec de l'authentification 3D Secure. Réessayez." |
+| `erreur_technique` | 00001, plateforme down | "Plateforme momentanément indisponible. Réessayez plus tard." |
+| `en_attente` | (rare, status intermédiaire) | "Paiement en cours de validation. Patientez quelques instants." |
+
+→ Stockage : colonnes `payment_error_code` + `payment_error_message` dans `stagiaire` (à ajouter si pas déjà là), ou table log dédiée.
+→ Next.js ne voit JAMAIS les codes Up2Pay bruts.
+
+Pour le mapping complet code → message, voir `errors.csv` (76 codes traduits avec messages personnalisés).
+
+---
+
+## 13. Tests obligatoires (étape 9)
+
+### Pré-requis
+- Up2Pay en mode TEST (clé HMAC TEST + URL preprod)
+- Bridge fonctionne (étapes 5-8 OK)
+- IPN/retour PHP joignables par Up2Pay → **localhost ne marche pas** → utiliser :
+  - **Sous-domaine OVH** dev (ex: `dev.prostagespermis.com`) — recommandé
+  - OU `ngrok`/`localtunnel` pour exposer le bridge local
+
+### 4 scénarios minimum
+1. **Paiement OK (cas nominal)** — carte test OK → vérifier front (récap) + BDD (statut "payé", date, montant, n° transaction)
+2. **Paiement refusé** — carte test refusée → vérifier front (retour formulaire bloc CB ouvert + message) + BDD (statut "refusé", code/message cohérent)
+3. **Erreur carte / 3DS** — scénarios test Up2Pay → vérifier message bloc CB (erreur saisie / 3DS) + BDD
+4. **Abandon paiement** — quitter avant payer → vérifier BDD (`stagiaire` reste "prospect/en_attente", JAMAIS "payé") + front (pas de message confirmation)
+
+### Test "side-by-side" avec ANCIEN tunnel (très important)
+Pour chaque scénario principal :
+- Faire l'inscription sur le SITE PHP ANCIEN → exporter ligne `stagiaire` correspondante
+- Faire la MÊME inscription sur le NOUVEAU site Next.js + bridge → exporter ligne `stagiaire`
+- Diff caractère par caractère via VS Code (clic droit → "Compare Selected")
+- Champs à comparer : statut, dates/formats, montants, codes, NULL vs `''`
+- **Objectif** : les deux lignes doivent être identiques caractère par caractère
+
+### Vérifications métier en plus de `stagiaire`
+- **Simpligestion** : stage apparaît correctement, statut/paiement cohérents
+- **Espace centre** (si utilisé) : stagiaire remonte bien
+- **Espace stagiaire / mails** (si déjà branchés) : rien de cassé
+
+---
+
+## 14. Bascule production (étape 10)
+
+### Pré-requis avant bascule
+- Tous scénarios étape 9 OK en TEST
+- Diff "ancien vs nouveau stagiaire" propre
+- Polling page confirmation fonctionne
+- Validation Kader explicite : UX, BDD, Simpligestion, espaces
+
+### Bascule
+1. **Up2Pay PROD** : récupérer credentials PROD (déjà connus, cf §3) + vérifier dans le back-office Up2Pay que les URLs `PBX_REPONDRE_A` / `PBX_EFFECTUE` pointent bien sur les scripts PROD (pas TEST)
+2. **Bridge PHP PROD** : vérifier qu'il pointe sur la BDD PROD + `BRIDGE_SECRET_TOKEN` PROD en place dans `config_secrets.php`
+3. **Next.js PROD** (Vercel) :
+   - `BRIDGE_URL` = URL bridge prod (`https://www.prostagespermis.fr/api/bridge.php`)
+   - `BRIDGE_API_KEY` = même token que côté PHP PROD
+   - Déployer la version avec nouveau tunnel activé
+4. Vérifier sur le site PROD (sans payer) : formulaire s'affiche, pas de 404/CORS/mixed-content
+
+### Plan rollback
+À clarifier avec Kader **avant** la bascule :
+- Garder l'ancienne page formulaire PHP accessible derrière une autre URL
+- OU switch routing simple (repointer le lien "Réserver" vers l'ancien)
+- En cas de taux d'échec anormal ou incohérences BDD → **désactiver le nouveau tunnel rapidement**
+
+### Paiements pilote
+1-3 vrais paiements (petits montants si possible) avec Kader pour valider :
+- UX : formulaire → bloc CB → page CB Up2Pay → page confirmation
+- BDD `stagiaire` : statut, date, montant, n° transaction, colonnes liées paiement
+- Simpligestion / espaces : stagiaire apparaît, infos cohérentes
+- Comparaison rapide avec une inscription ancien tunnel
+
+### Monitoring premiers jours
+**Côté technique** :
+- Logs bridge : erreurs auth (X-Api-Key), erreurs DB, temps de réponse
+- Logs IPN/retour : HMAC invalides, réponses d'erreur envoyées à Up2Pay
+- Back-office Up2Pay : taux d'échec vs avant bascule
+
+**Côté métier** :
+- Retours support : "paiement OK mais pas de confirmation", "n'apparaît pas chez le centre"
+- Retours centres : incohérences sur listes de stagiaires
+
+**Réaction en cas de problème** :
+- Noter date/heure, `id_stagiaire`, type de problème
+- Si bug isolé → corriger
+- Si problème systémique → discuter avec Kader d'un retour temporaire à l'ancien tunnel
+
+---
+
+## 15. ⚠️ Liste exhaustive des inconnues / décisions à prendre
+
+Avant de commencer à coder, **ces points doivent être clarifiés avec Kader** :
+
+| # | Question | Impact |
+|---|----------|--------|
+| 1 | **Mode A (Direct PPPS) vs Mode B (Hosted iFrame)** ? Le PSP actuel est en A, le cahier des charges dit B. | Détermine TOUT le code à écrire. |
+| 2 | Hébergement du bridge : sur `prostagespermis.fr` (OVH actuel) ou nouveau hosting Twelvy ? | Détermine les URLs de bridge et de retour. |
+| 3 | Domaine de DEV pour les tests (Up2Pay ne peut pas appeler localhost) : créer `dev.prostagespermis.com` sur OVH ? | Bloque l'étape 9 (tests bout-en-bout). |
+| 4 | BDD : on garde `stagiaire` PSP intacte (recommandé) ou on crée une table Twelvy parallèle ? | Cahier dit "garde `stagiaire`". À confirmer. |
+| 5 | Email infra : on réutilise les `mail_inscription.php` etc. de PSP, ou on construit côté Twelvy avec Resend/SendGrid ? | Cahier dit "rejouer à l'identique". À confirmer. |
+| 6 | Clé HMAC TEST : on prend celle du back-office Up2Pay (Kader) ou la dummy publique Verifone (`0123456789ABCDEF...`) ? | Si on prend la dummy → il faut s'assurer que les tests passent quand même (la sandbox Verifone l'accepte). |
+| 7 | Plan rollback : quelle est la stratégie exacte ? Garder l'ancien `/es/inscriptionv2_3ds.php` accessible ? | Sécurité bascule. |
+| 8 | Qui a accès au back-office Up2Pay pour vérifier/modifier les URLs `PBX_REPONDRE_A` ? | Bloque la bascule prod. |
+| 9 | Y a-t-il un environnement de **staging Up2Pay** distinct (back-office propre) ou seulement TEST/PROD ? | Pour valider les changements de config sans impacter la prod. |
+| 10 | Le `cron_status_payment.php` actuel doit-il continuer à tourner sur l'ancien hébergement, ou être migré ? | Couvre les cas où l'IPN n'arrive pas. À garder. |
+
+---
+
+## 16. Liens & ressources
+
+### Documentation officielle Up2Pay
+- Portail marchand (login requis) : https://www.ca-moncommerce.com/espace-client-mon-commerce/
+- Doc Up2Pay (login-walled) : https://www.ca-moncommerce.com/espace-client-mon-commerce/up2pay-e-transactions/ma-documentation/
+- Tests d'intégration : https://www.ca-moncommerce.com/espace-client-mon-commerce/up2pay-e-transactions/ma-documentation/realisation-des-tests-dintegration/
+
+### Documentation Paybox/Verifone (autoritative, publique)
+- Manuel d'intégration v8.0 FR (PDF) : https://www1.paybox.com/wp-content/uploads/2017/08/ManuelIntegrationVerifone_PayboxSystem_V8.0_FR.pdf
+- Manuel d'intégration v8.0 EN (PDF) : https://www1.paybox.com/wp-content/uploads/2017/08/ManuelIntegrationVerifone_PayboxSystem_V8.0_EN.pdf
+- Paramètres de test v8.1 : https://www.paybox.com/wp-content/uploads/2022/01/ParametresTestVerifone_Paybox_V8.1_FR-1.pdf
+- Dictionnaire de données (tous les PBX_*) : https://www.paybox.com/espace-integrateur-documentation/dictionnaire-des-donnees/paybox-system/
+- Gestion de la réponse / IPN : https://www.paybox.com/espace-integrateur-documentation/la-solution-paybox-system/gestion-de-la-reponse/
+- Plateformes de test : https://www.paybox.com/espace-integrateur-documentation/les-plateformes-de-test/
+- Clé publique Up2Pay (vérif IPN) : https://www1.paybox.com/wp-content/uploads/2014/03/pubkey.pem
+
+### Implémentations de référence (open-source)
+- **Crédit Agricole GitHub officiel** (modules CMS) : https://github.com/E-Transactions-CA
+- **WooCommerce E-Transactions** (référence WordPress) : https://wordpress.org/plugins/e-transactions-wc/
+- **LexikPayboxBundle** (Symfony, mature) : https://github.com/lexik/LexikPayboxBundle
+- **highcanfly-club/up2pay** (TypeScript 3DS2) : https://github.com/highcanfly-club/up2pay
+- **wp-paybox/controller-ipn.php** (exemple IPN) : https://github.com/drzraf/wp-paybox/blob/master/controller-ipn.php
+
+### Local — fichiers du projet
+- Cahier des charges complet : `/Volumes/Crucial X9/PROSTAGES/TWELVY_LOCAL_PHP/Cahier des charges up2pay.pages`
+- Liste codes erreur : `/Volumes/Crucial X9/PROSTAGES/TWELVY_LOCAL_PHP/errors.csv`
+- Code PSP référence : `/Volumes/Crucial X9/PROSTAGES/www_2/src/payment/`
+- Code PSP IPN historique (mode hosted) : `/Volumes/Crucial X9/PROSTAGES/PSP 3/backup code cb/`
+
+---
+
+## 17. Glossaire
+
+| Terme | Définition |
+|-------|-----------|
+| **Up2Pay** | Branding actuel (depuis ~2020) du gateway de paiement de Crédit Agricole Mon Commerce. |
+| **E-Transactions** | Ancien nom du même produit. Toujours utilisé en interne et dans la doc legacy. |
+| **Paybox** | Nom historique du produit (avant rachat par Crédit Agricole puis Verifone). Doc technique toujours publique sous ce nom. |
+| **HPP** (Hosted Payment Page) | Page de paiement hébergée chez le gateway. Le marchand n'héberge jamais le formulaire CB. |
+| **HMAC** | Hash-based Message Authentication Code. Up2Pay utilise HMAC-SHA-512 pour signer les params sortants. |
+| **IPN** (Instant Payment Notification) | Notification serveur-à-serveur envoyée par Up2Pay au marchand après le paiement. **Source de vérité.** |
+| **3DS / 3DS2** | 3-D Secure : authentification forte de l'acheteur (SMS, biométrie, app banque). Obligatoire en Europe (PSD2). |
+| **Idempotence** | Propriété d'une opération qui produit le même résultat qu'elle soit exécutée 1 ou N fois. Critique pour l'IPN car Up2Pay peut retry. |
+| **Bridge PHP** | Script PHP unique côté OVH qui sert de passerelle entre Next.js (Vercel) et la BDD MySQL + scripts Up2Pay. |
+| **PBX_*** | Préfixe de tous les paramètres du protocole Paybox/Up2Pay (ex: `PBX_SITE`, `PBX_TOTAL`, `PBX_HMAC`). |
+| **stagiaire** | Table MySQL principale de PSP qui contient les inscriptions clients. C'est elle qui doit être mise à jour à l'IPN. |
+| **Simpligestion** | Outil métier interne PSP qui lit la table `stagiaire` pour la gestion centres/compta. |
+
+---
+
+**Document rédigé le 15 avril 2026 par session Claude Code.**
+Sources : Cahier des charges (37 pages), code source PSP (`www_2/src/payment/`), documentation publique Paybox/Verifone v8.0/v8.1, recherche web Up2Pay/E-Transactions/Paybox.
