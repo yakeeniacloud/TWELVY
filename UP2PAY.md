@@ -385,6 +385,78 @@ echo 'OK';
 
 ---
 
+## 8.bis — État actuel : un mini-bridge existe déjà ⚠️ (découvert le 15 avril)
+
+**Important** : contrairement à ce que disait la première rédaction de ce doc, **un mini-bridge existe déjà** sur `api.twelvy.net`. Il s'appelle `stagiaire-create.php` et il fait déjà fonctionner le pattern Vercel → PHP OVH → MySQL.
+
+### Comment ça marche aujourd'hui
+
+```
+Formulaire inscription Next.js
+    ↓ POST
+Next.js route /api/stagiaire/create
+    ↓ proxy fetch
+https://api.twelvy.net/stagiaire-create.php
+    ↓ PDO
+MySQL khapmaitpsp / table `stagiaire`
+    INSERT avec status='pre-inscrit'
+    ↓
+Renvoie {success, stagiaire_id, booking_reference}
+```
+
+Fichier source : `php/stagiaire-create.php` (151 lignes).
+Route Next.js proxy : `app/api/stagiaire/create/route.ts`.
+
+### Comparaison existant vs cible
+
+| Capacité | `stagiaire-create.php` (actuel) | `bridge.php` (cible) |
+|----------|---------------------------------|----------------------|
+| Créer un stagiaire en BDD | ✅ Oui | ✅ Oui (à reprendre) |
+| Routeur d'actions multiples | ❌ Non, fait UNE seule chose | ✅ Oui (`?action=...`) |
+| Préparer params Up2Pay + HMAC | ❌ Non | ✅ Oui |
+| Lire statut paiement | ❌ Non | ✅ Oui |
+| Sécurisé par X-Api-Key | ❌ Non | ✅ Oui |
+| CORS restrictif | ❌ Non — `Access-Control-Allow-Origin: *` | ✅ Limité à `https://www.twelvy.net` |
+| Mot de passe MySQL en clair | ⚠️ **Oui** (`Lretouiva1226` ligne 66) | À déplacer dans `config_secrets.php` |
+| Format JSON `{success, data, error}` | ⚠️ Partiel | ✅ Standard |
+
+### Stratégie : Option 1 (recommandée par le cahier)
+
+**Étendre `stagiaire-create.php` en `bridge.php` complet**, plutôt que créer un fichier en parallèle. Le code existant de création stagiaire devient simplement l'action `create_or_update_prospect`. On ajoute les autres actions (`prepare_payment`, `get_stagiaire_status`, `ping`).
+
+### À corriger en passant (3 problèmes de sécurité)
+
+Quand on touchera à ce fichier, **3 corrections obligatoires** :
+
+1. **Mot de passe MySQL en clair dans le code**
+   - Ligne 66 de `stagiaire-create.php` : `'Lretouiva1226'` lisible par quiconque accède au fichier source
+   - **Fix** : créer `config_secrets.php` (non versionné, dans `.gitignore`) qui contient les credentials MySQL ; faire un `require_once` dans bridge.php
+   - Mettre à jour `MEMORY.md` pour ne PAS commiter cette valeur (déjà présente actuellement)
+
+2. **CORS ouvert à tous (`Access-Control-Allow-Origin: *`)**
+   - N'importe quel site malveillant peut appeler `stagiaire-create.php` depuis le navigateur d'un visiteur et créer des faux stagiaires
+   - **Fix** : remplacer par `Access-Control-Allow-Origin: https://www.twelvy.net` (et éventuellement le domaine de dev)
+   - Ne pas mettre `*` ET `Allow-Credentials: true` ensemble (interdit par les navigateurs)
+
+3. **Aucune vérification d'API key**
+   - Pas de header `X-Api-Key` exigé → spam de la BDD trivial pour qui découvre l'URL
+   - **Fix** : ajouter en début de bridge.php :
+     ```php
+     $apiKey = isset($_SERVER['HTTP_X_API_KEY']) ? $_SERVER['HTTP_X_API_KEY'] : '';
+     if (!hash_equals(BRIDGE_SECRET_TOKEN, $apiKey)) {
+         http_response_code(403);
+         echo json_encode(array('success' => false, 'error' => 'unauthorized'));
+         exit;
+     }
+     ```
+   - Côté Next.js : la route `/api/stagiaire/create/route.ts` doit ajouter ce header dans son `fetch` vers OVH
+
+### Bonne nouvelle
+
+Le pattern technique (Vercel → OVH PHP → MySQL) **fonctionne déjà**. On n'invente rien d'architectural. On **étend** un fichier qui marche, en le renommant et en ajoutant des actions + de la sécurité. Beaucoup moins risqué que partir de zéro.
+
+---
+
 ## 9. Variables d'environnement à prévoir
 
 ### Côté PHP (OVH) — `config_paiement.php` (versionné, structure)
