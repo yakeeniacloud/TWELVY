@@ -66,12 +66,69 @@ Ajout d'une nouvelle section **"8.bis — État actuel : un mini-bridge existe d
 
 ---
 
-## 2. À suivre dans cette session
+## 2. Session pédagogique — les 5 sous-catégories validées
 
-- [ ] Finir sous-catégorie 4 (parcours complet du paiement)
-- [ ] Finir sous-catégorie 5 (IPN + idempotence)
-- [ ] Mettre à jour ce fichier avec les conclusions de fin de session
+| # | Sous-catégorie | Statut |
+|---|----------------|--------|
+| 1 | C'est quoi Up2Pay et pourquoi on en a besoin | ✅ Validée |
+| 2 | Les 2 façons d'intégrer Up2Pay (Direct vs Hébergé iFrame) | ✅ Validée |
+| 3 | Qui fait quoi (Vercel, OVH, le bridge) + découverte mini-bridge existant | ✅ Validée |
+| 3.5 | Focus : c'est quoi la clé HMAC | ✅ Ajouté sur demande |
+| 4 | Le parcours complet d'un paiement, clic par clic | ✅ Validée |
+| 5 | L'IPN et l'idempotence | ✅ Validée |
+
+**Contenu intégral archivé dans `UP2PAY.md`** sous une nouvelle section "📚 Explication pédagogique pour débutants (session 15 avril)". Toute la session est désormais relisible hors contexte chat.
 
 ---
 
-**Session 15 Avril 2026 — en cours.**
+## 3. Récapitulatif du mental model construit
+
+### Les 5 acteurs
+Client · Toi (commerçant) · Banque du client · Ta banque · Up2Pay
+
+### Les 2 modes d'intégration
+- **Direct PPPS** = PSP aujourd'hui, carte passe par ton serveur (PCI-DSS obligatoire)
+- **Hébergé iFrame** = cible Twelvy, carte saisie chez Up2Pay (hors scope PCI)
+
+### Les 3 endroits où vit le code
+- **Vercel** = UI Next.js (pas de BDD, pas de PHP)
+- **OVH** = PHP 5.6 + MySQL (là où vit toute la logique métier)
+- **Up2Pay** = serveurs externes Crédit Agricole
+
+### Les 3 scripts PHP à construire/étendre sur `api.twelvy.net`
+- **bridge.php** — passerelle Next.js ↔ MySQL (évolution de `stagiaire-create.php`)
+- **retour.php** — reçoit le navigateur après paiement, redirige vers Next.js
+- **ipn.php** — reçoit la notification serveur d'Up2Pay, **fait foi** pour la BDD
+
+### Les 2 signatures cryptographiques
+- **HMAC-SHA-512** pour les appels sortants (toi → Up2Pay, clé symétrique)
+- **RSA-SHA1** pour l'IPN entrante (Up2Pay → toi, clé asymétrique, clé publique téléchargée)
+
+### La règle d'or
+**Idempotence IPN** : vérifier `status==='inscrit' && numtrans rempli` avant d'agir, sinon SKIP. Sinon Up2Pay peut envoyer la même notif 2-3 fois → doublons → mails en double, commissions en double, stock décrémenté en double.
+
+---
+
+## 4. Commits du jour
+
+- `2c7e751` — Existing mini-bridge discovery + 3 security fixes to apply
+- (à venir) — Session pédagogique complète ajoutée à UP2PAY.md
+
+---
+
+## 5. État du projet Étape 8 après la session pédagogique
+
+| Item | Statut |
+|------|--------|
+| Compréhension générale utilisateur | ✅ Fondations posées (5 sous-catégories) |
+| Mini-bridge existant identifié | ✅ `stagiaire-create.php` |
+| Stratégie technique | ✅ Étendre le mini-bridge en bridge.php complet |
+| 3 corrections de sécurité listées | ✅ Mot de passe MySQL, CORS, X-Api-Key |
+| Documentation master (`UP2PAY.md`) | ✅ Section 8.bis + Section pédagogique ajoutées |
+| Validation Kader | ⏳ En attente (10 questions critiques, notamment mode Direct vs iFrame) |
+| Attaque Étape 1 (audit table stagiaire) | ⏳ En attente de validation Kader |
+
+---
+
+**Session 15 Avril 2026 — en cours de clôture.**
+**Prochaine étape** : toujours valider `UP2PAY.md` avec Kader avant tout code.

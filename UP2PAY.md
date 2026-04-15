@@ -754,3 +754,318 @@ Avant de commencer à coder, **ces points doivent être clarifiés avec Kader** 
 
 **Document rédigé le 15 avril 2026 par session Claude Code.**
 Sources : Cahier des charges (37 pages), code source PSP (`www_2/src/payment/`), documentation publique Paybox/Verifone v8.0/v8.1, recherche web Up2Pay/E-Transactions/Paybox.
+
+---
+
+# 📚 Explication pédagogique pour débutants (session 15 avril)
+
+Cette section reprend les 5 sous-catégories expliquées en session "comme à un enfant". Si tu lis ce doc pour la première fois, commence par ici avant d'aller dans les sections techniques au-dessus.
+
+---
+
+## 📦 Sous-catégorie 1 — C'est quoi Up2Pay et pourquoi on en a besoin
+
+### Le problème de base
+En tant que commerçant, tu n'as pas le droit de prendre directement le numéro de carte d'un client et d'aller demander à sa banque "envoie-moi 219 €". Tu serais responsable en cas de vol, fraude, fuite. Il te faut un **intermédiaire** autorisé légalement à manipuler les cartes.
+
+### L'analogie du magasin physique
+Dans une boutique, le caissier ne tape pas ton numéro de carte sur sa caisse. Il a un **petit boîtier** (le terminal de paiement) fourni par la banque. Tu insères ta carte, tu tapes ton code, le boîtier appelle la banque tout seul, et affiche "ACCEPTÉ" ou "REFUSÉ". Le caissier ne voit jamais ton code.
+
+> **Up2Pay c'est exactement ce boîtier, mais pour les sites internet.**
+
+### Pourquoi 3 noms (Up2Pay / E-Transactions / Paybox)
+- **Paybox System** (années 1990) — nom original
+- **E-Transactions** — nom intermédiaire chez Crédit Agricole
+- **Up2Pay e-Transactions** — nom actuel (depuis ~2020) sous Crédit Agricole Mon Commerce
+
+**C'est exactement le même produit.** Protocole inchangé.
+
+### Les 5 acteurs d'un paiement
+1. Le client (acheteur)
+2. Toi (commerçant — Twelvy / AM FORMATION)
+3. La banque du client (BNP, Société Générale, etc.)
+4. Ta banque (Crédit Agricole)
+5. Up2Pay (l'intermédiaire qui orchestre tout)
+
+### Pourquoi Up2Pay et pas Stripe/PayPal
+PSP a déjà un contrat signé avec Up2Pay sous "AM FORMATION", contrat N°0966892.02. Changer = nouveau contrat, transition risquée, nouvelle compta. On garde le même → **même argent sur le même compte AM FORMATION**.
+
+### Le trajet de l'argent
+```
+Compte client (BNP)
+  ↓ (Up2Pay déclenche le prélèvement)
+Up2Pay (garde qq jours)
+  ↓ (versement périodique)
+Compte AM FORMATION au Crédit Agricole
+```
+Up2Pay prélève au passage une commission (quelques centimes + petit %).
+
+---
+
+## 🛠️ Sous-catégorie 2 — Les 2 façons d'intégrer Up2Pay
+
+### Mode 1 — "Direct PPPS" (PSP aujourd'hui)
+La carte est tapée dans un formulaire de TON serveur, qui l'envoie ensuite à Up2Pay en cURL backend. Réponse immédiate. **Le serveur PSP touche la carte.**
+
+Endpoint : `https://ppps.paybox.com/PPPS.php`
+
+### Mode 2 — "Hébergé iFrame" (cible Twelvy)
+La carte est tapée dans une fenêtre Up2Pay embarquée dans la page. **Ton serveur ne voit jamais la carte.** Up2Pay te prévient ensuite (via IPN) que le paiement est passé.
+
+Endpoint : `https://tpeweb.up2pay.com/cgi/MYchoix_pagepaiement.cgi`
+
+### Pourquoi c'est critique : la règle PCI-DSS
+PCI-DSS = réglementation bancaire mondiale. **Si tu touches la carte → lourdes obligations** (audit, coffre numérique, assurance). **Si tu ne la touches jamais → tu es hors scope**.
+
+### Pourquoi on change de mode pour Twelvy
+- Twelvy tourne sur **Vercel**, hébergeur moderne pas conçu pour manipuler des cartes
+- Mode 1 sur Vercel = audit PCI obligatoire, ingérable
+- Mode 2 = aucune obligation PCI, infrastructure simplifiée
+
+### Bonne nouvelle : PSP a DÉJÀ utilisé le mode 2 dans le passé
+Vieux code disponible dans `/Volumes/Crucial X9/PROSTAGES/PSP 3/backup code cb/pbx_repondre_a.php` → modèle pour écrire les nouveaux scripts Twelvy.
+
+### Pour l'utilisateur final
+Différence quasi invisible. Un formulaire CB avec numéro/date/CVV/bouton payer. Il ne sait pas si c'est "chez toi" ou "chez Up2Pay embarqué chez toi".
+
+---
+
+## 🏗️ Sous-catégorie 3 — Qui fait quoi dans l'architecture
+
+### Les 3 endroits du décor
+
+**Vercel (la "salle de restaurant")** — hébergeur américain. Fait tourner Next.js (twelvy.net). Joli, rapide, moderne, mais pas de BDD, pas de PHP, pas de secrets longue durée.
+
+**OVH (la "cuisine + le stock")** — hébergeur français traditionnel. PHP 5.6 + MySQL. C'est là que PSP vit depuis des années. Deux sous-domaines en service :
+- `prostagespermis.fr` → site PSP actuel
+- `api.twelvy.net` → backend Twelvy (déjà existant, héberge `stages-geo.php`)
+
+**Up2Pay (le "grossiste/banque")** — serveurs Crédit Agricole, externes. Tu fais des appels chez eux, ils te rappellent.
+
+### La BDD MySQL : `stagiaire`
+Table centrale avec nom, prénom, email, stage, statut paiement, numéro transaction, etc. Tout le business (Simpligestion, espace centre, compta) lit dedans. **Modifiée uniquement par PHP, jamais par Next.js.**
+
+### Le problème Vercel ↔ OVH
+Vercel ne peut pas parler directement à MySQL OVH pour 4 raisons :
+1. Sécurité (ouvrir MySQL à Internet = trou)
+2. Code (Next.js c'est du JS, PSP c'est du PHP)
+3. Confiance (ne pas mettre les creds MySQL dans un hébergeur tiers)
+4. HMAC (la clé secrète ne doit jamais quitter OVH)
+
+### La solution : bridge.php
+**Un seul fichier PHP sur OVH** qui fait l'intermédiaire. Adresse : `https://api.twelvy.net/bridge.php`.
+
+Actions exposées :
+| Action | Rôle |
+|--------|------|
+| `ping` | Test santé (retourne "pong") |
+| `create_or_update_prospect` | INSERT stagiaire, retourne ID |
+| `prepare_payment` | Calcule montant + signe HMAC, retourne paymentFields |
+| `get_stagiaire_status` | Lit statut (paye/refuse/en_attente) + infos récap |
+
+### Le cadenas : X-Api-Key
+Header HTTP secret exigé à chaque appel. Une longue chaîne random type `f3a8b9c2-d4e5-46f7-...`. Stocké en env var Vercel ET dans `config_secrets.php` OVH (pas dans Git).
+
+Si mauvais ou absent → `403 Forbidden`, stop.
+
+### Les 2 autres scripts PHP à côté
+| Fichier | Rôle |
+|---------|------|
+| `bridge.php` | Sert Next.js pour toutes les actions courantes |
+| `retour.php` | Reçoit le navigateur après paiement, redirige vers Next.js |
+| `ipn.php` | Reçoit la notification serveur d'Up2Pay, **fait foi** pour le statut |
+
+### ⚠️ Découverte importante (15 avril)
+**Un mini-bridge existe déjà** : `stagiaire-create.php` sur `api.twelvy.net`. Il fait UNE seule chose (créer un stagiaire). Stratégie : **l'étendre** en bridge complet plutôt que créer un fichier parallèle. Voir section 8.bis ci-dessus pour les 3 corrections de sécurité à appliquer en passant.
+
+---
+
+## 🎬 Sous-catégorie 4 — Le parcours complet d'un paiement
+
+### Acte 1 — Les coordonnées
+1. Client arrive sur `/stages-recuperation-points/.../inscription`
+2. Remplit le bloc 1 : civilité, nom, email, tel, adresse, CGV
+3. Clique "Valider mes coordonnées"
+4. Next.js appelle `/api/stagiaire/create` → proxy vers `bridge.php?action=create_or_update_prospect`
+5. bridge.php fait `INSERT INTO stagiaire` avec `status='pre-inscrit'`, retourne `stagiaire_id=12345`
+6. Next.js stocke l'ID, cache le bloc 1, affiche le bloc CB
+
+### Acte 2 — Le paiement
+7. Client clique "Payer 219 €"
+8. Next.js appelle `bridge.php?action=prepare_payment&id=12345`
+9. bridge.php construit tous les params Up2Pay (PBX_SITE, PBX_TOTAL en centimes, PBX_CMD, etc.) et les **signe avec HMAC**
+10. Retourne à Next.js : `{paymentUrl, paymentFields: {PBX_SITE:..., PBX_HMAC:...}}`
+11. Next.js construit un formulaire HTML caché avec tous ces champs, et **l'auto-soumet** vers l'URL Up2Pay
+12. Le navigateur bascule sur la page Up2Pay (ou iFrame)
+13. Client tape sa carte + 3DS → Up2Pay traite
+
+### Acte 3 — La confirmation (2 canaux parallèles)
+
+**Canal A (navigateur — UX seulement)** :
+- Up2Pay redirige le navigateur vers `retour.php?status=ok&...`
+- `retour.php` redirige vers `https://www.twelvy.net/confirmation?id=12345`
+- Next.js affiche "Vérification en cours..."
+- Next.js fait du **polling** : appelle `bridge.php?action=get_stagiaire_status` toutes les 2-3 secondes
+- Dès que le bridge répond `status='paye'` → affiche le récap final
+
+**Canal B (IPN serveur-à-serveur — autoritatif)** :
+- Up2Pay envoie une requête HTTP directe à `ipn.php` avec la signature RSA
+- `ipn.php` vérifie la signature, vérifie l'idempotence, met à jour `stagiaire`, envoie les 3 emails
+- Répond HTTP 200
+
+### Cas d'erreur
+Si banque refuse : IPN reçoit `Erreur=00114`, met `status='refuse'` + stocke code/catégorie d'erreur. Navigateur redirigé vers formulaire avec `?result=error&id=12345`. Next.js rouvre le bloc CB avec message clair. Le client peut retenter sans retaper ses coordonnées.
+
+---
+
+## 🔐 Focus — C'est quoi la clé HMAC ?
+
+### L'idée
+HMAC = une façon de **signer un message** pour prouver (1) qu'il vient de toi, (2) que personne ne l'a modifié.
+
+### Analogie : le sceau de cire médiéval
+Le roi envoie une lettre, appose son sceau avec son anneau royal. Impossible à reproduire sans l'anneau. Le destinataire vérifie le sceau → lettre authentique + non modifiée. **L'anneau ne quitte jamais le roi.**
+
+### Les 3 ingrédients
+- **Clé secrète** : 128 chars hexa, partagée entre toi et Up2Pay, ne voyage JAMAIS
+- **Message** : les params Up2Pay concaténés (`PBX_SITE=0966892&PBX_TOTAL=21900&...`)
+- **Fonction** : HMAC-SHA-512 (imposée par Up2Pay)
+
+### Processus
+```php
+$cleHmac = pack("H*", "78f9db5d0b421f...");  // convertir hex → binaire
+$message = "PBX_SITE=0966892&PBX_TOTAL=21900&...";
+$signature = strtoupper(hash_hmac('sha512', $message, $cleHmac));
+// → "78E9B5A2F1D8C3E7..." (128 chars)
+```
+
+### Pourquoi c'est sécurisé
+1. La clé **ne voyage jamais** sur le réseau (seule la signature est envoyée)
+2. Sans la clé, **impossible de produire la bonne signature** (propriété mathématique de HMAC)
+3. Toute modification du message casse la signature → Up2Pay rejette
+4. `PBX_TIME` empêche de rejouer une ancienne signature (rejet si > 30 min)
+
+### 2 clés dans notre cas
+- **Clé TEST** (sandbox) : pour les tests
+- **Clé PROD** (réelle) : pour les vrais paiements
+
+La clé PROD existe déjà dans le code PSP (`www_2/.../E_TransactionConfig.php`) — à migrer vers `config_secrets.php` non versionné.
+
+### Si la clé est volée
+Impact limité (le voleur ne peut pas détourner l'argent, il va toujours sur ton compte). Mais procédure d'urgence : régénérer dans le back-office Up2Pay + remplacer dans `config_secrets.php`.
+
+---
+
+## 🔔 Sous-catégorie 5 — L'IPN et l'idempotence
+
+### Pourquoi pas le navigateur
+Le navigateur est non fiable :
+- Onglet fermé après paiement
+- Wi-Fi coupé
+- Pirate qui falsifie l'URL de retour (`?status=ok` à la main)
+- Navigateur plante
+
+**Règle absolue** : seul l'IPN met `status='paye'` en BDD. Jamais le navigateur.
+
+### L'IPN — l'appel que personne ne peut bloquer
+Up2Pay serveur → ton serveur, direct, sans navigateur. Impossible à falsifier. Signé en RSA.
+
+### RSA vs HMAC (petite différence)
+- HMAC = clé symétrique (toi + Up2Pay la connaissez tous deux)
+- RSA = clé asymétrique (Up2Pay garde la privée, tout le monde a la publique)
+
+Pour l'IPN : tu télécharges la clé publique Up2Pay (fichier `pubkey.pem`), tu vérifies la signature avec.
+
+### Le système de retry
+Si ton `ipn.php` ne répond pas 200, Up2Pay **réessaie jusqu'à 24h**. Excellente sécurité contre les pannes temporaires.
+
+### Le problème des doublons
+Up2Pay peut envoyer la **même notification 2-3 fois** (timeout, retry après 500, bug réseau). Si ton code traite chaque appel naïvement :
+- 2 mails de confirmation au stagiaire
+- 2 notifs au centre
+- 2 commissions en compta
+- Stock décrémenté 2 fois
+
+**Solution : idempotence.**
+
+### C'est quoi l'idempotence
+
+**"Traiter l'action 1 fois ou 10 fois → même résultat final."**
+
+Analogie : le bouton d'ascenseur. Appuie 1 fois ou 10 fois → l'ascenseur vient **une seule fois**.
+
+### Implémentation dans `ipn.php`
+
+```php
+$stagiaire = StagiaireRepository::findByReference($ref);
+
+// CHECK IDEMPOTENCE
+if ($stagiaire['status'] === 'inscrit'
+    && !empty($stagiaire['numappel'])
+    && !empty($stagiaire['numtrans'])) {
+    // DÉJÀ TRAITÉ → no-op
+    error_log("[IPN] Doublon détecté pour $ref");
+    http_response_code(200);
+    echo 'already paid';
+    exit;
+}
+
+// Sinon, 1er passage → traiter
+UPDATE stagiaire SET status='inscrit', numappel=..., numtrans=... WHERE id=$id;
+send_ticket_email(...);
+send_center_notification(...);
+send_admin_copy(...);
+
+http_response_code(200);
+echo 'OK';
+```
+
+**Important** : on répond toujours **200** même sur un doublon (sinon Up2Pay réessaie inutilement).
+
+### Contrat exact avec Up2Pay
+| Ta réponse | Up2Pay fait |
+|------------|-------------|
+| `HTTP 200` | Arrête ✅ |
+| `HTTP 403` (signature bad) | Arrête aussi |
+| `HTTP 500` | Réessaie plus tard |
+| Timeout > 10s | Réessaie plus tard |
+
+### Cas particuliers de timing
+- **IPN avant navigateur** (rare) : quand Next.js charge `/confirmation`, status est déjà "paye", récap immédiat
+- **Navigateur avant IPN** (fréquent) : status="en_attente" au début → polling Next.js toutes les 2-3s jusqu'à "paye"
+
+---
+
+## 🎯 Synthèse visuelle du mental model
+
+```
+┌─ 5 ACTEURS ─────────────────────────────────────┐
+│ Client, Toi, Banque client, Ta banque, Up2Pay  │
+└─────────────────────────────────────────────────┘
+
+┌─ 2 MODES D'INTÉGRATION ─────────────────────────┐
+│ Direct PPPS (PSP auj.) vs Hébergé iFrame (cible)│
+└─────────────────────────────────────────────────┘
+
+┌─ 3 ENDROITS OÙ VIT LE CODE ─────────────────────┐
+│ Vercel (UI) ↔ OVH (logique+BDD) ↔ Up2Pay (banque)│
+└─────────────────────────────────────────────────┘
+
+┌─ 3 SCRIPTS PHP À ÉCRIRE/ÉTENDRE ────────────────┐
+│ bridge.php │ retour.php │ ipn.php              │
+│ (Next→BDD) │ (browser)  │ (serveur, VÉRITÉ)    │
+└─────────────────────────────────────────────────┘
+
+┌─ 2 SIGNATURES CRYPTOGRAPHIQUES ─────────────────┐
+│ HMAC-SHA-512 (toi → Up2Pay, clé symétrique)    │
+│ RSA-SHA1     (Up2Pay → toi, clé asymétrique)   │
+└─────────────────────────────────────────────────┘
+
+┌─ 1 RÈGLE D'OR ──────────────────────────────────┐
+│ IDEMPOTENCE : check "déjà payé ?" avant d'agir │
+└─────────────────────────────────────────────────┘
+```
+
+---
+
+**Fin de l'explication pédagogique. Si tu as compris cette section, tu as tout le mental model dont tu as besoin pour attaquer le code.**
