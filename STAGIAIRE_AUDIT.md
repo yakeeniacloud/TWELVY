@@ -490,6 +490,126 @@ Compteur séquentiel facture → stagiaire. Probablement géré par un cron / ac
 
 ---
 
+## Section I.bis — FAQ pédagogique (clarifications post-audit)
+
+Cette section répond aux questions concrètes posées en relisant l'audit. À garder pour référence rapide.
+
+### Q : Pourquoi `id_membre` est dans `transaction` alors que c'est juste un log de paiement ?
+
+`transaction` n'est pas QUE un log de paiement. C'est aussi l'endroit où PSP enregistre **à qui** le paiement est destiné (le centre partenaire qui hébergera le stagiaire). Schéma rappel :
+```
+id, id_stage, id_stagiaire, id_membre, type_paiement,
+erreur, autorisation, date_transaction, id_externe,
+paiement_interne, virement
+```
+
+`id_membre` est obligatoire à l'INSERT. **D'où vient cette valeur** ? Elle vient de `stage.id_membre` — chaque stage est hébergé par UN centre, et `stage.id_membre` indique lequel. Quand quelqu'un paie pour stage #329207, on lit `stage.id_membre` pour ce stage et on copie dans `transaction.id_membre`.
+
+### Q : Pourquoi la majorité des lignes `transaction` ont `type_paiement = 'cheque_en_attente'` ?
+
+Cycle de vie d'une ligne `transaction` :
+```
+1. Form rempli → INSERT transaction avec type_paiement = 'cheque_en_attente'
+                 (placeholder, pas un vrai paiement par chèque)
+2. Tentative paiement Up2Pay :
+   - Succès → UPDATE transaction SET type_paiement = 'CB_OK'
+   - Abandon ou échec → la ligne RESTE 'cheque_en_attente' à vie
+```
+
+Donc `cheque_en_attente` rows = paiements abandonnés ou jamais finalisés. `CB_OK` rows = paiements CB réussis. Le ratio observé (majorité `cheque_en_attente`) est normal pour de l'e-commerce — beaucoup commencent le formulaire sans aller au bout.
+
+### Q : Où sont les factures dans la BDD ?
+
+⚠️ **Il y a 2 sortes complètement différentes de "factures"** :
+
+**Type 1 — Numéro de facture client (CE QUI NOUS CONCERNE)**
+Juste un numéro séquentiel attribué à chaque client payé.
+- Stocké dans `stagiaire.facture_num` (bigint, ex. `274085`)
+- Compteur dans la table `facture_id` (2 cols `id` + `id_stagiaire`, 274 084 lignes)
+- Au paiement, on prend le prochain numéro du compteur, on l'écrit dans `facture_num`
+- **Pas de génération de PDF au moment du paiement** — la "facture" envoyée par email au client est un texte/PDF généré qui utilise ce numéro comme référence
+
+**Type 2 — Vraies factures comptables pour centres partenaires (PAS NOTRE PROBLÈME)**
+Factures mensuelles que PSP envoie à ses centres partenaires.
+- `facture` (11 583 lignes) — entête facture par centre
+- `facture_centre` (1 431 lignes), `facture_centre_produit` (1 879 lignes) — détails
+- `facture_formateur` (4 079 lignes) — factures formateurs
+- **Ces tables ne sont PAS touchées au moment du paiement.** Générées par un batch comptable (cron mensuel probablement). Hors scope Up2Pay.
+
+### Q : C'est quoi `commission_ht` exactement, où vit-il ?
+
+C'est juste **une colonne sur la table `stagiaire`** (type `float`, default 0). Pas une table séparée.
+
+Exemple ligne payée :
+```
+paiement       = 189   (le client a payé 189 €)
+commission_ht  = 78.9  (78,90 € reviennent au centre partenaire)
+partenariat    = 1     (c'est un stage en partenariat)
+```
+
+→ ~42% de commission sur le prix payé. Le calcul est **figé dans la ligne stagiaire au moment du paiement** (snapshot — la commission historique reste correcte même si le taux change ensuite).
+
+**Où est calculé le montant ?** Dans le code PSP (probablement `PaymentRepository::updateStudentData()`). Le calcul dépend de :
+- Prix du stage (`stage.prix`)
+- Département (via `marge_commerciale` table — 4 lignes seulement, ex. Bouches-du-Rhône = 25 €)
+- Si stage partenariat (`partenariat = 0 ou 1`)
+- Possiblement type de contrat partenaire
+
+**On a besoin d'extraire la formule exacte du code PSP** pour la reproduire dans le bridge Twelvy.
+
+### Q : Qui écrit "Capturé" / "Remboursé" dans `up2pay_status` ?
+
+**PAS le script de paiement immédiat (`validate_payment.php`).** Vérifié — ce script écrit `numappel`, `numtrans`, `status='inscrit'`, `numero_cb`, etc. mais ne touche jamais `up2pay_status`.
+
+**C'est un cron job qui le fait** :
+```
+/Volumes/Crucial X9/PROSTAGES/www_2/planificateur_tache/up2pay/cron_status_payment.php
+```
+
+Ce script tourne périodiquement (toutes les quelques heures probablement). Il :
+1. Liste les stagiaires payés récemment dont `up2pay_status` est encore NULL
+2. Appelle l'API Up2Pay pour réinterroger : "quel est le statut actuel de cette transaction ?"
+3. Up2Pay répond `"Capturé"` / `"Remboursé"` / `"Refusé"` / etc.
+4. Le cron met à jour `stagiaire.up2pay_status` avec cette valeur
+
+**C'est pour ça que 29 746 lignes ont NULL** — soit ce sont d'anciens paiements pré-cron, soit des paiements très récents que le cron n'a pas encore traités.
+
+**Recommandation Twelvy** : ne pas attendre un cron. Notre `ipn.php` doit écrire `up2pay_status` directement au moment du paiement (`'Capturé'` sur succès, `'Refusé'` sur échec). La ligne stagiaire est self-describing immédiatement.
+
+### Q : C'est quoi `paiement`, où vit-il ?
+
+Juste **une colonne sur `stagiaire`** (type `smallint`, NOT NULL). Stocke le montant payé en EUR (entier, pas de décimales).
+
+Valeurs réelles observées en prod :
+- 189, 209, 219, 229, 249 EUR — prix de stage typiques
+- 0 EUR — prospect non payé OU stage gratuit
+
+Limite `smallint` : 0 à 32 767. OK pour les stages actuels (€169–€259) mais overflow si un jour on vend > €327 ou avec des centimes.
+
+### Q : Tableau récapitulatif — où vit chaque truc ?
+
+| Truc | Table | Type colonne |
+|------|-------|--------------|
+| `paiement` (montant) | `stagiaire` | smallint |
+| `numappel` (Up2Pay #1) | `stagiaire` | text |
+| `numtrans` (Up2Pay #2) | `stagiaire` | text |
+| `numero_cb` (CB masquée) | `stagiaire` | text |
+| `up2pay_status` ("Capturé"...) | `stagiaire` | varchar(100) |
+| `up2pay_code_error` | `stagiaire` | varchar(10) |
+| `commission_ht` | `stagiaire` | float |
+| `partenariat` (0 ou 1) | `stagiaire` | tinyint |
+| `facture_num` (n° facture client) | `stagiaire` | bigint |
+| Compteur n° facture client | `facture_id` | séquence bigint |
+| Log paiement CB (auto/auth) | `transaction` | ligne complète |
+| Référence commande | `order_stage` | ligne complète |
+| Audit log inscriptions | `archive_inscriptions` | ligne complète |
+| Config commissions partenaires | `commission_main`, `commission_effective` | tables (PAS touchées au paiement) |
+| Factures mensuelles partenaires | `facture`, `facture_centre*` | tables (PAS touchées au paiement) |
+
+**Tout ce dont on a besoin pour Up2Pay au moment du paiement = la ligne `stagiaire` + 4 tables sœurs**. Les tables comptables (`facture`, `commission_*`) sont downstream et hors scope.
+
+---
+
 ## Section I — 10 décisions critiques à clarifier avec Kader
 
 1. **Scope BDD.** Twelvy IPN écrit dans les 5 tables (transaction, order_stage, stagiaire, archive_inscriptions, stage), ou seulement `stagiaire` ?
@@ -500,14 +620,15 @@ Compteur séquentiel facture → stagiaire. Probablement géré par un cron / ac
 
 3. **Le mystère `id_membre`.** Pour `transaction` et `archive_inscriptions`, on a besoin du `id_membre` du centre partenaire. Il vient probablement de `stage.id_membre` — à confirmer en regardant le schéma `stage` (135 cols).
 
-4. **`facture_num` / `facture_id`.** Comment incrémenter de manière atomique le compteur ?
+4. **Numéro de facture client (compteur `facture_id`).** Comment l'incrémenter atomiquement pour éviter que deux paiements simultanés aient le même numéro ?
    - Option A : `INSERT INTO facture_id (id_stagiaire) VALUES ($studentId); SELECT LAST_INSERT_ID();`
-   - Option B : un cron PSP gère ça déjà — Twelvy n'a peut-être qu'à reprendre la valeur déjà calculée.
-   - À vérifier dans le code PSP.
+   - Option B : un cron PSP gère ça déjà — Twelvy n'a peut-être qu'à reprendre une valeur déjà calculée.
+   - À vérifier dans le code PSP. **Note** : il s'agit uniquement du numéro client (la "facture" partenaire mensuelle est hors scope).
 
-5. **`commission_ht`.** Comment calculée ? D'après quelle config ? À extraire du code PSP et reproduire dans le bridge.
+5. **Calcul de `commission_ht`.** Quelle est la formule exacte ? Probablement dans `PaymentRepository::updateStudentData()`. Dépend du prix stage, du département (table `marge_commerciale`), et du flag `partenariat`. À extraire du code PSP et reproduire dans le bridge Twelvy.
 
-6. **`up2pay_status`.** Confirmer la liste canonique : `'Capturé'`, `'Refusé'`, `'Annulé'`, `'Remboursé'`, `'Pré-autorisé'` ? Le dump n'en montre que `'Capturé'`.
+6. **Liste canonique des `up2pay_status`.** Le dump observe : `'Capturé'`, `'Remboursé'`, `'Refusé'` (1 cas), plus quelques messages d'erreur PAYBOX bruts. **Quelle est la liste officielle ?** `'Capturé'`, `'Refusé'`, `'Annulé'`, `'Remboursé'`, `'Pré-autorisé'` ? À confirmer.
+   - **NB** : ce champ n'est PAS écrit par le code PSP de paiement immédiat — c'est le cron `cron_status_payment.php` qui le remplit a posteriori. Twelvy doit l'écrire directement à l'IPN pour avoir une ligne self-describing.
 
 7. **PCI / `numero_cb`.** PSP stockait historiquement le PAN complet (sample row 1 de l'agent montre full PAN). Twelvy doit stocker uniquement un PAN masqué (`45XXXX...XX5251`) renvoyé par Up2Pay.
 

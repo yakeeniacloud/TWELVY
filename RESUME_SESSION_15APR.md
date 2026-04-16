@@ -193,6 +193,40 @@ Synthétisées dans `STAGIAIRE_AUDIT.md` Section I :
 
 ---
 
+## 7. Session de clarification — précision des explications post-audit
+
+L'utilisateur a relu le résumé et posé de bonnes questions de précision. Réponses apportées et intégrées dans `STAGIAIRE_AUDIT.md` Section I.bis (FAQ pédagogique) :
+
+### 7.1 Pourquoi `id_membre` dans `transaction` ?
+La table `transaction` contient l'`id_membre` (centre partenaire) en plus de `id_stagiaire`/`id_stage`/`type_paiement`. Cette valeur vient de `stage.id_membre` — chaque stage est hébergé par un centre, et le paiement doit savoir à qui la commission revient.
+
+### 7.2 Pourquoi tant de lignes `cheque_en_attente` ?
+Cycle : INSERT au moment du form avec `'cheque_en_attente'` → UPDATE à `'CB_OK'` si paiement OK, sinon reste `'cheque_en_attente'` à vie. Donc majorité = paiements abandonnés. Normal en e-commerce.
+
+### 7.3 Les "factures" — 2 sortes complètement différentes
+- **Type 1 (NOTRE PROBLÈME)** : numéro de facture client, stocké dans `stagiaire.facture_num`, compteur dans `facture_id` (274 084 lignes). Juste un numéro séquentiel attribué à chaque client payé.
+- **Type 2 (PAS NOTRE PROBLÈME)** : factures mensuelles partenaires dans `facture`, `facture_centre`, `facture_centre_produit`, `facture_formateur`. Générées par un batch comptable, jamais touchées au paiement.
+
+### 7.4 `commission_ht` — c'est juste une colonne
+`commission_ht` = colonne float sur `stagiaire`, calculée et snapshottée au moment du paiement. Pas une table séparée. Formule dans le code PSP (à extraire).
+
+### 7.5 `up2pay_status` — écrit par un CRON, pas par le code de paiement
+`validate_payment.php` ne touche jamais `up2pay_status`. C'est le cron `cron_status_payment.php` qui réinterroge Up2Pay périodiquement et remplit ce champ. **Pour Twelvy, recommandation : écrire `'Capturé'` directement à l'IPN** (ne pas attendre un cron).
+
+### 7.6 `paiement` — colonne smallint sur `stagiaire`
+Montant en EUR (entier, pas de décimales). Limite `smallint` = 32 767. OK aujourd'hui, overflow potentiel si stage > €327 ou décimales un jour.
+
+### 7.7 Tableau récap "où vit chaque truc"
+Ajouté dans Section I.bis du `STAGIAIRE_AUDIT.md` — référence rapide pour savoir si un champ est sur `stagiaire` (la majorité), sur `facture_id` (le compteur), ou sur les 4 tables sœurs (transaction, order_stage, archive_inscriptions, stage).
+
+### 7.8 Mises à jour des questions Kader (Section I)
+Questions 4, 5, 6 affinées avec plus de précision :
+- Q4 reformulée : compteur atomique pour `facture_id` (pas confondre avec factures partenaires)
+- Q5 reformulée : où est le code du calcul commission_ht
+- Q6 enrichie : note que le champ est rempli par cron, pas par paiement immédiat
+
+---
+
 **Session 15-16 Avril 2026 — terminée.**
 **Étapes 0-1 du plan Up2Pay : faites.** Restent les étapes 2-10.
-**Prochaine étape** : valider `STAGIAIRE_AUDIT.md` + `UP2PAY.md` avec Kader, obtenir réponses aux 10 questions, puis attaquer Étape 2 (cartographie dynamique du flux PHP avec un vrai paiement test).
+**Prochaine étape** : valider `STAGIAIRE_AUDIT.md` + `UP2PAY.md` avec Kader (appel téléphonique prévu), obtenir réponses aux 10 questions, puis attaquer Étape 2 (cartographie dynamique du flux PHP avec un vrai paiement test).
