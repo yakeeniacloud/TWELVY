@@ -385,6 +385,36 @@ echo 'OK';
 
 ---
 
+## 8.ter — Audit BDD live (Étape 1 réalisée le 16 avril) ⚡
+
+**Voir le document dédié `STAGIAIRE_AUDIT.md`** pour le détail complet (1500+ lignes).
+
+### Faits clés
+- BDD live `khapmaitpsp` : **315 tables** (les dumps locaux du 17 février ne contenaient que 4 tables — totalement obsolètes)
+- MySQL 8.4.8 + PHP 5.6.40 sur OVH cluster115
+- Table `stagiaire` : **163 colonnes**, 50 005 lignes
+- 4 tables critiques pour Up2Pay : `stagiaire`, `transaction` (63 247 rows), `order_stage` (138 936 rows), `archive_inscriptions` (98 980 rows)
+- 3 statuts effectifs : `inscrit` (24 548), `supprime` (25 452), `pre-inscrit` (4)
+
+### Le contrat "paiement OK" : 5 écritures SQL
+À l'IPN succès, PSP exécute 5 écritures :
+1. `UPDATE transaction SET type_paiement='CB_OK', autorisation=…, paiement_interne=1`
+2. `UPDATE order_stage SET is_paid=TRUE, reference_order='CFPSP_xxx', num_suivi=…`
+3. `UPDATE stagiaire SET status='inscrit', numappel=…, numtrans=…, date_inscription=…, facture_num=numSuivi-1000, …`
+4. `INSERT INTO archive_inscriptions (id_stagiaire, id_stage, id_membre)`
+5. `UPDATE stage SET nb_places_allouees=…, nb_inscrits=…` (recalcul COUNT, idempotent par design)
+
+### Idempotence
+Avant les 5 écritures, vérifier `status='inscrit' AND numappel != '' AND numtrans != ''` → SKIP si déjà payé.
+
+### 10 décisions à clarifier avec Kader
+Voir `STAGIAIRE_AUDIT.md` Section I (10 questions critiques détaillées).
+
+### Méthodologie
+Script PHP read-only `_audit_temp.php` uploadé via FTP, exécuté une fois, **supprimé immédiatement** (404 confirmé). Aucune modification de données. Voir `STAGIAIRE_AUDIT.md` Section J pour le protocole complet.
+
+---
+
 ## 8.bis — État actuel : un mini-bridge existe déjà ⚠️ (découvert le 15 avril)
 
 **Important** : contrairement à ce que disait la première rédaction de ce doc, **un mini-bridge existe déjà** sur `api.twelvy.net`. Il s'appelle `stagiaire-create.php` et il fait déjà fonctionner le pattern Vercel → PHP OVH → MySQL.

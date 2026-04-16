@@ -130,5 +130,69 @@ Client · Toi (commerçant) · Banque du client · Ta banque · Up2Pay
 
 ---
 
-**Session 15 Avril 2026 — en cours de clôture.**
-**Prochaine étape** : toujours valider `UP2PAY.md` avec Kader avant tout code.
+## 6. ⚡ Étape 1 du plan Up2Pay — RÉALISÉE (16 avril)
+
+Suite du débrief : nous avons attaqué l'Étape 1 du cahier des charges (audit table `stagiaire`).
+
+### 6.1 Découverte critique sur les dumps locaux
+Les dumps `khapmaitpsp_mysql_db.sql` (80 MB) et `prostagepsp_mysql_db.sql` (2 GB) datent du 17 février et ne contiennent que 4 / 256 tables respectivement. **Totalement obsolètes**. La BDD live OVH a beaucoup évolué depuis.
+
+### 6.2 Audit live (read-only) sur OVH
+Pour avoir la vérité :
+1. Script PHP read-only `_audit_temp.php` créé localement
+2. Upload via FTP `curl -T` sur `ftp.cluster115.hosting.ovh.net/www/api/`
+3. Exécution unique via `https://api.twelvy.net/_audit_temp.php?key=<random>`
+4. **Suppression immédiate** via FTP DELE (HTTP 404 confirmé)
+5. JSON 835 KB sauvegardé localement, 315 tables auditées
+
+Aucune modification de données — uniquement SHOW/DESCRIBE/SELECT.
+
+### 6.3 Constats clés
+- **315 tables** dans la BDD live `khapmaitpsp` (vs 4 dans le dump)
+- MySQL **8.4.8** + PHP **5.6.40** sur OVH
+- `stagiaire` : **163 colonnes**, 50 005 lignes
+- 4 tables critiques pour Up2Pay (toutes dans khapmaitpsp live) :
+  - `stagiaire` (50 005 rows)
+  - `transaction` (63 247 rows)
+  - `order_stage` (138 936 rows)
+  - `archive_inscriptions` (98 980 rows)
+- Statuts effectifs : `inscrit` (24 548), `supprime` (25 452), `pre-inscrit` (4) — seulement 3 valeurs utiles
+- `up2pay_status` observé : NULL (29k), `'Capturé'` (20k), quelques bugs/refunds rares
+
+### 6.4 Le contrat "paiement OK" — 5 écritures SQL
+À l'IPN succès, le code PSP fait :
+1. `UPDATE transaction` (flippe `type_paiement` de `'cheque_en_attente'` à `'CB_OK'`)
+2. `UPDATE order_stage SET is_paid=TRUE`
+3. `UPDATE stagiaire SET status='inscrit', numappel, numtrans, ...` (~14 colonnes)
+4. `INSERT INTO archive_inscriptions`
+5. `UPDATE stage SET nb_places_allouees, nb_inscrits` (recalcul COUNT — **idempotent par design**)
+
+### 6.5 Pédagogie agent — l'agent en background était sur les dumps stale
+Un agent `general-purpose` lancé en parallèle sur les dumps locaux a produit une analyse incroyablement détaillée du **code PSP** (10+ fichiers, file:line refs des 5 écritures SQL, identification de `facture_num = numSuivi - 1000`, etc.) — ces analyses ont été **intégrées** au document final.
+
+Mais ses conclusions sur l'architecture BDD ("deux serveurs MySQL séparés", "transaction n'existe pas") étaient fausses car basées sur les dumps stale. Le document final corrige ces erreurs.
+
+### 6.6 Livrables
+- `STAGIAIRE_AUDIT.md` (~28 KB, 12 sections) — rapport d'audit complet
+- `UP2PAY.md` mis à jour avec section 8.ter référençant l'audit
+- Script `_audit_temp.php` supprimé du serveur OVH
+- Données JSON brutes sauvegardées en local à `/tmp/audit_result.json` (non versionné)
+
+### 6.7 10 décisions critiques pour Kader (avant de coder)
+Synthétisées dans `STAGIAIRE_AUDIT.md` Section I :
+1. Scope BDD : 5 tables (PSP exact) ou seulement `stagiaire` ?
+2. Statut `pre-inscrit` vs `supprime` à la création prospect
+3. Origine du `id_membre` (probablement `stage.id_membre`)
+4. Comment incrémenter atomiquement `facture_id` ?
+5. Calcul `commission_ht` à reproduire
+6. Liste canonique des `up2pay_status`
+7. PCI : masquage `numero_cb`
+8. `paiement` smallint — migrer vers `decimal(7,2)` ?
+9. Préfixe référence Twelvy (`TWLV_xxxxx` ?)
+10. Refund : SEPA (comme PSP) ou Up2Pay API ?
+
+---
+
+**Session 15-16 Avril 2026 — terminée.**
+**Étapes 0-1 du plan Up2Pay : faites.** Restent les étapes 2-10.
+**Prochaine étape** : valider `STAGIAIRE_AUDIT.md` + `UP2PAY.md` avec Kader, obtenir réponses aux 10 questions, puis attaquer Étape 2 (cartographie dynamique du flux PHP avec un vrai paiement test).
