@@ -7,6 +7,79 @@
 
 ---
 
+## ⚡ UPDATE 2026-04-16 — Phase 2 audit : le mystère de `transaction` résolu
+
+> **Correction majeure** : après un 2e passage d'audit plus approfondi suite à un retour utilisateur (Kader ne connaissait pas les tables à mettre à jour, et l'utilisateur a vu que la dernière ligne `transaction` datait de 2014), nous avons établi que **`transaction` est une table MORTE depuis fin 2014**.
+
+### Ce que dit la phase 2 (queries par plages de dates)
+
+| Table | Range dates | Row count | Statut |
+|-------|-------------|-----------|--------|
+| **`transaction`** | **2009-05-03 → 2014-11-21** (+ 1 outlier 2017) | 63 247 | 🪦 **MORTE depuis fin 2014** |
+| `order_stage` | **2022-02-10 → 2026-02-20** | 138 936 | ✅ ACTIVE (remplace `transaction`) |
+| `stagiaire` | `datetime_preinscription` 2024-09-23 → 2026-04-14 | 50 005 | ✅ ACTIVE |
+| `archive_inscriptions` | 2018-09-10 → 2026-02-20 | 98 980 | ✅ ACTIVE |
+| `tracking_payment_error_code` | 2025-02-13 → 2026-02-17 | 3 095 | ✅ ACTIVE (récent) |
+| `historique_stagiaire` | 2017-11-21 → 2018-01-14 | 10 | 🪦 MORTE depuis 2018 |
+
+### Distribution des types de paiement dans `transaction` (toutes années confondues)
+- `cheque_en_attente` : 38 098 (60 %) — placeholders d'abandon
+- `CB_OK` : 20 165 (32 %) — paiements CB réussis avant 2014
+- `CB OK` : 4 979 (8 %) — même idée, ancien format de chaîne
+- `cb_en_attente` : 5
+
+### Distribution `order_stage` par année
+- **2026** : 317, **2025** : 35 843, **2024** : 47 426, **2023** : 47 607, **2022** : 7 735
+
+### Distribution `stagiaire` avec `numappel` rempli par année (= paiements Up2Pay)
+- **2026** : 320 inscriptions, 153 payées Up2Pay (48 %)
+- **2025** : 36 195 inscriptions, 18 262 payées Up2Pay (50 %)
+- **2024** : 12 489 inscriptions, 6 131 payées Up2Pay (49 %)
+
+### Exemple de ligne `order_stage` récente (VIVANTE)
+```
+id=138937, created='2026-02-20 06:34:51', reference_order='CFPSP_275086',
+amount=189, is_paid=1, num_suivi=275086, stage_id=329207
+```
+
+### Conclusion critique
+- L'ancien code PSP (`www_2/src/payment/validate_payment.php` + `PaymentRepository.php`) prétend faire UPDATE sur `transaction`, mais **ce code path n'est plus exécuté** — sinon la table aurait des lignes 2014-2026
+- La table a dû être "abandonnée" silencieusement quand le site a migré vers un nouveau système, probablement lors d'une grosse refonte fin 2014. Les UPDATE continuent peut-être d'être appelés sur d'anciennes lignes zombies, mais aucun INSERT frais.
+- **Le vrai flux moderne de paiement écrit dans 3 tables actives** : `stagiaire`, `order_stage`, `archive_inscriptions` — **PAS dans `transaction`**.
+
+### Révision du "contrat paiement OK"
+
+#### Ancien contrat (Section E — issu du code PSP www_2, partiellement obsolète)
+Le code PSP fait prétendument :
+1. UPDATE transaction ← **OBSOLÈTE** (cette table n'est plus écrite depuis 2014)
+2. UPDATE order_stage ← ✅ actif
+3. UPDATE stagiaire ← ✅ actif
+4. INSERT archive_inscriptions ← ✅ actif
+5. UPDATE stage ← ✅ actif
+
+#### Nouveau contrat (réalité production 2026)
+1. ~~UPDATE transaction~~ — **on n'écrit plus là**
+2. INSERT/UPDATE order_stage
+3. UPDATE stagiaire (status='inscrit', numappel, numtrans, etc.)
+4. INSERT archive_inscriptions
+5. UPDATE stage (nb_places_allouees — recompute)
+6. INSERT tracking_payment_error_code en cas d'échec
+
+**Pour l'IPN Twelvy** : 4 écritures réelles, pas 5. L'UPDATE `transaction` est en fait optionnel (on peut le garder pour backward compat si on veut, mais ce n'est pas critique — aucun reporting moderne ne lit cette table vu qu'elle ne bouge plus).
+
+### Décision recommandée à valider avec Kader (nouvelle question)
+> **"Est-ce qu'on continue d'UPDATE la table `transaction` (inutile puisqu'elle est morte depuis 2014) ou on l'ignore complètement dans le nouveau tunnel Twelvy ?"**
+
+Mon avis : on l'ignore. Inutile d'écrire dans une table dead. Les données modernes sont dans `order_stage`.
+
+### Méthodologie de cette phase 2
+- Script `_audit2_temp.php` read-only uploadé sur `api.twelvy.net` puis supprimé (HTTP 404 confirmé)
+- Queries : MIN/MAX date par colonne + distribution par année pour chaque table candidate
+- Aucune modification de données
+- Données JSON brutes dans `/tmp/audit2_result.json` (non versionné)
+
+---
+
 ## TL;DR
 
 - **315 tables** dans la BDD live `khapmaitpsp` (les dumps locaux n'en ont que 4 — totalement obsolètes).

@@ -227,6 +227,82 @@ Questions 4, 5, 6 affinées avec plus de précision :
 
 ---
 
+## 8. ⚡ Appel Kader du 16 avril + audit phase 2 (post-appel)
+
+### 8.1 Décisions prises sur l'appel
+- ✅ **Mode iFrame confirmé** pour Twelvy — on va en mode hosted iFrame, pas Direct PPPS
+- ⚠️ **Mais le design actuel doit être préservé** : le formulaire custom CB (4 504 lignes, 195 KB) est le résultat de beaucoup de travail design. Kader veut pouvoir revenir dessus si jamais l'iFrame ne convient pas
+- ⚠️ **Les tables BDD à mettre à jour** : Kader ne sait pas avec certitude. L'utilisateur a vu que la dernière ligne de `transaction` datait de 2014 → **signal fort que notre audit initial pointait vers la mauvaise table**
+- ⚠️ **HMAC PROD** : Kader n'est pas sûr de l'avoir donnée. On a extrait `78f9db5d...` du code PSP `E_TransactionPayment.php:27` — à tester pour confirmer que c'est bien la bonne
+- 📱 **"Supervision"** : Kader mentionne une app à télécharger sur Mac. Identifiée (agent web) comme étant en fait l'**interface web Paybox Supervision** (`https://guerr.e-transactions.fr/Vision/`) — pas une vraie app Mac, juste un bookmark navigateur
+
+### 8.2 Backup du formulaire custom (fait)
+- Git tag créé : **`payment-form-custom-backup-2026-04-16`** au commit `938fa0c`
+- Dossier physique créé : `_backup_payment_form_2026-04-16/` contenant :
+  - `inscription-page.tsx` (copie de la page inscription actuelle, 4 504 lignes)
+  - `README.md` avec 3 méthodes de restauration
+- Restauration possible à tout moment via `git checkout payment-form-custom-backup-2026-04-16 -- app/stages-recuperation-points/[slug]/[id]/inscription/`
+
+### 8.3 Audit BDD Phase 2 — MYSTÈRE TRANSACTION RÉSOLU ⚡
+
+Script read-only `_audit2_temp.php` uploadé, exécuté, supprimé (HTTP 404 confirmé).
+
+**Découverte critique** :
+
+| Table | Range dates réel | Statut |
+|-------|------------------|--------|
+| `transaction` | 2009-05-03 → **2014-11-21** | 🪦 **MORTE depuis fin 2014** |
+| `order_stage` | 2022-02-10 → **2026-02-20** | ✅ ACTIVE (remplace transaction) |
+| `stagiaire` | 2024-09-23 → **2026-04-14** | ✅ ACTIVE |
+| `archive_inscriptions` | 2018-09-10 → **2026-02-20** | ✅ ACTIVE |
+| `tracking_payment_error_code` | 2025-02-13 → 2026-02-17 | ✅ ACTIVE (récent) |
+| `historique_stagiaire` | 2017-11-21 → 2018-01-14 | 🪦 MORTE depuis 2018 |
+
+**Conclusion** : le code PSP dans `www_2/` (celui que l'agent avait analysé) prétend UPDATE la table `transaction`, mais **en réalité cette table n'est plus écrite depuis 10 ans**. Le flux moderne de paiement écrit dans 3 tables actives : `stagiaire`, `order_stage`, `archive_inscriptions`. **Plus `tracking_payment_error_code` sur les échecs.**
+
+**Révision du "contrat paiement OK"** (cf. `STAGIAIRE_AUDIT.md` section updatée) :
+- Ancien contrat : 5 écritures, dont UPDATE transaction
+- **Nouveau contrat réel** : 4 écritures, `transaction` ignoré (ou optionnellement UPDATE pour backward compat — aucun effet reportng)
+
+**Impact** : notre architecture est légèrement simplifiée. Le bridge a 1 table de moins à gérer.
+
+### 8.4 Distribution des paiements modernes (pour calibrer)
+- **2026** (partiel) : 317 `order_stage`, 320 préinscriptions `stagiaire`, 153 payées Up2Pay (48 %)
+- **2025** : 35 843 `order_stage`, 36 195 préinscriptions, 18 262 payées (50 %)
+- **2024** : 47 426 `order_stage`, 12 489 préinscriptions (partial year start)
+- Taux de conversion stable ~50 % : la moitié des prospects vont jusqu'au paiement
+
+### 8.5 "Supervision" = Paybox Supervision web back-office
+Identifié via agent web recherche :
+- URL typique : `https://guerr.e-transactions.fr/Vision/` (production)
+- URL test : `https://preprod-guerr.e-transactions.fr/Vision/`
+- **Ce n'est PAS une app Mac** — c'est une interface web navigateur
+- Kader l'a probablement installée comme "Add to Dock" dans Safari, d'où la confusion "app à télécharger"
+- **Même fonction que le "back-office Up2Pay"** dont on a déjà parlé — monitoring des paiements, remboursements, config URLs
+
+### 8.6 HMAC PROD — à tester quand on sera prêts
+Clé extraite de `www_2/src/payment/E_Transaction/E_TransactionPayment.php:27` :
+```
+78f9db5d0b421f5f5b7e0eda11f3a66c84b2fdadfcad8cf8c8df25b87a0a4988775f3ff7a81b5a9b653854c10bc742889f612e7741363e585b758fc4e2e86e0d
+```
+(128 chars hex — HMAC-SHA-512, 64 bytes)
+
+Procédure de validation prévue :
+1. On code l'intégration avec les credentials TEST publics (Verifone) en mode sandbox
+2. Quand c'est robuste, on change `UP2PAY_HMAC_KEY` pour cette clé PROD + switch vers URL PROD (`tpeweb.up2pay.com`)
+3. On tente un petit paiement (€5) avec notre propre carte
+4. Si ça marche → la clé est bonne ✅
+5. Si ça foire → fouille plus fine dans le code PSP, ou demande à Kader, ou régénération back-office (en dernier recours)
+
+### 8.7 Nouvelles questions à poser à Kader (après cette session)
+- **Q11** : "On a découvert que ta table `transaction` n'est plus écrite depuis 2014. Tu confirmes qu'on peut l'ignorer ?"
+- **Q12** : "La clé HMAC dans `E_TransactionPayment.php` ligne 27, c'est bien la clé de prod actuelle ? On la teste dans quelques semaines quand on sera prêts."
+- **Q13** : "Pour le formulaire CB custom qu'on garde en backup — si iFrame ne convient pas, on peut faire le switch back en 1 jour. Tu valides cette approche ?"
+
+---
+
 **Session 15-16 Avril 2026 — terminée.**
-**Étapes 0-1 du plan Up2Pay : faites.** Restent les étapes 2-10.
-**Prochaine étape** : valider `STAGIAIRE_AUDIT.md` + `UP2PAY.md` avec Kader (appel téléphonique prévu), obtenir réponses aux 10 questions, puis attaquer Étape 2 (cartographie dynamique du flux PHP avec un vrai paiement test).
+**Étapes 0-1 du plan Up2Pay : faites (avec audit phase 2 en bonus).**
+**Backup design custom : fait.**
+**Restent les étapes 2-10.**
+**Prochaine étape** : commencer Étape 2 du plan (cartographier le flux paiement PHP actuel dynamique — quels fichiers sont vraiment appelés en prod aujourd'hui).
