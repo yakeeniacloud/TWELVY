@@ -67,10 +67,17 @@ Le code PSP fait prétendument :
 
 **Pour l'IPN Twelvy** : 4 écritures réelles, pas 5. L'UPDATE `transaction` est en fait optionnel (on peut le garder pour backward compat si on veut, mais ce n'est pas critique — aucun reporting moderne ne lit cette table vu qu'elle ne bouge plus).
 
-### Décision recommandée à valider avec Kader (nouvelle question)
-> **"Est-ce qu'on continue d'UPDATE la table `transaction` (inutile puisqu'elle est morte depuis 2014) ou on l'ignore complètement dans le nouveau tunnel Twelvy ?"**
+### Décision prise (17 avril 2026) ✅
+> **"On ignore la table `transaction`."**
 
-Mon avis : on l'ignore. Inutile d'écrire dans une table dead. Les données modernes sont dans `order_stage`.
+Yakeen a validé : Twelvy IPN n'écrira PAS dans `transaction`. La table est figée depuis 2014, aucun reporting moderne ne la lit, inutile de continuer à la toucher. Les données modernes sont dans `order_stage`.
+
+**Contrat IPN Twelvy finalisé → 4 écritures actives + 1 conditionnelle :**
+1. UPDATE `stagiaire` (status, numappel, numtrans, dates, commission, facture_num)
+2. INSERT/UPDATE `order_stage` (is_paid=1, reference_order, num_suivi, amount)
+3. INSERT `archive_inscriptions` (id_stagiaire, id_stage, id_membre)
+4. UPDATE `stage` (nb_places_allouees, nb_inscrits)
+5. *Conditionnel* — INSERT `tracking_payment_error_code` si échec paiement
 
 ### Méthodologie de cette phase 2
 - Script `_audit2_temp.php` read-only uploadé sur `api.twelvy.net` puis supprimé (HTTP 404 confirmé)

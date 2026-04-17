@@ -294,10 +294,26 @@ Procédure de validation prévue :
 4. Si ça marche → la clé est bonne ✅
 5. Si ça foire → fouille plus fine dans le code PSP, ou demande à Kader, ou régénération back-office (en dernier recours)
 
-### 8.7 Nouvelles questions à poser à Kader (après cette session)
-- **Q11** : "On a découvert que ta table `transaction` n'est plus écrite depuis 2014. Tu confirmes qu'on peut l'ignorer ?"
-- **Q12** : "La clé HMAC dans `E_TransactionPayment.php` ligne 27, c'est bien la clé de prod actuelle ? On la teste dans quelques semaines quand on sera prêts."
-- **Q13** : "Pour le formulaire CB custom qu'on garde en backup — si iFrame ne convient pas, on peut faire le switch back en 1 jour. Tu valides cette approche ?"
+### 8.7 Questions Q11-Q13 — RÉPONDUES par Yakeen le 17 avril ✅
+
+- **Q11** : Ignorer la table `transaction` ? → **✅ OUI, on l'ignore**
+- **Q12** : La clé HMAC `78f9db5d...` est bien la PROD ? → **✅ OUI, on assume et on verra à la validation finale (test €5)**
+- **Q13** : Backup design custom OK ? → **✅ OUI, design sauvé**
+
+### 8.8 Statut : débloqué pour attaquer Étape 2 🚀
+
+Toutes les décisions bloquantes sont prises :
+- ✅ Mode iFrame (Q1)
+- ✅ Contrat BDD final : 4 tables actives (Q2 reformulée + Q11)
+- ✅ Credentials disponibles (PROD + TEST)
+- ✅ Backup design custom en sécurité (git tag + dossier)
+- ✅ Bridge hostable sur `api.twelvy.net`
+- ✅ Supervision = web back-office (pas d'app à installer)
+- ✅ HMAC assumée correcte jusqu'à preuve du contraire
+
+Les questions restantes (Q3 à Q10) sont des détails d'implémentation qui se résoudront pendant le codage (en lisant le code PSP), pas des blockers.
+
+**Prochaine action concrète** : attaquer Étape 2 du plan Up2Pay — cartographier le flux PHP actuel en dynamique. Lire les 10 fichiers PSP déjà identifiés pour confirmer le contrat "4 écritures" et produire un schéma texte du "film du paiement" (livrable étape 2 cahier des charges). ~1-2h de lecture de code, aucun risque, aucun live query nécessaire.
 
 ---
 
