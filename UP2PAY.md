@@ -385,6 +385,33 @@ echo 'OK';
 
 ---
 
+## 8.quater — Architecture cible documentée (Étape 3 réalisée le 17 avril) ⚡
+
+**Voir le document dédié `ARCHITECTURE_CIBLE.md`** pour le blueprint complet du nouveau système Twelvy + Bridge PHP + Up2Pay.
+
+### Résumé en 5 points
+1. **4 briques** : Next.js (Vercel) ↔ bridge.php (OVH) ↔ ipn.php (OVH) + retour.php (OVH) ↔ Up2Pay
+2. **4 tables actives** au paiement : `stagiaire`, `order_stage`, `archive_inscriptions`, `stage` (+ `tracking_payment_error_code` sur erreur)
+3. **3 mécanismes cryptographiques** : HMAC-SHA-512 (Twelvy → Up2Pay), RSA-SHA1 (Up2Pay → IPN), X-Api-Key (Next.js → bridge)
+4. **Idempotence locked** : check `status='inscrit' AND numappel/numtrans non vides` avant toute action dans `ipn.php`
+5. **Coexistence PSP** : zéro changement côté PSP, écritures parallèles dans la même base MySQL
+
+### Décisions verrouillées (depuis ARCHITECTURE_CIBLE.md)
+- Mode iFrame ✅
+- Bridge à `https://api.twelvy.net/bridge.php` ✅
+- IPN à `https://api.twelvy.net/ipn.php` ✅
+- Retour à `https://api.twelvy.net/retour.php` ✅
+- HMAC uniquement côté PHP ✅
+- Préfixe référence : à valider Kader (CFPSP_ recommandé)
+- Channel remboursement : à valider Kader (SEPA manuel recommandé pour Phase 1)
+
+### Plan rollback en 3 options (cf. ARCHITECTURE_CIBLE.md §9)
+1. Git tag `payment-form-custom-backup-2026-04-16` → revert formulaire custom (5 min)
+2. Redirect Twelvy → PSP en attendant fix (10 min)
+3. Suppression scripts OVH → 404 explicite (5 min)
+
+---
+
 ## 8.ter — Audit BDD live (Étape 1 réalisée le 16 avril) ⚡
 
 **Voir le document dédié `STAGIAIRE_AUDIT.md`** pour le détail complet (1500+ lignes).

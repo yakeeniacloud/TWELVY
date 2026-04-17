@@ -265,6 +265,87 @@ UPDATE stagiaire SET up2pay_code_error = '<pbx_error_code>' WHERE id = <stagiair
 
 ---
 
+## 9. ⚡ Étape 3 ATTAQUÉE le même jour — architecture cible documentée
+
+Suite à l'avancement rapide d'Étape 2, on a enchaîné directement sur Étape 3.
+
+### 9.1 Livrable produit : `ARCHITECTURE_CIBLE.md`
+
+Document complet (~14 sections, ~3500 mots) qui sert de blueprint avant tout code :
+
+- **Section 0** : TL;DR exécutif
+- **Section 1** : les 4 briques (Next.js, bridge.php, ipn.php, retour.php) — rôles, où elles vivent, ce qu'elles font/ne font pas
+- **Section 2** : le "nouveau film" du paiement — 35 steps avec ASCII diagram, du clic au record en BDD
+- **Section 3** : URLs et fichiers finaux à configurer côté Vercel et OVH
+- **Section 4** : contrat BDD locked — les 4 UPDATEs/INSERTs SQL exacts (stagiaire, order_stage, archive_inscriptions, stage)
+- **Section 5** : sécurité — les 3 mécanismes cryptographiques (HMAC, RSA, X-Api-Key)
+- **Section 6** : idempotence — la règle non négociable + code PHP type
+- **Section 7** : gestion d'erreurs UX — 5 catégories mappant les 76 codes Up2Pay
+- **Section 8** : coexistence PSP — comment les deux flux écrivent sans conflit dans la même base
+- **Section 9** : plan de rollback — 3 options (git tag / redirect / full)
+- **Section 10** : NOT-en-scope — exclusions explicites pour éviter scope creep
+- **Section 11** : ordre d'implémentation des étapes 4-10 avec durées estimées
+- **Section 12** : 3 décisions à valider avec Kader avant code (architecture globale, préfixe CFPSP_, channel remboursement)
+- **Section 13** : index des autres documents de référence
+- **Section 14** : checklist de validation Kader (☐ à cocher)
+
+### 9.2 Pourquoi écrire ce doc avant de coder
+
+- Une seule source de vérité — pas de re-litigation de décisions pendant le code
+- Kader peut donner un GO/NO-GO en 10 minutes de lecture
+- Évite que différentes parties du bridge fassent des assomptions divergentes
+- Référence pour les sessions futures (rappel "pourquoi a-t-on choisi ça déjà ?")
+
+### 9.3 Décisions verrouillées dans le doc
+
+| Item | Décision |
+|------|----------|
+| Mode d'intégration | Hosted iFrame (pas Direct PPPS) |
+| Tables actives à écrire | 4 (stagiaire, order_stage, archive_inscriptions, stage) |
+| Table sur erreur | tracking_payment_error_code |
+| Tables ignorées | transaction (mort), historique_stagiaire (mort), paiement (vide) |
+| Bridge URL | https://api.twelvy.net/bridge.php |
+| IPN URL | https://api.twelvy.net/ipn.php |
+| Sécurité bridge | header X-Api-Key obligatoire |
+| Vérif IPN | RSA-SHA1 avec pubkey.pem Up2Pay |
+| HMAC | uniquement côté PHP, jamais Next.js |
+| Idempotence | check status='inscrit' AND numappel/numtrans non vides → SKIP |
+| Stage decrement | recompute via COUNT (idempotent par design) |
+| Coexistence PSP | aucun changement à PSP, écritures parallèles dans même base |
+| Rollback custom | git tag payment-form-custom-backup-2026-04-16 |
+| Emails | réutilisation des scripts PSP existants (mail_inscription.php etc.) |
+
+### 9.4 Décisions encore à valider par Kader (3 dernières)
+
+1. **Architecture globale** : valider la lecture du doc → si OK on attaque Étape 4
+2. **Préfixe référence commande** : CFPSP_ (continuité PSP — recommandé) vs TWLV_ (distinction)
+3. **Channel remboursement Phase 1** : SEPA manuel (comme PSP — recommandé) vs API Up2Pay refund
+
+### 9.5 Mise à jour `UP2PAY.md`
+
+Ajout d'une section référence vers `ARCHITECTURE_CIBLE.md` dans le master doc.
+
+---
+
+## 10. Récap final de la journée du 17 avril
+
+| Action | Statut |
+|--------|--------|
+| Comparaison archives www_2/www_3 | ✅ |
+| Agent général flow movie | ✅ |
+| Phase 2 audit FTP psp-copie | ✅ |
+| Phase 3 audit BDD privilèges/triggers/INSERT test | ✅ |
+| Résolution mystère transaction table | ✅ partial (origine inconnue mais comportement observé OK) |
+| Réponses Q3-Q7 avec preuves | ✅ |
+| Doc PSP_FLOW_MOVIE.md | ✅ |
+| Étape 3 attaquée immédiatement | ✅ |
+| Doc ARCHITECTURE_CIBLE.md | ✅ |
+| RESUME_SESSION_17APR.md complet | ✅ |
+| UP2PAY.md mis à jour avec référence | ✅ |
+| Tous les commits pushés | ✅ |
+
+---
+
 **Session 17 Avril 2026 — terminée.**
-**Étape 2 verrouillée avec preuves multi-sources.**
-**Prochaine session** : Étape 3 — designer l'architecture cible "Next.js + Bridge PHP + Up2Pay" en texte clair (1-2 pages).
+**Étapes 2 ET 3 verrouillées dans la même journée.**
+**Prochaine étape** : faire valider `ARCHITECTURE_CIBLE.md` à Kader (~10 min de lecture). Une fois OK → attaquer Étape 4 (config TEST + PROD).
