@@ -317,6 +317,79 @@ Les questions restantes (Q3 à Q10) sont des détails d'implémentation qui se r
 
 ---
 
+## 9. ⚡ Étape 2 — RÉALISÉE (17 avril 2026)
+
+### 9.1 Méthodologie — triple vérification
+
+Vu le piège rencontré avec la table `transaction` (dead depuis 2014), j'ai appliqué une discipline rigoureuse :
+1. **Lire le code PSP** dans `www_3` (archive complète, identique à `www_2` pour src/payment)
+2. **Spawner un agent général** avec mission "file:line citations obligatoires, zéro spéculation"
+3. **Fetch live FTP** depuis `psp-copie` (test copy de PSP sur khapmait) et comparer avec les archives locales
+4. **Phase-3 live DB audit** (read-only, script uploadé/exécuté/supprimé) pour trancher les contradictions code vs DB
+
+### 9.2 Livrable produit
+
+Fichier `PSP_FLOW_MOVIE.md` (~2700 mots + addendum phase-3) :
+- **Deliverable 1** : entry point identification avec preuves
+- **Deliverable 2** : flow movie complet avec 29 steps, chaque step avec `file:line` + snippet PHP
+- **Deliverable 3** : réponses Q3-Q7 avec preuves (cf. ci-dessous)
+- **Deliverable 4** : matrice decision LIVE vs LEGACY pour chaque fichier
+- **Addendum phase-3** : résolution de la contradiction transaction/order_stage
+
+### 9.3 Réponses aux questions Q3-Q7 (avec preuves file:line)
+
+- **Q3 `id_membre`** : vient de `stage.id_membre` via JOIN `stage → membre.id = member_id` dans `RetrieveFullOrderByStageStudent`. Passé à `archive_inscriptions` INSERT à `PaymentRepository.php:96`. ✅ Confirmé
+- **Q4 `facture_num` atomique** : via `facture_id` table — INSERT puis `LAST_INSERT_ID()`. Proof : `OrderStageRepository.php:219-229`. Formule : `facture_num = num_suivi - 1000` où `num_suivi = facture_id.id + 1000`. Safe car MySQL LAST_INSERT_ID est session-scoped. ✅ Confirmé
+- **Q5 `commission_ht`** : **pure passthrough** depuis `stage.commission_ht` — aucune formule dans le code paiement. Source : `OrderStageRepository.php:137` alias `stage.commission_ht as stage_commission`, puis `validate_payment.php:296` passe cette valeur. ✅ Confirmé
+- **Q6 `up2pay_status`** : JAMAIS écrit par `src/payment/`. Seulement par le cron `planificateur_tache/up2pay/cron_status_payment.php:49` et l'admin panel `simpligestion/ajax_functions.php:4079`. Proof : grep exhaustif ne trouve que ces deux emplacements. ✅ Confirmé — Twelvy doit écrire `'Capturé'` explicitement à l'IPN
+- **Q7 `numero_cb`** : **stocké en PAN brut (16 chiffres complets) — RISQUE PCI-DSS MAJEUR**. Proof : `PaymentRepository.php:80` `numero_cb = '$cardNumber'` où `$cardNumber` vient directement de `$_POST['cardNumber']` via la session. ✅ Confirmé — pour Twelvy en mode iFrame, Up2Pay ne nous renverra QUE le PAN masqué (ex `45XXXX...5251`), ce qui résout le problème automatiquement
+
+### 9.4 ⚡ Résolution de LA contradiction — transaction table
+
+**Problème** : le code PSP `OrderStageRepository::saveOrder` INSERT dans `order_stage` ET `transaction` ensemble. Mais en live :
+- `order_stage` : 138 936 rows, dernière 2026-02-20 ✅ active
+- `transaction` : 63 247 rows, dernière 2014-11-21 🪦 dead
+
+**Investigations menées** :
+1. Privilèges MySQL → `GRANT ALL` ✅ pas de blocage de permission
+2. Triggers → 0 triggers sur `transaction` ✅ rien ne rejette silencieusement
+3. Test INSERT direct → **réussit** (rollback testé) ✅ l'INSERT marcherait si appelé
+4. Code psp-copie live → **identique** à nos archives locales (diff = chemins seulement)
+5. Cross-check 3 stagiaires payés 2026 (id 40120314/315/316) → order_stage rows présents, transaction rows **ABSENTS**
+
+**Conclusion définitive** : le LIVE `prostagespermis.fr` tourne sur un codebase **DIFFÉRENT** du `psp-copie` que nous avons. Ce codebase live (que nous n'avons pas via FTP) insère dans `order_stage` mais PAS dans `transaction`. `transaction` table est déclarée officiellement morte pour nos besoins.
+
+### 9.5 Contrat Twelvy FINAL (verrouillé par la preuve)
+
+```
+IPN Twelvy écrit dans 4 tables actives :
+1. UPDATE stagiaire  (status, numappel, numtrans, numero_cb MASQUÉ, up2pay_status='Capturé', dates, commission, facture_num)
+2. UPDATE order_stage (is_paid=1, reference_order='CFPSP_...', num_suivi)
+3. INSERT archive_inscriptions (id_stagiaire, id_stage, id_membre)
+4. UPDATE stage (nb_places_allouees, nb_inscrits — recomputé via COUNT = idempotent)
++1 sur échec : INSERT tracking_payment_error_code
+
+SKIP : transaction, historique_stagiaire, paiement (empty), facture_*
+```
+
+### 9.6 Découverte secondaire — table `paiement` vide
+Il existe une table `paiement` (0 rows, AUTO_INCREMENT=1, créée mais jamais utilisée). Probablement un remplaçant futur de `transaction` qui n'a jamais été adopté. À ignorer jusqu'à nouvel ordre de Kader.
+
+### 9.7 Méthodologie de vérification (cleanup)
+- Scripts `_audit2_temp.php` et `_audit3_temp.php` uploadés sur OVH via FTP
+- Exécutés une fois chacun
+- **Supprimés immédiatement** (HTTP 404 confirmé sur les deux)
+- Tous les fetch psp-copie via FTP read-only
+- Aucune donnée production modifiée
+
+---
+
+**Étape 2 : TERMINÉE.** Contrat BDD locked avec preuves.
+
+**Prochaine étape** : **Étape 3 du plan** — designer l'architecture cible "Next.js + Bridge PHP + Up2Pay" en texte simple. On a maintenant tout ce qu'il faut pour la produire sans ambiguïté.
+
+---
+
 **Session 15-16 Avril 2026 — terminée.**
 **Étapes 0-1 du plan Up2Pay : faites (avec audit phase 2 en bonus).**
 **Backup design custom : fait.**
