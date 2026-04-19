@@ -198,6 +198,62 @@ Une fois bridge.php OK avec ping, on ajoutera progressivement les actions `creat
 
 ---
 
-**Session 18 Avril 2026 — terminée.**
-**Étape 4 : verrouillée et testée.**
-**Prêt pour Étape 5 (bridge.php avec action ping).**
+## 6. ⚡ Étape 5 ATTAQUÉE le même jour — bridge.php avec action ping
+
+Suite à la rapidité d'Étape 4, on a enchaîné directement sur Étape 5. Yakeen a configuré les env vars sur Vercel (`BRIDGE_URL` + `BRIDGE_API_KEY`) en parallèle.
+
+### 6.1 Création du fichier `php/bridge.php`
+
+Fichier de ~150 lignes, PHP 5.6 compatible, structure claire en 8 étapes commentées :
+1. Load config (qui charge les secrets)
+2. Set HTTP headers (Content-Type JSON, CORS restrictif, no-cache)
+3. Handle CORS preflight OPTIONS → 204
+4. Helpers JSON standardisés `bridge_send_response()` et `bridge_send_error()`
+5. Read X-Api-Key depuis headers (fallback multi-méthodes pour compat OVH)
+6. Verify X-Api-Key avec `hash_equals()` timing-safe
+7. Read action from query string (ou body POST)
+8. Action router avec switch — pour l'instant juste `ping`
+
+### 6.2 Action `ping` implémentée
+
+Retourne `{success:true, data:{message:'pong', environment, php_version, timestamp, bridge_ready}}`.
+**Aucune logique BDD, aucun appel Up2Pay, aucun secret exposé.** Juste la preuve que la plomberie fonctionne.
+
+### 6.3 Tests passés (les 6 critiques)
+
+| # | Test | Attendu | Résultat |
+|---|------|---------|----------|
+| 1 | Sans X-Api-Key | HTTP 403 unauthorized | ✅ `{"success":false,"error":"unauthorized"}` |
+| 2 | Mauvais X-Api-Key | HTTP 403 unauthorized | ✅ Idem |
+| 3 | Bon X-Api-Key + action=ping | HTTP 200 pong | ✅ `{"success":true,"data":{"message":"pong",...}}` |
+| 4 | Bon X-Api-Key sans action | HTTP 400 unknown_action | ✅ Avec liste actions disponibles |
+| 5 | Bon X-Api-Key + action inconnue | HTTP 400 unknown_action | ✅ Idem |
+| 6 | CORS preflight OPTIONS | HTTP 204 + headers CORS | ✅ Tous les headers présents (allow-origin, methods, headers, max-age) |
+
+### 6.4 Détails techniques validés
+- PHP 5.6.40 confirmé sur OVH
+- Environnement par défaut : `test` (safe)
+- Timestamp : 2026-04-19T07:35:13+02:00 (Europe/Paris OK)
+- Timing-safe comparison via `hash_equals()` (anti timing-attack)
+- Multi-fallback pour lecture du header X-Api-Key (`getallheaders()` + `$_SERVER['HTTP_X_API_KEY']`)
+- Cache-Control no-store (pas de cache CDN sur les réponses du bridge)
+
+### 6.5 Foundation validée
+
+Avec les 6 tests qui passent, on a maintenant la **preuve que le squelette du bridge fonctionne** :
+- ✅ La sécurité (X-Api-Key) marche
+- ✅ La config charge correctement (token bien lu)
+- ✅ Le format JSON est standardisé
+- ✅ Le router d'actions est extensible (juste ajouter un `case` pour chaque nouvelle action)
+- ✅ CORS restrictif à twelvy.net
+- ✅ Erreurs propres avec codes HTTP cohérents
+
+### 6.6 État après cette session
+
+**Étape 5 du plan Up2Pay : DONE.** On vient de boucler 5 étapes sur 10 **dans une seule session** (qui s'est étendue sur 18-19 avril en réalité, mais l'utilisateur préfère qu'on l'appelle "session du 18 avril"). On est **à 50 % du plan**.
+
+---
+
+**Session 18 Avril 2026 — terminée pour de vrai cette fois.**
+**Étapes 4 et 5 : verrouillées et testées.**
+**Prêt pour Étape 6 (scripts retour + IPN avec vrai accès BDD).**

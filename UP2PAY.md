@@ -385,6 +385,40 @@ echo 'OK';
 
 ---
 
+## 8.sexies — Bridge.php opérationnel avec action ping (Étape 5 réalisée le 18 avril) ⚡
+
+**Voir `RESUME_SESSION_18APR.md` §6** pour le détail complet.
+
+### Fichier créé
+- **`php/bridge.php`** (versionné, ~150 lignes) — uploadé sur OVH `/www/api/bridge.php` → accessible à `https://api.twelvy.net/bridge.php`
+
+### Architecture mise en place
+- Garde X-Api-Key avec `hash_equals()` timing-safe (compare avec `BRIDGE_SECRET_TOKEN`)
+- CORS restrictif à `https://www.twelvy.net` (preflight OPTIONS supporté)
+- Format JSON standardisé : `{success:true, data:{...}}` ou `{success:false, error:'code'}`
+- Action router via `switch ($action)` — extensible pour les futures actions
+- Cache-Control no-store
+- PHP 5.6 compatible
+
+### Action implémentée pour Étape 5
+- `ping` → retourne `{message:"pong", environment:"test", php_version:"5.6.40", timestamp, bridge_ready:true}`
+- Pas de DB, pas d'Up2Pay, pas de secret exposé
+
+### Les 6 tests validés
+1. Sans X-Api-Key → 403 ✅
+2. Mauvais X-Api-Key → 403 ✅
+3. Bon X-Api-Key + ping → 200 pong ✅
+4. Sans action → 400 unknown_action ✅
+5. Action inconnue → 400 unknown_action ✅
+6. CORS OPTIONS preflight → 204 + headers ✅
+
+### Prochaines actions à ajouter (Étapes 6-7)
+- `create_or_update_prospect` → INSERT/UPDATE stagiaire
+- `prepare_payment` → calc montant + signe HMAC + retourne paymentFields
+- `get_stagiaire_status` → lit BDD + retourne statut + recap
+
+---
+
 ## 8.quinquies — Config TEST + PROD en place (Étape 4 réalisée le 18 avril) ⚡
 
 **Voir `RESUME_SESSION_18APR.md`** pour le détail complet.
