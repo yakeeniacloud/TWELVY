@@ -385,6 +385,37 @@ echo 'OK';
 
 ---
 
+## 8.quinquies — Config TEST + PROD en place (Étape 4 réalisée le 18 avril) ⚡
+
+**Voir `RESUME_SESSION_18APR.md`** pour le détail complet.
+
+### Fichiers créés
+- **`php/config_paiement.php`** (versionné) — structure complète avec switch TEST/PROD, sanity check, garde anti-accès direct. Uploadé sur OVH `/www/api/`.
+- **`php/config_secrets.example.php`** (versionné) — template pour futurs devs.
+- **`config_secrets.php`** (NON versionné) — créé en `/tmp` avec vraies valeurs, uploadé sur OVH `/www/api/`, supprimé du local.
+
+### Sécurité
+- Garde `if (!defined('TWELVY_BRIDGE')) exit(403)` au début des deux fichiers config
+- Vérifié : `curl https://api.twelvy.net/config_paiement.php` retourne **HTTP 403** ✅
+- `.gitignore` mis à jour pour bloquer `php/config_secrets.php` à tous les niveaux
+- Token `BRIDGE_SECRET_TOKEN` généré : 64 chars hex (256 bits)
+
+### Test de chargement
+Script `_test_config.php` uploadé/exécuté/supprimé. Confirme :
+- Environnement par défaut = `test` (safe)
+- Toutes les constantes chargent (HMAC TEST + PROD, MySQL, token bridge)
+- Sélection automatique TEST ou PROD selon `UP2PAY_ENV`
+- PHP 5.6.40 sur OVH
+
+### Action requise côté Vercel (à faire par Yakeen)
+Ajouter deux env vars sur le dashboard Vercel :
+- `BRIDGE_URL` = `https://api.twelvy.net/bridge.php`
+- `BRIDGE_API_KEY` = `c6759c1f4f2f51d24d601eb85c575177f3d411c82e4f5e175d4816975d63fc55`
+
+Les valeurs DOIVENT être identiques côté Vercel (`BRIDGE_API_KEY`) et côté OVH (`BRIDGE_SECRET_TOKEN`) sinon le bridge refusera les appels.
+
+---
+
 ## 8.quater — Architecture cible documentée (Étape 3 réalisée le 17 avril) ⚡
 
 **Voir le document dédié `ARCHITECTURE_CIBLE.md`** pour le blueprint complet du nouveau système Twelvy + Bridge PHP + Up2Pay.

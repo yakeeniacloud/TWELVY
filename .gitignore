@@ -29,6 +29,10 @@ yarn-error.log*
 .env*.local
 .env
 
+# Secrets — never commit (Up2Pay HMAC keys, MySQL password, BRIDGE_SECRET_TOKEN)
+php/config_secrets.php
+**/config_secrets.php
+
 # vercel
 .vercel
 
