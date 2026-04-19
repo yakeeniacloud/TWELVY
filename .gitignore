@@ -41,3 +41,7 @@ php/config_secrets.php
 next-env.d.ts
 *.json
 !lib/seo-data.json
+
+# Large database dumps — never commit
+*.sql
+*.sql.gz

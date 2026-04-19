@@ -5,9 +5,7 @@
 // the real values. config_secrets.php is in .gitignore — never commit it.
 //
 // To generate a fresh BRIDGE_SECRET_TOKEN: openssl rand -hex 32
-// HMAC PROD key is found in PSP code: www_2/src/payment/E_Transaction/E_TransactionPayment.php:27
-// HMAC TEST key: use the public Verifone sandbox key (128 chars, repeat
-// "0123456789ABCDEF" 8 times) OR pull a TEST key from Up2Pay back-office.
+// HMAC keys: see internal documentation (do not commit paths to legacy code).
 // =========================================================================
 
 if (!defined('TWELVY_BRIDGE')) {

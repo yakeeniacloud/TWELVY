@@ -16,6 +16,9 @@ if (!defined('TWELVY_BRIDGE')) {
 // Environment switch — 'test' (sandbox) or 'prod' (real money)
 // Override via OS env var UP2PAY_ENV before deploying
 // -------------------------------------------------------------------------
+// IMPORTANT: any value other than the literal string 'prod' falls back to
+// 'test' (fail-safe to sandbox). 'PROD', 'production', ' prod' (with space),
+// etc. all silently route to test mode. Set the OS env var precisely.
 if (!defined('UP2PAY_ENV')) {
     $env_from_os = getenv('UP2PAY_ENV');
     define('UP2PAY_ENV', ($env_from_os === 'prod') ? 'prod' : 'test');

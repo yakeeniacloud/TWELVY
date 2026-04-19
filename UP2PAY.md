@@ -385,6 +385,35 @@ echo 'OK';
 
 ---
 
+## 8.septies — Bridge.php avec 3 actions BDD (Étape 6 chunk A — 19 avril) ⚡
+
+**Voir `RESUME_SESSION_18APR.md` §8** pour le détail complet.
+
+### 3 nouvelles actions ajoutées à bridge.php
+- **`create_or_update_prospect`** (POST) — INSERT/UPDATE stagiaire en `pre-inscrit`, retourne stagiaire_id + booking_reference
+- **`prepare_payment`** (POST) — génère num_suivi + INSERT order_stage + signe HMAC-SHA-512, retourne paymentFields prêts à submit vers Up2Pay
+- **`get_stagiaire_status`** (GET/POST) — lit DB + JOIN stage/site, retourne statut simple (`paye`/`refuse`/`en_attente`) + recap
+
+### Helpers ajoutés
+- `bridge_db()` — connexion PDO lazy, utf8mb4, prepared statements
+- `bridge_read_body()` — parse JSON ou form, cap 64 KB
+- `bridge_compute_pbx_hmac()` — signature HMAC-SHA-512 sur params concat
+- `bridge_classify_up2pay_error()` — map codes → catégorie UX
+
+### Audit préalable
+Audit live read-only `_audit4_temp.php` pour confirmer noms de colonnes (uploaded/deleted, HTTP 404). Trouvé : `stage.date1`/`date2` (pas `date_debut`/`date_fin`). Aliasés en SQL pour lisibilité front.
+
+### 7 tests passés
+- ping regression ✅
+- get_stagiaire_status sur vrai ID Feb 2026 → status='paye' + recap complet ✅
+- 404 stagiaire inexistant ✅
+- 400 missing_field, invalid_email ✅
+
+### À suivre dans chunk B
+ipn.php + retour.php + pubkey.pem (clé publique Paybox).
+
+---
+
 ## 8.sexies — Bridge.php opérationnel avec action ping (Étape 5 réalisée le 18 avril) ⚡
 
 **Voir `RESUME_SESSION_18APR.md` §6** pour le détail complet.
