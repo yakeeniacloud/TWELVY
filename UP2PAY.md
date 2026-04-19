@@ -387,7 +387,7 @@ echo 'OK';
 
 ## 8.septies — Bridge.php avec 3 actions BDD (Étape 6 chunk A — 19 avril) ⚡
 
-**Voir `RESUME_SESSION_18APR.md` §8** pour le détail complet.
+**Voir `RESUME_SESSION_19APR.md` §2** pour le détail complet.
 
 ### 3 nouvelles actions ajoutées à bridge.php
 - **`create_or_update_prospect`** (POST) — INSERT/UPDATE stagiaire en `pre-inscrit`, retourne stagiaire_id + booking_reference
