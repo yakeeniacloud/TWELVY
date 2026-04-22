@@ -27,10 +27,17 @@ if (!defined('UP2PAY_ENV')) {
 // -------------------------------------------------------------------------
 // TEST credentials — public Verifone sandbox (anyone can use these)
 // -------------------------------------------------------------------------
-define('UP2PAY_SITE_ID_TEST',     '1999887');
-define('UP2PAY_RANG_TEST',        '63');
-define('UP2PAY_IDENTIFIANT_TEST', '222');
-define('UP2PAY_PAYMENT_URL_TEST', 'https://preprod-tpeweb.up2pay.com/cgi/MYchoix_pagepaiement.cgi');
+// Verifone public sandbox account for "Paybox System" hosted page integration.
+// SITE 1999888 + RANG 32 + IDENT 107904482 = non-3DS hosted page (simplest for first smoke tests).
+// Switch RANG/IDENT to 43/107975626 once we want to validate the 3DS flow.
+// Source: https://www.paybox.com/espace-integrateur-documentation/comptes-de-tests/
+// Backoffice login: 199988832 / 1999888I (public — for inspecting the HMAC test key).
+define('UP2PAY_SITE_ID_TEST',     '1999888');
+define('UP2PAY_RANG_TEST',        '32');
+define('UP2PAY_IDENTIFIANT_TEST', '107904482');
+// Verifone TEST/preprod hosted-iFrame endpoint (MYframepagepaiement_ip.cgi).
+// Use this CGI specifically — MYchoix_pagepaiement.cgi is the redirect-only variant.
+define('UP2PAY_PAYMENT_URL_TEST', 'https://preprod-tpeweb.paybox.com/cgi/MYframepagepaiement_ip.cgi');
 define('UP2PAY_KEY_VERSION_TEST', '1');
 
 // -------------------------------------------------------------------------
@@ -40,7 +47,8 @@ define('UP2PAY_KEY_VERSION_TEST', '1');
 define('UP2PAY_SITE_ID_PROD',     '0966892');
 define('UP2PAY_RANG_PROD',        '02');
 define('UP2PAY_IDENTIFIANT_PROD', '651027368');
-define('UP2PAY_PAYMENT_URL_PROD', 'https://tpeweb.up2pay.com/cgi/MYchoix_pagepaiement.cgi');
+// Verifone PROD hosted-iFrame endpoint (MYframepagepaiement_ip.cgi — iframe-specific).
+define('UP2PAY_PAYMENT_URL_PROD', 'https://tpeweb.paybox.com/cgi/MYframepagepaiement_ip.cgi');
 define('UP2PAY_KEY_VERSION_PROD', '1');
 
 // -------------------------------------------------------------------------
@@ -48,6 +56,13 @@ define('UP2PAY_KEY_VERSION_PROD', '1');
 // -------------------------------------------------------------------------
 define('UP2PAY_NORMAL_RETURN_URL',      'https://api.twelvy.net/retour.php');
 define('UP2PAY_AUTOMATIC_RESPONSE_URL', 'https://api.twelvy.net/ipn.php');
+
+// -------------------------------------------------------------------------
+// Twelvy frontend destinations — where retour.php bounces the browser to
+// (must be Next.js routes on www.twelvy.net — Step 8 will create /paiement/confirmation)
+// -------------------------------------------------------------------------
+define('TWELVY_CONFIRMATION_URL', 'https://www.twelvy.net/paiement/confirmation');
+define('TWELVY_HOMEPAGE_URL',     'https://www.twelvy.net/');
 
 // -------------------------------------------------------------------------
 // Active values — picked based on UP2PAY_ENV
@@ -72,7 +87,28 @@ if (UP2PAY_ENV === 'prod') {
 define('UP2PAY_DEVISE', '978');         // EUR (ISO-4217 numeric)
 define('UP2PAY_HASH',   'SHA512');      // HMAC algorithm
 define('UP2PAY_LANGUE', 'FRA');         // Payment page language
-define('UP2PAY_RETOUR', 'Mt:M;Ref:R;Auto:A;Erreur:E;Sign:K'); // Fields Up2Pay echoes back (Sign:K required)
+
+// PBX_RETOUR — fields Up2Pay echoes back on IPN + browser return.
+// Format: "alias1:code1;alias2:code2;...". Sign:K MUST be present + last-ish.
+// Codes: M=montant R=cmd A=autorisation E=erreur T=numappel S=numtrans C=carte K=sign
+define('UP2PAY_RETOUR', 'Mt:M;Ref:R;Auto:A;Erreur:E;NumAppel:T;NumTrans:S;Carte:C;Sign:K');
+
+// IPN — path to Up2Pay RSA public key file (downloaded from paybox.com)
+// Used by ipn.php to verify the RSA-SHA1 signature on incoming notifications.
+define('UP2PAY_PUBKEY_PATH', __DIR__ . '/pubkey_up2pay.pem');
+
+// IPN — optional test mode (for local signature unit tests only — NEVER on prod)
+// When defined AND true, ipn.php reads the key at UP2PAY_PUBKEY_PATH_TEST instead.
+// Tests set UP2PAY_IPN_TEST_MODE=true before requiring config.
+if (!defined('UP2PAY_IPN_TEST_MODE')) {
+    define('UP2PAY_IPN_TEST_MODE', false);
+}
+define('UP2PAY_PUBKEY_PATH_TEST', __DIR__ . '/ipn_tests/pubkey_test.pem');
+
+// Email — where admin/accounting copies go (confirm address with Kader before prod)
+define('EMAIL_ADMIN_NOTIFICATIONS', 'contact@twelvy.net');
+define('EMAIL_FROM',                'nepasrepondre@twelvy.net');
+define('EMAIL_FROM_NAME',           'Twelvy');
 
 // -------------------------------------------------------------------------
 // Booking reference prefix (decision locked: CFPSP_ for PSP compat)

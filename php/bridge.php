@@ -393,9 +393,10 @@ switch ($action) {
 
         $pdo = bridge_db();
         try {
-            // Fetch stagiaire + stage info
+            // Fetch stagiaire + stage info — extended for PBX_BILLING (3DSv2 mandatory)
             $stmt = $pdo->prepare(
                 "SELECT s.id, s.email, s.id_stage, s.paiement,
+                        s.nom, s.prenom, s.adresse, s.code_postal, s.ville,
                         st.prix, st.id_membre, st.date1
                  FROM stagiaire s
                  INNER JOIN stage st ON st.id = s.id_stage
@@ -429,24 +430,48 @@ switch ($action) {
                 ':ref' => $reference,
             ));
 
-            // Build PBX_* params — ORDER MATTERS for HMAC
+            // Build PBX_SHOPPINGCART (mandatory since 3DSv2 — Erreur PAYBOX 4 if absent in prod)
+            $pbx_shoppingcart = '<?xml version="1.0" encoding="UTF-8" ?>'
+                . '<shoppingcart><total><totalQuantity>1</totalQuantity></total></shoppingcart>';
+
+            // Build PBX_BILLING (mandatory since 3DSv2). Field-length caps per V8.3 manual.
+            // Empty values produce empty XML tags — Paybox tolerates these in TEST,
+            // PROD acceptance to be validated during Étape 9.
+            $bill_first = htmlspecialchars(mb_substr((string)$row['prenom'],     0, 30, 'UTF-8'), ENT_XML1, 'UTF-8');
+            $bill_last  = htmlspecialchars(mb_substr((string)$row['nom'],        0, 30, 'UTF-8'), ENT_XML1, 'UTF-8');
+            $bill_addr  = htmlspecialchars(mb_substr((string)$row['adresse'],    0, 50, 'UTF-8'), ENT_XML1, 'UTF-8');
+            $bill_zip   = htmlspecialchars(mb_substr((string)$row['code_postal'],0, 16, 'UTF-8'), ENT_XML1, 'UTF-8');
+            $bill_city  = htmlspecialchars(mb_substr((string)$row['ville'],      0, 50, 'UTF-8'), ENT_XML1, 'UTF-8');
+            $pbx_billing = '<?xml version="1.0" encoding="UTF-8" ?>'
+                . '<Billing><Address>'
+                . '<FirstName>' . $bill_first . '</FirstName>'
+                . '<LastName>'  . $bill_last  . '</LastName>'
+                . '<Address1>'  . $bill_addr  . '</Address1>'
+                . '<ZipCode>'   . $bill_zip   . '</ZipCode>'
+                . '<City>'      . $bill_city  . '</City>'
+                . '<CountryCode>250</CountryCode>'  // 250 = France (ISO-3166-1 numeric)
+                . '</Address></Billing>';
+
+            // Build PBX_* params — ORDER MATTERS for HMAC (must match form submission order)
             $params = array(
-                'PBX_SITE'        => UP2PAY_SITE_ID,
-                'PBX_RANG'        => UP2PAY_RANG,
-                'PBX_IDENTIFIANT' => UP2PAY_IDENTIFIANT,
-                'PBX_TOTAL'       => (string)$amount_cents,
-                'PBX_DEVISE'      => UP2PAY_DEVISE,
-                'PBX_CMD'         => $reference,
-                'PBX_PORTEUR'     => $row['email'],
-                'PBX_RETOUR'      => UP2PAY_RETOUR,
-                'PBX_HASH'        => UP2PAY_HASH,
-                'PBX_TIME'        => gmdate('c'),
-                'PBX_LANGUE'      => UP2PAY_LANGUE,
-                'PBX_REPONDRE_A'  => UP2PAY_AUTOMATIC_RESPONSE_URL,
-                'PBX_RUF1'        => 'POST',
-                'PBX_EFFECTUE'    => UP2PAY_NORMAL_RETURN_URL . '?status=ok&id=' . $stagiaire_id,
-                'PBX_REFUSE'      => UP2PAY_NORMAL_RETURN_URL . '?status=refuse&id=' . $stagiaire_id,
-                'PBX_ANNULE'      => UP2PAY_NORMAL_RETURN_URL . '?status=annule&id=' . $stagiaire_id,
+                'PBX_SITE'         => UP2PAY_SITE_ID,
+                'PBX_RANG'         => UP2PAY_RANG,
+                'PBX_IDENTIFIANT'  => UP2PAY_IDENTIFIANT,
+                'PBX_TOTAL'        => (string)$amount_cents,
+                'PBX_DEVISE'       => UP2PAY_DEVISE,
+                'PBX_CMD'          => $reference,
+                'PBX_PORTEUR'      => $row['email'],
+                'PBX_SHOPPINGCART' => $pbx_shoppingcart,    // 3DSv2 mandatory
+                'PBX_BILLING'      => $pbx_billing,         // 3DSv2 mandatory
+                'PBX_RETOUR'       => UP2PAY_RETOUR,
+                'PBX_HASH'         => UP2PAY_HASH,
+                'PBX_TIME'         => gmdate('c'),
+                'PBX_LANGUE'       => UP2PAY_LANGUE,
+                'PBX_REPONDRE_A'   => UP2PAY_AUTOMATIC_RESPONSE_URL,
+                'PBX_RUF1'         => 'POST',
+                'PBX_EFFECTUE'     => UP2PAY_NORMAL_RETURN_URL . '?status=ok&id='     . $stagiaire_id,
+                'PBX_REFUSE'       => UP2PAY_NORMAL_RETURN_URL . '?status=refuse&id=' . $stagiaire_id,
+                'PBX_ANNULE'       => UP2PAY_NORMAL_RETURN_URL . '?status=annule&id=' . $stagiaire_id,
             );
 
             // Compute HMAC over params (order = same as form submission order)

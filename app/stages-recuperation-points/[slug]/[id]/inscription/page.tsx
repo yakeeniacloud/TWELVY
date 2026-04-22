@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import { removeStreetNumber } from '@/lib/formatAddress'
+import Up2PayIframe, { type PaymentData } from '@/components/payment/Up2PayIframe'
 
 interface Stage {
   id: number
@@ -52,7 +53,13 @@ export default function InscriptionPage() {
     cgv?: string
   }>({})
 
-  // Payment form state
+  // Payment form state — Up2Pay iframe (Step 7, 22 Apr 2026)
+  // Card data is now typed inside the iframe (on Up2Pay's hosted form), not on Twelvy.
+  // The legacy nomCarte/numeroCarte/dateExpiration*/codeCVV state is kept ONLY for backward
+  // compatibility with the sticky-button conditions; the inputs themselves were removed.
+  const [paymentData, setPaymentData] = useState<PaymentData | null>(null)
+  const [isPreparingPayment, setIsPreparingPayment] = useState(false)
+  const [paymentError, setPaymentError] = useState<string | null>(null)
   const [nomCarte, setNomCarte] = useState('')
   const [numeroCarte, setNumeroCarte] = useState('')
   const [dateExpirationMois, setDateExpirationMois] = useState('')
@@ -361,40 +368,79 @@ export default function InscriptionPage() {
       })
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  /**
+   * Step 7 — call bridge.php to (1) save the prospect in the real PSP-schema DB,
+   * then (2) generate the Up2Pay-signed payment fields. Reveals the iframe on success.
+   *
+   * Replaces the legacy handleSubmit which posted to /api/stagiaire/create (the dead
+   * Phase-1 demo endpoint) and redirected to /merci without ever charging the card.
+   *
+   * Sets paymentData → triggers <Up2PayIframe> render → auto-submits POST into iframe.
+   */
+  const prepareAndShowPayment = async () => {
+    setIsPreparingPayment(true)
+    setPaymentError(null)
+    setPaymentData(null)
 
     try {
-      const response = await fetch('/api/stagiaire/create', {
+      // Step 1 — create or update the stagiaire prospect in khapmaitpsp.stagiaire
+      const prospectResp = await fetch('/api/payment/create-prospect', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          stage_id: id,
+          stage_id: parseInt(id, 10),
           civilite,
           nom,
           prenom,
           email,
-          telephone_mobile: telephone,
-          guarantee_serenite: garantieSerenite,
-          cgv_accepted: cgvAccepted
+          mobile: telephone,           // bridge.php expects "mobile", not "telephone_mobile"
+          adresse: '',                 // optional in bridge; PBX_BILLING tolerates empty in TEST
+          code_postal: '',
+          ville: '',
+          date_naissance: '',
+          cgv_accepted: cgvAccepted,
         }),
       })
+      const prospect = await prospectResp.json()
+      if (!prospectResp.ok || !prospect?.success) {
+        const code = prospect?.error?.code || 'unknown'
+        const message = prospect?.error?.message || 'Erreur création prospect'
+        throw new Error(`[create-prospect] ${code}: ${message}`)
+      }
+      const stagiaire_id = prospect?.data?.stagiaire_id
+      if (!stagiaire_id) throw new Error('[create-prospect] missing stagiaire_id in response')
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        alert('Erreur lors de l\'inscription: ' + (data.error || 'Erreur inconnue'))
-        return
+      // Step 2 — generate signed Up2Pay payment params
+      const prepareResp = await fetch('/api/payment/prepare', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stagiaire_id }),
+      })
+      const prepare = await prepareResp.json()
+      if (!prepareResp.ok || !prepare?.success) {
+        const code = prepare?.error?.code || 'unknown'
+        const message = prepare?.error?.message || 'Erreur préparation paiement'
+        throw new Error(`[prepare_payment] ${code}: ${message}`)
       }
 
-      // Redirect to confirmation page
-      window.location.href = `/stages-recuperation-points/${city.toLowerCase()}/${id}/merci?ref=${data.booking_reference || ''}`
-    } catch (error) {
-      console.error('Error submitting form:', error)
-      alert('Une erreur est survenue lors de l\'inscription')
+      setPaymentData(prepare.data as PaymentData)
+    } catch (err) {
+      console.error('Payment preparation failed:', err)
+      setPaymentError(err instanceof Error ? err.message : 'Erreur réseau')
+    } finally {
+      setIsPreparingPayment(false)
     }
+  }
+
+  /**
+   * Legacy submit handler — kept as a no-op shim for any lingering "Payer" button
+   * references that still call onClick={handleSubmit}. The actual payment is now
+   * triggered by clicking "Valider et passer au paiement" → prepareAndShowPayment(),
+   * after which Up2Pay's own button (inside the iframe) finalises the transaction.
+   */
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    // Intentionally no-op — see prepareAndShowPayment + <Up2PayIframe>.
   }
 
   // Mobile functions
@@ -445,10 +491,11 @@ export default function InscriptionPage() {
       return
     }
 
-    // All fields are valid - reveal payment block and mark form as validated
+    // All fields are valid — reveal payment block + kick off the Up2Pay prepare flow
     setPaymentBlockVisible(true)
     setFormValidated(true)
     setIsFormExpanded(false)
+    void prepareAndShowPayment()  // Step 7 — load iframe asynchronously
 
     // Scroll to payment section
     setTimeout(() => {
@@ -483,7 +530,9 @@ export default function InscriptionPage() {
   }
 
   const isFormComplete = civilite && nom && prenom && email && telephone && cgvAccepted
-  const arePaymentFieldsFilled = nomCarte && numeroCarte && dateExpirationMois && dateExpirationAnnee && codeCVV
+  // Step 7 — once the Up2Pay iframe is loaded with paymentData, treat the payment as
+  // "ready" for the sticky-button conditions. Card data is now typed inside the iframe.
+  const arePaymentFieldsFilled = !!paymentData
 
   if (loading) {
     return <div className="min-h-screen bg-white flex items-center justify-center">Chargement...</div>
@@ -1105,140 +1154,61 @@ export default function InscriptionPage() {
           <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '36px', marginBottom: '36px' }} />
         )}
 
-        {/* Payment Section */}
+        {/* Payment Section — Step 7 (22 Apr 2026): mockup card form replaced by Up2Pay iframe.
+            Card data now typed inside the iframe (Paybox-hosted form). The "Payer" button
+            we used to render here is gone — Paybox provides its own inside the iframe. */}
         {paymentBlockVisible && (
           <div id="mobile-payment-section" className="px-3 py-3">
             <h2 className="font-medium mb-3" style={{ fontSize: '18px' }}>Étape 2/2 : paiement sécurisé</h2>
 
             <p className="text-center font-medium mb-1" style={{ fontSize: '13px' }}>Paiement sécurisé par Crédit Agricole</p>
             <p className="text-center italic text-gray-600 mb-2" style={{ fontSize: '12px' }}>
-              Vos données bancaires sont chiffrées par la solution Up2Pay-Crédit Agricole (cryptage SSL) et ne sont jamais stockées par ProStagesPermis
+              Vos données bancaires sont chiffrées par la solution Up2Pay-Crédit Agricole (cryptage SSL) et ne sont jamais stockées par Twelvy
             </p>
 
             <div className="flex justify-center mb-3">
-              <img src="/cards.png" alt="Cards" className="h-8" />
+              <img src="/cards.png" alt="Cartes acceptées" className="h-8" />
             </div>
 
-            {/* Payment Fields */}
-            <div className="space-y-3">
-              <div>
-                <label className="block mb-1" style={{ fontSize: '14px' }}>Nom sur la carte</label>
-                <input
-                  type="text"
-                  value={nomCarte}
-                  onChange={(e) => setNomCarte(e.target.value)}
-                  placeholder="Nom"
-                  className="w-full border border-black rounded-lg px-2 py-1.5"
-                  style={{ fontSize: '12px' }}
-                />
-              </div>
+            {/* Price Summary */}
+            <div className="bg-gray-200 rounded-lg p-2.5 text-center" style={{ marginBottom: '20px' }}>
+              <p className="font-medium mb-1" style={{ fontSize: '14px' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)} à {stage && formatCityName(stage.site.ville)}</p>
+              <p style={{ fontSize: '13px' }}>Prix du stage : {stage?.prix}€ TTC</p>
+              {garantieSerenite && (
+                <p style={{ fontSize: '13px' }}>Garantie Sérénité : +57€ TTC</p>
+              )}
+              <p className="font-medium mt-1" style={{ fontSize: '16px' }}>Total à payer : {totalPrice}€ TTC</p>
+            </div>
 
-              <div>
-                <label className="block mb-1" style={{ fontSize: '14px' }}>Numéro de carte</label>
-                <input
-                  type="text"
-                  value={numeroCarte}
-                  onChange={(e) => setNumeroCarte(e.target.value)}
-                  placeholder="Numéro de carte"
-                  maxLength={16}
-                  className="w-full border border-black rounded-lg px-2 py-1.5"
-                  style={{ fontSize: '12px' }}
-                />
+            {/* Up2Pay iframe — replaces the mockup card form */}
+            {isPreparingPayment && (
+              <div className="text-center py-8">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600" />
+                <p className="mt-3 text-sm text-gray-600">Préparation du paiement sécurisé…</p>
               </div>
+            )}
 
-              <div>
-                <label className="block mb-1" style={{ fontSize: '14px' }}>Date d&apos;expiration</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={dateExpirationMois}
-                    onChange={(e) => setDateExpirationMois(e.target.value)}
-                    placeholder="Mois"
-                    maxLength={2}
-                    className="w-16 border border-black rounded-lg px-2 py-1.5 text-center"
-                    style={{ fontSize: '12px' }}
-                  />
-                  <input
-                    type="text"
-                    value={dateExpirationAnnee}
-                    onChange={(e) => setDateExpirationAnnee(e.target.value)}
-                    placeholder="Année"
-                    maxLength={2}
-                    className="w-16 border border-black rounded-lg px-2 py-1.5 text-center"
-                    style={{ fontSize: '12px' }}
-                  />
-                </div>
-              </div>
-
-              <div style={{ marginBottom: '24px' }}>
-                <label className="block mb-1" style={{ fontSize: '14px' }}>Code (cvv)</label>
-                <input
-                  type="text"
-                  value={codeCVV}
-                  onChange={(e) => setCodeCVV(e.target.value)}
-                  placeholder="Code"
-                  maxLength={3}
-                  className="w-24 border border-black rounded-lg px-2 py-1.5"
-                  style={{ fontSize: '12px' }}
-                />
-              </div>
-
-              {/* Price Summary */}
-              <div className="bg-gray-200 rounded-lg p-2.5 text-center" style={{ marginBottom: '24px' }}>
-                <p className="font-medium mb-1" style={{ fontSize: '14px' }}>Stage du {stage && formatDate(stage.date_start, stage.date_end)} à {stage && formatCityName(stage.site.ville)}</p>
-                <p style={{ fontSize: '13px' }}>Prix du stage : {stage?.prix}€ TTC</p>
-                {garantieSerenite && (
-                  <p style={{ fontSize: '13px' }}>Garantie Sérénité : +57€ TTC</p>
-                )}
-                <p className="font-medium mt-1" style={{ fontSize: '16px' }}>Total à payer : {totalPrice}€ TTC</p>
-              </div>
-
-              {/* Payer Button */}
-              <div className="flex justify-center" style={{ marginBottom: '16px' }}>
+            {paymentError && !paymentData && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm" style={{ marginBottom: '16px' }}>
+                <p className="font-medium text-red-700">Erreur lors de la préparation du paiement</p>
+                <p className="text-red-600 mt-1 text-xs">{paymentError}</p>
                 <button
-                  id="mobile-payer-button"
-                  onClick={handleSubmit}
-                  disabled={isFormExpanded || isPayerButtonDisabled}
-                  className="flex items-center disabled:bg-gray-400"
-                  style={{
-                    display: 'flex',
-                    width: '232px',
-                    height: '51px',
-                    padding: '10px 15px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '8px',
-                    flexShrink: 0,
-                    borderRadius: '30px',
-                    background: (isFormExpanded || isPayerButtonDisabled) ? '#9CA3AF' : '#41A334'
-                  }}
+                  onClick={prepareAndShowPayment}
+                  className="mt-3 bg-red-600 text-white py-2 px-4 rounded text-sm"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" className="flex-shrink-0">
-                    <path d="M7.29167 11.4584V7.29171C7.29167 5.91037 7.8404 4.58561 8.81715 3.60886C9.7939 2.63211 11.1187 2.08337 12.5 2.08337C13.8813 2.08337 15.2061 2.63211 16.1828 3.60886C17.1596 4.58561 17.7083 5.91037 17.7083 7.29171V11.4584M5.20833 11.4584H19.7917C20.9423 11.4584 21.875 12.3911 21.875 13.5417V20.8334C21.875 21.984 20.9423 22.9167 19.7917 22.9167H5.20833C4.05774 22.9167 3.125 21.984 3.125 20.8334V13.5417C3.125 12.3911 4.05774 11.4584 5.20833 11.4584Z" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  <span style={{
-                    color: '#FFF',
-                    textAlign: 'center',
-                    fontFamily: 'Poppins',
-                    fontSize: '16px',
-                    fontStyle: 'normal',
-                    fontWeight: '400',
-                    lineHeight: 'normal',
-                    letterSpacing: '1.12px',
-                    whiteSpace: 'nowrap'
-                  }}>
-                    Payer {totalPrice}€ TTC
-                  </span>
+                  Réessayer
                 </button>
               </div>
+            )}
 
-              <p className="text-center italic" style={{ fontSize: '13px', marginBottom: '16px' }}>
-                Après avoir cliqué sur &quot;Payer&quot;, votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédiatement par email votre convocation au stage.
-              </p>
+            {paymentData && <Up2PayIframe paymentData={paymentData} height={620} />}
 
-              {/* Grey separator line below payment text */}
-              <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '36px', marginBottom: '36px' }} />
-            </div>
+            <p className="text-center italic" style={{ fontSize: '13px', marginTop: '16px', marginBottom: '16px' }}>
+              Une fois le paiement confirmé, vous recevez immédiatement par email votre convocation au stage.
+            </p>
+
+            {/* Grey separator line below payment block */}
+            <div className="mx-auto" style={{ width: '363px', height: '1px', background: '#D9D9D9', marginTop: '36px', marginBottom: '36px' }} />
           </div>
         )}
 
@@ -2966,6 +2936,7 @@ export default function InscriptionPage() {
                       setCurrentStep(2)
                       setHasFormBeenSubmittedOnce(true)
                       setIsDesktopFormEditing(false)
+                      void prepareAndShowPayment()  // Step 7 — load Up2Pay iframe
                       // Scroll to payment section
                       document.getElementById('payment-section')?.scrollIntoView({ behavior: 'smooth' })
                     }
@@ -3061,426 +3032,128 @@ export default function InscriptionPage() {
                   <div style={{ width: '672px', height: '1px', background: '#D9D9D9' }} />
                 </div>
 
-                {/* Payment Section - Étape 2/2 */}
+                {/* Payment Section — Step 7 (22 Apr 2026): mockup card form replaced by Up2Pay iframe.
+                    Card data now typed inside the iframe (Paybox-hosted form). The "Payer" button
+                    we used to render here is gone — Paybox provides its own inside the iframe. */}
                 <div id="payment-section">
-              <h2
-                style={{
-                  display: 'flex',
-                  width: '673px',
-                  height: '43px',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  color: '#000',
-                  fontFamily: 'Poppins',
-                  fontSize: '20px',
-                  fontStyle: 'normal',
-                  fontWeight: 500,
-                  lineHeight: '25px'
-                }}
-              >
-                Étape 2/2 - paiement sécurisé
-              </h2>
-
-              {/* Payment Method Header */}
-              <div style={{ marginTop: '28px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <p
-                  style={{
-                    width: '464px',
-                    color: '#000',
-                    textAlign: 'center',
-                    fontFamily: 'Poppins',
-                    fontSize: '16px',
-                    fontStyle: 'normal',
-                    fontWeight: 500,
-                    lineHeight: '25px',
-                    marginBottom: '20px'
-                  }}
-                >
-                  Paiement sécurisé par Crédit Agricole
-                </p>
-
-                {/* Security Disclaimer */}
-                <p
-                  style={{
-                    alignSelf: 'stretch',
-                    color: '#5C5C5C',
-                    textAlign: 'center',
-                    fontFamily: 'Poppins',
-                    fontSize: '13px',
-                    fontStyle: 'italic',
-                    fontWeight: 500,
-                    lineHeight: '22px'
-                  }}
-                >
-                  Vos données bancaires sont chiffrées par la solution Up2Pay-Crédit Agricole (cryptage SSL) et ne sont jamais stockées par ProStagesPermis
-                </p>
-
-                {/* Payment Card Logos */}
-                <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
-                  <img src="/cards.png" alt="Visa, Mastercard, Discover, American Express" style={{ width: '160px', height: '31px' }} />
-                </div>
-              </div>
-
-              {/* Payment Form */}
-              <div style={{ marginTop: '40px' }}>
-                {/* Nom sur la carte */}
-                <div className="flex items-center mb-6" style={{ position: 'relative' }}>
-                  <label
-                    style={{
-                      position: 'absolute',
-                      left: 0,
-                      color: '#000',
-                      fontFamily: 'Poppins',
-                      fontSize: '15px',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      lineHeight: '25px'
-                    }}
-                  >
-                    Nom sur la carte
-                  </label>
-                  <div style={{ marginLeft: '170px' }}>
-                    <input
-                      type="text"
-                      value={nomCarte}
-                      onChange={(e) => setNomCarte(e.target.value)}
-                      required
-                      placeholder="Nom"
-                      className="border border-black"
-                      style={{
-                        display: 'flex',
-                        width: '369px',
-                        height: '35px',
-                        padding: '7px 15px',
-                        alignItems: 'center',
-                        gap: '10px',
-                        borderRadius: '8px',
-                        border: '1px solid #000'
-                      }}
-                    />
-                  </div>
-                </div>
-
-                {/* Numéro de carte */}
-                <div className="flex items-center mb-6" style={{ position: 'relative' }}>
-                  <label
-                    style={{
-                      position: 'absolute',
-                      left: 0,
-                      color: '#000',
-                      fontFamily: 'Poppins',
-                      fontSize: '15px',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      lineHeight: '25px'
-                    }}
-                  >
-                    Numéro de carte
-                  </label>
-                  <div style={{ marginLeft: '170px' }}>
-                    <input
-                      type="text"
-                      value={numeroCarte}
-                      onChange={(e) => setNumeroCarte(e.target.value)}
-                      required
-                      placeholder="Numéro de carte"
-                      className="border border-black"
-                      style={{
-                        display: 'flex',
-                        width: '369px',
-                        height: '35px',
-                        padding: '7px 15px',
-                        alignItems: 'center',
-                        gap: '10px',
-                        borderRadius: '8px',
-                        border: '1px solid #000'
-                      }}
-                      maxLength={16}
-                    />
-                  </div>
-                </div>
-
-                {/* Date expiration */}
-                <div className="flex items-center mb-6" style={{ position: 'relative' }}>
-                  <label
-                    style={{
-                      position: 'absolute',
-                      left: 0,
-                      color: '#000',
-                      fontFamily: 'Poppins',
-                      fontSize: '15px',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      lineHeight: '25px'
-                    }}
-                  >
-                    Date d'expiration
-                  </label>
-                  <div style={{ marginLeft: '170px', display: 'flex', gap: '15px' }}>
-                    <input
-                      type="text"
-                      value={dateExpirationMois}
-                      onChange={(e) => setDateExpirationMois(e.target.value)}
-                      required
-                      placeholder="Mois"
-                      className="border border-black"
-                      style={{
-                        display: 'flex',
-                        width: '60px',
-                        height: '35px',
-                        padding: '7px 8px',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: '10px',
-                        flexShrink: 0,
-                        borderRadius: '8px',
-                        border: '1px solid #000',
-                        fontSize: '13px',
-                        fontFamily: 'Poppins',
-                        textAlign: 'center'
-                      }}
-                      maxLength={2}
-                    />
-                    <input
-                      type="text"
-                      value={dateExpirationAnnee}
-                      onChange={(e) => setDateExpirationAnnee(e.target.value)}
-                      required
-                      placeholder="Année"
-                      className="border border-black"
-                      style={{
-                        display: 'flex',
-                        width: '66px',
-                        height: '35px',
-                        padding: '7px 8px',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: '10px',
-                        flexShrink: 0,
-                        borderRadius: '8px',
-                        border: '1px solid #000',
-                        fontSize: '13px',
-                        fontFamily: 'Poppins',
-                        textAlign: 'center'
-                      }}
-                      maxLength={2}
-                    />
-                  </div>
-                </div>
-
-                {/* Code CVV */}
-                <div className="flex items-center mb-6" style={{ position: 'relative' }}>
-                  <label
-                    style={{
-                      position: 'absolute',
-                      left: 0,
-                      color: '#000',
-                      fontFamily: 'Poppins',
-                      fontSize: '15px',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      lineHeight: '25px'
-                    }}
-                  >
-                    Code (cvv)
-                  </label>
-                  <div style={{ marginLeft: '170px' }}>
-                    <input
-                      type="text"
-                      value={codeCVV}
-                      onChange={(e) => setCodeCVV(e.target.value)}
-                      required
-                      placeholder="Code"
-                      className="border border-black"
-                      style={{
-                        display: 'flex',
-                        width: '137px',
-                        height: '35px',
-                        padding: '7px 15px',
-                        alignItems: 'center',
-                        gap: '10px',
-                        flexShrink: 0,
-                        borderRadius: '8px',
-                        border: '1px solid #000'
-                      }}
-                      maxLength={3}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Price Summary - Grey Box */}
-              <div style={{ marginTop: '40px', marginLeft: '170px' }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    width: '331px',
-                    height: '129px',
-                    padding: '8px 0',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexShrink: 0,
-                    borderRadius: '15px',
-                    background: '#EFEFEF'
-                  }}
-                >
-                  {/* Date */}
-                  <div
+                  <h2
                     style={{
                       display: 'flex',
-                      height: '21px',
+                      width: '673px',
+                      height: '43px',
                       flexDirection: 'column',
                       justifyContent: 'center',
-                      flexShrink: 0,
-                      alignSelf: 'stretch',
                       color: '#000',
-                      textAlign: 'center',
                       fontFamily: 'Poppins',
-                      fontSize: '15px',
+                      fontSize: '20px',
                       fontStyle: 'normal',
                       fontWeight: 500,
-                      lineHeight: '22px'
+                      lineHeight: '25px'
                     }}
                   >
-                    Stage du {formatDate(stage.date_start, stage.date_end)} à {formatCityName(stage.site.ville)}
+                    Étape 2/2 - paiement sécurisé
+                  </h2>
+
+                  {/* Payment Method Header */}
+                  <div style={{ marginTop: '28px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <p
+                      style={{
+                        width: '464px',
+                        color: '#000',
+                        textAlign: 'center',
+                        fontFamily: 'Poppins',
+                        fontSize: '16px',
+                        fontStyle: 'normal',
+                        fontWeight: 500,
+                        lineHeight: '25px',
+                        marginBottom: '20px'
+                      }}
+                    >
+                      Paiement sécurisé par Crédit Agricole
+                    </p>
+                    <p
+                      style={{
+                        alignSelf: 'stretch',
+                        color: '#5C5C5C',
+                        textAlign: 'center',
+                        fontFamily: 'Poppins',
+                        fontSize: '13px',
+                        fontStyle: 'italic',
+                        fontWeight: 500,
+                        lineHeight: '22px'
+                      }}
+                    >
+                      Vos données bancaires sont chiffrées par la solution Up2Pay-Crédit Agricole (cryptage SSL) et ne sont jamais stockées par Twelvy
+                    </p>
+                    <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'center' }}>
+                      <img src="/cards.png" alt="Cartes acceptées" style={{ width: '160px', height: '31px' }} />
+                    </div>
                   </div>
 
-                  {/* Prix du stage */}
+                  {/* Price Summary */}
+                  <div style={{ marginTop: '32px', marginBottom: '24px', display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ background: '#F3F4F6', borderRadius: '12px', padding: '12px 20px', textAlign: 'center', maxWidth: '500px' }}>
+                      <p style={{ fontWeight: 500, marginBottom: '4px', fontSize: '14px' }}>
+                        Stage du {stage && formatDate(stage.date_start, stage.date_end)} à {stage && formatCityName(stage.site.ville)}
+                      </p>
+                      <p style={{ fontSize: '13px' }}>Prix du stage : {stage?.prix}€ TTC</p>
+                      {garantieSerenite && (
+                        <p style={{ fontSize: '13px' }}>Garantie Sérénité : +57€ TTC</p>
+                      )}
+                      <p style={{ fontWeight: 600, marginTop: '4px', fontSize: '16px' }}>
+                        Total à payer : {totalPrice}€ TTC
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Up2Pay iframe — replaces the legacy mockup card form */}
+                  <div style={{ marginTop: '20px', maxWidth: '700px', marginLeft: 'auto', marginRight: 'auto' }}>
+                    {isPreparingPayment && (
+                      <div className="text-center py-8">
+                        <div className="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-green-600" />
+                        <p className="mt-3 text-gray-600">Préparation du paiement sécurisé…</p>
+                      </div>
+                    )}
+
+                    {paymentError && !paymentData && (
+                      <div className="bg-red-50 border border-red-200 rounded-lg p-5">
+                        <p className="font-medium text-red-700">Erreur lors de la préparation du paiement</p>
+                        <p className="text-red-600 mt-2 text-sm">{paymentError}</p>
+                        <button
+                          onClick={prepareAndShowPayment}
+                          className="mt-4 bg-red-600 text-white py-2 px-5 rounded text-sm"
+                        >
+                          Réessayer
+                        </button>
+                      </div>
+                    )}
+
+                    {paymentData && <Up2PayIframe paymentData={paymentData} height={680} />}
+                  </div>
+
+                  {/* Payment Disclaimer */}
                   <div
                     style={{
                       display: 'flex',
-                      width: '189px',
-                      height: '30px',
                       flexDirection: 'column',
                       justifyContent: 'center',
-                      flexShrink: 0,
                       color: '#000',
                       textAlign: 'center',
                       fontFamily: 'Poppins',
                       fontSize: '14px',
-                      fontStyle: 'normal',
+                      fontStyle: 'italic',
                       fontWeight: 400,
-                      lineHeight: '22px'
+                      lineHeight: '22px',
+                      marginTop: '20px',
+                      width: '100%',
+                      maxWidth: '650px',
+                      marginLeft: 'auto',
+                      marginRight: 'auto'
                     }}
                   >
-                    Prix du stage : {stage?.prix}€ TTC
-                  </div>
-
-                  {/* Garantie Sérénité */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      width: '226px',
-                      height: '30px',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      color: '#000',
-                      textAlign: 'center',
-                      fontFamily: 'Poppins',
-                      fontSize: '14px',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      lineHeight: '22px'
-                    }}
-                  >
-                    Garantie Sérénité : {garantieSerenite ? '+57€ TTC' : 'N/A'}
-                  </div>
-
-                  {/* Total à payer */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      width: '227px',
-                      height: '30px',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      color: '#000',
-                      textAlign: 'center',
-                      fontFamily: 'Poppins',
-                      fontSize: '15px',
-                      fontStyle: 'normal',
-                      fontWeight: 500,
-                      lineHeight: '22px'
-                    }}
-                  >
-                    Total à payer : {garantieSerenite ? stage?.prix + 57 : stage?.prix}€ TTC
+                    Une fois le paiement confirmé, vous recevez immédiatement par email votre convocation au stage.
                   </div>
                 </div>
-
-                {/* Payment Button */}
-                <button
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={isDesktopFormEditing}
-                  style={{
-                    display: 'flex',
-                    width: '203px',
-                    height: '40px',
-                    padding: '10px 43px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '5px',
-                    flexShrink: 0,
-                    borderRadius: '30px',
-                    background: isDesktopFormEditing ? '#9CA3AF' : '#41A334',
-                    border: 'none',
-                    cursor: isDesktopFormEditing ? 'not-allowed' : 'pointer',
-                    marginTop: '20px',
-                    marginLeft: '64px'
-                  }}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
-                    <path d="M7.29167 11.4584V7.29171C7.29167 5.91037 7.8404 4.58561 8.81715 3.60886C9.7939 2.63211 11.1187 2.08337 12.5 2.08337C13.8813 2.08337 15.2061 2.63211 16.1828 3.60886C17.1596 4.58561 17.7083 5.91037 17.7083 7.29171V11.4584M5.20833 11.4584H19.7917C20.9423 11.4584 21.875 12.3911 21.875 13.5417V20.8334C21.875 21.984 20.9423 22.9167 19.7917 22.9167H5.20833C4.05774 22.9167 3.125 21.984 3.125 20.8334V13.5417C3.125 12.3911 4.05774 11.4584 5.20833 11.4584Z" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                  <div
-                    style={{
-                      display: 'flex',
-                      width: '146px',
-                      height: '21px',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                      color: '#FFF',
-                      textAlign: 'center',
-                      fontFamily: 'Poppins',
-                      fontSize: '16px',
-                      fontStyle: 'normal',
-                      fontWeight: 400,
-                      lineHeight: 'normal',
-                      letterSpacing: '1.12px'
-                    }}
-                  >
-                    Payer {garantieSerenite ? stage?.prix + 57 : stage?.prix}€ TTC
-                  </div>
-                </button>
-
-                {/* Payment Disclaimer */}
-                <div
-                  style={{
-                    display: 'flex',
-                    height: '65px',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                    color: '#000',
-                    textAlign: 'center',
-                    fontFamily: 'Poppins',
-                    fontSize: '14px',
-                    fontStyle: 'italic',
-                    fontWeight: 400,
-                    lineHeight: '22px',
-                    marginTop: '10px',
-                    marginLeft: '-170px',
-                    width: '650px'
-                  }}
-                >
-                  Après avoir cliqué sur "Payer", votre banque vous demandera une validation 3D secure. Une fois le paiement confirmé, vous recevez immédtiatement par email votre convocation au stage.
-                </div>
-              </div>
-            </div>
               </>
             )}
 
@@ -4484,6 +4157,21 @@ export default function InscriptionPage() {
       )}
       </div>
       {/* End Desktop Version */}
+
+      {/* Footer */}
+      <footer className="bg-[#343435] py-6 mt-12">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-3">
+            <a href="/qui-sommes-nous" className="text-white text-xs hover:underline">Qui sommes-nous</a>
+            <a href="https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">Aide et contact</a>
+            <a href="https://www.prostagespermis.fr/CGV_PROSTAGESPERMIS-STAGIAIRES.pdf" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">Conditions générales de vente</a>
+            <a href="/mentions-legales" className="text-white text-xs hover:underline">Mentions légales</a>
+            <a href="https://psp-copie.twelvy.net/es/" className="text-white text-xs hover:underline">Espace Client</a>
+            <a href="https://psp-copie.twelvy.net/ep/" className="text-white text-xs hover:underline">Espace Partenaire</a>
+          </div>
+          <p className="text-center text-white text-xs">{new Date().getFullYear()}©ProStagesPermis</p>
+        </div>
+      </footer>
     </div>
   )
 }

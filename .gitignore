@@ -45,3 +45,7 @@ next-env.d.ts
 # Large database dumps — never commit
 *.sql
 *.sql.gz
+
+# IPN test private key — generated locally per dev machine
+php/ipn_tests/privkey_test.pem
+php/ipn_tests/pubkey_test.pem
