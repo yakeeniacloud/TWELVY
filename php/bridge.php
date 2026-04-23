@@ -469,6 +469,7 @@ switch ($action) {
                 'PBX_LANGUE'       => UP2PAY_LANGUE,
                 'PBX_REPONDRE_A'   => UP2PAY_AUTOMATIC_RESPONSE_URL,
                 'PBX_RUF1'         => 'POST',
+                'PBX_SOURCE'       => 'RWD',                // opt into responsive iframe (FramepagepaiementRWD.cgi)
                 'PBX_EFFECTUE'     => UP2PAY_NORMAL_RETURN_URL . '?status=ok&id='     . $stagiaire_id,
                 'PBX_REFUSE'       => UP2PAY_NORMAL_RETURN_URL . '?status=refuse&id=' . $stagiaire_id,
                 'PBX_ANNULE'       => UP2PAY_NORMAL_RETURN_URL . '?status=annule&id=' . $stagiaire_id,

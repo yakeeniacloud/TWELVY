@@ -35,9 +35,11 @@ if (!defined('UP2PAY_ENV')) {
 define('UP2PAY_SITE_ID_TEST',     '1999888');
 define('UP2PAY_RANG_TEST',        '32');
 define('UP2PAY_IDENTIFIANT_TEST', '107904482');
-// Verifone TEST/preprod hosted-iFrame endpoint (MYframepagepaiement_ip.cgi).
-// Use this CGI specifically — MYchoix_pagepaiement.cgi is the redirect-only variant.
-define('UP2PAY_PAYMENT_URL_TEST', 'https://preprod-tpeweb.paybox.com/cgi/MYframepagepaiement_ip.cgi');
+// Verifone TEST/preprod hosted-iFrame endpoint — RESPONSIVE variant (RWD, 2018+).
+// FramepagepaiementRWD.cgi serves a modern HTML5 form with mobile-responsive layout,
+// jQuery UI 1.13.2, Verifone SVG logo. Activated together with PBX_SOURCE=RWD in the signed payload.
+// The legacy MYframepagepaiement_ip.cgi remains available but ships a 2010-era look (paybox2.css, no DOCTYPE).
+define('UP2PAY_PAYMENT_URL_TEST', 'https://preprod-tpeweb.paybox.com/cgi/FramepagepaiementRWD.cgi');
 define('UP2PAY_KEY_VERSION_TEST', '1');
 
 // -------------------------------------------------------------------------
@@ -47,8 +49,9 @@ define('UP2PAY_KEY_VERSION_TEST', '1');
 define('UP2PAY_SITE_ID_PROD',     '0966892');
 define('UP2PAY_RANG_PROD',        '02');
 define('UP2PAY_IDENTIFIANT_PROD', '651027368');
-// Verifone PROD hosted-iFrame endpoint (MYframepagepaiement_ip.cgi — iframe-specific).
-define('UP2PAY_PAYMENT_URL_PROD', 'https://tpeweb.paybox.com/cgi/MYframepagepaiement_ip.cgi');
+// Verifone PROD hosted-iFrame endpoint — RESPONSIVE variant (RWD, 2018+).
+// Same modern HTML5 layout as TEST. Requires PBX_SOURCE=RWD in the signed payload.
+define('UP2PAY_PAYMENT_URL_PROD', 'https://tpeweb.paybox.com/cgi/FramepagepaiementRWD.cgi');
 define('UP2PAY_KEY_VERSION_PROD', '1');
 
 // -------------------------------------------------------------------------

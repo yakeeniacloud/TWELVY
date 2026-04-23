@@ -468,6 +468,92 @@ Sans le pubkey.pem, ipn.php rejettera systématiquement (return false dans verif
 
 ---
 
+## 8.quaterdecies — Iframe RWD upgrade (24 avril) 🎨
+
+**Voir `RESUME_SESSION_24APR.md` pour le détail complet.**
+
+### Résumé
+
+Yakeen a vu pour la première fois l'iframe Paybox déployé live et a immédiatement remarqué que le design était daté (≈ 2010). Demandé une recherche sur les sites qui utilisent vraiment Up2Pay. Verdict : Verifone a livré en 2018 un endpoint **responsive** (`FramepagepaiementRWD.cgi`) qui n'apparaît dans aucun cahier des charges < V8.3, et que TOUS les plugins modernes (Magento Verifone official, Presta, Woo) utilisent par défaut.
+
+### Fix appliqué
+
+**config_paiement.php** :
+```diff
+-define('UP2PAY_PAYMENT_URL_TEST', 'https://preprod-tpeweb.paybox.com/cgi/MYframepagepaiement_ip.cgi');
++define('UP2PAY_PAYMENT_URL_TEST', 'https://preprod-tpeweb.paybox.com/cgi/FramepagepaiementRWD.cgi');
+
+-define('UP2PAY_PAYMENT_URL_PROD', 'https://tpeweb.paybox.com/cgi/MYframepagepaiement_ip.cgi');
++define('UP2PAY_PAYMENT_URL_PROD', 'https://tpeweb.paybox.com/cgi/FramepagepaiementRWD.cgi');
+```
+
+**bridge.php prepare_payment** : ajouté `'PBX_SOURCE' => 'RWD'` dans le tableau `$params` après `PBX_RUF1` et avant les URLs PBX_EFFECTUE/REFUSE/ANNULE. La fonction `bridge_compute_pbx_hmac` itère le tableau dans l'ordre donc PBX_SOURCE est automatiquement inclus dans la signature.
+
+### Différence visuelle (vérifiée par curl direct)
+
+| | Legacy `MYframepagepaiement_ip.cgi` | RWD `FramepagepaiementRWD.cgi` |
+|---|---|---|
+| HTML | `<html>` (HTML4, no DOCTYPE) | `<!DOCTYPE html>` HTML5 |
+| Stylesheet | `paybox2.css` (2010-era) | `rwd.css` + `styles.css` |
+| Mobile | Fixed pixels, `BACKGROUND='fond3.gif'` | `<meta viewport>` responsive |
+| jQuery | Vieille version | jQuery UI 1.13.2 |
+| Logo | Aucun | SVG Verifone + footer "Paiement sécurisé par Verifone" |
+| HTTP CSP | aucune | meta tag CSP frame-ancestors (NON enforced selon spec MDN) |
+
+### Re-déploiement OVH
+
+| Fichier | SHA-256 |
+|---------|---------|
+| `config_paiement.php` (8 671 octets) | `231c276b29822333097ce177dc511321fa0b45ec9ce40863e8de143bf88123d1` |
+| `bridge.php` (27 663 octets) | `c6809a1f20b1a5ae09c3915772131ff7b51eedbe032a482f7db63fdcb981bdac` |
+
+Re-download + verify byte-identique : ✅ 2/2.
+
+### Live tests post-deploy
+
+| # | Test | Résultat |
+|---|------|----------|
+| 1 | bridge.php ping | ✅ JSON success |
+| 2 | ipn.php POST bad-sig | ✅ HTTP 403 |
+| 3 | retour.php redirect | ✅ 302 vers /paiement/confirmation |
+| 4 | Fresh prepare_payment retourne `paymentUrl=...FramepagepaiementRWD.cgi` + `PBX_SOURCE=RWD` | ✅ |
+| 5 | POST signedPayload contre RWD endpoint → renvoie `<!DOCTYPE html>` + viewport meta + rwd.css + Verifone SVG logo + zero "Erreur PAYBOX" | ✅ |
+
+161 tests locaux toujours verts (zero regression).
+
+### Aucun changement Vercel/Next.js
+
+Le frontend Twelvy ne change PAS. `bridge.php prepare_payment` retourne maintenant `paymentUrl=FramepagepaiementRWD.cgi` au lieu de `MYframepagepaiement_ip.cgi`, et `<Up2PayIframe>` auto-submit le form vers cette nouvelle URL — le composant React est le même, juste le contenu de l'iframe change. Aucune modif Next.js requise pour bénéficier du nouveau design.
+
+### Pattern de bug récurrent (4ème fois)
+
+| # | Session | Bug évité par double-vérif |
+|---|---------|----------------------------|
+| 1 | 21 avr | Code review paranoïaque ipn.php → 10 issues |
+| 2 | 22 avr | Hotfix URL Up2Pay (DNS NXDOMAIN, mauvais endpoint, credentials bidons, champs 3DSv2 manquants) |
+| 3 | 22 avr | Cross-vérif pubkey contre 4 sources |
+| 4 | **24 avr** | **Iframe RWD : endpoint responsive existe depuis 2018, pas dans le cahier des charges initial** |
+
+→ Workflow renforcé : pour toute config externe (URL, identifiants, paramètres), curl direct + cross-check sur 2-3 sources documentaires officielles ET regarder les sources GitHub des plugins majeurs (Magento, Presta) qui shippent généralement les paramètres optimaux par défaut.
+
+### Réalité business
+
+Up2Pay RWD ressemble à du "2018 banking iframe" — décent, responsive, plus moderne. Mais pour atteindre du Stripe-grade, il faudrait :
+- **Up2Pay Premium** (offre Crédit Agricole) : permet logo + couleurs custom dans le back-office. Contrat à upgrader avec Kader.
+- OU **changer de gateway** entièrement (Stripe / Lyra / Adyen). Décision business hors scope étape 7-10.
+
+### Roadmap à jour
+
+| Étape | Statut |
+|-------|--------|
+| 1-7 | ✅ |
+| 7.bis (RWD upgrade) | ✅ 24 avr |
+| 8 | ⏳ Page de confirmation polling |
+| 9 | ⏳ Tests bout-en-bout sandbox + fix num_suivi |
+| 10 | ⏳ Bascule prod |
+
+---
+
 ## 8.terdecies — Étape 7 : frontend wiring (22-23 avril) 🔌
 
 **Voir `RESUME_SESSION_22APR.md` pour le détail complet.**
