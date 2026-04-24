@@ -27,13 +27,18 @@ type Props = {
  */
 export default function Up2PayIframe({ paymentData, height = 620 }: Props) {
   const formRef = useRef<HTMLFormElement>(null)
+  // Track which paymentData reference we already submitted. Without this guard,
+  // any re-render that re-runs the effect would re-submit the same payload, and
+  // Paybox returns "Session invalide ou obsolète" on the second submission.
+  const submittedForRef = useRef<PaymentData | null>(null)
   const iframeName = 'up2pay_iframe'
 
   useEffect(() => {
-    // Auto-submit the form into the iframe on mount (and whenever paymentData changes)
-    if (formRef.current) {
-      formRef.current.submit()
-    }
+    if (!formRef.current) return
+    // Skip if we already submitted THIS exact paymentData object (idempotent)
+    if (submittedForRef.current === paymentData) return
+    submittedForRef.current = paymentData
+    formRef.current.submit()
   }, [paymentData])
 
   return (
