@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import { removeStreetNumber } from '@/lib/formatAddress'
-import Up2PayIframe, { type PaymentData } from '@/components/payment/Up2PayIframe'
+import { type PaymentData } from '@/components/payment/Up2PayIframe'
 
 interface Stage {
   id: number
@@ -60,6 +60,8 @@ export default function InscriptionPage() {
   const [paymentData, setPaymentData] = useState<PaymentData | null>(null)
   const [isPreparingPayment, setIsPreparingPayment] = useState(false)
   const [paymentError, setPaymentError] = useState<string | null>(null)
+  // Option B: guards against a double create-prospect + double redirect while one is in flight.
+  const isRedirectingRef = useRef(false)
   const [nomCarte, setNomCarte] = useState('')
   const [numeroCarte, setNumeroCarte] = useState('')
   const [dateExpirationMois, setDateExpirationMois] = useState('')
@@ -378,23 +380,31 @@ export default function InscriptionPage() {
    * Sets paymentData → triggers <Up2PayIframe> render → auto-submits POST into iframe.
    */
   const prepareAndShowPayment = async () => {
+    // Double-submit / double-redirect guard (Option B navigates the browser away).
+    if (isRedirectingRef.current) return
+    isRedirectingRef.current = true
     setIsPreparingPayment(true)
     setPaymentError(null)
-    setPaymentData(null)
 
     try {
-      // Step 1 — create or update the stagiaire prospect in khapmaitpsp.stagiaire
+      // Use the LIVE selected stage (stage.id), NOT the URL param `id`. After a
+      // "Changer de date" swap, history.pushState does not refresh useParams(), so
+      // `id` would be stale and we'd book/charge the WRONG stage.
+      const currentStageId = stage && stage.id ? stage.id : parseInt(id, 10)
+
+      // Create/refresh the prospect in khapmaitpsp.stagiaire. The response carries a
+      // server-signed redirect_url to the secure PSP-copie payment page (Option B).
       const prospectResp = await fetch('/api/payment/create-prospect', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          stage_id: parseInt(id, 10),
+          stage_id: currentStageId,
           civilite,
           nom,
           prenom,
           email,
-          mobile: telephone,           // bridge.php expects "mobile", not "telephone_mobile"
-          adresse: '',                 // optional in bridge; PBX_BILLING tolerates empty in TEST
+          mobile: telephone,           // bridge.php expects "mobile"
+          adresse: '',
           code_postal: '',
           ville: '',
           date_naissance: '',
@@ -403,32 +413,30 @@ export default function InscriptionPage() {
       })
       const prospect = await prospectResp.json()
       if (!prospectResp.ok || !prospect?.success) {
-        const code = prospect?.error?.code || 'unknown'
-        const message = prospect?.error?.message || 'Erreur création prospect'
-        throw new Error(`[create-prospect] ${code}: ${message}`)
+        throw new Error('create_prospect_failed')
       }
-      const stagiaire_id = prospect?.data?.stagiaire_id
-      if (!stagiaire_id) throw new Error('[create-prospect] missing stagiaire_id in response')
-
-      // Step 2 — generate signed Up2Pay payment params
-      const prepareResp = await fetch('/api/payment/prepare', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stagiaire_id }),
-      })
-      const prepare = await prepareResp.json()
-      if (!prepareResp.ok || !prepare?.success) {
-        const code = prepare?.error?.code || 'unknown'
-        const message = prepare?.error?.message || 'Erreur préparation paiement'
-        throw new Error(`[prepare_payment] ${code}: ${message}`)
+      const redirectUrl = prospect?.data?.redirect_url
+      if (!redirectUrl || typeof redirectUrl !== 'string') {
+        throw new Error('missing_redirect_url')
+      }
+      // Defense-in-depth: never navigate off an allowlisted origin (our own domains
+      // over HTTPS), so a wrong/compromised API can't open-redirect the customer.
+      const u = new URL(redirectUrl)
+      const okHost = u.protocol === 'https:' &&
+        (u.hostname.endsWith('.twelvy.net') || u.hostname.endsWith('.prostagespermis.fr'))
+      if (!okHost) {
+        throw new Error('bad_redirect_origin')
       }
 
-      setPaymentData(prepare.data as PaymentData)
+      // Full-page navigation to the secure payment page (replaces the old Up2Pay iframe).
+      // Keep the spinner up (do NOT reset isPreparingPayment) so the trigger stays
+      // disabled while the browser navigates away.
+      window.location.href = redirectUrl
     } catch (err) {
-      console.error('Payment preparation failed:', err)
-      setPaymentError(err instanceof Error ? err.message : 'Erreur réseau')
-    } finally {
+      console.error('Payment redirect preparation failed:', err)
+      setPaymentError('Une erreur est survenue lors de la préparation du paiement. Veuillez réessayer.')
       setIsPreparingPayment(false)
+      isRedirectingRef.current = false
     }
   }
 
@@ -1184,7 +1192,7 @@ export default function InscriptionPage() {
             {isPreparingPayment && (
               <div className="text-center py-8">
                 <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600" />
-                <p className="mt-3 text-sm text-gray-600">Préparation du paiement sécurisé…</p>
+                <p className="mt-3 text-sm text-gray-600">Redirection vers le paiement sécurisé…</p>
               </div>
             )}
 
@@ -1201,7 +1209,7 @@ export default function InscriptionPage() {
               </div>
             )}
 
-            {paymentData && <Up2PayIframe paymentData={paymentData} height={620} />}
+            {/* Option B: card entry happens on the redirected PSP-copie payment page — no inline iframe. */}
 
             <p className="text-center italic" style={{ fontSize: '13px', marginTop: '16px', marginBottom: '16px' }}>
               Une fois le paiement confirmé, vous recevez immédiatement par email votre convocation au stage.
@@ -3111,7 +3119,7 @@ export default function InscriptionPage() {
                     {isPreparingPayment && (
                       <div className="text-center py-8">
                         <div className="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-green-600" />
-                        <p className="mt-3 text-gray-600">Préparation du paiement sécurisé…</p>
+                        <p className="mt-3 text-gray-600">Redirection vers le paiement sécurisé…</p>
                       </div>
                     )}
 
@@ -3128,7 +3136,7 @@ export default function InscriptionPage() {
                       </div>
                     )}
 
-                    {paymentData && <Up2PayIframe paymentData={paymentData} height={680} />}
+                    {/* Option B: card entry happens on the redirected PSP-copie payment page — no inline iframe. */}
                   </div>
 
                   {/* Payment Disclaimer */}

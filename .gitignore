@@ -49,3 +49,8 @@ next-env.d.ts
 # IPN test private key — generated locally per dev machine
 php/ipn_tests/privkey_test.pem
 php/ipn_tests/pubkey_test.pem
+
+# Twelvy payment — never commit the filled secret or local server backups
+php/psp-copie/twelvy_secret.php
+**/twelvy_secret.php
+php/_backups/
