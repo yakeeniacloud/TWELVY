@@ -51,8 +51,11 @@
     require_once APP . "payment/Utils/SessionManage.php";
     require_once APP . 'order/services/RetrieveFullOrderByStageStudent.php';
     require_once APP . 'order/services/GenerateReferenceOrder.php';
-    require_once APP . 'payment/services/email/SendTicketPaymentEmail.php';
-    require_once APP . 'payment/services/email/SendPaymentSuccessEmail.php';
+    // Twelvy: email-sender classes (SendTicketPaymentEmail / SendPaymentSuccessEmail /
+    // SendAdminTransactionSuccessInError) are loaded LAZILY at their DEBUG-guarded call sites
+    // below. Several require_once mails_v3/* at FILE scope (functions.php, mail_inscription.php)
+    // which are NOT deployed here — requiring them at the top fatals the handler on EVERY request.
+    // In sandbox the email subsystem stays completely inert; in prod the call sites load it.
     require_once APP . 'payment/services/UpdateStagePaymentData.php';
     require_once APP . 'stage/services/IsStagePlaceAvailableForSale.php';
     require_once APP . 'upsell/services/RetrieveNextUpSellToPay.php';
@@ -61,8 +64,13 @@
     require_once APP . 'upsell/services/RetrieveUpsellById.php';
     require_once APP . 'student/services/RetrieveStudentById.php';
     require_once APP . 'Api/Sms/sendSMS.php';
-    require_once ROOT . '/mails_v3/mail_echec_paiement.php';
-    require_once APP . 'payment/emails/SendAdminTransactionSuccessInError.php';
+    // Twelvy ROOT-CAUSE FIX (infinite "Veuillez patienter…"): mail_echec_paiement.php is NOT
+    // deployed on psp-copie AND its PSP original hardcodes a /Users/yakeen dev path. A missing
+    // require_once is a fatal that killed this handler BEFORE any payment logic — after the
+    // "Veuillez patienter…" HTML was already flushed — so the page span forever on the animated
+    // loading.gif and the customer was never charged nor redirected. Load it only if present;
+    // the call site is function_exists-guarded so its absence can never fatal this handler.
+    if (file_exists(ROOT . '/mails_v3/mail_echec_paiement.php')) { include_once ROOT . '/mails_v3/mail_echec_paiement.php'; }
     require_once APP . 'student/services/UpdateOneFieldStudent.php';
     require_once APP . 'payment/repositories/TrackingPathUserRepository.php';
     require_once APP . 'payment/repositories/TrackingUserPaymentErrorCode.php';
@@ -216,7 +224,9 @@
                 $data['id_stage'] = $stageId;
                 $data['id_stagiaire'] = $studentId;
                 $data['errorMsg'] = $errorMsg;
-                mail_echec_paiement($data);
+                // Best-effort failure email — never let a missing template / dead SMTP hang the
+                // refuse-redirect. Skipped in sandbox (DEBUG); guarded for prod.
+                if (!DEBUG && function_exists('mail_echec_paiement')) { try { @mail_echec_paiement($data); } catch (\Exception $e) {} }
 
                 $updateOneFieldStudent = new UpdateOneFieldStudent();
                 $updateOneFieldStudent->__invoke($studentId, 'up2pay_code_error', $codereponseFlat, $mysqli);
@@ -275,20 +285,24 @@
 
                 $Error_Etransaction = new E_TransactionError();
                 if ($Error_Etransaction->transactionSuccessInError($msg, $commentaire)) {
-                    (new SendAdminTransactionSuccessInError())->execute($studentId, $mysqli);
+                    // Best-effort admin alert — guarded so it can't hang/crash the success path.
+                    if (!DEBUG) { try { require_once APP . 'payment/emails/SendAdminTransactionSuccessInError.php'; (new SendAdminTransactionSuccessInError())->execute($studentId, $mysqli); } catch (\Exception $e) {} }
                 }
 
                 $logCommission->loggingCommission($studentId, $stageId, $stage->partenariat, $stage->stage_commission);
 
-                (new SendTicketPaymentEmail())->__invoke(
-                    $reference,
-                    $autorisation,
-                    $amount,
-                    $email
-                );
+                // Best-effort customer ticket email (PHPMailer/SMTP). Skipped in sandbox (DEBUG) so a
+                // dead/slow SMTP can NEVER hang BEFORE the critical UpdateStagePaymentData DB write below.
+                if (!DEBUG) {
+                    try {
+                        require_once APP . 'payment/services/email/SendTicketPaymentEmail.php';
+                        (new SendTicketPaymentEmail())->__invoke($reference, $autorisation, $amount, $email);
+                    } catch (\Exception $e) {}
+                }
 
                 // TODO update webservice RPPC after complete information,
-
+                // CRITICAL: marks the booking paid (numappel/numtrans/status=inscrit). The Twelvy
+                // confirmation page reads THIS via /api/payment/status — it must always run.
                 (new UpdateStagePaymentData())->__invoke(
                     $stageId,
                     $studentId,
@@ -312,10 +326,21 @@
 
                 (new TrackingPathUserRepository($mysqli))->addTracking('process_payment_return_success', 'id_stagiaire', $studentId);
 
-                if (in_array($email, $emails_de_tests)) {
-                    require_once ROOT . '/mails_v3/mail_inscription.php';
-                    mail_inscription($studentId);
-                } else (new SendPaymentSuccessEmail())->__invoke($studentId, $stage->member_id);
+                // Best-effort confirmation email. SendPaymentSuccessEmail internally
+                // require_once's mails_v3/mail_inscription.php — NOT deployed on psp-copie — which
+                // would be a non-catchable fatal on the success path. Skipped in sandbox (DEBUG);
+                // for prod, deploy the mails_v3/* templates + verify SMTP before flipping DEBUG.
+                if (!DEBUG) {
+                    try {
+                        if (in_array($email, $emails_de_tests) && file_exists(ROOT . '/mails_v3/mail_inscription.php')) {
+                            require_once ROOT . '/mails_v3/mail_inscription.php';
+                            if (function_exists('mail_inscription')) { mail_inscription($studentId); }
+                        } else {
+                            require_once APP . 'payment/services/email/SendPaymentSuccessEmail.php';
+                            (new SendPaymentSuccessEmail())->__invoke($studentId, $stage->member_id);
+                        }
+                    } catch (\Exception $e) {}
+                }
 
                 if ($isOrderBump == 1) {
                     $upsellOrderBump = (new RetrieveUpsellById())->__invoke($funnel->order_bump_id, $mysqli);
