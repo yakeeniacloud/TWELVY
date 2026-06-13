@@ -82,11 +82,14 @@ if (!$row) { http_response_code(404); exit('Réservation introuvable.'); }
 
 // Already paid? → straight to the confirmation page (no double charge).
 // empty() (not !== '') so a NULL numappel/numtrans isn't mistaken for "paid"; require supprime=0.
+// &already=1 is a COSMETIC hint so the confirmation page shows "Vous avez déjà réservé ce stage"
+// instead of a fresh "Merci, paiement confirmé" (this booking was paid on a PRIOR visit, not now).
+// The authoritative paid/refuse state still comes only from the token-verified status poll.
 if ($row['status'] === 'inscrit' && !empty($row['numappel']) && !empty($row['numtrans']) && (int)$row['supprime'] === 0) {
     $confExp = time() + 7200;
     $confKey = hash_hmac('sha256', 'twelvy-conf-v1', TWELVY_HANDOFF_SECRET);
     $t = hash_hmac('sha256', $studentId . '|conf|' . $confExp, $confKey);
-    header('Location: https://www.twelvy.net/paiement/confirmation?id=' . $studentId . '&status=ok&t=' . $t . '&te=' . $confExp);
+    header('Location: https://www.twelvy.net/paiement/confirmation?id=' . $studentId . '&status=ok&already=1&t=' . $t . '&te=' . $confExp);
     exit;
 }
 

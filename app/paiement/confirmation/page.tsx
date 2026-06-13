@@ -39,6 +39,10 @@ function ConfirmationInner() {
   const id = params.get('id') || ''
   const sig = params.get('t') || ''
   const exp = params.get('te') || ''
+  // Cosmetic hint set by twelvy_payment.php when the booking was ALREADY paid on a prior visit
+  // (the already-paid double-charge guard) — so we frame it as "déjà réservé" instead of a fresh
+  // "merci, paiement confirmé". The real paid/refuse state still comes only from the verified poll.
+  const already = params.get('already') === '1'
 
   const [data, setData] = useState<StatusData | null>(null)
   const [phase, setPhase] = useState<'loading' | 'paye' | 'refuse' | 'pending_timeout' | 'error'>('loading')
@@ -106,8 +110,14 @@ function ConfirmationInner() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h1 className="mt-5 text-2xl font-bold text-gray-900">Merci{prenom ? ` ${prenom}` : ''} !</h1>
-            <p className="mt-2 text-gray-600">Votre paiement a bien été confirmé.</p>
+            <h1 className="mt-5 text-2xl font-bold text-gray-900">
+              {already ? 'Vous avez déjà réservé ce stage' : `Merci${prenom ? ` ${prenom}` : ''} !`}
+            </h1>
+            <p className="mt-2 text-gray-600">
+              {already
+                ? 'Votre inscription à ce stage est déjà confirmée — vous n’avez pas été débité de nouveau.'
+                : 'Votre paiement a bien été confirmé.'}
+            </p>
             {ref ? (
               <p className="mt-1 text-sm text-gray-500">
                 Référence de réservation : <span className="font-semibold text-gray-700">{ref}</span>
