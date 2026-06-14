@@ -123,6 +123,17 @@ $h = function ($v) { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 $j = function ($v) { return json_encode($v, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); };
 $prix    = (int)$row['prix'];
 $dateTxt = $row['date1'];
+
+// Twelvy (Problem 2 — "message au niveau du bloc CB"): a declined/failed payment redirects BACK here;
+// twelvy_validate.php left the precise reason in $_SESSION['paiement_error']. That value is ALWAYS HTML
+// built server-side — E_TransactionError::getFullTextErrorCodes() (a fixed code→message lookup table) or
+// a hardcoded literal — so it carries NO user input and NO card data. We render it as trusted HTML, but
+// pass it through strip_tags with a formatting-only allowlist as defense-in-depth, and consume it once.
+$paiementError = '';
+if (isset($_SESSION['paiement_error']) && is_string($_SESSION['paiement_error']) && $_SESSION['paiement_error'] !== '') {
+    $paiementError = strip_tags($_SESSION['paiement_error'], '<u><br><b><strong><div><p><span>');
+    unset($_SESSION['paiement_error']);
+}
 ?><!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -146,6 +157,8 @@ $dateTxt = $row['date1'];
   .btn{width:100%;height:50px;border:none;border-radius:30px;background:var(--tw-green);color:#fff;font-size:16px;font-weight:600;margin-top:20px;cursor:pointer}
   .btn:disabled{opacity:.6;cursor:default}
   #rowError{display:none;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:10px;padding:10px;font-size:13px;margin-top:12px}
+  .pay-error{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:10px;padding:12px 14px;font-size:13.5px;line-height:1.45;margin-bottom:16px}
+  .pay-error u{text-decoration:underline}
   .secure{text-align:center;color:#6b7280;font-size:12px;margin-top:14px}
   #loading-overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,.75);z-index:9999;align-items:center;justify-content:center}
   #loading-overlay .spin{width:46px;height:46px;border:4px solid #e5e7eb;border-bottom-color:var(--tw-green);border-radius:50%;animation:r 1s linear infinite}
@@ -162,6 +175,10 @@ $dateTxt = $row['date1'];
       <div>Stage du <?php echo $h($dateTxt); ?></div>
       <div class="total">Total à payer : <?php echo $h($prix); ?> € TTC</div>
     </div>
+
+    <?php if ($paiementError !== '') { /* trusted server-built HTML (getFullTextErrorCodes), strip_tags'd above */ ?>
+      <div class="pay-error" role="alert"><?php echo $paiementError; ?></div>
+    <?php } ?>
 
     <form id="paiement_gae_div" onsubmit="return false;">
       <label for="cardNumber">Numéro de carte</label>

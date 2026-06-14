@@ -371,10 +371,24 @@
     $mysqli->close();
     if (isset($studentId) && intval($studentId) > 0) {
         $tw_status = (strpos($page_redirection, 'recap') !== false || $page_redirection === '') ? 'refuse' : 'ok';
-        $tw_exp = time() + 7200;
-        $tw_ck = hash_hmac('sha256', 'twelvy-conf-v1', TWELVY_HANDOFF_SECRET);
-        $tw_t = hash_hmac('sha256', intval($studentId) . '|conf|' . $tw_exp, $tw_ck);
-        echo "<script>location.href = 'https://www.twelvy.net/paiement/confirmation?id=" . intval($studentId) . "&status=" . $tw_status . "&t=" . $tw_t . "&te=" . $tw_exp . "';</script>";
+        if ($tw_status === 'refuse') {
+            // Twelvy (Problem 2 — cahier "message au bloc CB"): a DECLINED/failed payment goes BACK to the
+            // card form, where $_SESSION['paiement_error'] (built above by E_TransactionError::getFullTextErrorCodes)
+            // is shown as a banner so the customer reads the precise reason and retries IN-CONTEXT — exactly like
+            // PSP's legacy redirect to page_recap.php. Mint a FRESH 15-min handoff token in the same scheme
+            // twelvy_payment.php verifies: HMAC-SHA256 of "<id>|<exp>" with the derived 'twelvy-handoff-v1' subkey.
+            // HOST is a server constant (twelvy_env.php), NOT user input → no open-redirect. The booking is still
+            // pre-inscrit (decline set no numappel/numtrans) so twelvy_payment.php's already-paid guard won't fire.
+            $rk_exp = time() + 900;
+            $rk_key = hash_hmac('sha256', 'twelvy-handoff-v1', TWELVY_HANDOFF_SECRET);
+            $rk_sig = hash_hmac('sha256', intval($studentId) . '|' . $rk_exp, $rk_key);
+            echo "<script>location.href = '" . HOST . "/twelvy_payment.php?s=" . intval($studentId) . "&exp=" . $rk_exp . "&sig=" . $rk_sig . "';</script>";
+        } else {
+            $tw_exp = time() + 7200;
+            $tw_ck = hash_hmac('sha256', 'twelvy-conf-v1', TWELVY_HANDOFF_SECRET);
+            $tw_t = hash_hmac('sha256', intval($studentId) . '|conf|' . $tw_exp, $tw_ck);
+            echo "<script>location.href = 'https://www.twelvy.net/paiement/confirmation?id=" . intval($studentId) . "&status=" . $tw_status . "&t=" . $tw_t . "&te=" . $tw_exp . "';</script>";
+        }
     } else {
         echo "<script>location.href = 'https://www.twelvy.net/';</script>";
     }
