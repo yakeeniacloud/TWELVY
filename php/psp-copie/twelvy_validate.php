@@ -131,7 +131,11 @@
 
             $isPlaceAvailableForSale = (new IsStagePlaceAvailableForSale())->__invoke($stageId, $mysqli);
             $stage = (new RetrieveFullOrderByStageStudent())->__invoke($studentId, $stageId, $mysqli);
-            $amount = $stage->paiement;
+            // Twelvy (Problem 3): the PPPS CAPTURE must equal base + Garantie Sérénité — the same total
+            // the card page displayed and RemoteMPI authorised (payment.js Amount = (paiement+garantie)*100).
+            // $stage comes from stagiaire.* so total_guarantee is present (0/NULL when not taken). Without
+            // this, 3DS would authorise base+garantie but capture only the base → garantie never charged.
+            $amount = round((float)$stage->paiement + (float)$stage->total_guarantee, 2);
 
             $arrReference = (new GenerateReferenceOrder())->__invoke($studentId, $mysqli);
             $isAlreadyBuyStage = false;
