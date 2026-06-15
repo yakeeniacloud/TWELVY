@@ -69,6 +69,8 @@ export async function GET(request: NextRequest) {
         status: d.status, // paye | refuse | en_attente
         prenom: d.stagiaire?.prenom,
         facture_num: d.stagiaire?.facture_num,
+        montant_total: d.stagiaire?.montant_total, // base + Garantie Sérénité (what was actually paid)
+        total_guarantee: d.stagiaire?.total_guarantee,
         errorCategory: d.errorCategory,
         errorMessage: d.errorMessage,
         stage: {

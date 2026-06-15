@@ -235,6 +235,25 @@ function bridge_classify_up2pay_error($code) {
     return array('category' => 'erreur_inconnue', 'message' => 'Une erreur est survenue lors du paiement. Code : ' . $code);
 }
 
+/**
+ * Garantie Sérénité config — single source of truth = PSP's `cancel_guarantee_params` table
+ * (admin-managed in simpligestion → Garantie Sérénité). Returns {active, price}. Used by BOTH the
+ * guarantee_params action (the form's displayed price) AND create_or_update_prospect (the charged
+ * amount) so the displayed price and the charged price can never disagree. The client NEVER supplies
+ * the price — only the on/off boolean.
+ */
+function bridge_guarantee_config($pdo) {
+    $active = false; $price = 0.0;
+    try {
+        $rows = $pdo->query("SELECT param_key, param_value FROM cancel_guarantee_params WHERE param_key IN ('active','price')")->fetchAll();
+        foreach ($rows as $r) {
+            if ($r['param_key'] === 'active') { $active = ((string)$r['param_value'] === '1'); }
+            if ($r['param_key'] === 'price')  { $price  = is_numeric($r['param_value']) ? round((float)$r['param_value'], 2) : 0.0; }
+        }
+    } catch (Exception $e) { /* table absent / error → garantie simply unavailable */ }
+    return array('active' => $active, 'price' => $price);
+}
+
 // -------------------------------------------------------------------------
 // Step 8 — Read action from query string (and optionally body for POST)
 // -------------------------------------------------------------------------
@@ -266,6 +285,15 @@ switch ($action) {
             'timestamp'    => date('c'),          // ISO-8601 with timezone
             'bridge_ready' => true,
         ), 200);
+        break;
+
+    // ---------------------------------------------------------------------
+    // guarantee_params — Garantie Sérénité price + active flag (drives the form display).
+    // Same source the charge reads → display and debit can never disagree.
+    // ---------------------------------------------------------------------
+    case 'guarantee_params':
+        $g = bridge_guarantee_config(bridge_db());
+        bridge_send_success(array('active' => $g['active'], 'price' => $g['price']), 200);
         break;
 
     // ---------------------------------------------------------------------
@@ -310,31 +338,66 @@ switch ($action) {
                 bridge_send_error('stage_not_found', 404, array('stage_id' => $stage_id));
             }
 
+            // Garantie Sérénité (Problem 3) — SERVER-AUTHORITATIVE amount. The client sends only the
+            // boolean `with_guarantee`; the price comes from PSP's admin config (cancel_guarantee_params),
+            // never from the client. PSP keeps the garantie SEPARATE: `paiement` = base stage price,
+            // `total_guarantee` = the garantie amount (0 if not taken / not active). The card page charges
+            // paiement + total_guarantee; the Espace Stagiaire honours it via total_guarantee > 0.
+            $with_guarantee = isset($body['with_guarantee'])
+                && $body['with_guarantee'] !== false && $body['with_guarantee'] !== 'false'
+                && $body['with_guarantee'] !== 0 && $body['with_guarantee'] !== '0' && $body['with_guarantee'] !== '';
+            $g = bridge_guarantee_config($pdo);
+            $total_guarantee = ($g['active'] && $with_guarantee) ? round($g['price'], 2) : 0.0;
+            $paiement = round((float)$stage['prix'], 2); // BASE stage price only
+
             // Check if a prospect already exists for this email + stage_id
-            $stmt = $pdo->prepare("SELECT id FROM stagiaire WHERE email = :email AND id_stage = :sid LIMIT 1");
+            $stmt = $pdo->prepare("SELECT id, status, numappel, numtrans FROM stagiaire WHERE email = :email AND id_stage = :sid LIMIT 1");
             $stmt->execute(array(':email' => $email, ':sid' => $stage_id));
             $existing = $stmt->fetch();
 
             $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
 
             if ($existing) {
-                // UPDATE existing prospect (refresh data + reset to pre-inscrit if not paid)
-                $stmt = $pdo->prepare(
-                    "UPDATE stagiaire SET
-                        civilite = :civilite, nom = :nom, prenom = :prenom,
-                        mobile = :mobile, adresse = :adresse, code_postal = :cp,
-                        ville = :ville, date_naissance = :dnais,
-                        autoriseDonneesPersonnelles = :cgv,
-                        ip = :ip, last_timestamp = NOW()
-                     WHERE id = :id"
-                );
-                $stmt->execute(array(
-                    ':civilite' => $civilite, ':nom' => $nom, ':prenom' => $prenom,
-                    ':mobile' => $mobile, ':adresse' => $adresse, ':cp' => $code_postal,
-                    ':ville' => $ville, ':dnais' => $date_naiss,
-                    ':cgv' => $cgv_ok, ':ip' => $ip,
-                    ':id' => $existing['id'],
-                ));
+                // Never mutate the amount/garantie of an ALREADY-PAID booking — it would corrupt the
+                // charged record + the honouring flag. Refresh paiement/total_guarantee only when unpaid.
+                $existing_paid = ($existing['status'] === 'inscrit' && !empty($existing['numappel']) && !empty($existing['numtrans']));
+                if ($existing_paid) {
+                    $stmt = $pdo->prepare(
+                        "UPDATE stagiaire SET
+                            civilite = :civilite, nom = :nom, prenom = :prenom,
+                            mobile = :mobile, adresse = :adresse, code_postal = :cp,
+                            ville = :ville, date_naissance = :dnais,
+                            autoriseDonneesPersonnelles = :cgv,
+                            ip = :ip, last_timestamp = NOW()
+                         WHERE id = :id"
+                    );
+                    $stmt->execute(array(
+                        ':civilite' => $civilite, ':nom' => $nom, ':prenom' => $prenom,
+                        ':mobile' => $mobile, ':adresse' => $adresse, ':cp' => $code_postal,
+                        ':ville' => $ville, ':dnais' => $date_naiss,
+                        ':cgv' => $cgv_ok, ':ip' => $ip,
+                        ':id' => $existing['id'],
+                    ));
+                } else {
+                    $stmt = $pdo->prepare(
+                        "UPDATE stagiaire SET
+                            civilite = :civilite, nom = :nom, prenom = :prenom,
+                            mobile = :mobile, adresse = :adresse, code_postal = :cp,
+                            ville = :ville, date_naissance = :dnais,
+                            autoriseDonneesPersonnelles = :cgv,
+                            paiement = :paiement, total_guarantee = :tg,
+                            ip = :ip, last_timestamp = NOW()
+                         WHERE id = :id"
+                    );
+                    $stmt->execute(array(
+                        ':civilite' => $civilite, ':nom' => $nom, ':prenom' => $prenom,
+                        ':mobile' => $mobile, ':adresse' => $adresse, ':cp' => $code_postal,
+                        ':ville' => $ville, ':dnais' => $date_naiss,
+                        ':cgv' => $cgv_ok, ':ip' => $ip,
+                        ':paiement' => $paiement, ':tg' => $total_guarantee,
+                        ':id' => $existing['id'],
+                    ));
+                }
                 $stagiaire_id = (int)$existing['id'];
             } else {
                 // INSERT new prospect
@@ -344,21 +407,21 @@ switch ($action) {
                         adresse, code_postal, ville, date_naissance,
                         date_inscription, date_preinscription, datetime_preinscription,
                         status, supprime, paiement, ip,
-                        autoriseDonneesPersonnelles, provenance_site
+                        autoriseDonneesPersonnelles, provenance_site, total_guarantee
                      ) VALUES (
                         :sid, :civilite, :nom, :prenom, :email, :mobile,
                         :adresse, :cp, :ville, :dnais,
                         '0000-00-00', CURDATE(), NOW(),
-                        'pre-inscrit', 0, :prix, :ip,
-                        :cgv, 1
+                        'pre-inscrit', 0, :paiement, :ip,
+                        :cgv, 1, :tg
                      )"
                 );
                 $stmt->execute(array(
                     ':sid' => $stage_id, ':civilite' => $civilite, ':nom' => $nom,
                     ':prenom' => $prenom, ':email' => $email, ':mobile' => $mobile,
                     ':adresse' => $adresse, ':cp' => $code_postal, ':ville' => $ville,
-                    ':dnais' => $date_naiss, ':prix' => (int)$stage['prix'],
-                    ':ip' => $ip, ':cgv' => $cgv_ok,
+                    ':dnais' => $date_naiss, ':paiement' => $paiement,
+                    ':ip' => $ip, ':cgv' => $cgv_ok, ':tg' => $total_guarantee,
                 ));
                 $stagiaire_id = (int)$pdo->lastInsertId();
             }
@@ -512,7 +575,7 @@ switch ($action) {
         try {
             $stmt = $pdo->prepare(
                 "SELECT s.id, s.nom, s.prenom, s.email, s.status, s.numappel, s.numtrans,
-                        s.paiement, s.up2pay_status, s.up2pay_code_error,
+                        s.paiement, s.total_guarantee, s.up2pay_status, s.up2pay_code_error,
                         s.date_inscription, s.facture_num,
                         st.id AS stage_id, st.date1 AS date_debut, st.date2 AS date_fin, st.prix,
                         si.nom AS lieu_nom, si.adresse AS lieu_adresse,
@@ -552,7 +615,9 @@ switch ($action) {
                     'nom'      => $row['nom'],
                     'prenom'   => $row['prenom'],
                     'email'    => $row['email'],
-                    'paiement' => (int)$row['paiement'],
+                    'paiement' => (float)$row['paiement'],
+                    'total_guarantee' => (float)$row['total_guarantee'],
+                    'montant_total'   => round((float)$row['paiement'] + (float)$row['total_guarantee'], 2),
                     'facture_num' => (int)$row['facture_num'],
                 ),
                 'stage' => array(

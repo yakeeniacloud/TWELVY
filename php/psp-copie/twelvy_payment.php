@@ -70,7 +70,7 @@ if (!isset($mysqli) || $mysqli->connect_errno) { http_response_code(500); exit('
 // OVH PHP 5.6 has no mysqlnd → mysqli_stmt::get_result() is unavailable. $studentId is a
 // strictly-validated integer (ctype_digit + (int) cast above) so a direct query is injection-safe.
 $sql = "SELECT s.id, s.id_stage, s.email, s.nom, s.prenom, s.adresse, s.code_postal, s.ville,
-               s.mobile, s.paiement, s.status, s.numappel, s.numtrans, s.supprime,
+               s.mobile, s.paiement, s.total_guarantee, s.status, s.numappel, s.numtrans, s.supprime,
                st.prix, st.id_membre, st.date1, st.date2
         FROM stagiaire s
         INNER JOIN stage st ON st.id = s.id_stage
@@ -95,8 +95,12 @@ if ($row['status'] === 'inscrit' && !empty($row['numappel']) && !empty($row['num
 
 $stageId  = (int)$row['id_stage'];
 $memberId = (int)$row['id_membre'];
-$amount   = (int)$row['paiement'];          // euros — payment.js does *100. Set by bridge = stage.prix.
-if ($amount <= 0) { $amount = (int)$row['prix']; }
+// Charge = base stage price (paiement) + Garantie Sérénité (total_guarantee — server-set by the bridge
+// from the admin config; 0 if not taken). Floats preserve cents; payment.js multiplies by 100.
+$basePaiement = (float)$row['paiement'];
+if ($basePaiement <= 0) { $basePaiement = (float)$row['prix']; }
+$garantie = (float)$row['total_guarantee'];
+$amount   = round($basePaiement + $garantie, 2);
 
 // --- 6. Ensure the order_stage row exists (PSP's own creator) --------------------
 // PSP's payment chain INNER-JOINs order_stage; create it once, idempotently.
@@ -123,6 +127,8 @@ $h = function ($v) { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 $j = function ($v) { return json_encode($v, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); };
 $prix    = (int)$row['prix'];
 $dateTxt = $row['date1'];
+// Price formatter: whole → "239", with cents → "239,50".
+$fmtPrice = function ($v) { $v = round((float)$v, 2); return (floor($v) == $v) ? (string)(int)$v : number_format($v, 2, ',', ''); };
 
 // Twelvy (Problem 2 — "message au niveau du bloc CB"): a declined/failed payment redirects BACK here;
 // twelvy_validate.php left the precise reason in $_SESSION['paiement_error']. That value is ALWAYS HTML
@@ -173,7 +179,8 @@ if (isset($_SESSION['paiement_error']) && is_string($_SESSION['paiement_error'])
     <div class="sub">Paiement chiffré — Crédit Agricole / Up2Pay e-Transactions</div>
     <div class="recap">
       <div>Stage du <?php echo $h($dateTxt); ?></div>
-      <div class="total">Total à payer : <?php echo $h($prix); ?> € TTC</div>
+      <div style="font-size:13px;color:#6b7280;margin-top:4px">Stage : <?php echo $h($fmtPrice($basePaiement)); ?> €<?php if ($garantie > 0.005) { ?>&nbsp; ·&nbsp; Garantie Sérénité : +<?php echo $h($fmtPrice($garantie)); ?> €<?php } ?></div>
+      <div class="total">Total à payer : <?php echo $h($fmtPrice($amount)); ?> € TTC</div>
     </div>
 
     <?php if ($paiementError !== '') { /* trusted server-built HTML (getFullTextErrorCodes), strip_tags'd above */ ?>
@@ -199,7 +206,7 @@ if (isset($_SESSION['paiement_error']) && is_string($_SESSION['paiement_error'])
 
       <div id="rowError"></div>
 
-      <button type="button" class="btn" onclick="Payment.paymentWithCard(event)">Payer <?php echo $h($prix); ?> € TTC</button>
+      <button type="button" class="btn" onclick="Payment.paymentWithCard(event)">Payer <?php echo $h($fmtPrice($amount)); ?> € TTC</button>
     </form>
 
     <div class="secure">🔒 Vos données bancaires ne sont jamais stockées par Twelvy.</div>

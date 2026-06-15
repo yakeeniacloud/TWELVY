@@ -41,6 +41,10 @@ export default function InscriptionPage() {
   const [email, setEmail] = useState('')
   const [telephone, setTelephone] = useState('')
   const [garantieSerenite, setGarantieSerenite] = useState(false)
+  // Garantie Sérénité config (Problem 3) — fetched from /api/payment/guarantee, the SAME PSP admin
+  // config the bridge charges from, so the displayed +X€ and the debited amount can never disagree.
+  const [garantiePrice, setGarantiePrice] = useState(57)
+  const [garantieActive, setGarantieActive] = useState(true)
   const [cgvAccepted, setCgvAccepted] = useState(false)
 
   // Form validation errors
@@ -108,6 +112,23 @@ export default function InscriptionPage() {
   const stageCardRef = useRef<HTMLDivElement>(null)
   const paymentSectionRef = useRef<HTMLDivElement>(null)
   const payerButtonRef = useRef<HTMLButtonElement>(null)
+
+  // Garantie Sérénité: load the live price + active flag (config-driven, never hardcoded).
+  useEffect(() => {
+    let cancelled = false
+    fetch('/api/payment/guarantee')
+      .then((r) => r.json())
+      .then((j) => {
+        if (cancelled || !j?.success || !j.data) return
+        const active = !!j.data.active
+        const price = Number(j.data.price) || 0
+        setGarantieActive(active)
+        setGarantiePrice(price)
+        if (!active) setGarantieSerenite(false) // can't subscribe to a disabled option
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [])
 
   useEffect(() => {
     async function fetchStage() {
@@ -409,6 +430,7 @@ export default function InscriptionPage() {
           ville: '',
           date_naissance: '',
           cgv_accepted: cgvAccepted,
+          with_guarantee: garantieSerenite && garantieActive, // server re-validates active + owns the price
         }),
       })
       const prospect = await prospectResp.json()
@@ -551,7 +573,7 @@ export default function InscriptionPage() {
   }
 
   // Calculate sticky states
-  const totalPrice = garantieSerenite ? (stage?.prix || 0) + 57 : (stage?.prix || 0)
+  const totalPrice = (garantieSerenite && garantieActive) ? (stage?.prix || 0) + garantiePrice : (stage?.prix || 0)
 
   // Determine which sticky to show (CAS logic)
   // STICKY 1a (MOBILE2 - no button): Form NOT validated, stage card NOT visible, but form section IS visible
@@ -927,7 +949,7 @@ export default function InscriptionPage() {
                   </div>
                   <label className="flex items-start gap-1.5 cursor-pointer mb-1.5">
                     <input type="checkbox" checked={garantieSerenite} onChange={(e) => setGarantieSerenite(e.target.checked)} className="mt-0.5" />
-                    <span style={{ fontSize: '13px' }}>Je souscris à la Garantie Sérénité: +57€ TTC (supplement facturé en plus du stage)</span>
+                    <span style={{ fontSize: '13px' }}>Je souscris à la Garantie Sérénité: +{garantiePrice}€ TTC (supplément facturé en plus du stage)</span>
                   </label>
                   <div
                     className="flex items-center justify-center gap-2 cursor-pointer"
@@ -1127,7 +1149,7 @@ export default function InscriptionPage() {
                       </div>
                       <label className="flex items-start gap-1.5 cursor-pointer mb-1.5">
                         <input type="checkbox" checked={garantieSerenite} onChange={(e) => setGarantieSerenite(e.target.checked)} className="mt-0.5" />
-                        <span style={{ fontSize: '13px' }}>Je souscris à la Garantie Sérénité: +57€ TTC (supplement facturé en plus du stage)</span>
+                        <span style={{ fontSize: '13px' }}>Je souscris à la Garantie Sérénité: +{garantiePrice}€ TTC (supplément facturé en plus du stage)</span>
                       </label>
                       <div className="flex items-center justify-center gap-2 cursor-pointer">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="22" viewBox="0 0 25 22" fill="none" style={{ width: '25px', height: '25px' }}>

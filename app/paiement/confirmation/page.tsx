@@ -14,6 +14,8 @@ type StatusData = {
   prenom?: string
   facture_num?: number
   errorMessage?: string
+  montant_total?: number   // base + Garantie Sérénité (what was actually paid)
+  total_guarantee?: number
   stage?: {
     date_debut?: string
     date_fin?: string
@@ -133,7 +135,13 @@ function ConfirmationInner() {
                   <p className="mt-1"><span className="font-medium">Lieu : </span>
                     {[stage.lieu_nom, stage.lieu_cp, stage.lieu_ville].filter(Boolean).join(', ')}</p>
                 )}
-                {stage.prix ? (<p className="mt-1"><span className="font-medium">Montant : </span>{stage.prix}€ TTC</p>) : null}
+                {(data?.montant_total || stage.prix) ? (
+                  <p className="mt-1"><span className="font-medium">Montant : </span>{data?.montant_total ?? stage.prix}€ TTC
+                    {data?.total_guarantee && data.total_guarantee > 0 ? (
+                      <span className="text-gray-500"> (dont Garantie Sérénité : {data.total_guarantee}€)</span>
+                    ) : null}
+                  </p>
+                ) : null}
               </div>
             )}
             <p className="mt-6 text-sm text-gray-600">
