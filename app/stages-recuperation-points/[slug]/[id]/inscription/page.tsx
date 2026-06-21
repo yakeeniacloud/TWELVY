@@ -170,6 +170,25 @@ export default function InscriptionPage() {
     return () => window.visualViewport?.removeEventListener('resize', handleResize)
   }, [])
 
+  // Bug #1 fix — "Back button → re-submit does nothing".
+  // prepareAndShowPayment() sets isRedirectingRef = true (and keeps isPreparingPayment = true)
+  // on purpose while window.location navigates away to the PSP-copie payment page. When the
+  // user presses Back, the browser restores THIS page from the bfcache with that in-flight
+  // guard still stuck = true, so the next "Valider" hits `if (isRedirectingRef.current) return`
+  // and silently no-ops. `pageshow` fires on every show, incl. bfcache restore (e.persisted) —
+  // clear the guard there so the form is immediately re-submittable. On a fresh load these are
+  // already false, so this is a harmless no-op.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const onPageShow = () => {
+      isRedirectingRef.current = false
+      setIsPreparingPayment(false)
+      setPaymentError(null)
+    }
+    window.addEventListener('pageshow', onPageShow)
+    return () => window.removeEventListener('pageshow', onPageShow)
+  }, [])
+
   // Scroll detection for sticky behaviors
   useEffect(() => {
     if (typeof window === 'undefined') return
