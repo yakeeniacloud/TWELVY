@@ -36,6 +36,35 @@ function frDate(d?: string): string {
   return dt.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
 }
 
+// Funnel progress, confirmation state: Coordonnées ✓ · Paiement ✓ · Confirmation (active).
+// Same green-tick / white-active language as the form + PSP payment pages, so the 3-step
+// journey reads consistently across the whole funnel. Shown only once payment is confirmed.
+function FunnelStepper() {
+  const DoneCircle = (
+    <span style={{ position: 'relative', width: 33, height: 31, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+      <svg width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}><path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="#41A334" stroke="#41A334"/></svg>
+      <svg width="17" height="17" viewBox="0 0 20 20" fill="none" style={{ position: 'absolute', zIndex: 2 }}><path d="M16.6667 5.5L8 14.1667L3.83337 10" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    </span>
+  )
+  const line = <span style={{ flex: 1, height: 1, background: '#D9D9D9', marginBottom: 42, marginLeft: -1, marginRight: -1 }} />
+  const labelStyle = { margin: 0, fontSize: 15, color: '#000', whiteSpace: 'nowrap' as const, textAlign: 'center' as const }
+  return (
+    <div style={{ width: 500, maxWidth: '100%', margin: '0 auto 32px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>{DoneCircle}<p style={labelStyle}>Coordonnées</p></span>
+      {line}
+      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>{DoneCircle}<p style={labelStyle}>Paiement sécurisé</p></span>
+      {line}
+      <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <span style={{ position: 'relative', width: 33, height: 31, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+          <svg width="33" height="31" viewBox="0 0 33 31" fill="none" style={{ position: 'absolute' }}><path d="M16.5 0.5C25.3665 0.5 32.5 7.24472 32.5 15.5C32.5 23.7553 25.3665 30.5 16.5 30.5C7.63354 30.5 0.5 23.7553 0.5 15.5C0.5 7.24472 7.63354 0.5 16.5 0.5Z" fill="white" stroke="#030303"/></svg>
+          <span style={{ position: 'relative', zIndex: 1, fontSize: 20, color: '#000', lineHeight: '28px' }}>3</span>
+        </span>
+        <p style={labelStyle}>Confirmation</p>
+      </span>
+    </div>
+  )
+}
+
 function ConfirmationInner() {
   const params = useSearchParams()
   const id = params.get('id') || ''
@@ -96,6 +125,7 @@ function ConfirmationInner() {
 
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col items-center px-4 py-12">
+      {phase === 'paye' && <FunnelStepper />}
       <div className="w-full max-w-xl bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
         {phase === 'loading' && (
           <>
