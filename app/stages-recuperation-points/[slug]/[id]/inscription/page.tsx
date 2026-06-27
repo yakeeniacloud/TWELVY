@@ -184,6 +184,19 @@ export default function InscriptionPage() {
       isRedirectingRef.current = false
       setIsPreparingPayment(false)
       setPaymentError(null)
+      // Bug #4 — pressing Back from the PSP payment page restored THIS form collapsed, so the button
+      // that returns to payment was hidden until the user re-opened the form. Re-expand the editable
+      // form on every show so Back (and the payment page's "Modifier mes coordonnées" / "Changer de
+      // date" links, which are just history.back()) lands on a usable, fully PRE-FILLED form — React
+      // field state survives the bfcache restore. Fresh loads are already in this state → no-op.
+      //   • DESKTOP gate = currentStep (1 = editable form with "Valider … passer au paiement").
+      //   • MOBILE gate  = formValidated (false = editable form with "Valider et passer au paiement");
+      //     paymentBlockVisible is reset too so the mobile stepper shows step 1 again, like desktop.
+      setCurrentStep(1)
+      setFormValidated(false)
+      setPaymentBlockVisible(false)
+      setIsFormExpanded(true)
+      setIsPayerButtonDisabled(false)
     }
     window.addEventListener('pageshow', onPageShow)
     return () => window.removeEventListener('pageshow', onPageShow)
