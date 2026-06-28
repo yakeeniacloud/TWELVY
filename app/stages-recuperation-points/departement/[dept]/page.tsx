@@ -420,7 +420,7 @@ export default function StagesDepartementPage() {
                 <li><Link href="/retrait-de-points" className="text-white text-sm hover:text-gray-200 block py-2" onClick={() => setShowMobileMenu(false)}>Le retrait de points</Link></li>
                 <li><Link href="/stages" className="text-white text-sm hover:text-gray-200 block py-2" onClick={() => setShowMobileMenu(false)}>Les stages</Link></li>
                 <li className="pt-4 border-t border-gray-600">
-                  <a href="https://psp-copie.twelvy.net/es/" className="text-white text-sm hover:text-gray-200 flex items-center gap-2 py-2" onClick={() => setShowMobileMenu(false)}>
+                  <a href="https://www.prostagespermis.fr/es/loginv2.php" className="text-white text-sm hover:text-gray-200 flex items-center gap-2 py-2" onClick={() => setShowMobileMenu(false)}>
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
@@ -963,8 +963,8 @@ export default function StagesDepartementPage() {
             <a href="https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">Aide et contact</a>
             <a href="https://www.prostagespermis.fr/CGV_PROSTAGESPERMIS-STAGIAIRES.pdf" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">Conditions générales de vente</a>
             <Link href="/mentions-legales" className="text-white text-xs hover:underline">Mentions légales</Link>
-            <a href="https://psp-copie.twelvy.net/es/" className="text-white text-xs hover:underline">Espace Client</a>
-            <a href="https://psp-copie.twelvy.net/ep/" className="text-white text-xs hover:underline">Espace Partenaire</a>
+            <a href="https://www.prostagespermis.fr/es/loginv2.php" className="text-white text-xs hover:underline">Espace Client</a>
+            <a href="https://www.prostagespermis.fr/partenaire" className="text-white text-xs hover:underline">Espace Partenaire</a>
           </div>
           <p className="text-center text-white text-xs">{new Date().getFullYear()}©ProStagesPermis</p>
         </div>

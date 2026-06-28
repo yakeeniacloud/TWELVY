@@ -564,7 +564,7 @@ export default function StagesResultsPage() {
                 </li>
                 <li className="pt-4 border-t border-gray-600">
                   <a
-                    href="https://psp-copie.twelvy.net/es/"
+                    href="https://www.prostagespermis.fr/es/loginv2.php"
                     className="text-white text-sm hover:text-gray-200 flex items-center gap-2 py-2"
                     onClick={() => setShowMobileMenu(false)}
                   >
@@ -1996,8 +1996,8 @@ export default function StagesResultsPage() {
             <a href="https://www.khapeo.com/wp/psp/aide-et-contact-prostagespermis/" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">Aide et contact</a>
             <a href="https://www.prostagespermis.fr/CGV_PROSTAGESPERMIS-STAGIAIRES.pdf" className="text-white text-xs hover:underline" target="_blank" rel="noopener noreferrer">Conditions générales de vente</a>
             <Link href="/mentions-legales" className="text-white text-xs hover:underline">Mentions légales</Link>
-            <a href="https://psp-copie.twelvy.net/es/" className="text-white text-xs hover:underline">Espace Client</a>
-            <a href="https://psp-copie.twelvy.net/ep/" className="text-white text-xs hover:underline">Espace Partenaire</a>
+            <a href="https://www.prostagespermis.fr/es/loginv2.php" className="text-white text-xs hover:underline">Espace Client</a>
+            <a href="https://www.prostagespermis.fr/partenaire" className="text-white text-xs hover:underline">Espace Partenaire</a>
           </div>
           <p className="text-center text-white text-xs">{new Date().getFullYear()}©ProStagesPermis</p>
         </div>
